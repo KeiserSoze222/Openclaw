@@ -13554,3 +13554,49 @@ Balance: $159.02 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Confidence] Score=3/10 | moderate_edge,coinbase_weak,2of3_agree
 [Timing] Window 11 min old — skipping
 [Cycle] No signal — YES=0.74 is between 0.30 and 0.70, sum=1.04 >= 0.97
+
+==================================================
+OpenClaw SOL Bot v4.0 — LIVE
+[Startup] Live balance synced: $159.02
+Balance: $159.02 | MaxBet: $5.96 | Threshold: <0.30 or >0.70
+==================================================
+
+[Startup] Resting orders cleared
+[Ticker] KXSOL15M-26APR031400-00
+[Market] YES=0.81 | NO=0.22 | Sum=1.03
+==================================================
+Balance: $159.02 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Timing] Window 11 min old — skipping
+[Cycle] No signal — YES=0.81 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Ticker] KXSOL15M-26APR031400-00
+[Market] YES=0.94 | NO=0.07 | Sum=1.01
+==================================================
+Balance: $159.02 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Timing] Window 12 min old — skipping
+[Cycle] No signal — YES=0.94 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXSOL15M-26APR031400-00
+[Market] YES=0.86 | NO=0.17 | Sum=1.03
+==================================================
+Balance: $159.02 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Timing] Window 13 min old — skipping
+[Cycle] No signal — YES=0.86 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Ticker] KXSOL15M-26APR031400-00
+[Market] YES=1.00 | NO=0.01 | Sum=1.00
+==================================================
+Balance: $159.02 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | extreme_edge,coinbase_weak
+[Timing] Window 14 min old — skipping
+[Cycle] No signal — YES=1.00 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[Ticker] KXSOL15M-26APR031415-15
+[Market] YES=0.44 | NO=0.60 | Sum=1.04
+==================================================
+Balance: $159.02 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.44 is between 0.30 and 0.70, sum=1.04 >= 0.97
+[Ticker] KXSOL15M-26APR031415-15
+[Market] YES=0.47 | NO=0.54 | Sum=1.01
+==================================================
+Balance: $159.02 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.47 is between 0.30 and 0.70, sum=1.01 >= 0.97

@@ -8,7 +8,7 @@ CHAT_ID   = raw.split("CHAT_ID   = '")[1].split("'")[0]
 del raw
 
 TRADES_URL     = "https://api.elections.kalshi.com/trade-api/v2/markets/trades"
-MIN_ALERT_SIZE = 500
+MIN_ALERT_SIZE = 2000
 SCAN_INTERVAL  = 15
 LOG_CSV        = "/root/whale_log.csv"
 STOP_FILE      = "/root/STOP_WHALE"
@@ -69,8 +69,11 @@ def scan_once(min_ts):
                 ticker, side, f"{size:.2f}", "OUR" if is_our else "OTHER"
             ])
 
-        emoji = "🎯 OUR MARKET!" if is_our else "🐋 Whale"
-        send_telegram(f"{emoji}\n{side} ${size:,.0f} on {ticker}")
+        # Only alert on our markets OR very large whales ($5k+)
+        if is_our:
+            send_telegram(f"🎯 OUR MARKET!\n{side} ${size:,.0f} on {ticker}")
+        elif size >= 5000:
+            send_telegram(f"🐋 BIG Whale\n{side} ${size:,.0f} on {ticker}")
 
 if __name__ == "__main__":
     print("🐋 OpenClaw Whale Scanner v3 starting...")
