@@ -74,7 +74,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;
 .whale-side-yes{color:var(--green);}.whale-side-no{color:var(--red);}
 .whale-ticker{color:var(--muted);font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px;}
 .whale-our-badge{font-size:9px;padding:2px 5px;background:rgba(0,212,255,0.2);color:var(--accent);border-radius:3px;margin-left:auto;flex-shrink:0;}
-.span3{grid-column:1/-1;}
+.span3{grid-column:1/-1;} @media(max-width:768px){.grid{grid-template-columns:1fr;padding:8px;}.balance-card{grid-template-columns:1fr 1fr;gap:16px;}.divider{display:none;}.balance-main{font-size:28px;}.proc-grid{grid-template-columns:repeat(3,1fr);}.header{padding:10px 16px;}.logo-text{font-size:14px;}.logo-sub{display:none;}.card{padding:14px;}}
 .no-data{color:var(--muted);font-size:12px;text-align:center;padding:20px;}
 .refresh-bar{position:fixed;bottom:0;left:0;right:0;height:2px;background:var(--border);z-index:200;}
 .refresh-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));animation:countdown 30s linear infinite;}

@@ -14080,3 +14080,8 @@ Balance: $160.39 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
 ==================================================
 Balance: $160.39 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
 [Cycle] No signal — YES=0.56 is between 0.30 and 0.70, sum=1.04 >= 0.97
+[Ticker] KXSOL15M-26APR031515-15
+[Market] YES=0.49 | NO=0.53 | Sum=1.02
+==================================================
+Balance: $160.39 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Cycle] No signal — YES=0.49 is between 0.30 and 0.70, sum=1.02 >= 0.97
