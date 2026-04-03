@@ -232,4 +232,23 @@ Next milestones:
 ---
 
 OpenClaw v4.0 — Built by Jeff Keiser with Claude AI | April 2026
+
 "The edge is in the math. The discipline is in the system."
+---
+ 
+## APPENDIX: DASHBOARD GUIDE
+
+URL: http://167.172.244.100:8080
+
+Sections:
+- Portfolio Overview — total balance, clean start P&L, strategy P&L, win rate
+- Bot Cards (BTC/ETH/SOL) — win rate, P&L, wins, losses, extreme signals, confirmed signals, cash outs, streak
+- System Status — live/down indicator for all 6 processes plus legend
+- Open Positions — active trades currently on Kalshi
+- Recent Trades — last 8 settled trades with result and time
+- Feature Attribution — win rate by signal type and entry minute
+- Bot Intelligence — AI-generated insights about current performance
+- Win Rate by Hour — bar chart showing best/worst UTC hours
+- Whale Feed — large trades ($2k+) detected on Kalshi markets
+
+Bible: Click the BIBLE button in the dashboard header to view this guide.
