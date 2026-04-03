@@ -15,7 +15,7 @@ import tempfile
 import os
 
 # ── CONFIG ────────────────────────────────────────────────────────────────────
-raw         = open('/root/real_bot.py').read()
+raw         = open('/root/real_bot_pre_v4_backup.py').read()
 KALSHI_KEY  = raw.split("KALSHI_API_KEY = '")[1].split("'")[0]
 KALSHI_SEC  = raw.split("KALSHI_SECRET  = '''")[1].split("'''")[0]
 BOT_TOKEN   = raw.split("BOT_TOKEN = '")[1].split("'")[0]
@@ -104,7 +104,7 @@ def scan_markets():
             # Skip markets already at 0 or 1 (no cash out value)
             if float(yes_ask) <= 0.01 or float(yes_ask) >= 0.99:
                 continue
-            if float(yes_ask) + float(no_ask) > 1.05:
+            if float(yes_ask) + float(no_ask) > 1.02:
                 continue
 
             yes_price = float(yes_ask)
