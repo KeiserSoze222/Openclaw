@@ -6410,3 +6410,36 @@ Balance: $156.72 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Signal] CONFIRMED UP | yes=0.85 | edge=0.35 | bet=$4.93
 [Safety] Balance $156.72 below floor $175.00
 🛑 OpenClaw BTC Bot v4.0 halted: Balance $156.72 below floor $175.00
+
+==================================================
+OpenClaw BTC Bot v4.0 — LIVE
+[Startup] Live balance synced: $156.72
+Balance: $156.72 | MaxBet: $15.67 | Threshold: <0.30 or >0.70
+==================================================
+
+[Startup] Resting orders cleared
+[Ticker] KXBTC15M-26APR030715-15
+[Market] YES=0.39 | NO=0.62 | Sum=1.01
+==================================================
+Balance: $156.72 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.39 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR030715-15
+[Market] YES=0.48 | NO=0.53 | Sum=1.01
+==================================================
+Balance: $156.72 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.48 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR030715-15
+[Market] YES=0.39 | NO=0.62 | Sum=1.01
+==================================================
+Balance: $156.72 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.39 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR030715-15
+[Market] YES=0.54 | NO=0.47 | Sum=1.01
+==================================================
+Balance: $156.72 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.54 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR030715-15
+[Market] YES=0.35 | NO=0.66 | Sum=1.01
+==================================================
+Balance: $156.72 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.35 is between 0.30 and 0.70, sum=1.01 >= 0.97

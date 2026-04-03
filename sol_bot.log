@@ -10983,3 +10983,29 @@ Balance: $156.72 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Signal] CONFIRMED UP | yes=0.77 | edge=0.27 | bet=$3.43
 [Safety] Balance $156.72 below floor $175.00
 🛑 OpenClaw SOL Bot v4.0 halted: Balance $156.72 below floor $175.00
+
+==================================================
+OpenClaw SOL Bot v4.0 — LIVE
+[Startup] Live balance synced: $156.72
+Balance: $156.72 | MaxBet: $15.67 | Threshold: <0.30 or >0.70
+==================================================
+
+[Startup] Resting orders cleared
+[Ticker] KXSOL15M-26APR030715-15
+[Market] YES=0.73 | NO=0.30 | Sum=1.03
+==================================================
+Balance: $156.72 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | moderate_edge,coinbase_weak,peak_hour
+[Signal] UP candidate | yes=0.73 | waiting (1/2)
+[Cycle] No signal — YES=0.73 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Ticker] KXSOL15M-26APR030715-15
+[Market] YES=0.77 | NO=0.25 | Sum=1.02
+==================================================
+Balance: $156.72 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | moderate_edge,coinbase_weak,peak_hour
+[Coinbase] Confirms UP | $80 gap=+0 (0.23%)
+[Kraken] Divergence 83180.56% — bet trimmed
+[Correlation] 2/3 agree UP
+[Signal] CONFIRMED UP | yes=0.77 | edge=0.27 | bet=$3.81
+[Safety] Balance $156.72 below floor $175.00
+🛑 OpenClaw SOL Bot v4.0 halted: Balance $156.72 below floor $175.00

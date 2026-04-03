@@ -11033,3 +11033,36 @@ Balance: $156.72 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Signal] CONFIRMED UP | yes=0.85 | edge=0.35 | bet=$4.93
 [Safety] Balance $156.72 below floor $175.00
 🛑 OpenClaw ETH Bot v4.0 halted: Balance $156.72 below floor $175.00
+
+==================================================
+OpenClaw ETH Bot v4.0 — LIVE
+[Startup] Live balance synced: $156.72
+Balance: $156.72 | MaxBet: $15.67 | Threshold: <0.30 or >0.70
+==================================================
+
+[Startup] Resting orders cleared
+[Ticker] KXETH15M-26APR030715-15
+[Market] YES=0.36 | NO=0.67 | Sum=1.03
+==================================================
+Balance: $156.72 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.36 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Ticker] KXETH15M-26APR030715-15
+[Market] YES=0.50 | NO=0.53 | Sum=1.03
+==================================================
+Balance: $156.72 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.50 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Ticker] KXETH15M-26APR030715-15
+[Market] YES=0.56 | NO=0.48 | Sum=1.04
+==================================================
+Balance: $156.72 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.56 is between 0.30 and 0.70, sum=1.04 >= 0.97
+[Ticker] KXETH15M-26APR030715-15
+[Market] YES=0.62 | NO=0.40 | Sum=1.02
+==================================================
+Balance: $156.72 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.62 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Ticker] KXETH15M-26APR030715-15
+[Market] YES=0.39 | NO=0.66 | Sum=1.05
+==================================================
+Balance: $156.72 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.39 is between 0.30 and 0.70, sum=1.05 >= 0.97

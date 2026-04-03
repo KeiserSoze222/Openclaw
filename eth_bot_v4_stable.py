@@ -50,7 +50,7 @@ FEAT_LOG="/root/feature_log.json"
 DRY_RUN=False
 MAX_BET_PCT=0.07
 PEAK_BET_PCT=0.10
-MIN_BALANCE=175.00
+MIN_BALANCE=150.00
 DAILY_LOSS_LIMIT=0.12
 CYCLE_SLEEP=60
 COOLDOWN_CYCLES=2
@@ -519,7 +519,7 @@ def try_directional(yes_price,no_price):
                     print(f"[Coinbase] Disagrees | ${spot_price:.0f} — bet reduced to ${bet:.2f}")
         except Exception as e:
             print(f"[Coinbase] Strike fetch failed: {e}")
-    kraken_price=get_kraken_btc()
+    kraken_price=None  # Kraken check BTC only
     if kraken_price and spot_price:
         diff_pct=abs(kraken_price-spot_price)/spot_price*100
         if diff_pct>0.5:
