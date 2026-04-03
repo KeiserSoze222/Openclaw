@@ -17,19 +17,19 @@ CHAT_ID   = '8257178399'
 BOTS = [
     {
         "name":    "BTC",
-        "script":  "/root/real_bot.py",
+        "script":  "/root/openclaw.py --market btc",
         "log":     "/root/bot.log",
         "stop":    "/root/STOP",
     },
     {
         "name":    "ETH",
-        "script":  "/root/eth_bot.py",
+        "script":  "/root/openclaw.py --market eth",
         "log":     "/root/eth_bot.log",
         "stop":    "/root/STOP_ETH",
     },
     {
         "name":    "SOL",
-        "script":  "/root/sol_bot.py",
+        "script":  "/root/openclaw.py --market sol",
         "log":     "/root/sol_bot.log",
         "stop":    "/root/STOP_SOL",
     },
@@ -79,8 +79,9 @@ def restart_bot(bot):
         print(f"[Watchdog] Kill failed: {e}")
     # Now start fresh
     log  = open(bot["log"], "a")
+    cmd = ["python3", "-u"] + bot["script"].split()
     proc = subprocess.Popen(
-        ["python3", "-u", bot["script"]],
+        cmd,
         stdout=log,
         stderr=log,
         start_new_session=True
