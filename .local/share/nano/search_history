@@ -55,6 +55,7 @@ def try_directional
 age_min > 20
 insert_after =
 def simulate_trade
+SINCE V4.0
 
 
 

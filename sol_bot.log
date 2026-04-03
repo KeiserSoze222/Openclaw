@@ -13600,3 +13600,127 @@ Balance: $159.02 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 ==================================================
 Balance: $159.02 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Cycle] No signal — YES=0.47 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXSOL15M-26APR031415-15
+[Market] YES=0.34 | NO=0.68 | Sum=1.02
+==================================================
+Balance: $159.02 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.34 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Ticker] KXSOL15M-26APR031415-15
+[Market] YES=0.25 | NO=0.80 | Sum=1.05
+==================================================
+Balance: $159.02 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,all3_agree
+[Signal] DOWN candidate | yes=0.25 | waiting (1/2)
+[Cycle] No signal — YES=0.25 is between 0.30 and 0.70, sum=1.05 >= 0.97
+[Ticker] KXSOL15M-26APR031415-15
+[Market] YES=0.27 | NO=0.74 | Sum=1.01
+==================================================
+Balance: $159.02 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,all3_agree
+[Coinbase] Confirms DOWN | $80 gap=-0 (0.08%)
+[Kraken] Divergence 83302.46% — bet trimmed
+[Correlation] All 3 agree — bet boosted
+[Signal] CONFIRMED DOWN | yes=0.27 | edge=0.23 | bet=$2.16
+[Order] KXSOL15M-26APR031415-15 | no | count=4 | $2.16
+[Order] status=executed remaining=-1 filled=True
+✅ BTC DIRECTIONAL: DOWN $2.16 on KXSOL15M-26APR031415-15
+[Positions] 1 still open
+[Ticker] KXSOL15M-26APR031415-15
+[Market] YES=0.42 | NO=0.60 | Sum=1.02
+==================================================
+Balance: $158.48 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.42 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Positions] 1 still open
+[Ticker] KXSOL15M-26APR031415-15
+[Market] YES=0.39 | NO=0.65 | Sum=1.04
+==================================================
+Balance: $158.28 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.39 is between 0.30 and 0.70, sum=1.04 >= 0.97
+[Positions] 1 still open
+[Ticker] KXSOL15M-26APR031415-15
+[Market] YES=0.32 | NO=0.70 | Sum=1.02
+==================================================
+Balance: $158.24 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.32 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Positions] 1 still open
+[Ticker] KXSOL15M-26APR031415-15
+[Market] YES=0.28 | NO=0.73 | Sum=1.01
+==================================================
+Balance: $158.88 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,all3_agree
+[Timing] Window 8 min old — skipping
+[Cycle] No signal — YES=0.28 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Positions] 1 still open
+[Ticker] KXSOL15M-26APR031415-15
+[Market] YES=0.19 | NO=0.82 | Sum=1.01
+==================================================
+Balance: $159.40 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
+[Timing] Window 9 min old — skipping
+[Cycle] No signal — YES=0.19 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Positions] 1 still open
+[Ticker] KXSOL15M-26APR031415-15
+[Market] YES=0.26 | NO=0.76 | Sum=1.02
+==================================================
+Balance: $159.24 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,all3_agree
+[Timing] Window 10 min old — skipping
+[Cycle] No signal — YES=0.26 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Positions] 1 still open
+[Ticker] KXSOL15M-26APR031415-15
+[Market] YES=0.07 | NO=0.95 | Sum=1.02
+==================================================
+Balance: $159.80 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
+[Timing] Window 11 min old — skipping
+[Cycle] No signal — YES=0.07 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Positions] 1 still open
+[Ticker] KXSOL15M-26APR031415-15
+[Market] YES=0.03 | NO=0.98 | Sum=1.01
+==================================================
+Balance: $160.00 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 12 min old — skipping
+[Cycle] No signal — YES=0.03 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Positions] 1 still open
+[Ticker] KXSOL15M-26APR031415-15
+[Market] YES=0.02 | NO=0.99 | Sum=1.01
+==================================================
+Balance: $159.96 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 13 min old — skipping
+[Cycle] No signal — YES=0.02 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[ProfitLock] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[CashOut] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[Positions] 1 still open
+[Ticker] KXSOL15M-26APR031415-15
+[Market] YES=0.01 | NO=1.00 | Sum=1.01
+==================================================
+Balance: $160.08 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | extreme_edge,coinbase_weak,2of3_agree
+[Timing] Window 14 min old — skipping
+[Cycle] No signal — YES=0.01 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[ProfitLock] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[CashOut] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[Positions] 1 still open
+[Ticker] KXSOL15M-26APR031430-30
+[Market] YES=0.56 | NO=0.47 | Sum=1.03
+==================================================
+Balance: $160.12 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.56 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[ProfitLock] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[CashOut] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[Positions] 1 still open
+[Ticker] KXSOL15M-26APR031430-30
+[Market] YES=0.52 | NO=0.51 | Sum=1.03
+==================================================
+Balance: $160.12 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.52 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[ProfitLock] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[CashOut] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[Positions] 1 still open
+[Ticker] KXSOL15M-26APR031430-30
+[Market] YES=0.58 | NO=0.46 | Sum=1.04
+==================================================
+Balance: $160.12 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.58 is between 0.30 and 0.70, sum=1.04 >= 0.97

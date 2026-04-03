@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OpenClaw Terminal</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#050810;--bg2:#080d1a;--bg3:#0d1526;
+  --accent:#00d4ff;--accent2:#00ff88;--accent3:#ff6b35;
+  --red:#ff3b5c;--green:#00ff88;--yellow:#ffd60a;
+  --text:#e0e8ff;--muted:#4a5568;--border:#1a2540;
+  --glow:0 0 20px rgba(0,212,255,0.3);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:13px;}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;
+  background:radial-gradient(ellipse at 20% 20%,rgba(0,212,255,0.03),transparent 60%),
+  radial-gradient(ellipse at 80% 80%,rgba(0,255,136,0.03),transparent 60%);
+  pointer-events:none;z-index:0;}
+.header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;
+  background:linear-gradient(90deg,var(--bg2),var(--bg3));border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:var(--glow);}
+.logo-text{font-family:'Orbitron',monospace;font-weight:900;font-size:18px;letter-spacing:3px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.logo-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+.header-right{display:flex;align-items:center;gap:20px;}
+.live-badge{display:flex;align-items:center;gap:6px;font-size:11px;letter-spacing:1px;color:var(--green);}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.8)}}
+.utc-time{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--accent);letter-spacing:1px;}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;padding:16px 24px;position:relative;z-index:1;}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);}
+.card.green::before{background:linear-gradient(90deg,var(--green),transparent);}
+.card.orange::before{background:linear-gradient(90deg,var(--accent3),transparent);}
+.card-title{font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
+.balance-card{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr auto auto auto;gap:32px;align-items:center;}
+.balance-main{font-family:'Orbitron',monospace;font-size:42px;font-weight:900;color:var(--text);line-height:1;}
+.balance-label{font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;}
+.balance-sub{font-family:'Share Tech Mono',monospace;font-size:13px;}
+.pnl-pos{color:var(--green);}.pnl-neg{color:var(--red);}
+.divider{width:1px;height:60px;background:var(--border);}
+.bot-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.bot-name{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;}
+.bot-badge{font-size:10px;padding:3px 8px;border-radius:4px;letter-spacing:1px;}
+.badge-live{background:rgba(0,255,136,0.15);color:var(--green);border:1px solid rgba(0,255,136,0.3);}
+.badge-down{background:rgba(255,59,92,0.15);color:var(--red);border:1px solid rgba(255,59,92,0.3);}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.stat-box{background:var(--bg3);border-radius:8px;padding:10px 12px;}
+.stat-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.stat-value{font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:bold;}
+.wr-bar{margin-top:12px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;}
+.wr-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 1s ease;}
+.proc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.proc-item{display:flex;align-items:center;gap:8px;background:var(--bg3);border-radius:8px;padding:10px 12px;}
+.proc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.proc-dot.on{background:var(--green);box-shadow:0 0 8px var(--green);}
+.proc-dot.off{background:var(--red);}
+.proc-name{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1px;}
+.trades-list{display:flex;flex-direction:column;gap:6px;}
+.trade-row{display:flex;align-items:center;gap:10px;background:var(--bg3);border-radius:8px;padding:8px 12px;font-family:'Share Tech Mono',monospace;font-size:11px;}
+.trade-market{font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(0,212,255,0.1);color:var(--accent);min-width:32px;text-align:center;}
+.trade-win{color:var(--green);}.trade-loss{color:var(--red);}
+.trade-time{color:var(--muted);margin-left:auto;font-size:10px;}
+.whale-list{display:flex;flex-direction:column;gap:6px;}
+.whale-row{display:flex;align-items:center;gap:10px;background:var(--bg3);border-radius:8px;padding:8px 12px;font-family:'Share Tech Mono',monospace;font-size:11px;}
+.whale-our{border-left:3px solid var(--accent);}
+.whale-size{font-size:13px;font-weight:bold;color:var(--yellow);min-width:70px;}
+.whale-side-yes{color:var(--green);}.whale-side-no{color:var(--red);}
+.whale-ticker{color:var(--muted);font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px;}
+.whale-our-badge{font-size:9px;padding:2px 5px;background:rgba(0,212,255,0.2);color:var(--accent);border-radius:3px;margin-left:auto;flex-shrink:0;}
+.span3{grid-column:1/-1;}
+.no-data{color:var(--muted);font-size:12px;text-align:center;padding:20px;}
+.refresh-bar{position:fixed;bottom:0;left:0;right:0;height:2px;background:var(--border);z-index:200;}
+.refresh-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));animation:countdown 30s linear infinite;}
+@keyframes countdown{from{width:100%}to{width:0%}}
+.version-tag{position:fixed;bottom:8px;right:16px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;z-index:200;}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon">🦀</div>
+    <div><div class="logo-text">OPENCLAW</div><div class="logo-sub">Autonomous Trading System</div></div>
+  </div>
+  <div class="header-right">
+    <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+    <div class="utc-time" id="clock">--:--:-- UTC</div>
+  </div>
+</div>
+<div class="grid" id="main-grid"><div class="no-data span3">Connecting...</div></div>
+<div class="refresh-bar"><div class="refresh-fill" id="rfill"></div></div>
+<div class="version-tag">v4.0 // OPENCLAW</div>
+<script>
+function updateClock(){
+  const n=new Date();
+  document.getElementById('clock').textContent=
+    String(n.getUTCHours()).padStart(2,'0')+':'+String(n.getUTCMinutes()).padStart(2,'0')+':'+String(n.getUTCSeconds()).padStart(2,'0')+' UTC';
+}
+setInterval(updateClock,1000);updateClock();
+function fmt(n,d=2){return '$'+parseFloat(n||0).toFixed(d);}
+function pct(n){return parseFloat(n||0).toFixed(1)+'%';}
+function pc(n){return parseFloat(n||0)>=0?'pnl-pos':'pnl-neg';}
+function ps(n){return parseFloat(n||0)>=0?'+':'';}
+async function refresh(){
+  try{
+    const r=await fetch('/api/data');
+    const d=await r.json();
+    const bal=d.balance,s=d.stats,pr=d.procs,tr=d.trades,wh=d.whales;
+    const sinceV=bal-d.version_balance;
+    const allW=(s.BTC.w||0)+(s.ETH.w||0)+(s.SOL.w||0);
+    const allL=(s.BTC.l||0)+(s.ETH.l||0)+(s.SOL.l||0);
+    const allWR=allW/(allW+allL)*100||0;
+    const allPNL=(s.BTC.pnl||0)+(s.ETH.pnl||0)+(s.SOL.pnl||0);
+    const prItems=Object.entries(pr).map(([k,v])=>
+      `<div class="proc-item"><div class="proc-dot ${v?'on':'off'}"></div><span class="proc-name">${k}</span></div>`).join('');
+    const trRows=tr.length?tr.map(t=>`<div class="trade-row">
+      <span class="trade-market">${t.market}</span>
+      <span style="color:${t.dir==='UP'?'var(--green)':'var(--red)'}">${t.dir}</span>
+      <span>${fmt(t.bet)}</span>
+      <span class="${t.result.includes('WIN')?'trade-win':'trade-loss'}">${t.result.includes('WIN')?'WIN':'LOSS'}</span>
+      <span class="trade-time">${t.time.slice(11,16)}</span></div>`).join('')
+      :'<div class="no-data">No trades yet</div>';
+    const whRows=wh.length?wh.map(w=>`<div class="whale-row ${w.type==='OUR'?'whale-our':''}">
+      <span class="whale-size">${fmt(w.size,0)}</span>
+      <span class="${w.side==='YES'?'whale-side-yes':'whale-side-no'}">${w.side}</span>
+      <span class="whale-ticker">${w.ticker}</span>
+      ${w.type==='OUR'?'<span class="whale-our-badge">OUR MKT</span>':''}</div>`).join('')
+      :'<div class="no-data">Scanning whales...</div>';
+    function botCard(name,sym,color,cls){
+      const b=s[name];
+      return `<div class="card ${cls}">
+        <div class="card-title">${name} Bot</div>
+        <div class="bot-header">
+          <span class="bot-name" style="color:${color}">${sym} ${name==='BTC'?'BITCOIN':name==='ETH'?'ETHEREUM':'SOLANA'}</span>
+          <span class="bot-badge ${pr[name]?'badge-live':'badge-down'}">${pr[name]?'LIVE':'DOWN'}</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-box"><div class="stat-label">Win Rate</div><div class="stat-value" style="color:var(--green)">${pct(b.wr)}</div></div>
+          <div class="stat-box"><div class="stat-label">All PnL</div><div class="stat-value ${pc(b.pnl)}">${ps(b.pnl)}${fmt(b.pnl)}</div></div>
+          <div class="stat-box"><div class="stat-label">Wins</div><div class="stat-value" style="color:var(--green)">${b.w}</div></div>
+          <div class="stat-box"><div class="stat-label">Losses</div><div class="stat-value" style="color:var(--red)">${b.l}</div></div>
+        </div>
+        <div class="wr-bar"><div class="wr-fill" style="width:${b.wr}%"></div></div>
+      </div>`;
+    }
+    document.getElementById('main-grid').innerHTML=`
+      <div class="card span3">
+        <div class="card-title">Portfolio Overview</div>
+        <div class="balance-card">
+          <div><div class="balance-label">TOTAL BALANCE</div><div class="balance-main">${fmt(bal)}</div></div>
+          <div class="divider"></div>
+          <div><div class="balance-label">CLEAN START</div><div class="balance-sub ${pc(sinceV)}">${ps(sinceV)}${fmt(sinceV)}</div></div>
+          <div><div class="balance-label">SIGNALS PNL</div><div class="balance-sub ${pc(allPNL)}">${ps(allPNL)}${fmt(allPNL)}</div></div>
+          <div><div class="balance-label">WIN RATE</div><div class="balance-sub" style="color:var(--accent)">${pct(allWR)} (${allW}W/${allL}L)</div></div>
+          <div><div class="balance-label">TOTAL TRADES</div><div class="balance-sub" style="color:var(--yellow)">${allW+allL}</div></div>
+          <div style="font-size:10px;color:#2a3550;align-self:flex-end">all-time: ${ps(allPNL-644)}${fmt(allPNL-644)}</div>
+         </div>
+      </div>
+      ${botCard('BTC','₿','#f7931a','')}
+      ${botCard('ETH','Ξ','#627eea','green')}
+      ${botCard('SOL','◎','#9945ff','orange')}
+      <div class="card"><div class="card-title">System Status</div><div class="proc-grid">${prItems}</div></div>
+      <div class="card span3"><div class="card-title">Recent Trades</div><div class="trades-list">${trRows}</div></div>
+      <div class="card span3"><div class="card-title">🐋 Whale Feed</div><div class="whale-list">${whRows}</div></div>`;
+    const rf=document.getElementById('rfill');
+    rf.style.animation='none';rf.offsetHeight;rf.style.animation='countdown 30s linear infinite';
+  }catch(e){console.error(e);}
+}
+refresh();setInterval(refresh,30000);
+</script>
+</body>
+</html>

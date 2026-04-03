@@ -14,7 +14,7 @@ _config.host = "https://api.elections.kalshi.com/trade-api/v2"
 kalshi = KalshiClient(_config)
 kalshi.set_kalshi_auth(KALSHI_KEY, _tf.name)
 
-VERSION_BALANCE = 159.84
+VERSION_BALANCE = 159.02
 
 def get_balance():
     try:
