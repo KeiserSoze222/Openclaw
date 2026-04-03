@@ -13353,3 +13353,10 @@ Balance: $159.02 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
 [Timing] Window 9 min old — skipping
 [Cycle] No signal — YES=0.06 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Ticker] KXSOL15M-26APR031330-30
+[Market] YES=0.04 | NO=0.98 | Sum=1.02
+==================================================
+Balance: $159.02 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 10 min old — skipping
+[Cycle] No signal — YES=0.04 is between 0.30 and 0.70, sum=1.02 >= 0.97

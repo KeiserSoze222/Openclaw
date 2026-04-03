@@ -8847,3 +8847,10 @@ Balance: $159.02 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
 [Timing] Window 8 min old — skipping
 [Cycle] No signal — YES=0.12 is between 0.30 and 0.70, sum=1.05 >= 0.97
+[Ticker] KXBTC15M-26APR031330-30
+[Market] YES=0.05 | NO=0.95 | Sum=1.00
+==================================================
+Balance: $159.02 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 9 min old — skipping
+[Cycle] No signal — YES=0.05 is between 0.30 and 0.70, sum=1.00 >= 0.97

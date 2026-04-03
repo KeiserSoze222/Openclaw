@@ -34,7 +34,8 @@ BOTS = [
         "stop":    "/root/STOP_SOL",
     },
     {
-        "name":    "BOND",
+        "name":    "WHALE", "script":  "/root/whale_scanner.py", "log":     "/root/whale_scanner.log", "stop":    "/root/STOP_WHALE"},
+    {"name":    "BOND",
         "script":  "/root/bond_scanner.py",
         "log":     "/root/bond_scanner.log",
         "stop":    "/root/STOP_BOND",
