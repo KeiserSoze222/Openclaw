@@ -453,7 +453,8 @@ body{{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacS
 <div class="bal-sub">Total Portfolio Value — TOD: <span style="color:{tod_col}">{tod_size} bet size</span> at {utc_hour:02d}:00 UTC</div>
 <div style="display:flex;gap:12px;margin-top:6px;font-size:11px;flex-wrap:wrap">
   <span style="color:var(--muted)">Deposited: <span style="color:var(--text)">${TOTAL_DEPOSITED:.2f}</span></span>
-  <span style="color:var(--muted)">True P\<div class="bal-sub">Total Portfolio Value — TOD: <span style="color:{tod_col}">{tod_size} bet size</span> at {utc_hour:02d}:00 UTC</div>P&amp;L: <span style="color:{"var(--green)" if balance>=TOTAL_DEPOSITED else "var(--red)"}">${balance-TOTAL_DEPOSITED:+.2f}</span></span>
+  <span style="color:var(--muted)">True P&L: <span style="color:{"var(--green)" if balance>=TOTAL_DEPOSITED else "var(--red)"}">${balance-TOTAL_DEPOSITED:+.2f}</span></span>
+  <span style="color:var(--muted)">Since Mar 25: <span style="color:{"var(--green)" if balance>=CLEAN_START_DEPOSITED else "var(--red)"}">${balance-CLEAN_START_DEPOSITED:+.2f}</span></span>
   <span style="color:var(--muted)">Since Mar 25: <span style="color:{"var(--green)" if balance>=CLEAN_START_DEPOSITED else "var(--red)"}">${balance-CLEAN_START_DEPOSITED:+.2f}</span></span>
 </div>
 
