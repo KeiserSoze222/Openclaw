@@ -13996,3 +13996,47 @@ Balance: $161.80 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 ==================================================
 Balance: $161.80 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Cycle] No signal — YES=0.48 is between 0.30 and 0.70, sum=1.04 >= 0.97
+[Ticker] KXETH15M-26APR031445-45
+[Market] YES=0.85 | NO=0.16 | Sum=1.01
+==================================================
+Balance: $161.80 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Signal] UP candidate | yes=0.85 | waiting (1/2)
+[Cycle] No signal — YES=0.85 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXETH15M-26APR031445-45
+[Market] YES=0.84 | NO=0.18 | Sum=1.02
+==================================================
+Balance: $161.80 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Coinbase] Confirms UP | $2053 gap=+2 (0.11%)
+[Kraken] Divergence 3158.60% — bet trimmed
+[Correlation] 2/3 agree UP
+[Signal] CONFIRMED UP | yes=0.84 | edge=0.34 | bet=$2.60
+[Order] KXETH15M-26APR031445-45 | yes | count=5 | $2.60
+[Order] status=executed remaining=-1 filled=True
+✅ BTC DIRECTIONAL: UP $2.60 on KXETH15M-26APR031445-45
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031445-45
+[Market] YES=0.87 | NO=0.15 | Sum=1.02
+==================================================
+Balance: $162.00 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Timing] Window 5 min old — skipping
+[Cycle] No signal — YES=0.87 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031445-45
+[Market] YES=0.87 | NO=0.15 | Sum=1.02
+==================================================
+Balance: $161.57 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Timing] Window 6 min old — skipping
+[Cycle] No signal — YES=0.87 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031445-45
+[Market] YES=0.87 | NO=0.15 | Sum=1.02
+==================================================
+Balance: $160.95 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Timing] Window 7 min old — skipping
+[Cycle] No signal — YES=0.87 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Positions] 1 still open
