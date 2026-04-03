@@ -159,3 +159,77 @@ Based on analysis of 400+ real trades, the bot applies scaling factors by UTC ho
 ## SECTION 7: SYSTEM ARCHITECTURE
 
 ### Files
+/root/openclaw.py          — unified trading bot (all 3 markets)
+/root/watchdog.py          — process monitor and auto-restart
+/root/dashboard.py         — web dashboard server
+/root/whale_scanner.py     — public trades monitor
+/root/bond_scanner.py      — near-certain market scanner
+/root/trade_log.csv        — BTC trade history
+/root/eth_trade_log.csv    — ETH trade history
+/root/sol_trade_log.csv    — SOL trade history
+/root/whale_log.csv        — whale trade history
+/root/feature_log.json     — ML feature data for analysis
+
+### Monitoring Commands
+python3 /tmp/status_all.py
+grep -E "WIN|LOSS" /root/bot.log /root/eth_bot.log /root/sol_bot.log | tail -20
+ps aux | grep -E "openclaw|watchdog|bond|whale" | grep -v grep
+cat /root/watchdog.log | tail -10
+
+### Restart Procedure
+pkill -f watchdog.py && pkill -f "openclaw.py"
+sleep 5
+python3 -m py_compile /root/openclaw.py && echo "OK"
+git add -A && git commit -m "description"
+nohup python3 -u /root/watchdog.py > /root/watchdog.log 2>&1 &
+
+---
+
+## SECTION 8: PERFORMANCE
+
+### All-Time Statistics (April 2026)
+- Total trades: 404
+- Overall win rate: 78%
+- Strategy PnL: +$433.70
+- BTC: 193W/57L (77%) | +$226.18
+- ETH: 55W/12L (82%) | +$99.19
+- SOL: 67W/21L (76%) | +$110.17
+
+### Signal Type Performance
+- EXTREME signals: 88% win rate
+- STANDARD signals: 82% win rate
+- All entry minutes (1-4) profitable
+
+### Clean Start Baseline
+Starting balance April 3 2026 (v4.0 with all bugs fixed): $159.84
+
+---
+
+## SECTION 9: THE VISION
+
+OpenClaw is phase one of a larger AI agency vision. The goal is automated income streams that compound over time.
+
+Next milestones:
+- Tournament mode — auto-test 3 parameter variants, deploy winner
+- Weather bot — NOAA data vs Kalshi temperature markets
+- 5-minute BTC markets — 3x more opportunities per hour
+- Market discovery — whale data guides new bot development
+- Market making — Stoikov model at $1,000+ balance
+
+---
+
+## SECTION 10: TECHNOLOGY STACK
+
+- Language: Python 3.12
+- Exchange: Kalshi (CFTC-regulated)
+- Server: DigitalOcean Ubuntu (167.172.244.100)
+- Price feeds: Coinbase Pro API, Kraken API
+- Alerts: Telegram Bot API
+- Dashboard: http://167.172.244.100:8080
+- Version control: Git
+- Built with: Claude AI (Anthropic)
+
+---
+
+OpenClaw v4.0 — Built by Jeff Keiser with Claude AI | April 2026
+"The edge is in the math. The discipline is in the system."

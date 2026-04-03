@@ -14040,3 +14040,29 @@ Balance: $160.95 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Timing] Window 7 min old — skipping
 [Cycle] No signal — YES=0.87 is between 0.30 and 0.70, sum=1.02 >= 0.97
 [Positions] 1 still open
+[Ticker] KXETH15M-26APR031445-45
+[Market] YES=0.86 | NO=0.15 | Sum=1.01
+==================================================
+Balance: $160.01 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Timing] Window 8 min old — skipping
+[Cycle] No signal — YES=0.86 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031445-45
+[Market] YES=0.69 | NO=0.33 | Sum=1.02
+==================================================
+Balance: $159.96 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.69 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031445-45
+[Market] YES=0.55 | NO=0.52 | Sum=1.07
+==================================================
+Balance: $157.57 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.55 is between 0.30 and 0.70, sum=1.07 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031445-45
+[Market] YES=0.38 | NO=0.65 | Sum=1.03
+==================================================
+Balance: $156.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.38 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[BreakEven] UP on KXETH15M-26APR031445-45 crossed 50% — exiting

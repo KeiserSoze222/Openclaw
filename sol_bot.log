@@ -13921,3 +13921,24 @@ Balance: $161.57 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+1.84
 Balance: $160.95 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
 [Cycle] No signal — YES=0.68 is between 0.30 and 0.70, sum=1.04 >= 0.97
 [Positions] 1 still open
+[Ticker] KXSOL15M-26APR031445-45
+[Market] YES=0.48 | NO=0.55 | Sum=1.03
+==================================================
+Balance: $159.74 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Cycle] No signal — YES=0.48 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Positions] 1 still open
+[Ticker] KXSOL15M-26APR031445-45
+[Market] YES=0.24 | NO=0.78 | Sum=1.02
+==================================================
+Balance: $159.30 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,all3_agree
+[Timing] Window 9 min old — skipping
+[Cycle] No signal — YES=0.24 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[BreakEven] UP on KXSOL15M-26APR031445-45 crossed 50% — exiting
+[Ticker] KXSOL15M-26APR031445-45
+[Market] YES=0.14 | NO=0.88 | Sum=1.02
+==================================================
+Balance: $157.68 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Confidence] Score=4/10 | strong_edge,coinbase_weak,2of3_agree
+[Timing] Window 10 min old — skipping
+[Cycle] No signal — YES=0.14 is between 0.30 and 0.70, sum=1.02 >= 0.97
