@@ -319,8 +319,10 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
         return True
     try:
         print(f"[Order] {ticker} | {side} | count={contract_count} | ${bet:.2f}")
+        yes_p=min(99,max(1,round((mkt_yes or 0.5)*100))) if side=="yes" else None
+        no_p=min(99,max(1,round((mkt_no or 0.5)*100))) if side=="no" else None
         order=kalshi.create_order(ticker=ticker,action="buy",side=side,type="market",
-            count=contract_count,time_in_force="ioc")
+            count=contract_count,yes_price=yes_p,no_price=no_p,time_in_force="ioc")
         try:
             if hasattr(order, "order") and order.order is not None:
                 o = order.order
@@ -611,7 +613,8 @@ def check_open_positions():
                 mr=requests.get(murl,headers=mheader,timeout=4)
                 if mr.status_code==200:
                     mkt=mr.json().get("market",{})
-                    cur_yes=float(mkt.get("yes_ask_dollars",0.5))
+                    ya=mkt.get("yes_ask_dollars") or mkt.get("yes_bid_dollars")
+                    cur_yes=float(ya) if ya and 0.02<float(ya)<0.98 else entry_yes
                     entry_yes=pos.get("entry_yes",0.5)
                     win_prob=(1-cur_yes) if direction=="DOWN" else cur_yes
                     reversal=((cur_yes-entry_yes)>0.08) if direction=="DOWN" else ((entry_yes-cur_yes)>0.08)
@@ -636,7 +639,8 @@ def check_open_positions():
                 if mr.status_code==200:
                     mkt=mr.json().get("market",{})
                     status=mkt.get("status","")
-                    cur_yes=float(mkt.get("yes_ask_dollars",0.5))
+                    ya=mkt.get("yes_ask_dollars") or mkt.get("yes_bid_dollars")
+                    cur_yes=float(ya) if ya and 0.02<float(ya)<0.98 else entry_yes
                     if status in ("open","active"):
                         entry_yes=pos.get("entry_yes",0.5)
                         adverse=((entry_yes-cur_yes) if direction=="UP" else (cur_yes-(1-entry_yes)))
