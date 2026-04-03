@@ -98,6 +98,14 @@ def scan_markets():
                 continue
             if ticker in placed_markets:
                 continue
+            # Skip sports parlay/multi-event markets (already resolved, no edge)
+            if any(x in ticker for x in ("KXMVE", "MULTIGAME", "CROSSCAT", "PARLAY")):
+                continue
+            # Skip markets already at 0 or 1 (no cash out value)
+            if float(yes_ask) <= 0.01 or float(yes_ask) >= 0.99:
+                continue
+            if float(yes_ask) + float(no_ask) > 1.05:
+                continue
 
             yes_price = float(yes_ask)
             no_price  = float(no_ask)
@@ -115,7 +123,7 @@ def scan_markets():
                 continue
 
             # Check for near-certain outcome
-            if YES_HIGH >= yes_price > YES_HIGH - 0.04 and yes_price < 1.00:
+            if yes_price >= YES_HIGH and yes_price < 0.99:
                 profit = (1 - yes_price) / yes_price * 100
                 if profit >= 0.5:  # minimum 0.5% profit
                     opportunities.append({
@@ -125,7 +133,7 @@ def scan_markets():
                         "mins_left": mins_left,
                         "profit_pct": profit,
                     })
-            elif YES_LOW <= yes_price < YES_LOW + 0.04 and no_price < 1.00:
+            elif yes_price <= YES_LOW and no_price < 0.99:
                 profit = (1 - no_price) / no_price * 100
                 if profit >= 0.5:
                     opportunities.append({
