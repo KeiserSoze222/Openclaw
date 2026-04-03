@@ -1,0 +1,24 @@
+
+==================================================
+OpenClaw Auto-Tuner — 2026-04-01 06:00
+==================================================
+
+Hour Classification (last 7 days):
+  🚫 STOP  (WR<50%):  [5]
+  🔴 BAD   (50-65%):  [0, 1, 4, 12, 13, 22]
+  🟡 MOD   (65-75%):  [2, 17, 18, 20, 23]
+  🟢 GOOD  (75-85%):  [10]
+  🏆 PEAK  (WR>85%):  [3, 6, 7, 8, 9, 11, 14, 15, 16, 19, 21]
+  ❓ UNKNOWN (<5 trades): []
+
+Results saved to /root/tod_analysis.json
+🤖 OpenClaw Auto-Tuner Report — 2026-04-01 06:00
+
+Based on last 7 days of trading:
+🚫 Stop hours: [5]
+🔴 Bad hours: [0, 1, 4, 12, 13, 22]
+🏆 Peak hours: [3, 6, 7, 8, 9, 11, 14, 15, 16, 19, 21]
+
+✅ No significant changes from last analysis
+
+Auto-tuner complete.

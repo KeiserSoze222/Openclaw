@@ -1,0 +1,60 @@
+cg = CoinGeckoAPI()
+cg = CoinGeckoAPI
+BOT_TOKEN = '8716034840:AAFhyZgriXRbPBfhajMVLG300TMBELh68TE'
+place_order()
+config = Configuration()
+def get_current_btc_ticker():
+def get_current_btc_ticker
+kelly_size
+profit_pct >= 25
+def place_order(direction, bet):
+def place_order(direction
+palce_order
+def current_balance
+CURRENT_BALANCE
+get_live_balance
+ticker
+create_order 
+create_order
+yes_price
+ticker=
+ticker =
+get_current_btc_ticker
+TRADE_COUNTER
+simulate_trade
+ticker = live_ticker
+get_fallback_ticker
+check_open_positions
+place_order
+series_ticker
+def update_live_ticker
+update_live_ticker
+python3
+BOT_TOKEN
+kalshi_api_key
+KALSHI_SECRET
+BEGIN RSA PRIVATE KEY
+KALSHI_API_KEY
+def place_order
+YOUR_KALSHI_KEY_ID
+INITIAL_BALANCE = 16.27
+INITIAL_BALANCE
+DRY_RUN =
+DRY_RUN
+try_directional
+def check_open_positions
+def get_market_prices
+for status in ("open", "active", "unopened")
+REGIME                   = "CHOP"
+REGIME
+CHOP
+if __name__ == "__main__"
+load_existing_positions()
+strategy: Dump-Hedge
+def try_directional
+age_min > 20
+insert_after =
+def simulate_trade
+
+
+

@@ -1,0 +1,390 @@
+import os
+import time
+import numpy as np
+from pycoingecko import CoinGeckoAPI
+from kalshi_python import KalshiClient
+from kalshi_python.configuration import Configuration
+import requests
+import csv
+import datetime
+
+# === CREDENTIALS ===
+KALSHI_API_KEY = '2d0a8c45-b76a-4459-a0e1-9a5e4d63fd8b'
+KALSHI_SECRET  = '''-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEArkD0NUpJf2F1v6hW9tlKzQ1wPGJ0ypTgBVLMk73dPINtXjAU
+TVcunm2GtdG5p9QReCmUaihBYOVCom9m9D93tH6n/8gm4AjciW+GvtEolsJiExmQ
+145maRyZjS2aLzuQY0LKjEVxtIdbwRuWnQ4X4VuL6k/lHI/N5Nzz1WLDRHaEwwSO
+0Evcu9Nl5NBeJKaUjpUKaBLwmK3T7VrizkpnWYo9hZwEU9RZpSW4KjYG9+lSeYeN
+OZ/L5DUwhabSdqXIipFaXwtElt0wLa5TicqK2Dc8dy2fdyz5pX/fcmSvMffsuPEg
+kjvtMnhDjWL3aCzwDsTGJe7oR5r/Wxe0x4daIQIDAQABAoIBAA2FmzqKnTfceqRF
+jk0+Tc1DsbK94ScNqAsOgpmKx9Q36EP0byuuDD9D0iRINgpaYB12/Ir2vLwMJ/OU
+hksfcbNfI+8RVRLyUErJ8/Ol8p356SpnEK2DFPQrJ/wKNRP21By5Xh/5QGDF8DTR
+maQH9L2kIPz5xJZ6AkkBBfR7fLOfOtJXXxGRua/4AnzBf/zDRV0so/2tJaMOxNeU
+Nop9xKGqvISVXPMk3M7j2LlDGTkZcNvcNfbuPwzkUbQFoAJ/Cko0Esx0nT7DQTuh
+SzGbqGI/rnLu0NsMDFOABCK4yJuQCZSh4WP6x5WDOwdaz+loWotEdPfHVms0eGjb
+U5p8a1ECgYEA2z8VIC2LnlyLEzwmM86K8vfy2XgqoL1LgZbctuepk9ymAvfS3Xa5
+Mvges+aeHSc/6H0apJHCTdQBozQo/vekyKofPQQrIFCCNGla6sAxjqNv6cskT6pg
+0WqpBNjY+5eRGGGDCcB4LRbgGlmt5455F+bmQ7ijMbeVJStZ0er2RHMCgYEAy3cE
+004aPtnH22EQdJopic5tnqNqqX0ruEPqT+MwjkA8T7CbC52CFcZTG3HAn2KWyn1H
+FVvngCkUflxbrNSL0BfwwWQBmfoOyrFkbCUcIG8q6s2t3i74zvkFGlTB8IPboxjg
+b672WisT4pktTnXHIuq/nDAwnwmTOKzLjhTS1hsCgYEAkT8cZsHlohcbB7YsdNvb
+T5WV7B5g1zYwxHxGYmHdBRkDXioCJzeU/8BCztn0W8n527KtqOLrf5X5M77Ffgxf
+vZR+t3SAgZr0d3ZoheanriB2bsNmneR42aO4r35dWWgS9rz7C8XXl7903eAVhrbr
+YDtWxvyWGMTPaN1sVtY7KiMCgYEAl4Gz7SjucDi5Esnvd/RH1B8MD6H+TeEwShEA
+jKZPRM3eWzTV70tFT7OTtQ76cXT3dibdZLE/7HYqlYFunn7S8YyyMT+n1aGXnCWF
+8uWbUSeWnKu1uYneqjhSLW5J0DBPv95JWcC+HxyOvSB01UTsmTqWndZgjjySDRTW
+qqEk8lsCgYBWXgZTI0C1ukU0/jHu9OMULsPsoioZgj1pLP7Zvc6TzIWQVSCn0a6j
+/DL0JzwIlrU4B+YEuHPMnbRzuYtx2bDlW7Ycky51Wfp7jw2SVUj/Lr1rxNe9y9a+
+7VTiKzf+09eR4dAW/8VcpNTErYmLqHRQQcWgo7/WSpmp8V0xy0AaRQ==
+-----END RSA PRIVATE KEY-----'''
+BOT_TOKEN = '8716034840:AAHBhhlM0nFOQCIAhVOzYW8iXamumTAZypU'
+CHAT_ID   = '8257178399'
+
+# === KALSHI CLIENT ===
+config = Configuration()
+config.host          = "https://api.elections.kalshi.com/trade-api/v2"
+config.api_key_id    = KALSHI_API_KEY
+config.private_key_pem = KALSHI_SECRET
+kalshi = KalshiClient(config)
+
+# === SAFETY CONSTANTS ===
+MAX_BET          = 5.00   # hard cap per order — raise only after 3 profitable days
+MIN_BALANCE      = 15.00  # bot stops if balance falls below this
+DAILY_LOSS_LIMIT = 0.20   # bot stops if balance drops 20% from session start
+CONFIDENCE_MIN   = 0.55   # only trade if prob_up > 0.55 or < 0.45
+COOLDOWN_CYCLES  = 2      # cycles to skip after a failed order
+
+# === GLOBALS ===
+INITIAL_BALANCE   = 18.76  # update this to your actual current balance
+SESSION_START_BAL = INITIAL_BALANCE
+CURRENT_BALANCE   = INITIAL_BALANCE
+RISK_SCORE        = 0.5
+OPEN_POSITIONS    = []
+TRADE_LOG         = []
+TRADE_COUNTER     = 0
+COOLDOWN_REMAINING = 0
+live_ticker       = None
+REGIME            = "CHOP"
+
+# === TELEGRAM ===
+def send_telegram(message):
+    try:
+        requests.get(
+            f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
+            params={"chat_id": CHAT_ID, "text": message},
+            timeout=5
+        )
+    except Exception:
+        pass
+
+# === PRICE DATA ===
+
+
+def get_btc_prices(minutes=60):
+    try:
+        resp = requests.get(
+            "https://api.kraken.com/0/public/OHLC",
+            params={"pair": "XBTUSD", "interval": 1},
+            timeout=8
+        )
+        if resp.status_code == 200:
+            data    = resp.json()
+            candles = data.get("result", {}).get("XXBTZUSD", [])
+            closes  = [float(c[4]) for c in candles[-minutes:]]
+            if closes:
+                print(f"[Prices] Kraken: {len(closes)} candles, "
+                      f"latest=${closes[-1]:,.0f}")
+                return np.array(closes)
+        print(f"[Prices] Kraken bad response — using fallback")
+    except Exception as e:
+        print(f"[Prices] Kraken failed: {e} — using fallback")
+    try:
+        cg    = CoinGeckoAPI()
+        data  = cg.get_coin_market_chart_by_id(
+            id='bitcoin', vs_currency='usd', days=1
+        )
+        closes = [p[1] for p in data['prices'][-minutes:]]
+        print(f"[Prices] CoinGecko fallback: {len(closes)} points")
+        return np.array(closes)
+    except Exception as e:
+        print(f"[Prices] CoinGecko fallback failed: {e}")
+    return np.array([83000] * minutes)
+
+def compute_volatility(prices):
+    if len(prices) < 2:
+        return 0
+    returns = np.diff(np.log(prices))
+    return np.std(returns)
+
+def bayesian_prob_update(prices):
+    returns = np.diff(np.log(prices))
+    momentum = np.mean(returns[-10:]) if len(returns) >= 10 else 0
+    rsi_adjust = 0
+    if len(returns) >= 14:
+        gains  = np.maximum(returns[-14:], 0).mean()
+        losses = np.abs(np.minimum(returns[-14:], 0)).mean()
+        rs     = gains / losses if losses != 0 else 0
+        rsi    = 100 - (100 / (1 + rs))
+        if rsi < 30:
+            rsi_adjust = 0.08
+        elif rsi > 70:
+            rsi_adjust = -0.08
+    prob = 0.5 + momentum * 50 + rsi_adjust
+    return max(0.01, min(0.99, prob))
+
+def update_regime(prices):
+    global REGIME, RISK_SCORE
+    ma200   = np.mean(prices[-200:]) if len(prices) >= 200 else prices.mean()
+    current = prices[-1]
+    if current > ma200 * 1.02:
+        REGIME     = "BULL"
+        RISK_SCORE = 0.6
+    elif current < ma200 * 0.98:
+        REGIME     = "BEAR"
+        RISK_SCORE = 0.3
+    else:
+        REGIME     = "CHOP"
+        RISK_SCORE = 0.4
+
+def kelly_size(prob):
+    edge = prob - 0.5
+    return max(0.01, min(0.25, edge * 2 * RISK_SCORE))
+
+# === TICKER AGENT ===
+def update_live_ticker():
+    global live_ticker
+
+    def build_ticker(dt):
+        floored = (dt.minute // 15) * 15
+        hhmm    = f"{dt.hour:02d}{floored:02d}"
+        suffix  = f"{floored:02d}"
+        y = dt.strftime('%y').upper()
+        b = dt.strftime('%b').upper()
+        d = dt.strftime('%d')
+        return f"KXBTC15M-{y}{b}{d}{hhmm}-{suffix}"
+
+    headers = {"Authorization": f"Bearer {KALSHI_API_KEY}"}
+    url     = "https://api.elections.kalshi.com/trade-api/v2/markets"
+    for status in ("open", "unopened"):
+        try:
+            resp = requests.get(
+                url,
+                headers=headers,
+                params={"status": status, "limit": 10,
+                        "series_ticker": "KXBTC15M"},
+                timeout=8
+            )
+            if resp.status_code == 200:
+                markets = resp.json().get("markets", [])
+                hits    = [
+                    m for m in markets
+                    if (m.get("ticker") or "").upper().startswith("KXBTC15M")
+                ]
+                if hits:
+                    open_hits = [
+                        m for m in hits
+                        if (m.get("status") or "").lower() == "open"
+                    ]
+                    pick       = (open_hits or hits)[0]["ticker"]
+                    live_ticker = pick
+                    print(f"[Ticker] {status}: {live_ticker}")
+                    return live_ticker
+        except Exception as e:
+            print(f"[Ticker] {status} error: {e}")
+
+    now_utc    = datetime.datetime.now(datetime.timezone.utc)
+    t1         = build_ticker(now_utc)
+    t2         = build_ticker(now_utc + datetime.timedelta(minutes=15))
+    print(f"[Ticker] fallback current={t1} next={t2}")
+    live_ticker = t1
+    return live_ticker
+
+# === ORDER PLACEMENT ===
+def log_trade(direction, bet, action, profit_pct=0):
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open("trade_log.csv", "a", newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow([timestamp, direction, f"{bet:.2f}",
+                         action, f"{profit_pct:.2f}%"])
+
+def place_order(direction, bet):
+    global COOLDOWN_REMAINING
+
+    # Safety: balance floor
+    if CURRENT_BALANCE < MIN_BALANCE:
+        print(f"[Safety] Balance ${CURRENT_BALANCE:.2f} below floor "
+              f"${MIN_BALANCE:.2f} — bot halted")
+        send_telegram(f"🛑 BOT HALTED: Balance ${CURRENT_BALANCE:.2f} "
+                      f"below safety floor ${MIN_BALANCE:.2f}")
+        raise SystemExit("Balance floor hit")
+
+    # Safety: daily loss limit
+    loss_pct = (SESSION_START_BAL - CURRENT_BALANCE) / SESSION_START_BAL
+    if loss_pct >= DAILY_LOSS_LIMIT:
+        print(f"[Safety] Daily loss limit hit "
+              f"({loss_pct*100:.1f}%) — bot halted")
+        send_telegram(f"🛑 BOT HALTED: Daily loss limit "
+                      f"{loss_pct*100:.1f}% exceeded")
+        raise SystemExit("Daily loss limit hit")
+
+    # Safety: hard bet cap
+    bet = min(bet, MAX_BET)
+
+    # Guard: no duplicate orders on same window
+    ticker = update_live_ticker()
+    if not ticker:
+        print("[Order] No ticker — skipping")
+        return False
+    if any(p.get("ticker") == ticker for p in OPEN_POSITIONS):
+        print(f"[Order] Already placed on {ticker} — skipping")
+        return False
+
+    side           = "yes" if direction == "UP" else "no"
+    contract_count = max(1, int(bet / 0.50))
+    yes_price      = 50 if side == "yes" else None
+    no_price       = 50 if side == "no"  else None
+
+    try:
+        print(f"[Order] → {ticker} | {side} | "
+              f"count={contract_count} | ${bet:.2f}")
+        order = kalshi.create_order(
+            ticker=ticker,
+            action="buy",
+            side=side,
+            type="market",
+            count=contract_count,
+            yes_price=yes_price,
+            no_price=no_price,
+        )
+        msg = f"✅ PLACED: {direction} ${bet:.2f} on {ticker}"
+        print(msg)
+        send_telegram(msg)
+        OPEN_POSITIONS.append({
+            "direction": direction,
+            "bet":       bet,
+            "ticker":    ticker,
+            "time":      time.time(),
+        })
+        log_trade(direction, bet, "PLACED")
+        COOLDOWN_REMAINING = 0
+        return True
+    except Exception as e:
+        print(f"[Order] Failed: {e}")
+        send_telegram(f"⚠️ Failed: {direction} ${bet:.2f} — {e}")
+        COOLDOWN_REMAINING = COOLDOWN_CYCLES
+        return False
+
+# === POSITION MANAGEMENT ===
+def get_live_balance():
+    try:
+        resp = kalshi.get_balance()
+        return float(resp.balance) / 100
+    except Exception:
+        return CURRENT_BALANCE
+
+def check_open_positions():
+    global CURRENT_BALANCE, OPEN_POSITIONS
+    CURRENT_BALANCE = get_live_balance()
+    print(f"Balance: ${CURRENT_BALANCE:.2f} | "
+          f"Open positions: {len(OPEN_POSITIONS)}")
+    if not OPEN_POSITIONS:
+        return
+    try:
+        current_prob = bayesian_prob_update(get_btc_prices(60))
+    except Exception as e:
+        print(f"[Positions] Could not compute prob: {e}")
+        return
+
+    positions_to_remove = []
+    for pos in list(OPEN_POSITIONS):
+        try:
+            direction  = pos.get("direction", "UP")
+            bet        = pos.get("bet", 0)
+            profit_pct = (
+                (current_prob - 0.5) * 100
+                if direction == "UP"
+                else (0.5 - current_prob) * 100
+            )
+            if profit_pct >= 25:
+                print(f"[Positions] Cash-out: {direction} +{profit_pct:.1f}%")
+                send_telegram(
+                    f"💰 CASH-OUT: {direction} +{profit_pct:.1f}%"
+                )
+                log_trade(direction, bet, "CASH_OUT", profit_pct)
+                positions_to_remove.append(pos)
+            elif profit_pct <= -60:
+                hedge_dir = "DOWN" if direction == "UP" else "UP"
+                hedge_bet = min(bet * 0.5, MAX_BET)
+                print(f"[Positions] Hedge: {hedge_dir} ${hedge_bet:.2f}")
+                send_telegram(
+                    f"🛡️ HEDGE: {hedge_dir} ${hedge_bet:.2f}"
+                )
+                place_order(hedge_dir, hedge_bet)
+                log_trade(hedge_dir, hedge_bet, "HEDGE", profit_pct)
+                positions_to_remove.append(pos)
+        except Exception as e:
+            print(f"[Positions] Error on {pos}: {e}")
+
+    for pos in positions_to_remove:
+        if pos in OPEN_POSITIONS:
+            OPEN_POSITIONS.remove(pos)
+
+# === MAIN CYCLE ===
+def simulate_trade():
+    global TRADE_COUNTER, COOLDOWN_REMAINING
+
+    TRADE_COUNTER += 1
+    print(f"\n{'='*40}")
+    print(f"Cycle {TRADE_COUNTER} | "
+          f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Balance: ${CURRENT_BALANCE:.2f} | "
+          f"Regime: {REGIME} | Cooldown: {COOLDOWN_REMAINING}")
+
+    update_live_ticker()
+
+    prices  = get_btc_prices(60)
+    vol     = compute_volatility(prices)
+    prob_up = bayesian_prob_update(prices)
+    update_regime(prices)
+
+    print(f"prob_up={prob_up:.3f} | vol={vol:.5f} | regime={REGIME}")
+
+    # Only trade if edge is strong enough
+    edge = abs(prob_up - 0.5)
+    if edge < (CONFIDENCE_MIN - 0.5):
+        print(f"[Signal] Edge {edge:.3f} below threshold "
+              f"{CONFIDENCE_MIN-0.5:.3f} — skipping")
+    elif COOLDOWN_REMAINING > 0:
+        print(f"[Cooldown] Waiting {COOLDOWN_REMAINING} more cycle(s)")
+        COOLDOWN_REMAINING -= 1
+    else:
+        direction = "UP" if prob_up > 0.5 else "DOWN"
+        raw_bet   = kelly_size(
+            prob_up if direction == "UP" else 1 - prob_up
+        ) * CURRENT_BALANCE
+        bet       = min(round(raw_bet, 2), MAX_BET)
+        print(f"[Signal] {direction} | raw_bet=${raw_bet:.2f} "
+              f"| capped_bet=${bet:.2f}")
+        place_order(direction, bet)
+
+    check_open_positions()
+    time.sleep(90)
+
+# === ENTRY POINT ===
+if __name__ == "__main__":
+    print(f"OpenClaw Bot starting — "
+          f"balance=${CURRENT_BALANCE:.2f} | "
+          f"max_bet=${MAX_BET:.2f} | "
+          f"confidence_min={CONFIDENCE_MIN}")
+    send_telegram(f"🤖 OpenClaw started | "
+                  f"Balance=${CURRENT_BALANCE:.2f} | "
+                  f"MaxBet=${MAX_BET:.2f}")
+    try:
+        while True:
+            simulate_trade()
+    except SystemExit as e:
+        print(f"Bot halted: {e}")
+        send_telegram(f"🛑 Bot halted: {e}")
+    except KeyboardInterrupt:
+        print("Bot stopped by user.")
+        send_telegram("⏹️ Bot stopped by user.")
