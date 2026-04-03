@@ -316,7 +316,7 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
     try:
         print(f"[Order] {ticker} | {side} | count={contract_count} | ${bet:.2f}")
         order=kalshi.create_order(ticker=ticker,action="buy",side=side,type="market",
-            count=contract_count,yes_price=yes_price,no_price=no_price,time_in_force="ioc")
+            count=contract_count,time_in_force="ioc")
         try:
             if hasattr(order, "order") and order.order is not None:
                 o = order.order
@@ -617,7 +617,7 @@ def check_open_positions():
                         to_remove.append(pos)
                         continue
                     entry_win_prob=(1-entry_yes) if direction=="DOWN" else entry_yes
-                    if win_prob<0.48 and age_placed>=2.0 and entry_win_prob>0.55:
+                    if win_prob<0.40 and age_placed>=3.0 and entry_win_prob>0.65:
                         print(f"[BreakEven] {direction} on {ticker} crossed 50% — exiting")
                         send_telegram(f"⚖️ BreakEven: {direction} {ticker}\n{entry_win_prob:.0%}→{win_prob:.0%}")
                         to_remove.append(pos)

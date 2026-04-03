@@ -1,32 +1,3 @@
-tail -5 /root/bot.log
-cp /root/real_bot.py /root/real_bot_v3_stable.py
-sed -i 's/INITIAL_BALANCE    = 259.29/INITIAL_BALANCE    = 266.37/' /root/real_bot.py
-source kalshi_env/bin/activate
-sed -i 's/if window_minute > 4 or window_minute >= 13:/if window_minute == 0 or window_minute > 4 or window_minute >= 13:/' /root/real_bot.py
-python3 /tmp/status_all.py
-pkill -f real_bot.py
-for f in /root/real_bot.py /root/eth_bot.py /root/sol_bot.py; do      sed -i 's/INITIAL_BALANCE    = 259.29/INITIAL_BALANCE    = 258.20/' $f;      sed -i 's/SESSION_START_BAL  = 259.29/SESSION_START_BAL  = 258.20/' $f;      sed -i 's/INITIAL_BALANCE    = 266.37/INITIAL_BALANCE    = 258.20/' $f;      sed -i 's/SESSION_START_BAL  = 266.37/SESSION_START_BAL  = 258.20/' $f;  done
-source kalshi_env/bin/activate
-python3 /tmp/status_all.py
-touch /root/STOP
-python3 /tmp/check_balance.py
-grep -n "window_minute\|consecutive\|confirmation\|DIRECTIONAL_HIGH\|DIRECTIONAL_LOW" real_bot.py | head -15
-nano /tmp/fix_entry.py
-python3 /tmp/fix_entry.py
-sed -n '474,502p' real_bot.py
-nano /tmp/fix_entry.py
-cat > /tmp/fix_entry.py << 'ENDOFSCRIPT'
- code = open('/root/real_bot.py').read()
- 
- old = '''    now_utc       = datetime.datetime.now(datetime.timezone.utc)
-     window_minute = now_utc.minute % 15
-     if window_minute == 0 or window_minute > 4 or window_minute >= 13:
-         print(f"[Timing] Window is {window_minute} min old — skipping")
-         return False
-     if yes_price > DIRECTIONAL_HIGH:
-         current_direction = "UP"
-         edge = yes_price - 0.5
-     elif yes_price < DIRECTIONAL_LOW:
          current_direction = "DOWN"
          edge = 0.5 - yes_price
      else:
@@ -1998,3 +1969,32 @@ python3 /tmp/calc_pnl.py
 grep "HALTED\|below floor\|MIN_BALANCE" /root/bot.log /root/eth_bot.log /root/sol_bot.log | tail -5
 for f in /root/real_bot.py /root/eth_bot.py /root/sol_bot.py; do      sed -i 's/MIN_BALANCE=185.00/MIN_BALANCE=175.00/' $f;  done
 pkill -f watchdog.py
+source kalshi_env/bin/activate
+python3 /tmp/status_all.py
+pkill -f watchdog.py
+grep -E "WIN|LOSS|PLACED|Settled" /root/bot.log | grep "26APR03" | tail -20
+python3 /tmp/check_positions.py
+grep -E "Error|error|failed|Failed|Exception|Traceback" /root/bot.log | grep "26APR03" | tail -20
+grep "Balance:" /root/bot.log | grep "26APR03" | head -20
+ls /root/real_bot_pre_v4_backup.py
+grep -n "filled\|OPEN_POSITIONS.append\|CreateOrder" /root/real_bot.py | head -10
+else:   filled = order is not None
+nano /tmp/fix_order_check.py
+python3 /tmp/fix_order_check.py
+sed -n '317,330p' /root/real_bot.py
+nano /tmp/fix_order_check2.py
+python3 /tmp/fix_order_check2.py
+nano /tmp/test_order_status.py
+python3 /tmp/test_order_status.py
+nano /tmp/test_order_fields.py
+python3 /tmp/test_order_fields.py
+nano /tmp/fix_order_check3.py
+python3 /tmp/fix_order_check3.py
+sed 's/DRY_RUN=False/DRY_RUN=True/' /root/real_bot.py > /tmp/btc_dryrun2.py
+cp /root/real_bot.py /root/real_bot_v4_stable.py
+sleep 120 && grep -E "Order.*status|Order.*filled|PLACED|Settled|WIN|LOSS|Confidence" /root/bot.log /root/eth_bot.log /root/sol_bot.log | tail -15
+tail -10 /root/sol_bot.log
+# Fix 1: Lower MIN_BALANCE further
+pkill -f watchdog.py
+tail -3 /root/bot.log
+sleep 120 && grep -E "Order.*status|Order.*remaining|PLACED|Settled|WIN|LOSS|Signal.*CONFIRMED" /root/bot.log /root/eth_bot.log /root/sol_bot.log | tail -10
