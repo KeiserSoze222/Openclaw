@@ -318,15 +318,22 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
         order=kalshi.create_order(ticker=ticker,action="buy",side=side,type="market",
             count=contract_count,yes_price=yes_price,no_price=no_price,time_in_force="ioc")
         try:
-            if hasattr(order, "order"):
-                status = order.order.status if hasattr(order.order, "status") else str(order.order)
-                filled = status in ("filled", "executed", "resting")
+            if hasattr(order, "order") and order.order is not None:
+                o = order.order
+                status = str(o.status) if o.status else ""
+                remaining = o.remaining_count if o.remaining_count is not None else -1
+                filled = status in ("filled","executed") or (remaining == 0 and o.order_id is not None)
+                print(f"[Order] status={status} remaining={remaining} filled={filled}")
             elif isinstance(order, dict):
-                filled = (order or {}).get("order",{}).get("status","") in ("filled","executed","resting")
+                status = (order or {}).get("order",{}).get("status","")
+                filled = status in ("filled","executed")
+                print(f"[Order] dict status={status} filled={filled}")
             else:
-                filled = order is not None
-        except Exception:
-            filled = order is not None
+                print(f"[Order] Unknown response: {type(order)} — treating as not filled")
+                filled = False
+        except Exception as ex:
+            print(f"[Order] Fill check error: {ex}")
+            filled = False
         if not filled:
             print(f"[Order] Not filled: {order}")
             COOLDOWN_REMAINING=COOLDOWN_CYCLES

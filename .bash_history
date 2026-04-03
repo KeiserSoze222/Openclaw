@@ -1,92 +1,3 @@
-curl -s "https://gamma-api.polymarket.com/markets?q=bitcoin+15&limit=10&active=true" | python3 -m json.tool | grep -i "question\|slug\|yes" | head -20
-node --version 2>/dev/null || echo "Node not installed"
-grep -E "Settled|WIN|LOSS|✅ DIRECT" bot.log | tail -10
-grep "get_max_bet\|min(20" real_bot.py | head -3
-npm install -g pmxtjs 2>&1 | tail -5
-cat bot.log | tail -8
-python3 /tmp/test_pmxt.py
-sleep 120 && grep -E "Settled|WIN|LOSS|✅ DIRECT|CONFIRMED" bot.log | tail -10
-grep -E "Settled|WIN|LOSS|✅ DIRECT|CONFIRMED" bot.log | tail -10
-sed -i 's/        print(f"\[Trend\] No 1H data — using 15M signal only")/        pass  # No 1H data available/' real_bot.py
-date -u
-pkill -f real_bot.py
-grep -n "def update_live_ticker\|live_ticker\|status.*open\|unopened" real_bot.py | head -10
-grep -n "live_ticker = pick\|live_ticker = t1\|return live_ticker" real_bot.py | head -8
-sleep 70 && grep -E "CONFIRMED|✅ DIRECT|Settled|WIN|LOSS" bot.log | tail -8
-sed -n '178,230p' real_bot.py
-sleep 300 && grep -E "Settled|WIN|LOSS" bot.log | tail -5
-grep -n "Bearer.*KALSHI_API_KEY\|Authorization.*Bearer" real_bot.py | head -5
-nano /tmp/fix_ticker_auth.py
-python3 /tmp/fix_ticker_auth.py
-nano /tmp/fix_ticker_auth.py
-sed -i 's/    headers = {"Authorization": f"Bearer {KALSHI_API_KEY}"}//' real_bot.py
-grep -E "Settled|WIN|LOSS" bot.log | tail -5
-pkill -f real_bot.py
-cat bot.log | tail -10
-grep -E "Order →|✅ DIRECT|CONFIRMED" bot.log | tail -5
-sed -i 's/no_price  = min(99, max(1, round((mkt_no  or 0.50) \* 100))) if side == "no"  else None/no_price  = min(99, max(1, round((mkt_no  or 0.50) * 100) + 2)) if side == "no"  else None/' real_bot.py
-source kalshi_env/bin/activate
-sleep 300 && grep -E "Settled|WIN|LOSS" bot.log | tail -5
-sed -i 's/DIRECTIONAL_HIGH = 0.65/DIRECTIONAL_HIGH = 0.70/' real_bot.py
-pkill -f real_bot.py
-python3 /tmp/check_balance.py
-python3 -c "
- import requests, tempfile
- raw = open('/root/real_bot.py').read()
- key = raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]
- kid = raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]
- tf = tempfile.NamedTemporaryFile(delete=False, suffix='.pem', mode='w')
- tf.write(key); tf.close()
- import kalshi_python
- from kalshi_python.configuration import Configuration
- import kalshi
- config = Configuration()
- config.host = 'https://api.elections.kalshi.com/trade-api/v2'
- kalshi.set_kalshi_auth(kid, tf.name)
- for series in ['KXETH15M', 'KXSOL15M', 'KXBTC1H', 'KXETH1H']:
-     url = 'https://api.elections.kalshi.com/trade-api/v2/markets'
-     h = kalshi.kalshi_auth.create_auth_headers('GET', url)
-     r = requests.get(url, headers=h, params={'series_ticker': series, 'status': 'open', 'limit': 1})
-     markets = r.json().get('markets', []) if r.status_code == 200 else []
-     print(f'{series}: {len(markets)} open markets {markets[0][\"ticker\"] if markets else \"none\"}')
- " 2>/dev/null
-nano /tmp/check_markets.py
-python3 /tmp/check_markets.py
-source /root/kalshi_env/bin/activate
-head -30 /root/real_bot.py | grep import
-nano /tmp/check_markets.py
-python3 /tmp/check_markets.py
-grep -n "KXBTC15M\|series_ticker" real_bot.py | head -10
-nano /tmp/add_multimarket.py
-python3 /tmp/add_multimarket.py
-sed -i 's/MARKET_SERIES    = MARKET_SERIES  # ← change to KXETH15M or KXSOL15M for other markets    # buy both sides when YES+NO sum < this (97¢)/MARKET_SERIES    = "KXBTC15M"  # ← change to KXETH15M or KXSOL15M for other markets/' real_bot.py
-cp real_bot.py /root/eth_bot.py
-cp real_bot.py /root/sol_bot.py
-grep "MARKET_SERIES\|OpenClaw" /root/eth_bot.py | head -3
-sed -i 's/MAX_BET_PCT        = 0.070/MAX_BET_PCT        = 0.025/' /root/eth_bot.py
-sed -i 's/trade_log.csv/eth_trade_log.csv/' /root/eth_bot.py
-sed -i 's|/root/STOP|/root/STOP_ETH|' /root/eth_bot.py
-python3 -m py_compile /root/eth_bot.py && echo "ETH OK"
-nohup python3 -u /root/eth_bot.py > /root/eth_bot.log 2>&1 &
-nohup python3 -u /root/sol_bot.py > /root/sol_bot.log 2>&1 &
-cat /root/eth_bot.log | tail -8
-cat /root/sol_bot.log | tail -8
-ps aux | grep -E "real_bot|eth_bot|sol_bot" | grep -v grep
-cat /root/bot.log | tail -5
-sed -i 's/f"✅ {strategy_tag.upper()}: {direction}/f"✅ ETH {strategy_tag.upper()}: {direction}/' /root/eth_bot.py
-sleep 300 && echo "=== BTC ===" && grep -E "Settled|WIN|LOSS|✅ DIRECT" /root/bot.log | tail -5 && echo "=== ETH ===" && grep -E "Settled|WIN|LOSS|✅ DIRECT" /root/eth_bot.log | tail -5 && echo "=== SOL ===" && grep -E "Settled|WIN|LOSS|✅ DIRECT" /root/sol_bot.log | tail -5
-source kalshi_env/bin/activate
-sleep 300 && echo "=== BTC ===" && grep -E "Settled|WIN|LOSS|✅ DIRECT" /root/bot.log | tail -5 && echo "=== ETH ===" && grep -E "Settled|WIN|LOSS|✅ DIRECT" /root/eth_bot.log | tail -5 && echo "=== SOL ===" && grep -E "Settled|WIN|LOSS|✅ DIRECT" /root/sol_bot.log | tail -5
-source kalshi_env/bin/activate
-python3 /tmp/check_balance.py
-pkill -f eth_bot.py
-cp /root/eth_bot.py /root/eth_bot_v1_stable.py
-nano /tmp/status_all.py
-python3 /tmp/status_all.py
-source kalshi_env/bin/activate
-python3 /tmp/status_all.py
-sed -i 's/if window_minute > 4 or window_minute == 14:/if window_minute > 4 or window_minute >= 13:/' /root/real_bot.py
-pkill -f real_bot.py
 tail -5 /root/bot.log
 cp /root/real_bot.py /root/real_bot_v3_stable.py
 sed -i 's/INITIAL_BALANCE    = 259.29/INITIAL_BALANCE    = 266.37/' /root/real_bot.py
@@ -1998,3 +1909,92 @@ cp /root/real_bot.py /root/real_bot_v4_stable.py
 source kalshi_env/bin/activate
 python3 /tmp/status_all.py
 exit
+source kalshi_env/bin/activate
+python3 /tmp/status_all.py
+grep -n "BTC {outcome}\|BTC {strategy\|BTC DIRECTIONAL\|BTC WIN\|BTC LOSS\|BTC Hourly" /root/eth_bot.py | head -5
+for f in /root/eth_bot.py /root/sol_bot.py; do      sed -i 's/f"✅ BTC {strategy_tag/f"✅ {BOT_NAME.split()[1]} {strategy_tag/' $f;      sed -i 's/} BTC {outcome}:/} {BOT_NAME.split()[1]} {outcome}:/' $f;      sed -i 's/f"📊 BTC Hourly/f"📊 {BOT_NAME.split()[1]} Hourly/' $f;      sed -i 's/f"{"✅" if won else "❌"} BTC/f"{"✅" if won else "❌"} {BOT_NAME.split()[1]}/' $f;  done
+for f in /root/real_bot.py /root/eth_bot.py /root/sol_bot.py; do       sed -i 's/f"⚠️ BTC cycle error/f"⚠️ {BOT_NAME.split()[1]} cycle error/' $f;      sed -i 's/f"🛑 {BOT_NAME} halted/f"🛑 {BOT_NAME} halted/' $f;  done
+nano /tmp/fix_entry_yes.py 
+python3 /tmp/fix_entry_yes.py
+nano /tmp/fix_cashout_thresholds.py
+python3 /tmp/fix_cashout_thresholds.py
+nano /tmp/fix_profit_lock.py
+python3 /tmp/fix_profit_lock.py
+grep -n "CASH OUT\|CashOut\|cash_out\|cashout" /root/real_bot.py | head -5
+sed -n '520,535p' /root/real_bot.py
+nano /tmp/fix_profit_lock2.py
+python3 /tmp/fix_profit_lock2.py
+pkill -f watchdog.py
+grep -n "window_minute==1\|EXTREME\|STRONG_MIN1\|consecutive_signal" /root/real_bot.py | head -10
+sed -n '369,420p' /root/real_bot.py
+nano /tmp/add_confidence.py
+python3 /tmp/add_confidence.py
+nano /tmp/fix_conf_sizing.py
+python3 /tmp/fix_conf_sizing.py
+cp /root/real_bot.py /root/real_bot_v4_stable.py
+cd /root
+git config --global user.email "openclaw@bot.com"
+git add -A && git commit -m "description of change"
+nano /tmp/write_status3.py
+python3 /tmp/write_status3.py
+grep -n "True P\|amp;L\|Deposited" /root/dashboard.py | head -8
+nano /tmp/fix_dashboard_pnl.py
+python3 /tmp/fix_dashboard_pnl.py
+cp /root/dashboard.py /root/dashboard_v3_stable.py
+grep -n "def \|series\|limit\|yes_ask\|threshold" /root/bond_scanner.py | head -15
+sed -n '72,145p' /root/bond_scanner.py
+grep -n "YES_HIGH\|YES_LOW\|MIN_MINUTES\|MAX_MINUTES\|MIN_BET\|MAX_BET" /root/bond_scanner.py | head -10
+grep -E "Found|opportunities|bond|BOND|scan" /root/bond_scanner.log | tail -20
+tail -20 /root/bond_scanner.log
+nano /tmp/debug_bond.py
+python3 /tmp/debug_bond.py
+sed -i 's/if not yes_ask or not no_ask or not close_ts:/if not yes_ask or not no_ask or not close_ts:/' /root/bond_scanner.py
+nano /tmp/fix_bond.py
+python3 /tmp/fix_bond.py
+python3 /tmp/debug_bond2.py
+nano /tmp/debug_bond2.py
+python3 /tmp/debug_bond2.py
+nano /tmp/fix_bond2.py
+python3 /tmp/fix_bond2.py
+grep -n "Skip markets already at 0\|yes_ask.*0.01\|yes_ask.*0.99" /root/bond_scanner.py | head -5
+sed -i 's/            if float(yes_ask) <= 0.01 or float(yes_ask) >= 0.99:/            if float(yes_ask) <= 0.01 or float(yes_ask) >= 0.99:\n                continue\n            if float(yes_ask) + float(no_ask) > 1.05:/' /root/bond_scanner.py
+pkill -f bond_scanner.py
+python3 /tmp/debug_bond2.py 2>/dev/null | head -10
+sed -i 's|open("/root/real_bot.py").read()|open("/root/real_bot_pre_v4_backup.py").read()|g' /root/bond_scanner.py
+sed -i 's/if float(yes_ask) + float(no_ask) > 1.05:/if float(yes_ask) + float(no_ask) > 1.02:/' /root/bond_scanner.py
+pkill -f bond_scanner.py
+grep -n "open.*read\|KALSHI_KEY\|KALSHI_SEC" /root/bond_scanner.py | head -8
+sed -i "s|open('/root/real_bot.py').read()|open('/root/real_bot_pre_v4_backup.py').read()|g" /root/bond_scanner.py
+pkill -f bond_scanner.py
+sleep 60
+git add /root/bond_scanner.py
+python3 /tmp/check_balance.py
+grep -E "Settled|WIN|LOSS|PLACED|CashOut|ProfitLock|BreakEven|HALTED|Error" /root/eth_bot.log | tail -20
+grep -E "Settled|WIN|LOSS|PLACED" /root/bot.log | grep "26APR02" | tail -20
+grep -E "Settled|WIN|LOSS" /root/eth_bot.log | grep "26APR02" | tail -20
+grep "PLACED\|Confidence\|HighConf\|bet=" /root/bot.log | grep "03:\|02:" | tail -10
+grep "PLACED" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR02" | wc -l
+python3 /tmp/check_balance.py
+grep -n "log_trade.*PLACED\|PLACED.*log_trade" /root/real_bot.py | head -5
+python3 -c "
+ import csv
+ total = 0
+ for f in ['/root/trade_log.csv', '/root/eth_trade_log.csv', '/root/sol_trade_log.csv']:
+     try:
+         with open(f) as fp:
+             for row in csv.reader(fp):
+                 if len(row)<5 or '26APR02' not in str(row): continue
+                 if 'WIN' in row[3]:
+                     try: total += float(row[4].replace('%',''))*float(row[2])/100
+                     except: pass
+                 elif 'LOSS' in row[3]:
+                     try: total -= float(row[2])
+                     except: pass
+     except: pass
+ print(f'Net PnL from CSV for today: \${total:+.2f}')
+ "
+nano /tmp/calc_pnl.py
+python3 /tmp/calc_pnl.py
+grep "HALTED\|below floor\|MIN_BALANCE" /root/bot.log /root/eth_bot.log /root/sol_bot.log | tail -5
+for f in /root/real_bot.py /root/eth_bot.py /root/sol_bot.py; do      sed -i 's/MIN_BALANCE=185.00/MIN_BALANCE=175.00/' $f;  done
+pkill -f watchdog.py

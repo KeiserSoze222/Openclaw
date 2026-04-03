@@ -22,3 +22,8 @@ Based on last 7 days of trading:
 ✅ No significant changes from last analysis
 
 Auto-tuner complete.
+Traceback (most recent call last):
+  File "/root/auto_tune_tod.py", line 12, in <module>
+    BOT_TOKEN = raw.split("BOT_TOKEN = '")[1].split("'")[0]
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+IndexError: list index out of range
