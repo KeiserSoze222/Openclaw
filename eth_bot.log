@@ -14066,3 +14066,171 @@ Balance: $157.57 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 Balance: $156.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Cycle] No signal — YES=0.38 is between 0.30 and 0.70, sum=1.03 >= 0.97
 [BreakEven] UP on KXETH15M-26APR031445-45 crossed 50% — exiting
+[Ticker] KXETH15M-26APR031445-45
+[Market] YES=0.74 | NO=0.29 | Sum=1.03
+==================================================
+Balance: $159.11 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=2/10 | moderate_edge,coinbase_weak
+[Timing] Window 12 min old — skipping
+[Cycle] No signal — YES=0.74 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Ticker] KXETH15M-26APR031445-45
+[Market] YES=0.65 | NO=0.42 | Sum=1.07
+==================================================
+Balance: $158.26 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.65 is between 0.30 and 0.70, sum=1.07 >= 0.97
+[Ticker] KXETH15M-26APR031445-45
+[Market] YES=0.99 | NO=0.02 | Sum=1.01
+==================================================
+Balance: $159.40 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | extreme_edge
+[Timing] Window 14 min old — skipping
+[Cycle] No signal — YES=0.99 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXETH15M-26APR031500-00
+[Market] YES=0.57 | NO=0.49 | Sum=1.06
+==================================================
+Balance: $159.45 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.57 is between 0.30 and 0.70, sum=1.06 >= 0.97
+[Ticker] KXETH15M-26APR031500-00
+[Market] YES=0.26 | NO=0.75 | Sum=1.01
+==================================================
+Balance: $159.45 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,all3_agree
+[Signal] DOWN candidate | yes=0.26 | waiting (1/2)
+[Cycle] No signal — YES=0.26 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXETH15M-26APR031500-00
+[Market] YES=0.26 | NO=0.75 | Sum=1.01
+==================================================
+Balance: $159.45 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,all3_agree
+[Coinbase] Confirms DOWN | $2049 gap=-1 (0.07%)
+[Kraken] Divergence 3161.16% — bet trimmed
+[Correlation] All 3 agree — bet boosted
+[Signal] CONFIRMED DOWN | yes=0.26 | edge=0.24 | bet=$2.17
+[Order] KXETH15M-26APR031500-00 | no | count=4 | $2.17
+[Order] status=executed remaining=-1 filled=True
+✅ BTC DIRECTIONAL: DOWN $2.17 on KXETH15M-26APR031500-00
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031500-00
+[Market] YES=0.33 | NO=0.68 | Sum=1.01
+==================================================
+Balance: $159.39 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.33 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031500-00
+[Market] YES=0.24 | NO=0.78 | Sum=1.02
+==================================================
+Balance: $159.59 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | moderate_edge,coinbase_weak,2of3_agree
+[Signal] DOWN candidate | yes=0.24 | waiting (1/2)
+[Cycle] No signal — YES=0.24 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031500-00
+[Market] YES=0.22 | NO=0.82 | Sum=1.04
+==================================================
+Balance: $159.55 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,all3_agree
+[Timing] Window 5 min old — skipping
+[Cycle] No signal — YES=0.22 is between 0.30 and 0.70, sum=1.04 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031500-00
+[Market] YES=0.19 | NO=0.82 | Sum=1.01
+==================================================
+Balance: $159.23 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
+[Timing] Window 6 min old — skipping
+[Cycle] No signal — YES=0.19 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031500-00
+[Market] YES=0.18 | NO=0.85 | Sum=1.03
+==================================================
+Balance: $159.95 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | strong_edge,coinbase_weak,2of3_agree
+[Timing] Window 7 min old — skipping
+[Cycle] No signal — YES=0.18 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031500-00
+[Market] YES=0.11 | NO=0.93 | Sum=1.04
+==================================================
+Balance: $160.05 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
+[Timing] Window 8 min old — skipping
+[Cycle] No signal — YES=0.11 is between 0.30 and 0.70, sum=1.04 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031500-00
+[Market] YES=0.12 | NO=0.91 | Sum=1.03
+==================================================
+Balance: $159.95 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | strong_edge,coinbase_weak,2of3_agree
+[Timing] Window 9 min old — skipping
+[Cycle] No signal — YES=0.12 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031500-00
+[Market] YES=0.03 | NO=0.98 | Sum=1.01
+==================================================
+Balance: $160.27 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 10 min old — skipping
+[Cycle] No signal — YES=0.03 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031500-00
+[Market] YES=0.04 | NO=0.98 | Sum=1.02
+==================================================
+Balance: $160.31 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | extreme_edge,coinbase_weak,2of3_agree
+[Timing] Window 11 min old — skipping
+[Cycle] No signal — YES=0.04 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031500-00
+[Market] YES=0.02 | NO=0.99 | Sum=1.00
+==================================================
+Balance: $160.31 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 12 min old — skipping
+[Cycle] No signal — YES=0.02 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[ProfitLock] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[CashOut] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031500-00
+[Market] YES=0.00 | NO=1.00 | Sum=1.00
+==================================================
+Balance: $160.35 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 13 min old — skipping
+[Cycle] No signal — YES=0.00 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[ProfitLock] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[CashOut] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031500-00
+[Market] YES=0.00 | NO=1.00 | Sum=1.00
+==================================================
+Balance: $160.38 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 14 min old — skipping
+[Cycle] No signal — YES=0.00 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[ProfitLock] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[CashOut] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031515-15
+[Market] YES=0.52 | NO=0.50 | Sum=1.02
+==================================================
+Balance: $160.39 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.52 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[ProfitLock] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[CashOut] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031515-15
+[Market] YES=0.57 | NO=0.47 | Sum=1.04
+==================================================
+Balance: $160.39 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.57 is between 0.30 and 0.70, sum=1.04 >= 0.97
+[ProfitLock] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[CashOut] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR031515-15
+[Market] YES=0.44 | NO=0.57 | Sum=1.01
+==================================================
+Balance: $160.39 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.44 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[ProfitLock] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[CashOut] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[Positions] 1 still open

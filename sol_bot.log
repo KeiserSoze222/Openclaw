@@ -13942,3 +13942,141 @@ Balance: $157.68 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
 [Confidence] Score=4/10 | strong_edge,coinbase_weak,2of3_agree
 [Timing] Window 10 min old — skipping
 [Cycle] No signal — YES=0.14 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Ticker] KXSOL15M-26APR031445-45
+[Market] YES=0.11 | NO=0.92 | Sum=1.03
+==================================================
+Balance: $157.08 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
+[Timing] Window 11 min old — skipping
+[Cycle] No signal — YES=0.11 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Ticker] KXSOL15M-26APR031445-45
+[Market] YES=0.10 | NO=0.93 | Sum=1.03
+==================================================
+Balance: $158.94 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
+[Timing] Window 12 min old — skipping
+[Cycle] No signal — YES=0.10 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Ticker] KXSOL15M-26APR031445-45
+[Market] YES=0.03 | NO=0.99 | Sum=1.02
+==================================================
+Balance: $157.79 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 13 min old — skipping
+[Cycle] No signal — YES=0.03 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Ticker] KXSOL15M-26APR031445-45
+[Market] YES=0.00 | NO=1.00 | Sum=1.00
+==================================================
+Balance: $159.44 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 14 min old — skipping
+[Cycle] No signal — YES=0.00 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[Ticker] KXSOL15M-26APR031500-00
+[Market] YES=0.55 | NO=0.48 | Sum=1.03
+==================================================
+Balance: $159.45 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Cycle] No signal — YES=0.55 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Ticker] KXSOL15M-26APR031500-00
+[Market] YES=0.37 | NO=0.65 | Sum=1.02
+==================================================
+Balance: $159.45 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Cycle] No signal — YES=0.37 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Ticker] KXSOL15M-26APR031500-00
+[Market] YES=0.32 | NO=0.71 | Sum=1.03
+==================================================
+Balance: $159.35 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Cycle] No signal — YES=0.32 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Ticker] KXSOL15M-26APR031500-00
+[Market] YES=0.31 | NO=0.73 | Sum=1.04
+==================================================
+Balance: $159.39 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Cycle] No signal — YES=0.31 is between 0.30 and 0.70, sum=1.04 >= 0.97
+[Ticker] KXSOL15M-26APR031500-00
+[Market] YES=0.25 | NO=0.76 | Sum=1.01
+==================================================
+Balance: $159.59 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,all3_agree
+[Signal] DOWN candidate | yes=0.25 | waiting (1/2)
+[Cycle] No signal — YES=0.25 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXSOL15M-26APR031500-00
+[Market] YES=0.28 | NO=0.76 | Sum=1.04
+==================================================
+Balance: $159.51 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Confidence] Score=3/10 | moderate_edge,coinbase_weak,2of3_agree
+[Timing] Window 5 min old — skipping
+[Cycle] No signal — YES=0.28 is between 0.30 and 0.70, sum=1.04 >= 0.97
+[Ticker] KXSOL15M-26APR031500-00
+[Market] YES=0.30 | NO=0.74 | Sum=1.04
+==================================================
+Balance: $159.19 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Cycle] No signal — YES=0.30 is between 0.30 and 0.70, sum=1.04 >= 0.97
+[Ticker] KXSOL15M-26APR031500-00
+[Market] YES=0.25 | NO=0.78 | Sum=1.03
+==================================================
+Balance: $159.67 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,all3_agree
+[Timing] Window 7 min old — skipping
+[Cycle] No signal — YES=0.25 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Ticker] KXSOL15M-26APR031500-00
+[Market] YES=0.27 | NO=0.76 | Sum=1.03
+==================================================
+Balance: $160.05 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,all3_agree
+[Timing] Window 8 min old — skipping
+[Cycle] No signal — YES=0.27 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Ticker] KXSOL15M-26APR031500-00
+[Market] YES=0.24 | NO=0.80 | Sum=1.04
+==================================================
+Balance: $159.95 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,all3_agree
+[Timing] Window 9 min old — skipping
+[Cycle] No signal — YES=0.24 is between 0.30 and 0.70, sum=1.04 >= 0.97
+[Ticker] KXSOL15M-26APR031500-00
+[Market] YES=0.11 | NO=0.90 | Sum=1.01
+==================================================
+Balance: $160.27 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
+[Timing] Window 10 min old — skipping
+[Cycle] No signal — YES=0.11 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXSOL15M-26APR031500-00
+[Market] YES=0.05 | NO=0.97 | Sum=1.02
+==================================================
+Balance: $160.25 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 11 min old — skipping
+[Cycle] No signal — YES=0.05 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Ticker] KXSOL15M-26APR031500-00
+[Market] YES=0.02 | NO=0.99 | Sum=1.01
+==================================================
+Balance: $160.19 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 12 min old — skipping
+[Cycle] No signal — YES=0.02 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXSOL15M-26APR031500-00
+[Market] YES=0.01 | NO=1.00 | Sum=1.00
+==================================================
+Balance: $160.35 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 13 min old — skipping
+[Cycle] No signal — YES=0.01 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[Ticker] KXSOL15M-26APR031500-00
+[Market] YES=0.00 | NO=1.00 | Sum=1.00
+==================================================
+Balance: $160.38 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 14 min old — skipping
+[Cycle] No signal — YES=0.00 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[Ticker] KXSOL15M-26APR031515-15
+[Market] YES=0.54 | NO=0.48 | Sum=1.02
+==================================================
+Balance: $160.39 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Cycle] No signal — YES=0.54 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Ticker] KXSOL15M-26APR031515-15
+[Market] YES=0.51 | NO=0.51 | Sum=1.02
+==================================================
+Balance: $160.39 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Cycle] No signal — YES=0.51 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Ticker] KXSOL15M-26APR031515-15
+[Market] YES=0.56 | NO=0.48 | Sum=1.04
+==================================================
+Balance: $160.39 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+3.84
+[Cycle] No signal — YES=0.56 is between 0.30 and 0.70, sum=1.04 >= 0.97

@@ -1,46 +1,3 @@
-         current_direction = "DOWN"
-         edge = 0.5 - yes_price
-     else:
-         last_signal_direction    = None
-         consecutive_signal_count = 0
-         return False
-     if current_direction == last_signal_direction:
-         consecutive_signal_count += 1
-     else:
-         last_signal_direction    = current_direction
-         consecutive_signal_count = 1
-     if consecutive_signal_count < 2:
-         print(f"[Signal] {current_direction} candidate | yes={yes_price:.2f} | "
-               f"waiting for confirmation (1/2)")
-         return False'''
- 
- new = '''    now_utc       = datetime.datetime.now(datetime.timezone.utc)
-     window_minute = now_utc.minute % 15
- 
-     # Determine direction and edge first
-     if yes_price > DIRECTIONAL_HIGH:
-         current_direction = "UP"
-         edge = yes_price - 0.5
-     elif yes_price < DIRECTIONAL_LOW:
-         current_direction = "DOWN"
-         edge = 0.5 - yes_price
-     else:
-         last_signal_direction    = None
-         consecutive_signal_count = 0
-         return False
- 
-     # EXTREME signal (YES < 0.20 or YES > 0.80): fire in minute 1, no confirmation
-     if (yes_price > 0.80 or yes_price < 0.20) and window_minute == 1:
-         print(f"[Signal] ⚡ EXTREME {current_direction} | yes={yes_price:.2f} | "
-               f"edge={edge:.2f} | firing immediately")
-         consecutive_signal_count = 2  # bypass confirmation
- 
-     # STANDARD signal: require 2 confirmations in minutes 1-4
-     else:
-         if window_minute == 0 or window_minute > 4 or window_minute >= 13:
-             print(f"[Timing] Window is {window_minute} min old — skipping")
-             return False
-         if current_direction == last_signal_direction:
              consecutive_signal_count += 1
          else:
              last_signal_direction    = current_direction
@@ -1998,3 +1955,46 @@ tail -10 /root/sol_bot.log
 pkill -f watchdog.py
 tail -3 /root/bot.log
 sleep 120 && grep -E "Order.*status|Order.*remaining|PLACED|Settled|WIN|LOSS|Signal.*CONFIRMED" /root/bot.log /root/eth_bot.log /root/sol_bot.log | tail -10
+source kalshi_env/bin/activate
+python3 /tmp/status_all.py
+view /mnt/skills/public/frontend-design/SKILL.md
+grep -n "create_order" /root/openclaw.py | head -5
+sed -n '320,326p' /root/openclaw.py
+sed -i 's/order=kalshi.create_order(ticker=ticker,action="buy",side=side,type="market",\n            count=contract_count,time_in_force="ioc")/order=kalshi.create_order(ticker=ticker,action="buy",side=side,type="market",count=contract_count,time_in_force="ioc")/' /root/openclaw.py
+nano /tmp/fix_order_price.py
+python3 /tmp/fix_order_price.py
+grep -n "win_prob<0.40\|BreakEven\|entry_win_prob" /root/openclaw.py | head -8
+sed -n '608,630p' /root/openclaw.py
+nano /tmp/fix_breakeven.py
+python3 /tmp/fix_breakeven.py
+sed -i 's/MIN_ALERT_SIZE = 500/MIN_ALERT_SIZE = 2000/' /root/whale_scanner.py
+nano /tmp/fix_whale_alerts.py
+python3 /tmp/fix_whale_alerts.py
+sleep 120 && grep -E "Order.*status|Order.*filled|PLACED|WIN|LOSS|Order failed" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR03 1[7-9]" | tail -10
+git add -A && git commit -m "Raise whale alert threshold, only alert our markets or $5k+ whales"
+tail -5 /root/bot.log
+cp /mnt/user-data/outputs/dashboard_v4.py /root/dashboard.py
+nano /root/dashboard_v4.py
+python3 -m py_compile /root/dashboard_v4.py && echo "OK"
+nano /root/dashboard_v4.html
+python3 -m py_compile /root/dashboard_v4.py && echo "OK"
+sed -i 's/VERSION_BALANCE = 159.02/VERSION_BALANCE = 159.84/' /root/dashboard.py
+pkill -f dashboard.py
+python3 /tmp/status_all.py
+nano /tmp/test_order_fix.py
+python3 /tmp/test_order_fix.py
+nano /root/dashboard_v4.html
+find /root -name "*bible*" -o -name "*Bible*" -o -name "*BIBLE*" 2>/dev/null
+wc -l /root/OPENCLAW_GUIDE.md
+nano /tmp/add_bible_route.py
+python3 /tmp/add_bible_route.py
+sed -i 's|<div class="header-right">|<div class="header-right"><a href="/bible" target="_blank" style="font-family:Orbitron,monospace;font-size:10px;letter-spacing:2px;color:var(--accent);text-decoration:none;border:1px solid var(--accent);padding:6px 12px;border-radius:6px;opacity:0.8;">📖 BIBLE</a>|' /root/dashboard_v4.html
+git add -A && git commit -m "Add Bible route and button to dashboard"
+nano /root/OPENCLAW_GUIDE.md
+wc -l /root/OPENCLAW_GUIDE.md
+tail -20 /root/OPENCLAW_GUIDE.md
+cat >> /root/OPENCLAW_GUIDE.md << 'EOF'
+nano /root/OPENCLAW_GUIDE.md
+wc -l /root/OPENCLAW_GUIDE.md
+grep -n "SECTION 7\|### Files\|### Monitor\|### Restart" /root/OPENCLAW_GUIDE.md
+sed -n '159,190p' /root/OPENCLAW_GUIDE.md

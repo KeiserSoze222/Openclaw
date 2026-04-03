@@ -9376,3 +9376,136 @@ Balance: $157.08 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
 [Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
 [Timing] Window 11 min old — skipping
 [Cycle] No signal — YES=0.08 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR031445-45
+[Market] YES=0.10 | NO=0.90 | Sum=1.00
+==================================================
+Balance: $158.18 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
+[Timing] Window 12 min old — skipping
+[Cycle] No signal — YES=0.10 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[Ticker] KXBTC15M-26APR031445-45
+[Market] YES=0.01 | NO=1.00 | Sum=1.00
+==================================================
+Balance: $158.44 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 13 min old — skipping
+[Cycle] No signal — YES=0.01 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[Ticker] KXBTC15M-26APR031445-45
+[Market] YES=0.00 | NO=1.00 | Sum=1.00
+==================================================
+Balance: $159.40 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 14 min old — skipping
+[Cycle] No signal — YES=0.00 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[Ticker] KXBTC15M-26APR031500-00
+[Market] YES=0.51 | NO=0.50 | Sum=1.01
+==================================================
+Balance: $159.45 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Cycle] No signal — YES=0.51 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR031500-00
+[Market] YES=0.27 | NO=0.74 | Sum=1.01
+==================================================
+Balance: $159.45 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,all3_agree
+[Signal] DOWN candidate | yes=0.27 | waiting (1/2)
+[Cycle] No signal — YES=0.27 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR031500-00
+[Market] YES=0.32 | NO=0.69 | Sum=1.01
+==================================================
+Balance: $159.45 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Cycle] No signal — YES=0.32 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR031500-00
+[Market] YES=0.33 | NO=0.68 | Sum=1.01
+==================================================
+Balance: $159.27 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Cycle] No signal — YES=0.33 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR031500-00
+[Market] YES=0.32 | NO=0.69 | Sum=1.01
+==================================================
+Balance: $159.43 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Cycle] No signal — YES=0.32 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR031500-00
+[Market] YES=0.26 | NO=0.77 | Sum=1.03
+==================================================
+Balance: $159.51 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,all3_agree
+[Timing] Window 5 min old — skipping
+[Cycle] No signal — YES=0.26 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Ticker] KXBTC15M-26APR031500-00
+[Market] YES=0.23 | NO=0.78 | Sum=1.01
+==================================================
+Balance: $159.19 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,all3_agree
+[Timing] Window 6 min old — skipping
+[Cycle] No signal — YES=0.23 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR031500-00
+[Market] YES=0.17 | NO=0.84 | Sum=1.01
+==================================================
+Balance: $159.83 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
+[Timing] Window 7 min old — skipping
+[Cycle] No signal — YES=0.17 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR031500-00
+[Market] YES=0.16 | NO=0.86 | Sum=1.02
+==================================================
+Balance: $160.05 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
+[Timing] Window 8 min old — skipping
+[Cycle] No signal — YES=0.16 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Ticker] KXBTC15M-26APR031500-00
+[Market] YES=0.17 | NO=0.84 | Sum=1.01
+==================================================
+Balance: $159.87 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
+[Timing] Window 9 min old — skipping
+[Cycle] No signal — YES=0.17 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR031500-00
+[Market] YES=0.06 | NO=0.95 | Sum=1.01
+==================================================
+Balance: $160.15 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
+[Timing] Window 10 min old — skipping
+[Cycle] No signal — YES=0.06 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR031500-00
+[Market] YES=0.03 | NO=0.98 | Sum=1.00
+==================================================
+Balance: $160.35 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Confidence] Score=5/10 | extreme_edge,coinbase_weak,2of3_agree
+[Timing] Window 11 min old — skipping
+[Cycle] No signal — YES=0.03 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[Ticker] KXBTC15M-26APR031500-00
+[Market] YES=0.06 | NO=0.96 | Sum=1.02
+==================================================
+Balance: $160.31 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
+[Timing] Window 12 min old — skipping
+[Cycle] No signal — YES=0.06 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Ticker] KXBTC15M-26APR031500-00
+[Market] YES=0.01 | NO=1.00 | Sum=1.01
+==================================================
+Balance: $160.35 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Confidence] Score=5/10 | extreme_edge,coinbase_weak,2of3_agree
+[Timing] Window 13 min old — skipping
+[Cycle] No signal — YES=0.01 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR031500-00
+[Market] YES=0.00 | NO=1.00 | Sum=1.00
+==================================================
+Balance: $160.38 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 14 min old — skipping
+[Cycle] No signal — YES=0.00 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[Ticker] KXBTC15M-26APR031515-15
+[Market] YES=0.59 | NO=0.42 | Sum=1.01
+==================================================
+Balance: $160.39 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Cycle] No signal — YES=0.59 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR031515-15
+[Market] YES=0.56 | NO=0.45 | Sum=1.01
+==================================================
+Balance: $160.39 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Cycle] No signal — YES=0.56 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR031515-15
+[Market] YES=0.53 | NO=0.48 | Sum=1.01
+==================================================
+Balance: $160.39 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.06
+[Cycle] No signal — YES=0.53 is between 0.30 and 0.70, sum=1.01 >= 0.97
