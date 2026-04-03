@@ -100,6 +100,34 @@ class Handler(http.server.BaseHTTPRequestHandler):
             except Exception as e:
                 self.send_response(500); self.end_headers()
                 self.wfile.write(str(e).encode())
+        elif self.path == '/bible':
+            self.send_response(200)
+            self.send_header('Content-Type','text/html')
+            self.end_headers()
+            md = open('/root/OPENCLAW_GUIDE.md').read()
+            html = f'''<!DOCTYPE html><html><head><meta charset="UTF-8">
+            <title>OpenClaw Bible</title>
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+            <style>
+            body{{background:#050810;color:#e0e8ff;font-family:'Inter',sans-serif;max-width:900px;margin:0 auto;padding:40px 20px;line-height:1.8;}}
+            h1{{font-family:'Orbitron',monospace;color:#00d4ff;font-size:24px;margin-bottom:8px;}}
+            h2{{font-family:'Orbitron',monospace;color:#00d4ff;font-size:16px;margin-top:40px;border-bottom:1px solid #1a2540;padding-bottom:8px;}}
+            h3{{color:#00ff88;font-size:14px;margin-top:24px;}}
+            code{{background:#0d1526;padding:2px 6px;border-radius:4px;font-size:12px;color:#ffd60a;}}
+            pre{{background:#0d1526;padding:16px;border-radius:8px;overflow-x:auto;border:1px solid #1a2540;}}
+            a{{color:#00d4ff;}}
+            .back{{display:inline-block;margin-bottom:32px;color:#00d4ff;text-decoration:none;font-size:12px;letter-spacing:1px;border:1px solid #1a2540;padding:6px 12px;border-radius:6px;}}
+            strong{{color:#ffd60a;}}
+            </style></head><body>
+            <a href="/" class="back">← BACK TO DASHBOARD</a>
+            <div id="content"></div>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+            <script>
+            const md = {repr(md)};
+            document.getElementById('content').innerHTML = marked.parse(md);
+            </script>
+            </body></html>'''
+            self.wfile.write(html.encode())
         else:
             self.send_response(200)
             self.send_header('Content-Type','text/html')

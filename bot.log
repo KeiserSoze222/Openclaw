@@ -9182,3 +9182,134 @@ Balance: $160.12 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 ==================================================
 Balance: $160.12 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Cycle] No signal — YES=0.70 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR031430-30
+[Market] YES=0.86 | NO=0.15 | Sum=1.01
+==================================================
+Balance: $160.12 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Signal] UP candidate | yes=0.86 | waiting (1/2)
+[Cycle] No signal — YES=0.86 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR031430-30
+[Market] YES=0.92 | NO=0.09 | Sum=1.01
+==================================================
+Balance: $160.12 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Coinbase] Confirms UP | $66920 gap=+87 (0.13%)
+[Correlation] 2/3 agree UP
+[Signal] CONFIRMED UP | yes=0.92 | edge=0.42 | bet=$2.94
+[Order] KXBTC15M-26APR031430-30 | yes | count=5 | $2.94
+[Order] status=executed remaining=-1 filled=True
+✅ BTC DIRECTIONAL: UP $2.94 on KXBTC15M-26APR031430-30
+[Positions] 1 still open
+[Ticker] KXBTC15M-26APR031430-30
+[Market] YES=0.91 | NO=0.10 | Sum=1.01
+==================================================
+Balance: $160.38 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Timing] Window 5 min old — skipping
+[Cycle] No signal — YES=0.91 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Positions] 1 still open
+[Ticker] KXBTC15M-26APR031430-30
+[Market] YES=0.92 | NO=0.09 | Sum=1.00
+==================================================
+Balance: $160.43 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Timing] Window 6 min old — skipping
+[Cycle] No signal — YES=0.92 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[Positions] 1 still open
+[Ticker] KXBTC15M-26APR031430-30
+[Market] YES=0.90 | NO=0.11 | Sum=1.01
+==================================================
+Balance: $160.28 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Timing] Window 7 min old — skipping
+[Cycle] No signal — YES=0.90 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Positions] 1 still open
+[Ticker] KXBTC15M-26APR031430-30
+[Market] YES=0.92 | NO=0.10 | Sum=1.01
+==================================================
+Balance: $160.00 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Timing] Window 8 min old — skipping
+[Cycle] No signal — YES=0.92 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Positions] 1 still open
+[Ticker] KXBTC15M-26APR031430-30
+[Market] YES=0.96 | NO=0.04 | Sum=1.00
+==================================================
+Balance: $160.57 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | extreme_edge,coinbase_weak
+[Timing] Window 9 min old — skipping
+[Cycle] No signal — YES=0.96 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[Positions] 1 still open
+[Ticker] KXBTC15M-26APR031430-30
+[Market] YES=0.98 | NO=0.03 | Sum=1.00
+==================================================
+Balance: $161.32 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | extreme_edge,coinbase_weak
+[Timing] Window 10 min old — skipping
+[Cycle] No signal — YES=0.98 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[Positions] 1 still open
+[Ticker] KXBTC15M-26APR031430-30
+[Market] YES=0.99 | NO=0.02 | Sum=1.00
+==================================================
+Balance: $161.53 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | extreme_edge,coinbase_weak
+[Timing] Window 11 min old — skipping
+[Cycle] No signal — YES=0.99 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[ProfitLock] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[CashOut] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[Positions] 1 still open
+[Ticker] KXBTC15M-26APR031430-30
+[Market] YES=0.99 | NO=0.01 | Sum=1.00
+==================================================
+Balance: $161.69 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | extreme_edge,coinbase_weak
+[Timing] Window 12 min old — skipping
+[Cycle] No signal — YES=0.99 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[ProfitLock] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[CashOut] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[Positions] 1 still open
+[Ticker] KXBTC15M-26APR031430-30
+[Market] YES=1.00 | NO=0.01 | Sum=1.00
+==================================================
+Balance: $161.73 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | extreme_edge,coinbase_weak
+[Timing] Window 13 min old — skipping
+[Cycle] No signal — YES=1.00 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[ProfitLock] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[CashOut] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[Positions] 1 still open
+[Ticker] KXBTC15M-26APR031430-30
+[Market] YES=1.00 | NO=0.00 | Sum=1.00
+==================================================
+Balance: $161.77 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | extreme_edge,coinbase_weak
+[Timing] Window 14 min old — skipping
+[Cycle] No signal — YES=1.00 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[ProfitLock] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[CashOut] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[Positions] 1 still open
+[Ticker] KXBTC15M-26APR031445-45
+[Market] YES=0.36 | NO=0.65 | Sum=1.01
+==================================================
+Balance: $161.80 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.36 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[ProfitLock] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[CashOut] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[Positions] 1 still open
+[Ticker] KXBTC15M-26APR031445-45
+[Market] YES=0.41 | NO=0.60 | Sum=1.01
+==================================================
+Balance: $161.80 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.41 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[ProfitLock] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[CashOut] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[Positions] 1 still open
+[Ticker] KXBTC15M-26APR031445-45
+[Market] YES=0.41 | NO=0.60 | Sum=1.01
+==================================================
+Balance: $161.80 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.41 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[ProfitLock] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[CashOut] Error: cannot access local variable 'entry_yes' where it is not associated with a value
+[Positions] 1 still open
