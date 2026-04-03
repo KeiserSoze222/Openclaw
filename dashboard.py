@@ -86,12 +86,101 @@ def get_processes():
         procs[name] = r.returncode == 0
     return procs
 
+
+def get_features():
+    import json
+    from collections import defaultdict
+    try:
+        signals = defaultdict(lambda:{"w":0,"l":0})
+        minutes = defaultdict(lambda:{"w":0,"l":0})
+        with open('/root/feature_log.json') as f:
+            for line in f:
+                try:
+                    e = json.loads(line.strip())
+                    if e.get("action") not in ("WIN","LOSS"): continue
+                    outcome = "w" if e["action"]=="WIN" else "l"
+                    feat = e.get("features",{})
+                    sig = feat.get("signal_type","UNKNOWN")
+                    signals[sig][outcome] += 1
+                    m = feat.get("entry_minute",0)
+                    minutes[f"Min {m}"][outcome] += 1
+                except: pass
+        rows = []
+        for k,v in sorted(signals.items()):
+            total = v["w"]+v["l"]
+            wr = round(v["w"]/total*100,1) if total else 0
+            rows.append({"name":k,"w":v["w"],"l":v["l"],"wr":wr})
+        for k,v in sorted(minutes.items()):
+            total = v["w"]+v["l"]
+            wr = round(v["w"]/total*100,1) if total else 0
+            rows.append({"name":k,"w":v["w"],"l":v["l"],"wr":wr})
+        return rows
+    except: return []
+
+def get_insights(stats):
+    insights = []
+    try:
+        allW = sum(s["w"] for s in stats.values())
+        allL = sum(s["l"] for s in stats.values())
+        total = allW + allL
+        wr = allW/total*100 if total else 0
+        if wr >= 80: insights.append(f"🔥 Win rate {wr:.1f}% — exceptional performance")
+        elif wr >= 75: insights.append(f"✅ Win rate {wr:.1f}% — strong edge confirmed")
+        elif wr >= 70: insights.append(f"📊 Win rate {wr:.1f}% — above break-even")
+        else: insights.append(f"⚠️ Win rate {wr:.1f}% — monitor closely")
+        best = max(stats.items(), key=lambda x: x[1]["wr"])
+        insights.append(f"⚡ {best[0]} is best market at {best[1]['wr']:.1f}% WR")
+        if total >= 30:
+            insights.append(f"📊 {total} trades — statistically significant sample")
+        else:
+            insights.append(f"📊 {30-total} more trades for full confidence")
+        import datetime
+        hour = datetime.datetime.now(datetime.timezone.utc).hour
+        peak = {3,6,7,8,9,10,11,14,15,16,19,21}
+        if hour in peak:
+            insights.append(f"🟢 Current hour {hour}:00 UTC is PEAK — full bet size")
+        elif hour == 5:
+            insights.append(f"🔴 Hour 5 UTC — bots paused (stop hour)")
+        else:
+            insights.append(f"🟡 Hour {hour}:00 UTC — reduced bet size")
+    except: pass
+    return insights
+
+def get_hourly():
+    from collections import defaultdict
+    hourly = defaultdict(lambda:{"w":0,"l":0})
+    for path in ["/root/trade_log.csv","/root/eth_trade_log.csv","/root/sol_trade_log.csv"]:
+        try:
+            import csv
+            with open(path) as f:
+                for row in csv.reader(f):
+                    if len(row)<4: continue
+                    try:
+                        h = int(row[0][11:13])
+                        if "WIN" in row[3]: hourly[h]["w"] += 1
+                        elif "LOSS" in row[3]: hourly[h]["l"] += 1
+                    except: pass
+        except: pass
+    return {str(k):v for k,v in hourly.items()}
+
 class Handler(http.server.BaseHTTPRequestHandler):
     def log_message(self, *a): pass
     def do_GET(self):
         if self.path == '/api/data':
             try:
-                data = {"balance":get_balance(),"version_balance":VERSION_BALANCE,"stats":get_stats(),"procs":get_processes(),"trades":get_recent_trades(8),"whales":get_whales(6),"positions":get_positions()}
+                stats = get_stats()
+                data = {
+                    "balance":get_balance(),
+                    "version_balance":VERSION_BALANCE,
+                    "stats":stats,
+                    "procs":get_processes(),
+                    "trades":get_recent_trades(8),
+                    "whales":get_whales(6),
+                    "positions":get_positions(),
+                    "features":get_features(),
+                    "insights":get_insights(stats),
+                    "hourly":get_hourly(),
+                }
                 self.send_response(200)
                 self.send_header('Content-Type','application/json')
                 self.send_header('Access-Control-Allow-Origin','*')

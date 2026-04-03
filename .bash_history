@@ -1,67 +1,3 @@
-             consecutive_signal_count += 1
-         else:
-             last_signal_direction    = current_direction
-             consecutive_signal_count = 1
-         if consecutive_signal_count < 2:
-             print(f"[Signal] {current_direction} candidate | yes={yes_price:.2f} | "
-                   f"waiting for confirmation (1/2)")
-             return False'''
- 
- if old in code:
-     code = code.replace(old, new)
-     open('/root/real_bot.py', 'w').write(code)
-     print("SUCCESS")
- else:
-     print("Pattern not found")
-     idx = code.find("window_minute = now_utc.minute % 15")
-     print(repr(code[idx:idx+200]))
- ENDOFSCRIPT
- python3 /tmp/fix_entry.py
- python3 -m py_compile real_bot.py && echo "OK"
-
-python3 /tmp/fix_entry.py
-python3 -m py_compile real_bot.py && echo "OK"
-sed -n '474,498p' real_bot.py | cat -A | head -30
-nano /tmp/fix_entry2.py
-python3 /tmp/fix_entry2.py
-cp /tmp/fix_entry2.py /tmp/fix_entry_eth.py
-for f in /root/real_bot.py /root/eth_bot.py /root/sol_bot.py; do      sed -i 's/INITIAL_BALANCE    = [0-9.]*/INITIAL_BALANCE    = 243.32/' $f;      sed -i 's/SESSION_START_BAL  = [0-9.]*/SESSION_START_BAL  = 243.32/' $f;      sed -i 's/MIN_BALANCE      = [0-9.]*/MIN_BALANCE      = 210.00/' $f;  done
-cp /root/real_bot.py /root/real_bot_v3_stable.py
-python3 /tmp/status_all.py
-touch /root/STOP
-grep -E "EXTREME|CONFIRMED|Settled" /root/bot.log | tail -20
-grep -E "EXTREME|CONFIRMED|Settled" /root/sol_bot.log | tail -20
-grep "MARKET_SERIES" /root/real_bot.py | head -3
-grep "Ticker" /root/bot.log | tail -10
-sed -i 's/MARKET_SERIES    = "KXSOL15M"/MARKET_SERIES    = "KXBTC15M"/' /root/real_bot.py
-grep "MARKET_SERIES" /root/eth_bot.py | head -1
-for f in /root/real_bot.py /root/eth_bot.py /root/sol_bot.py; do      sed -i 's/INITIAL_BALANCE    = [0-9.]*/INITIAL_BALANCE    = 233.78/' $f;      sed -i 's/SESSION_START_BAL  = [0-9.]*/SESSION_START_BAL  = 233.78/' $f;      sed -i 's/MIN_BALANCE      = [0-9.]*/MIN_BALANCE      = 200.00/' $f;  done
-nano /tmp/add_binance.py
-python3 /tmp/add_binance.py
-python3 -c "
- import requests
- for symbol in ['BTCUSDT', 'ETHUSDT', 'SOLUSDT']:
-     r = requests.get('https://api.binance.com/api/v3/ticker/price', params={'symbol': symbol}, timeout=3)
-     print(f'{symbol}: \${float(r.json()[\"price\"]):.2f}')
- "
-nano /tmp/test_binance.py
-python3 /tmp/test_binance.py
-nano /tmp/test_prices.py
-python3 /tmp/test_prices.py
-sed -i 's|https://api.binance.com/api/v3/ticker/price|https://api.coinbase.com/v2/prices/SYMBOL/spot|' /root/real_bot.py
-nano /tmp/fix_binance_to_coinbase.py
-python3 /tmp/fix_binance_to_coinbase.py
-grep -n "binance\|BTCUSDT\|coinbase\|api.binance" real_bot.py | head -10
-sed -n '257,295p' real_bot.py
-nano /tmp/fix_coinbase.py
-python3 /tmp/fix_coinbase.py
-sed -i "s|open('/root/real_bot.py')|open('/root/eth_bot.py')|g" /tmp/fix_coinbase.py
-nano /tmp/test_coinbase_live.py
-python3 /tmp/test_coinbase_live.py
-grep -n "coinbase\|data.*amount" /root/eth_bot.py | head -4
-python3 -c "
- import requests
- for sym in ['BTC-USD', 'ETH-USD', 'SOL-USD']:
      r = requests.get(f'https://api.coinbase.com/v2/prices/{sym}/spot', timeout=3)
      print(sym, r.json()['data']['amount'])
  " 2>/dev/null || echo "failed"
@@ -1998,3 +1934,67 @@ nano /root/OPENCLAW_GUIDE.md
 wc -l /root/OPENCLAW_GUIDE.md
 grep -n "SECTION 7\|### Files\|### Monitor\|### Restart" /root/OPENCLAW_GUIDE.md
 sed -n '159,190p' /root/OPENCLAW_GUIDE.md
+source kalshi_env/bin/activate
+nano /tmp/fix_mobile.py
+python3 /tmp/fix_mobile.py
+sed -i 's/.span3{grid-column:1\/-1;}/.span3{grid-column:1\/-1;} @media(max-width:768px){.grid{grid-template-columns:1fr;padding:8px;}.balance-card{grid-template-columns:1fr 1fr;gap:16px;}.divider{display:none;}.balance-main{font-size:28px;}.proc-grid{grid-template-columns:repeat(3,1fr);}.header{padding:10px 16px;}.logo-text{font-size:14px;}.logo-sub{display:none;}.card{padding:14px;}}/' /root/dashboard_v4.html
+python3 /tmp/status_all.py
+source kalshi_env/bin/activate
+python3 /tmp/status_all.py
+nano /tmp/fix_two_bugs.py
+python3 /tmp/fix_two_bugs.py
+nano /tmp/fix_market_order.py
+python3 /tmp/fix_market_order.py
+for f in /root/real_bot.py /root/eth_bot.py /root/sol_bot.py; do      sed -i 's/if win_prob<0.48 and age_placed>=2.0 and entry_win_prob>0.55:/if win_prob<0.40 and age_placed>=3.0 and entry_win_prob>0.65:/' $f;  done
+pkill -f watchdog.py
+sleep 120 && grep -E "Order.*status|Order.*Not filled|PLACED|WIN|LOSS" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR03" | tail -10
+sleep 120 && grep -E "Order.*status|Order.*remaining|PLACED|WIN|LOSS" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR03" | grep -v "5feac314\|59a61366" | tail -10
+grep "PLACED" /root/trade_log.csv | tail -3
+grep "Order.*status\|Order.*remaining" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep -v "5feac314\|59a61366" | tail -5
+nano /root/calibration_scanner.py 
+python3 -m py_compile /root/calibration_scanner.py && echo "OK"
+timeout 60 python3 -u /root/calibration_scanner.py 2>&1 | grep -v "SyntaxWarning\|markets_api\|escape" | head -20
+timeout 30 python3 -u /root/calibration_scanner.py > /tmp/cal_test.txt 2>&1 &
+sed -i 's/send_telegram("🔬 Calibration Scanner started")/print("[Cal] Sending startup message...")/' /root/calibration_scanner.py
+timeout 60 python3 -u /root/calibration_scanner.py > /tmp/cal_test.txt 2>&1 &
+nano /tmp/test_cal.py
+timeout 30 python3 -u /tmp/test_cal.py
+nano /tmp/cal_debug.py
+timeout 120 python3 -u /tmp/cal_debug.py
+python3 /tmp/status_all.py
+nano /tmp/test_unified.py
+python3 /tmp/test_unified.py --market btc
+nano /tmp/build_unified.py
+python3 /tmp/build_unified.py
+sed 's/DRY_RUN=False/DRY_RUN=True/' /root/openclaw.py > /tmp/openclaw_dry.py
+timeout 90 python3 -u /tmp/openclaw_dry.py --market eth > /tmp/unified_eth.txt 2>&1 &
+nano /tmp/update_watchdog.py
+python3 /tmp/update_watchdog.py
+sed -i 's|"script":  "/root/real_bot.py"|"script":  "/root/openclaw.py --market btc"|' /root/watchdog.py
+grep -A5 "def is_running" /root/watchdog.py
+nano /tmp/fix_watchdog_unified.py
+python3 /tmp/fix_watchdog_unified.py
+echo "__pycache__/" > /root/.gitignore 
+python3 /tmp/status_all.py
+grep -E "Order.*executed|Order.*status|PLACED" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR03 1[6-9]" | tail -10
+source kalshi_env/bin/activate
+nano /root/whale_scanner.py
+python3 -m py_compile /root/whale_scanner.py && echo "OK"
+sed -i 's/send_telegram("🐋 Whale Scanner v2 started\\nAuto-follow enabled on BTC\/ETH\/SOL")/print("[Whale] Startup complete")/' /root/whale_scanner.py
+nano /tmp/test_whale.py
+timeout 15 python3 -u /tmp/test_whale.py
+nano /tmp/fix_whale.py
+python3 /tmp/fix_whale.py
+nano /tmp/whale_debug.py
+timeout 20 python3 -u /tmp/whale_debug.py
+grep -n "Startup complete\|min_ts\|scan_once\|scan_count\|while True" /root/whale_scanner.py | head -10 
+sed -n '160,185p' /root/whale_scanner.py
+#!/usr/bin/env python3
+sed -n '160,185p' /root/whale_scanner.py
+nano /root/whale_scanner.py
+python3 -m py_compile /root/whale_scanner.py && echo "OK"
+nano /tmp/add_whale_watchdog.py
+python3 /tmp/add_whale_watchdog.py
+sed -i 's|"name":    "BOND"|"name":    "WHALE", "script":  "/root/whale_scanner.py", "log":     "/root/whale_scanner.log", "stop":    "/root/STOP_WHALE"},\n    {"name":    "BOND"|' /root/watchdog.py
+pkill -f watchdog.py
+tail -10 /root/whale_scanner.log

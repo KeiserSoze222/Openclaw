@@ -6,80 +6,94 @@
 <title>OpenClaw Terminal</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#050810;--bg2:#080d1a;--bg3:#0d1526;
-  --accent:#00d4ff;--accent2:#00ff88;--accent3:#ff6b35;
-  --red:#ff3b5c;--green:#00ff88;--yellow:#ffd60a;
-  --text:#e0e8ff;--muted:#4a5568;--border:#1a2540;
-  --glow:0 0 20px rgba(0,212,255,0.3);
-}
+:root{--bg:#050810;--bg2:#080d1a;--bg3:#0d1526;--accent:#00d4ff;--accent2:#00ff88;--accent3:#ff6b35;--red:#ff3b5c;--green:#00ff88;--yellow:#ffd60a;--text:#e0e8ff;--muted:#4a5568;--border:#1a2540;--glow:0 0 20px rgba(0,212,255,0.3);}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:13px;}
-body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;
-  background:radial-gradient(ellipse at 20% 20%,rgba(0,212,255,0.03),transparent 60%),
-  radial-gradient(ellipse at 80% 80%,rgba(0,255,136,0.03),transparent 60%);
-  pointer-events:none;z-index:0;}
-.header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;
-  background:linear-gradient(90deg,var(--bg2),var(--bg3));border-bottom:1px solid var(--border);
-  position:sticky;top:0;z-index:100;}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 20% 20%,rgba(0,212,255,0.03),transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(0,255,136,0.03),transparent 60%);pointer-events:none;z-index:0;}
+.header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:linear-gradient(90deg,var(--bg2),var(--bg3));border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
 .logo{display:flex;align-items:center;gap:12px;}
-.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));
-  border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:var(--glow);}
-.logo-text{font-family:'Orbitron',monospace;font-weight:900;font-size:18px;letter-spacing:3px;
-  background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:var(--glow);}
+.logo-text{font-family:'Orbitron',monospace;font-weight:900;font-size:18px;letter-spacing:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .logo-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
-.header-right{display:flex;align-items:center;gap:20px;}
+.header-right{display:flex;align-items:center;gap:12px;}
+.bible-btn{font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;color:var(--accent);text-decoration:none;border:1px solid var(--accent);padding:6px 12px;border-radius:6px;opacity:0.8;}
 .live-badge{display:flex;align-items:center;gap:6px;font-size:11px;letter-spacing:1px;color:var(--green);}
 .live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.8)}}
 .utc-time{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--accent);letter-spacing:1px;}
-.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;padding:16px 24px;position:relative;z-index:1;}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden;}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;padding:14px 20px;position:relative;z-index:1;}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative;overflow:hidden;}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);}
 .card.green::before{background:linear-gradient(90deg,var(--green),transparent);}
 .card.orange::before{background:linear-gradient(90deg,var(--accent3),transparent);}
-.card-title{font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
-.balance-card{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr auto auto auto;gap:32px;align-items:center;}
-.balance-main{font-family:'Orbitron',monospace;font-size:42px;font-weight:900;color:var(--text);line-height:1;}
-.balance-label{font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;}
+.card.yellow::before{background:linear-gradient(90deg,var(--yellow),transparent);}
+.card-title{font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.balance-card{grid-column:1/-1;display:grid;grid-template-columns:auto 1fr auto auto auto;gap:24px;align-items:center;}
+.balance-main{font-family:'Orbitron',monospace;font-size:38px;font-weight:900;color:var(--text);line-height:1;}
+.balance-label{font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;}
 .balance-sub{font-family:'Share Tech Mono',monospace;font-size:13px;}
 .pnl-pos{color:var(--green);}.pnl-neg{color:var(--red);}
-.divider{width:1px;height:60px;background:var(--border);}
-.bot-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
-.bot-name{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;}
+.divider{width:1px;height:50px;background:var(--border);}
+.bot-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.bot-name{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;}
 .bot-badge{font-size:10px;padding:3px 8px;border-radius:4px;letter-spacing:1px;}
 .badge-live{background:rgba(0,255,136,0.15);color:var(--green);border:1px solid rgba(0,255,136,0.3);}
 .badge-down{background:rgba(255,59,92,0.15);color:var(--red);border:1px solid rgba(255,59,92,0.3);}
-.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.stat-box{background:var(--bg3);border-radius:8px;padding:10px 12px;}
-.stat-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
-.stat-value{font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:bold;}
-.wr-bar{margin-top:12px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.stat-box{background:var(--bg3);border-radius:8px;padding:8px 10px;}
+.stat-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;}
+.stat-value{font-family:'Share Tech Mono',monospace;font-size:16px;font-weight:bold;}
+.icons-row{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:6px;background:var(--bg3);border-radius:6px;padding:6px 10px;}
+.wr-bar{margin-top:8px;height:3px;background:var(--bg3);border-radius:2px;overflow:hidden;}
 .wr-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 1s ease;}
-.proc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-.proc-item{display:flex;align-items:center;gap:8px;background:var(--bg3);border-radius:8px;padding:10px 12px;}
-.proc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.proc-dot.on{background:var(--green);box-shadow:0 0 8px var(--green);}
+.proc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.proc-item{display:flex;align-items:center;gap:6px;background:var(--bg3);border-radius:8px;padding:8px 10px;}
+.proc-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.proc-dot.on{background:var(--green);box-shadow:0 0 6px var(--green);}
 .proc-dot.off{background:var(--red);}
 .proc-name{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1px;}
-.trades-list{display:flex;flex-direction:column;gap:6px;}
-.trade-row{display:flex;align-items:center;gap:10px;background:var(--bg3);border-radius:8px;padding:8px 12px;font-family:'Share Tech Mono',monospace;font-size:11px;}
+.trades-list{display:flex;flex-direction:column;gap:5px;}
+.trade-row{display:flex;align-items:center;gap:8px;background:var(--bg3);border-radius:8px;padding:7px 10px;font-family:'Share Tech Mono',monospace;font-size:11px;}
 .trade-market{font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(0,212,255,0.1);color:var(--accent);min-width:32px;text-align:center;}
 .trade-win{color:var(--green);}.trade-loss{color:var(--red);}
 .trade-time{color:var(--muted);margin-left:auto;font-size:10px;}
-.whale-list{display:flex;flex-direction:column;gap:6px;}
-.whale-row{display:flex;align-items:center;gap:10px;background:var(--bg3);border-radius:8px;padding:8px 12px;font-family:'Share Tech Mono',monospace;font-size:11px;}
+.whale-list{display:flex;flex-direction:column;gap:5px;}
+.whale-row{display:flex;align-items:center;gap:8px;background:var(--bg3);border-radius:8px;padding:7px 10px;font-family:'Share Tech Mono',monospace;font-size:11px;}
 .whale-our{border-left:3px solid var(--accent);}
-.whale-size{font-size:13px;font-weight:bold;color:var(--yellow);min-width:70px;}
+.whale-size{font-size:12px;font-weight:bold;color:var(--yellow);min-width:65px;}
 .whale-side-yes{color:var(--green);}.whale-side-no{color:var(--red);}
-.whale-ticker{color:var(--muted);font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px;}
+.whale-ticker{color:var(--muted);font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px;}
 .whale-our-badge{font-size:9px;padding:2px 5px;background:rgba(0,212,255,0.2);color:var(--accent);border-radius:3px;margin-left:auto;flex-shrink:0;}
-.span3{grid-column:1/-1;} @media(max-width:768px){.grid{grid-template-columns:1fr;padding:8px;}.balance-card{grid-template-columns:1fr 1fr;gap:16px;}.divider{display:none;}.balance-main{font-size:28px;}.proc-grid{grid-template-columns:repeat(3,1fr);}.header{padding:10px 16px;}.logo-text{font-size:14px;}.logo-sub{display:none;}.card{padding:14px;}}
-.no-data{color:var(--muted);font-size:12px;text-align:center;padding:20px;}
+.feat-table{width:100%;border-collapse:collapse;font-size:11px;}
+.feat-table th{color:var(--muted);font-size:10px;letter-spacing:1px;text-align:left;padding:4px 8px;border-bottom:1px solid var(--border);}
+.feat-table td{padding:5px 8px;font-family:'Share Tech Mono',monospace;}
+.feat-table tr:hover td{background:var(--bg3);}
+.insight-item{background:var(--bg3);border-radius:8px;padding:8px 12px;font-size:11px;margin-bottom:5px;border-left:3px solid var(--accent);}
+.legend-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11px;}
+.legend-item{display:flex;align-items:center;gap:8px;background:var(--bg3);border-radius:6px;padding:6px 10px;}
+.pos-row{display:flex;align-items:center;gap:8px;background:var(--bg3);border-radius:8px;padding:8px 12px;margin-bottom:5px;font-family:'Share Tech Mono',monospace;font-size:11px;border-left:3px solid var(--yellow);}
+.equity-container{background:var(--bg3);border-radius:8px;padding:12px;margin-top:4px;}
+.hour-bars{display:flex;align-items:flex-end;gap:2px;height:50px;margin-top:8px;}
+.hour-bar{flex:1;border-radius:2px 2px 0 0;min-height:2px;transition:height 0.5s ease;}
+.hour-label{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:4px;}
+.span2{grid-column:span 2;}
+.span3{grid-column:1/-1;}
+.no-data{color:var(--muted);font-size:12px;text-align:center;padding:16px;}
 .refresh-bar{position:fixed;bottom:0;left:0;right:0;height:2px;background:var(--border);z-index:200;}
 .refresh-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));animation:countdown 30s linear infinite;}
 @keyframes countdown{from{width:100%}to{width:0%}}
 .version-tag{position:fixed;bottom:8px;right:16px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;z-index:200;}
+@media(max-width:768px){
+  .grid{grid-template-columns:1fr;padding:8px;}
+  .balance-card{grid-template-columns:1fr 1fr;gap:12px;}
+  .divider{display:none;}
+  .balance-main{font-size:28px;}
+  .proc-grid{grid-template-columns:repeat(3,1fr);}
+  .header{padding:10px 12px;}
+  .logo-text{font-size:13px;letter-spacing:2px;}
+  .logo-sub{display:none;}
+  .span2{grid-column:1/-1;}
+}
 </style>
 </head>
 <body>
@@ -88,7 +102,8 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;
     <div class="logo-icon">🦀</div>
     <div><div class="logo-text">OPENCLAW</div><div class="logo-sub">Autonomous Trading System</div></div>
   </div>
-  <div class="header-right"><a href="/bible" target="_blank" style="font-family:Orbitron,monospace;font-size:10px;letter-spacing:2px;color:var(--accent);text-decoration:none;border:1px solid var(--accent);padding:6px 12px;border-radius:6px;opacity:0.8;">📖 BIBLE</a>
+  <div class="header-right">
+    <a href="/bible" target="_blank" class="bible-btn">📖 BIBLE</a>
     <div class="live-badge"><div class="live-dot"></div>LIVE</div>
     <div class="utc-time" id="clock">--:--:-- UTC</div>
   </div>
@@ -97,41 +112,27 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;
 <div class="refresh-bar"><div class="refresh-fill" id="rfill"></div></div>
 <div class="version-tag">v4.0 // OPENCLAW</div>
 <script>
-function updateClock(){
-  const n=new Date();
-  document.getElementById('clock').textContent=
-    String(n.getUTCHours()).padStart(2,'0')+':'+String(n.getUTCMinutes()).padStart(2,'0')+':'+String(n.getUTCSeconds()).padStart(2,'0')+' UTC';
-}
+function updateClock(){const n=new Date();document.getElementById('clock').textContent=String(n.getUTCHours()).padStart(2,'0')+':'+String(n.getUTCMinutes()).padStart(2,'0')+':'+String(n.getUTCSeconds()).padStart(2,'0')+' UTC';}
 setInterval(updateClock,1000);updateClock();
 function fmt(n,d=2){return '$'+parseFloat(n||0).toFixed(d);}
 function pct(n){return parseFloat(n||0).toFixed(1)+'%';}
 function pc(n){return parseFloat(n||0)>=0?'pnl-pos':'pnl-neg';}
 function ps(n){return parseFloat(n||0)>=0?'+':'';}
+
 async function refresh(){
   try{
     const r=await fetch('/api/data');
     const d=await r.json();
-    const bal=d.balance,s=d.stats,pr=d.procs,tr=d.trades,wh=d.whales;
+    const bal=d.balance,s=d.stats,pr=d.procs,tr=d.trades,wh=d.whales,pos=d.positions,ft=d.features,ins=d.insights,hw=d.hourly;
     const sinceV=bal-d.version_balance;
     const allW=(s.BTC.w||0)+(s.ETH.w||0)+(s.SOL.w||0);
     const allL=(s.BTC.l||0)+(s.ETH.l||0)+(s.SOL.l||0);
     const allWR=allW/(allW+allL)*100||0;
     const allPNL=(s.BTC.pnl||0)+(s.ETH.pnl||0)+(s.SOL.pnl||0);
+
     const prItems=Object.entries(pr).map(([k,v])=>
       `<div class="proc-item"><div class="proc-dot ${v?'on':'off'}"></div><span class="proc-name">${k}</span></div>`).join('');
-    const trRows=tr.length?tr.map(t=>`<div class="trade-row">
-      <span class="trade-market">${t.market}</span>
-      <span style="color:${t.dir==='UP'?'var(--green)':'var(--red)'}">${t.dir}</span>
-      <span>${fmt(t.bet)}</span>
-      <span class="${t.result.includes('WIN')?'trade-win':'trade-loss'}">${t.result.includes('WIN')?'WIN':'LOSS'}</span>
-      <span class="trade-time">${t.time.slice(11,16)}</span></div>`).join('')
-      :'<div class="no-data">No trades yet</div>';
-    const whRows=wh.length?wh.map(w=>`<div class="whale-row ${w.type==='OUR'?'whale-our':''}">
-      <span class="whale-size">${fmt(w.size,0)}</span>
-      <span class="${w.side==='YES'?'whale-side-yes':'whale-side-no'}">${w.side}</span>
-      <span class="whale-ticker">${w.ticker}</span>
-      ${w.type==='OUR'?'<span class="whale-our-badge">OUR MKT</span>':''}</div>`).join('')
-      :'<div class="no-data">Scanning whales...</div>';
+
     function botCard(name,sym,color,cls){
       const b=s[name];
       return `<div class="card ${cls}">
@@ -142,13 +143,65 @@ async function refresh(){
         </div>
         <div class="stats-grid">
           <div class="stat-box"><div class="stat-label">Win Rate</div><div class="stat-value" style="color:var(--green)">${pct(b.wr)}</div></div>
-          <div class="stat-box"><div class="stat-label">All PnL</div><div class="stat-value ${pc(b.pnl)}">${ps(b.pnl)}${fmt(b.pnl)}</div></div>
+          <div class="stat-box"><div class="stat-label">PnL</div><div class="stat-value ${pc(b.pnl)}">${ps(b.pnl)}${fmt(b.pnl)}</div></div>
           <div class="stat-box"><div class="stat-label">Wins</div><div class="stat-value" style="color:var(--green)">${b.w}</div></div>
           <div class="stat-box"><div class="stat-label">Losses</div><div class="stat-value" style="color:var(--red)">${b.l}</div></div>
+        </div>
+        <div class="icons-row">
+          <span title="Extreme signals">⚡${b.extreme||0}</span>
+          <span title="Confirmed signals">✅${b.confirmed||0}</span>
+          <span title="Cash outs">💸${b.cashouts||0}</span>
+          <span title="Streak">${b.streak_icon||'—'}${b.streak||0}</span>
         </div>
         <div class="wr-bar"><div class="wr-fill" style="width:${b.wr}%"></div></div>
       </div>`;
     }
+
+    const trRows=tr.length?tr.map(t=>`<div class="trade-row">
+      <span>${t.result.includes('WIN')?'✅':'❌'}</span>
+      <span class="trade-market">${t.market}</span>
+      <span style="color:${t.dir==='UP'?'var(--green)':'var(--red)'}">${t.dir}</span>
+      <span>${fmt(t.bet)}</span>
+      <span class="${t.result.includes('WIN')?'trade-win':'trade-loss'}">${t.result.includes('WIN')?'WIN':'LOSS'}</span>
+      <span class="trade-time">${t.time.slice(11,16)}</span></div>`).join('')
+      :'<div class="no-data">No trades yet</div>';
+
+    const whRows=wh.length?wh.map(w=>`<div class="whale-row ${w.type==='OUR'?'whale-our':''}">
+      <span class="whale-size">${fmt(w.size,0)}</span>
+      <span class="${w.side==='YES'?'whale-side-yes':'whale-side-no'}">${w.side}</span>
+      <span class="whale-ticker">${w.ticker}</span>
+      ${w.type==='OUR'?'<span class="whale-our-badge">OUR MKT</span>':''}</div>`).join('')
+      :'<div class="no-data">Scanning...</div>';
+
+    const posRows=pos.length?pos.map(p=>`<div class="pos-row">
+      <span>🟡</span>
+      <span>${p.ticker}</span>
+      <span style="color:var(--yellow);margin-left:auto">OPEN</span></div>`).join('')
+      :'<div class="no-data">No open positions</div>';
+
+    const ftRows=ft.length?`<table class="feat-table">
+      <tr><th>FEATURE</th><th>W</th><th>L</th><th>WIN%</th></tr>
+      ${ft.map(f=>`<tr><td>${f.name}</td><td style="color:var(--green)">${f.w}</td><td style="color:var(--red)">${f.l}</td><td style="color:var(--accent)">${f.wr}%</td></tr>`).join('')}
+    </table>`:'<div class="no-data">Accumulating feature data...</div>';
+
+    const insRows=ins.length?ins.map(i=>`<div class="insight-item">${i}</div>`).join('')
+      :'<div class="no-data">Analyzing patterns...</div>';
+
+    // Hourly win rate bars
+    let hourBars='';let hourLabels='';
+    if(hw && Object.keys(hw).length){
+      const maxH=Math.max(...Object.values(hw).map(h=>(h.w||0)+(h.l||0)),1);
+      for(let i=0;i<24;i++){
+        const h=hw[i]||{w:0,l:0};
+        const total=(h.w||0)+(h.l||0);
+        const wr=total>0?(h.w/total*100):0;
+        const height=total>0?Math.max(4,(total/maxH*100)):2;
+        const col=wr>=80?'var(--green)':wr>=60?'var(--yellow)':'var(--red)';
+        hourBars+=`<div class="hour-bar" style="height:${height}%;background:${col}" title="${i}:00 UTC — ${h.w}W/${h.l}L (${wr.toFixed(0)}%)"></div>`;
+      }
+      hourLabels='<span>0</span><span>6</span><span>12</span><span>18</span><span>23</span>';
+    }
+
     document.getElementById('main-grid').innerHTML=`
       <div class="card span3">
         <div class="card-title">Portfolio Overview</div>
@@ -159,15 +212,63 @@ async function refresh(){
           <div><div class="balance-label">SIGNALS PNL</div><div class="balance-sub ${pc(allPNL)}">${ps(allPNL)}${fmt(allPNL)}</div></div>
           <div><div class="balance-label">WIN RATE</div><div class="balance-sub" style="color:var(--accent)">${pct(allWR)} (${allW}W/${allL}L)</div></div>
           <div><div class="balance-label">TOTAL TRADES</div><div class="balance-sub" style="color:var(--yellow)">${allW+allL}</div></div>
-          <div style="font-size:10px;color:#2a3550;align-self:flex-end">all-time: ${ps(allPNL-644)}${fmt(allPNL-644)}</div>
-         </div>
+          <div style="font-size:10px;color:#2a3550;align-self:flex-end">all-time: -$${(644-allPNL).toFixed(2)}</div>
+        </div>
       </div>
+
       ${botCard('BTC','₿','#f7931a','')}
       ${botCard('ETH','Ξ','#627eea','green')}
       ${botCard('SOL','◎','#9945ff','orange')}
-      <div class="card"><div class="card-title">System Status</div><div class="proc-grid">${prItems}</div></div>
-      <div class="card span3"><div class="card-title">Recent Trades</div><div class="trades-list">${trRows}</div></div>
-      <div class="card span3"><div class="card-title">🐋 Whale Feed</div><div class="whale-list">${whRows}</div></div>`;
+
+      <div class="card">
+        <div class="card-title">System Status</div>
+        <div class="proc-grid">${prItems}</div>
+        <div style="margin-top:12px">
+          <div class="card-title" style="margin-bottom:8px">Legend</div>
+          <div class="legend-grid">
+            <div class="legend-item">⚡ Extreme signal</div>
+            <div class="legend-item">✅ Confirmed signal</div>
+            <div class="legend-item">💸 Cash out</div>
+            <div class="legend-item">🔥 Win streak</div>
+            <div class="legend-item">❄️ Loss streak</div>
+            <div class="legend-item">🟡 Open position</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card span2">
+        <div class="card-title">Open Positions</div>
+        ${posRows}
+      </div>
+
+      <div class="card span3">
+        <div class="card-title">Recent Trades</div>
+        <div class="trades-list">${trRows}</div>
+      </div>
+
+      <div class="card span2">
+        <div class="card-title">📊 Feature Attribution</div>
+        ${ftRows}
+      </div>
+
+      <div class="card">
+        <div class="card-title">🤖 Bot Intelligence</div>
+        ${insRows}
+      </div>
+
+      <div class="card span3">
+        <div class="card-title">📈 Win Rate by Hour (UTC)</div>
+        <div class="equity-container">
+          <div class="hour-bars">${hourBars||'<div class="no-data">Accumulating hourly data...</div>'}</div>
+          <div class="hour-label">${hourLabels}</div>
+        </div>
+      </div>
+
+      <div class="card span3">
+        <div class="card-title">🐋 Whale Feed — Live Market Intelligence</div>
+        <div class="whale-list">${whRows}</div>
+      </div>`;
+
     const rf=document.getElementById('rfill');
     rf.style.animation='none';rf.offsetHeight;rf.style.animation='countdown 30s linear infinite';
   }catch(e){console.error(e);}
