@@ -16907,3 +16907,49 @@ Balance: $151.12 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.00
 ==================================================
 Balance: $151.12 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+2.00
 [Cycle] No signal — YES=0.69 is between 0.30 and 0.70, sum=1.01 >= 0.97
+
+==================================================
+OpenClaw BTC Bot v4.0 — LIVE
+[Startup] Live balance synced: $151.12
+Balance: $151.12 | MaxBet: $15.11 | Threshold: <0.30 or >0.70
+==================================================
+
+[Startup] Resting orders cleared
+[Ticker] KXBTC15M-26APR041030-30
+[Market] YES=0.85 | NO=0.17 | Sum=1.02
+==================================================
+Balance: $151.12 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | strong_edge,coinbase_weak,peak_hour
+[Timing] Window 13 min old — skipping
+[Cycle] No signal — YES=0.85 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Ticker] KXBTC15M-26APR041030-30
+[Market] YES=0.96 | NO=0.04 | Sum=1.00
+==================================================
+Balance: $151.12 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | extreme_edge,coinbase_weak,peak_hour
+[Timing] Window 14 min old — skipping
+[Cycle] No signal — YES=0.96 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[Ticker] KXBTC15M-26APR041045-45
+[Market] YES=0.32 | NO=0.69 | Sum=1.01
+==================================================
+Balance: $151.12 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.32 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR041045-45
+[Market] YES=0.23 | NO=0.78 | Sum=1.01
+==================================================
+Balance: $151.12 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | moderate_edge,coinbase_weak,all3_agree,peak_hour
+[Signal] DOWN candidate | yes=0.23 | waiting (1/2)
+[Cycle] No signal — YES=0.23 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR041045-45
+[Market] YES=0.28 | NO=0.73 | Sum=1.01
+==================================================
+Balance: $151.12 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | moderate_edge,coinbase_weak,all3_agree,peak_hour
+[Coinbase] Confirms DOWN | $67171 gap=-29 (0.04%)
+[Correlation] All 3 agree — bet boosted
+[Signal] CONFIRMED DOWN | yes=0.28 | edge=0.22 | bet=$3.98
+[Order] KXBTC15M-26APR041045-45 | no | count=7 | $3.98
+[Order] status=executed remaining=-1 filled=True
+✅ BTC DIRECTIONAL: DOWN $3.98 on KXBTC15M-26APR041045-45
+[Positions] 1 still open

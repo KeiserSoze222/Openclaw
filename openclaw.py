@@ -342,9 +342,21 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
             filled = False
         if not filled:
             print(f"[Order] Not filled: {order}")
+            # Cancel the resting order immediately to free funds
+            try:
+                if hasattr(order,"order") and order.order and order.order.order_id:
+                    oid = order.order.order_id
+                    curl = f"https://api.elections.kalshi.com/trade-api/v2/portfolio/orders/{oid}"
+                    ch = kalshi.kalshi_auth.create_auth_headers("DELETE", curl)
+                    requests.delete(curl, headers=ch, timeout=5)
+                    print(f"[Order] Cancelled resting order {oid}")
+                else:
+                    cancel_resting_orders()
+            except Exception as ce:
+                print(f"[Order] Cancel failed: {ce}")
             COOLDOWN_REMAINING=COOLDOWN_CYCLES
             return False
-        msg=f"✅ BTC {strategy_tag.upper()}: {direction} ${bet:.2f} on {ticker}"
+        msg=f"✅ {BOT_NAME.split()[1]} {strategy_tag.upper()}: {direction} ${bet:.2f} on {ticker}"
         print(msg)
         send_telegram(msg)
         entry_yes=mkt_yes if mkt_yes is not None else (yes_price if yes_price else 0.5)

@@ -21363,3 +21363,40 @@ Balance: $151.12 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Confidence] Score=6/10 | strong_edge,coinbase_weak,all3_agree,peak_hour
 [Timing] Window 13 min old — skipping
 [Cycle] No signal — YES=0.17 is between 0.30 and 0.70, sum=1.03 >= 0.97
+
+==================================================
+OpenClaw SOL Bot v4.0 — LIVE
+[Startup] Live balance synced: $151.12
+Balance: $151.12 | MaxBet: $15.11 | Threshold: <0.30 or >0.70
+==================================================
+
+[Startup] Resting orders cleared
+[Ticker] KXSOL15M-26APR041030-30
+[Market] YES=0.09 | NO=0.94 | Sum=1.03
+==================================================
+Balance: $151.12 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=6/10 | strong_edge,coinbase_weak,all3_agree,peak_hour
+[Timing] Window 14 min old — skipping
+[Cycle] No signal — YES=0.09 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Ticker] KXSOL15M-26APR041030-30
+[Market] YES=0.01 | NO=0.99 | Sum=1.00
+==================================================
+Balance: $151.12 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=7/10 | extreme_edge,coinbase_weak,all3_agree,peak_hour
+[Timing] Window 0 min old — skipping
+[Cycle] No signal — YES=0.01 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[Ticker] KXSOL15M-26APR041045-45
+[Market] YES=0.46 | NO=0.59 | Sum=1.05
+==================================================
+Balance: $151.12 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.46 is between 0.30 and 0.70, sum=1.05 >= 0.97
+[Ticker] KXSOL15M-26APR041045-45
+[Market] YES=0.32 | NO=0.69 | Sum=1.01
+==================================================
+Balance: $151.12 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.32 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXSOL15M-26APR041045-45
+[Market] YES=0.36 | NO=0.69 | Sum=1.05
+==================================================
+Balance: $151.02 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.36 is between 0.30 and 0.70, sum=1.05 >= 0.97
