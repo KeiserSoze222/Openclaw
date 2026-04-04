@@ -46,7 +46,7 @@ _parser.add_argument("--market", choices=["btc","eth","sol"], default="btc")
 _args = _parser.parse_args()
 _CONFIGS = {
     "btc": ("KXBTC15M","OpenClaw BTC Bot v4.0","/root/trade_log.csv","/root/STOP",0.07,"/root/performance_log.json"),
-    "eth": ("KXETH15M","OpenClaw ETH Bot v4.0","/root/eth_trade_log.csv","/root/STOP_ETH",0.07,"/root/eth_performance_log.json"),
+    "eth": ("KXETH15M","OpenClaw ETH Bot v4.0","/root/eth_trade_log.csv","/root/STOP_ETH",0.09,"/root/eth_performance_log.json"),
     "sol": ("KXSOL15M","OpenClaw SOL Bot v4.0","/root/sol_trade_log.csv","/root/STOP_SOL",0.05,"/root/sol_performance_log.json"),
 }
 MARKET_SERIES,BOT_NAME,LOG_CSV,STOP_FILE,MAX_BET_PCT,PERF_LOG = _CONFIGS[_args.market]
@@ -70,7 +70,12 @@ CASHOUT_ADVERSE=0.35
 INITIAL_BALANCE=200.29
 SESSION_START_BAL=200.29
 CURRENT_BALANCE=INITIAL_BALANCE
-TOD_SCHEDULE={0:0.40,1:0.25,2:1.00,3:1.00,4:0.40,5:0.00,6:1.00,7:1.00,8:1.00,9:1.00,10:1.00,11:1.00,12:0.50,13:0.50,14:1.00,15:1.00,16:1.00,17:0.75,18:0.75,19:1.00,20:0.75,21:1.00,22:0.25,23:0.75}
+# TOD schedule — adjusted per market liquidity
+if MARKET_SERIES == "KXBTC15M":
+    TOD_SCHEDULE={0:0.40,1:0.25,2:1.00,3:1.00,4:0.40,5:0.00,6:1.00,7:1.00,8:1.00,9:1.00,10:1.00,11:1.00,12:0.50,13:0.50,14:1.00,15:1.00,16:1.00,17:0.75,18:0.75,19:1.00,20:0.75,21:1.00,22:0.25,23:0.75}
+else:
+    # ETH/SOL: reduce hours 1-5 UTC (thin liquidity causes resting orders)
+    TOD_SCHEDULE={0:0.25,1:0.00,2:0.00,3:0.25,4:0.00,5:0.00,6:1.00,7:1.00,8:1.00,9:1.00,10:1.00,11:1.00,12:0.50,13:0.50,14:1.00,15:1.00,16:1.00,17:0.75,18:0.75,19:1.00,20:0.75,21:1.00,22:0.00,23:0.50}
 PEAK_HOURS={3,6,7,8,9,10,11,14,15,16,19,21}
 OPEN_POSITIONS=[]
 COOLDOWN_REMAINING=0

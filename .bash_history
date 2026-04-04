@@ -1,24 +1,3 @@
-python3 /tmp/debug_bond.py
-nohup python3 -u /root/bond_scanner.py > /root/bond_scanner.log 2>&1 &
-ps aux | grep -E "real_bot|eth_bot|sol_bot|bond_scanner" | grep -v grep
-nano /tmp/add_feature_logger.py
-python3 /tmp/add_feature_logger.py
-sed -i 's/sol_sol_trade_log.csv/trade_log.csv/' /root/real_bot.py
-python3 /tmp/add_feature_logger.py
-sed -i 's|/root/sol_sol_performance_log.json|/root/performance_log.json|' /root/real_bot.py
-nano /tmp/add_feature_tags.py
-python3 /tmp/add_feature_tags.py
-nano /root/analyze_features.py
-pkill -f real_bot.py
-sed -i 's/eth_eth_trade_log.csv/eth_trade_log.csv/' /root/eth_bot.py
-sed -i 's/sol_sol_trade_log.csv/sol_trade_log.csv/' /root/sol_bot.py
-grep "trade_log\|performance_log" /root/eth_bot.py | head -3
-sed -i 's/sol_eth_trade_log.csv/eth_trade_log.csv/' /root/eth_bot.py
-grep "trade_log\|performance_log" /root/eth_bot.py | head -3
-cp /root/real_bot.py /root/real_bot_v3_stable.py
-nano /tmp/add_mae.py
-python3 /tmp/add_mae.py
-sed -n '838,848p' real_bot.py
 grep -n "OPEN_POSITIONS.append" real_bot.py | head -3
 sed -n '468,482p' real_bot.py
 sed -n '840,846p' real_bot.py
@@ -1997,4 +1976,25 @@ nano /tmp/check_positions2.py
 python3 /tmp/check_positions2.py
 sleep 60 && grep -E "WIN|LOSS|Settled" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "41100" | tail -5
 source kalshi_env/bin/activatesource kalshi_env/bin/activatesource kalshi_env/bin/activsource kalshi_env/bin/activatesource kalshi_env/bin/activatesource kalshi_env/bin/activatesource kalshi_env/bin/activate
+exit
+source kalshi_env/bin/activate
+sleep 60 && grep -E "WIN|LOSS|Settled" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "41100" | tail -5
+grep -E "WIN|LOSS|Settled" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR04 1[1-9]" | tail -10 
+grep -E "WIN|LOSS|Settled" /root/bot.log /root/eth_bot.log /root/sol_bot.log | tail -15 
+grep -E "WIN|LOSS|Settled" /root/bot.log | grep "26APR04" | tail -10
+grep -E "Settled|WIN|LOSS|PLACED|Order.*exec" /root/eth_bot.log | grep "26APR04 1[01]" | tail -10
+grep "Startup\|LIVE started\|Session" /root/eth_bot.log | tail -5 
+cat /root/watchdog.log | grep -E "ETH|crashed|restarted" | tail -10
+grep -E "Traceback|Error|Exception" /root/bot.log | tail -5 
+ps aux | grep -E "real_bot|eth_bot|sol_bot|openclaw" | grep -v grep
+sed -n '610,635p' /root/openclaw.py
+sed -n '635,660p' /root/openclaw.py
+nano /tmp/fix_entry_yes2.py
+python3 /tmp/fix_entry_yes2.py
+grep -E "Error|entry_yes" /root/bot.log | grep "$(date -u +%H)" | tail -5
+sleep 180 && grep -E "Order.*executed|WIN|LOSS|CashOut|ProfitLock" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "$(date -u +%Y-%m-%d)" | tail -10
+sleep 180 && grep -E "Order.*executed|WIN|LOSS|CashOut|ProfitLock" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "$(date -u +%Y-%m-%d)" | tail -10 
+grep -E "entry_yes|Error|Traceback" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "$(date -u +%Y-%m-%d %H)" | tail -5
+nano /root/check_health.py
+python3 /root/check_health.py
 exit
