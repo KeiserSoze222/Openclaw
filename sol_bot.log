@@ -24431,3 +24431,15 @@ Balance: $145.76 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Confidence] Score=4/10 | extreme_edge,coinbase_weak
 [Timing] Window 14 min old — skipping
 [Cycle] No signal — YES=0.99 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXSOL15M-26APR041830-30
+[Market] YES=1.00 | NO=1.00 | Sum=2.00
+==================================================
+Balance: $145.76 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | extreme_edge,coinbase_weak
+[Timing] Window 0 min old — skipping
+[Cycle] No signal — YES=1.00 is between 0.30 and 0.70, sum=2.00 >= 0.97
+[Ticker] KXSOL15M-26APR041845-45
+[Market] YES=0.59 | NO=0.45 | Sum=1.04
+==================================================
+Balance: $145.76 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.59 is between 0.30 and 0.70, sum=1.04 >= 0.97
