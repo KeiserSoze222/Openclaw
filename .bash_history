@@ -1,4 +1,3 @@
-grep -n "OPEN_POSITIONS.append" real_bot.py | head -3
 sed -n '468,482p' real_bot.py
 sed -n '840,846p' real_bot.py
 python3 -c "
@@ -1998,3 +1997,4 @@ grep -E "entry_yes|Error|Traceback" /root/bot.log /root/eth_bot.log /root/sol_bo
 nano /root/check_health.py
 python3 /root/check_health.py
 exit
+source kalshi_env/bin/activate

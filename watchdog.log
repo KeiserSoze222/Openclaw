@@ -1,15 +1,298 @@
 nohup: ignoring input
-[17:39] Watchdog started
-[Watchdog] Auto-started BTC (PID 557692)
-[Watchdog] Auto-started ETH (PID 557695)
-[Watchdog] Auto-started SOL (PID 557698)
-[17:39] BTC ✅
-[17:39] ETH ✅
-[17:39] SOL ✅
-[17:39] WHALE ✅
-[17:39] BOND ✅
-[17:44] BTC ✅
-[17:44] ETH ✅
-[17:44] SOL ✅
-[17:44] WHALE ✅
-[17:44] BOND ✅
+[17:49] Watchdog started
+[Watchdog] Auto-started BTC (PID 557830)
+[Watchdog] Auto-started ETH (PID 557833)
+[Watchdog] Auto-started SOL (PID 557836)
+[17:49] BTC ✅
+[17:49] ETH ✅
+[17:49] SOL ✅
+[17:49] WHALE ✅
+[17:49] BOND ✅
+[17:54] BTC ✅
+[17:54] ETH ✅
+[17:54] SOL ✅
+[17:54] WHALE ✅
+[17:54] BOND ✅
+[17:59] BTC ✅
+[17:59] ETH ✅
+[17:59] SOL ✅
+[17:59] WHALE ✅
+[17:59] BOND ✅
+[18:04] BTC ✅
+[18:04] ETH ✅
+[18:04] SOL bot is DOWN — restarting
+⚠️ SOL bot crashed and was restarted (PID 557940)
+[18:04] WHALE ✅
+[18:04] BOND ✅
+[18:09] BTC ✅
+[18:09] ETH ✅
+[18:09] SOL ✅
+[18:09] WHALE ✅
+[18:09] BOND ✅
+[18:14] BTC ✅
+[18:14] ETH ✅
+[18:14] SOL ✅
+[18:14] WHALE ✅
+[18:14] BOND ✅
+[18:19] BTC bot is DOWN — restarting
+⚠️ BTC bot crashed and was restarted (PID 558069)
+[18:19] ETH bot is DOWN — restarting
+⚠️ ETH bot crashed and was restarted (PID 558072)
+[18:19] SOL ✅
+[18:19] WHALE ✅
+[18:19] BOND ✅
+[18:24] BTC ✅
+[18:24] ETH ✅
+[18:24] SOL ✅
+[18:24] WHALE ✅
+[18:24] BOND ✅
+[18:29] BTC ✅
+[18:29] ETH ✅
+[18:29] SOL ✅
+[18:29] WHALE ✅
+[18:29] BOND ✅
+[18:34] BTC bot is DOWN — restarting
+⚠️ BTC bot crashed and was restarted (PID 558212)
+[18:35] ETH bot is DOWN — restarting
+⚠️ ETH bot crashed and was restarted (PID 558218)
+[18:35] SOL ✅
+[18:35] WHALE ✅
+[18:35] BOND ✅
+[18:40] BTC ✅
+[18:40] ETH ✅
+[18:40] SOL ✅
+[18:40] WHALE ✅
+[18:40] BOND ✅
+[18:45] BTC ✅
+[18:45] ETH ✅
+[18:45] SOL ✅
+[18:45] WHALE ✅
+[18:45] BOND ✅
+[18:50] BTC ✅
+[18:50] ETH ✅
+[18:50] SOL ✅
+[18:50] WHALE ✅
+[18:50] BOND ✅
+[18:55] BTC ✅
+[18:55] ETH ✅
+[18:55] SOL ✅
+[18:55] WHALE ✅
+[18:55] BOND ✅
+[19:00] BTC ✅
+[19:00] ETH ✅
+[19:00] SOL ✅
+[19:00] WHALE ✅
+[19:00] BOND ✅
+[19:05] BTC bot is DOWN — restarting
+⚠️ BTC bot crashed and was restarted (PID 558364)
+[19:05] ETH bot is DOWN — restarting
+⚠️ ETH bot crashed and was restarted (PID 558367)
+[19:05] SOL bot is DOWN — restarting
+⚠️ SOL bot crashed and was restarted (PID 558370)
+[19:05] WHALE ✅
+[19:05] BOND ✅
+[19:10] BTC ✅
+[19:10] ETH ✅
+[19:10] SOL ✅
+[19:10] WHALE ✅
+[19:10] BOND ✅
+[19:15] BTC ✅
+[19:15] ETH ✅
+[19:15] SOL ✅
+[19:15] WHALE ✅
+[19:15] BOND ✅
+[19:20] BTC bot is DOWN — restarting
+⚠️ BTC bot crashed and was restarted (PID 558442)
+[19:20] ETH ✅
+[19:20] SOL ✅
+[19:20] WHALE ✅
+[19:20] BOND ✅
+[19:25] BTC ✅
+[19:25] ETH ✅
+[19:25] SOL ✅
+[19:25] WHALE ✅
+[19:25] BOND ✅
+[19:30] BTC ✅
+[19:30] ETH ✅
+[19:30] SOL ✅
+[19:30] WHALE ✅
+[19:30] BOND ✅
+[19:35] BTC bot is DOWN — restarting
+⚠️ BTC bot crashed and was restarted (PID 558593)
+[19:36] ETH ✅
+[19:36] SOL ✅
+[19:36] WHALE ✅
+[19:36] BOND ✅
+[19:41] BTC ✅
+[19:41] ETH ✅
+[19:41] SOL ✅
+[19:41] WHALE ✅
+[19:41] BOND ✅
+[19:46] BTC ✅
+[19:46] ETH ✅
+[19:46] SOL ✅
+[19:46] WHALE ✅
+[19:46] BOND ✅
+[19:51] BTC ✅
+[19:51] ETH ✅
+[19:51] SOL ✅
+[19:51] WHALE ✅
+[19:51] BOND ✅
+[19:56] BTC ✅
+[19:56] ETH ✅
+[19:56] SOL ✅
+[19:56] WHALE ✅
+[19:56] BOND ✅
+[20:01] BTC ✅
+[20:01] ETH ✅
+[20:01] SOL ✅
+[20:01] WHALE ✅
+[20:01] BOND ✅
+[20:06] BTC ✅
+[20:06] ETH bot is DOWN — restarting
+⚠️ ETH bot crashed and was restarted (PID 558783)
+[20:06] SOL bot is DOWN — restarting
+⚠️ SOL bot crashed and was restarted (PID 558788)
+[20:06] WHALE ✅
+[20:06] BOND ✅
+[20:11] BTC ✅
+[20:11] ETH ✅
+[20:11] SOL ✅
+[20:11] WHALE ✅
+[20:11] BOND ✅
+[20:16] BTC ✅
+[20:16] ETH ✅
+[20:16] SOL ✅
+[20:16] WHALE ✅
+[20:16] BOND ✅
+[20:21] BTC bot is DOWN — restarting
+⚠️ BTC bot crashed and was restarted (PID 558933)
+[20:21] ETH bot is DOWN — restarting
+⚠️ ETH bot crashed and was restarted (PID 558936)
+[20:21] SOL ✅
+[20:21] WHALE ✅
+[20:21] BOND ✅
+[20:26] BTC ✅
+[20:26] ETH ✅
+[20:26] SOL ✅
+[20:26] WHALE ✅
+[20:26] BOND ✅
+[20:31] BTC ✅
+[20:31] ETH ✅
+[20:31] SOL ✅
+[20:31] WHALE ✅
+[20:31] BOND ✅
+[20:36] BTC ✅
+[20:36] ETH ✅
+[20:36] SOL ✅
+[20:36] WHALE ✅
+[20:36] BOND ✅
+[20:41] BTC ✅
+[20:41] ETH ✅
+[20:41] SOL ✅
+[20:41] WHALE ✅
+[20:41] BOND ✅
+[20:46] BTC ✅
+[20:46] ETH ✅
+[20:46] SOL ✅
+[20:46] WHALE ✅
+[20:46] BOND ✅
+[20:51] BTC ✅
+[20:51] ETH ✅
+[20:51] SOL ✅
+[20:51] WHALE ✅
+[20:51] BOND ✅
+[20:56] BTC ✅
+[20:56] ETH ✅
+[20:56] SOL ✅
+[20:56] WHALE ✅
+[20:56] BOND ✅
+[21:01] BTC ✅
+[21:01] ETH ✅
+[21:01] SOL ✅
+[21:01] WHALE ✅
+[21:01] BOND ✅
+[21:06] BTC ✅
+[21:06] ETH bot is DOWN — restarting
+⚠️ ETH bot crashed and was restarted (PID 559786)
+[21:07] SOL bot is DOWN — restarting
+⚠️ SOL bot crashed and was restarted (PID 559797)
+[21:07] WHALE ✅
+[21:07] BOND ✅
+[21:12] BTC ✅
+[21:12] ETH ✅
+[21:12] SOL ✅
+[21:12] WHALE ✅
+[21:12] BOND ✅
+[21:17] BTC ✅
+[21:17] ETH ✅
+[21:17] SOL ✅
+[21:17] WHALE ✅
+[21:17] BOND ✅
+[21:22] BTC ✅
+[21:22] ETH bot is DOWN — restarting
+⚠️ ETH bot crashed and was restarted (PID 560099)
+[21:22] SOL ✅
+[21:22] WHALE ✅
+[21:22] BOND ✅
+[21:27] BTC ✅
+[21:27] ETH ✅
+[21:27] SOL ✅
+[21:27] WHALE ✅
+[21:27] BOND ✅
+[21:32] BTC ✅
+[21:32] ETH ✅
+[21:32] SOL ✅
+[21:32] WHALE ✅
+[21:32] BOND ✅
+[21:37] BTC ✅
+[21:37] ETH ✅
+[21:37] SOL ✅
+[21:37] WHALE ✅
+[21:37] BOND ✅
+[21:42] BTC ✅
+[21:42] ETH ✅
+[21:42] SOL ✅
+[21:42] WHALE ✅
+[21:42] BOND ✅
+[21:47] BTC ✅
+[21:47] ETH ✅
+[21:47] SOL ✅
+[21:47] WHALE ✅
+[21:47] BOND ✅
+[21:52] BTC bot is DOWN — restarting
+⚠️ BTC bot crashed and was restarted (PID 560540)
+[21:52] ETH ✅
+[21:52] SOL ✅
+[21:52] WHALE ✅
+[21:52] BOND ✅
+[21:57] BTC ✅
+[21:57] ETH ✅
+[21:57] SOL ✅
+[21:57] WHALE ✅
+[21:57] BOND ✅
+[22:02] BTC ✅
+[22:02] ETH ✅
+[22:02] SOL ✅
+[22:02] WHALE ✅
+[22:02] BOND ✅
+[22:07] BTC ✅
+[22:07] ETH ✅
+[22:07] SOL ✅
+[22:07] WHALE ✅
+[22:07] BOND ✅
+[22:12] BTC ✅
+[22:12] ETH ✅
+[22:12] SOL ✅
+[22:12] WHALE ✅
+[22:12] BOND ✅
+[22:17] BTC ✅
+[22:17] ETH ✅
+[22:17] SOL ✅
+[22:17] WHALE ✅
+[22:17] BOND ✅
+[22:22] BTC ✅
+[22:22] ETH ✅
+[22:22] SOL ✅
+[22:22] WHALE ✅
+[22:22] BOND ✅
