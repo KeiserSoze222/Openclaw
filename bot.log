@@ -20082,3 +20082,22 @@ Balance: $145.76 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 ==================================================
 Balance: $145.76 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Cycle] No signal — YES=0.34 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR041845-45
+[Market] YES=0.35 | NO=0.66 | Sum=1.01
+==================================================
+Balance: $145.76 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.35 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR041845-45
+[Market] YES=0.18 | NO=0.83 | Sum=1.01
+==================================================
+Balance: $145.76 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
+[Signal] DOWN candidate | yes=0.18 | waiting (1/2)
+[Cycle] No signal — YES=0.18 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR041845-45
+[Market] YES=0.27 | NO=0.74 | Sum=1.01
+==================================================
+Balance: $145.09 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,all3_agree
+[Timing] Window 5 min old — skipping
+[Cycle] No signal — YES=0.27 is between 0.30 and 0.70, sum=1.01 >= 0.97

@@ -24761,3 +24761,32 @@ Balance: $145.76 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 ==================================================
 Balance: $145.76 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Cycle] No signal — YES=0.39 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXETH15M-26APR041845-45
+[Market] YES=0.33 | NO=0.69 | Sum=1.02
+==================================================
+Balance: $145.76 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.33 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Ticker] KXETH15M-26APR041845-45
+[Market] YES=0.28 | NO=0.76 | Sum=1.04
+==================================================
+Balance: $145.76 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | moderate_edge,coinbase_weak,2of3_agree
+[Signal] DOWN candidate | yes=0.28 | waiting (1/2)
+[Cycle] No signal — YES=0.28 is between 0.30 and 0.70, sum=1.04 >= 0.97
+[Ticker] KXETH15M-26APR041845-45
+[Market] YES=0.12 | NO=0.89 | Sum=1.01
+==================================================
+Balance: $145.76 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
+[Coinbase] Confirms DOWN | $2070 gap=-2 (0.07%)
+[Kraken] Divergence 3156.07% — bet trimmed
+[Correlation] All 3 agree — bet boosted
+[Signal] CONFIRMED DOWN | yes=0.12 | edge=0.38 | bet=$2.16
+[Order] KXETH15M-26APR041845-45 | no | count=4 | $2.16
+[Order] status=executed remaining=-1 filled=True
+✅ ETH DIRECTIONAL: DOWN $2.16 on KXETH15M-26APR041845-45
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR041845-45
+[Market] YES=0.26 | NO=0.79 | Sum=1.05
+==================================================
+Balance: $145.33 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00

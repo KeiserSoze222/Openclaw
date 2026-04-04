@@ -1,4 +1,4 @@
- #!/usr/bin/env python3
+#!/usr/bin/env python3
 """OpenClaw Pre-Break Health Check — run before stepping away"""
 import subprocess, requests, tempfile, csv, datetime, os
 from kalshi_python import KalshiClient
@@ -111,6 +111,22 @@ try:
     else:
         ok("No recent crashes in watchdog")
 except: pass
+
+# 7. Halt loop detection
+try:
+    wlog = open('/root/watchdog.log').readlines()[-50:]
+    recent_restarts = sum(1 for l in wlog if 'crashed and was restarted' in l)
+    halts = sum(1 for l in wlog if 'HALTED' in l or 'below floor' in l)
+    if recent_restarts >= 3:
+        fail(f"HALT LOOP: {recent_restarts} restarts, {halts} halts detected") 
+        fail("FIX: Lower MIN_BALANCE in openclaw.py or add funds")
+        issues += 1
+    elif recent_restarts >= 1:
+        warn(f"{recent_restarts} recent restart(s) — monitor closely")
+    else:
+        ok("No halt loop detected")
+except Exception as he:
+    warn(f"Could not check halt loop: {he}")
 
 # Summary
 print("\n" + "="*50)
