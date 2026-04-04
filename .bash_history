@@ -1,15 +1,3 @@
-     r = requests.get(f'https://api.coinbase.com/v2/prices/{sym}/spot', timeout=3)
-     print(sym, r.json()['data']['amount'])
- " 2>/dev/null || echo "failed"
-nano /tmp/test_cb.py
-python3 /tmp/test_cb.py
-nano /tmp/fix_eth_sol.py
-python3 /tmp/fix_eth_sol.py
-cp /root/real_bot.py /root/eth_bot.py
-rm -f /root/STOP /root/STOP_ETH /root/STOP_SOL
-cp /root/real_bot.py /root/real_bot_v3_stable.py
-nano /tmp/add_cashout.py
-python3 /tmp/add_cashout.py
 grep -n "OPEN_POSITIONS.append" real_bot.py | head -3
 sed -n '420,435p' real_bot.py
 sed -n '468,485p' real_bot.py
@@ -1998,3 +1986,15 @@ python3 /tmp/add_whale_watchdog.py
 sed -i 's|"name":    "BOND"|"name":    "WHALE", "script":  "/root/whale_scanner.py", "log":     "/root/whale_scanner.log", "stop":    "/root/STOP_WHALE"},\n    {"name":    "BOND"|' /root/watchdog.py
 pkill -f watchdog.py
 tail -10 /root/whale_scanner.log
+source kalshi_env/bin/activate
+grep -n "feature\|equity\|cashout\|extreme\|signal\|hourly\|position\|frequency\|news\|legend" /root/dashboard_v3_stable.py | head -30
+grep -n "cashout\|CashOut\|extreme\|EXTREME\|confirmed\|CONFIRMED\|legend\|icon" /root/dashboard_v3_stable.py | head -20
+nano /root/dashboard_v4.html
+nano /tmp/update_dashboard_api.py
+python3 /tmp/update_dashboard_api.py
+nano /tmp/add_dashboard_funcs.py
+python3 /tmp/add_dashboard_funcs.py
+python3 /tmp/status_all.py
+nano /root/OPENCLAW_GUIDE.md
+wc -l /root/OPENCLAW_GUIDE.md
+python3 /tmp/status_all.py

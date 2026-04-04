@@ -4,3 +4,4 @@
 {"timestamp": "2026-04-02T00:17:51.789358", "ticker": "KXMVESPORTSMULTIGAMEEXTENDED-S202602FD8B92690-C9187BD65BE", "side": "no", "price": 0.96, "count": 3, "cost": 2.88, "mins_left": 42.57074553333334}
 {"timestamp": "2026-04-02T00:30:21.991684", "ticker": "KXMVESPORTSMULTIGAMEEXTENDED-S20267B6A95FFA2C-E544D5C1F49", "side": "no", "price": 0.98, "count": 3, "cost": 2.94, "mins_left": 30.0899044}
 {"timestamp": "2026-04-02T03:40:21.732589", "ticker": "KXMVESPORTSMULTIGAMEEXTENDED-S20268292DEF540B-C699DAB0103", "side": "no", "price": 0.98, "count": 3, "cost": 2.94, "mins_left": 20.122345250000002}
+{"timestamp": "2026-04-04T10:46:44.774459", "ticker": "KXTEMPNYCH-26APR0407-T52.99", "side": "yes", "price": 0.97, "count": 3, "cost": 2.91, "mins_left": 13.339138700000001}
