@@ -626,8 +626,8 @@ def check_open_positions():
                 if mr.status_code==200:
                     mkt=mr.json().get("market",{})
                     ya=mkt.get("yes_ask_dollars") or mkt.get("yes_bid_dollars")
-                    cur_yes=float(ya) if ya and 0.02<float(ya)<0.98 else pos.get("entry_yes",0.5)
                     entry_yes=pos.get("entry_yes",0.5)
+                    cur_yes=float(ya) if ya and 0.02<float(ya)<0.98 else entry_yes
                     win_prob=(1-cur_yes) if direction=="DOWN" else cur_yes
                     reversal=((cur_yes-entry_yes)>0.08) if direction=="DOWN" else ((entry_yes-cur_yes)>0.08)
                     if win_prob>0.70 and reversal:
@@ -652,9 +652,9 @@ def check_open_positions():
                     mkt=mr.json().get("market",{})
                     status=mkt.get("status","")
                     ya=mkt.get("yes_ask_dollars") or mkt.get("yes_bid_dollars")
-                    cur_yes=float(ya) if ya and 0.02<float(ya)<0.98 else pos.get("entry_yes",0.5)
+                    entry_yes=pos.get("entry_yes",0.5)
+                    cur_yes=float(ya) if ya and 0.02<float(ya)<0.98 else entry_yes
                     if status in ("open","active"):
-                        entry_yes=pos.get("entry_yes",0.5)
                         adverse=((entry_yes-cur_yes) if direction=="UP" else (cur_yes-(1-entry_yes)))
                         if adverse>CASHOUT_ADVERSE:
                             print(f"[CashOut] {direction} on {ticker} moved {adverse:.2f} against — exiting early")

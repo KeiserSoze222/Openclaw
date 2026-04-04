@@ -1,32 +1,3 @@
-sed -i 's/BOT_NAME = "OpenClaw Bot v3.0"/BOT_NAME = "OpenClaw BTC Bot v3.0"\nEXPECTED_MARKET = "KXBTC15M"/' /root/real_bot.py
-grep -n "print.*OpenClaw\|BOT_NAME\|v3.0\|v1.0" /root/real_bot.py | head -5
-sleep 120 && grep -E "Binance|EXTREME|Settled|WIN|LOSS" /root/bot.log | tail -10
-grep -n "print(f\"OpenClaw" /root/real_bot.py | head -3
-assert MARKET_SERIES == EXPECTED_MARKET, f"WRONG MARKET: {MARKET_SERIES} != {EXPECTED_MARKET}"
-sed -n '958,965p' /root/real_bot.py
-cp /root/real_bot.py /root/real_bot_v3_stable.py
-sed -i 's/print(f"OpenClaw SOL Bot v1.0/print(f"OpenClaw BTC Bot v3.0/' /root/real_bot.py
-sed -i '960a\    assert MARKET_SERIES == "KXBTC15M", f"WRONG MARKET in real_bot.py: {MARKET_SERIES}"' /root/real_bot.py
-python3 /tmp/status_all.py
-nano /root/bond_scanner.py
-python3 -m py_compile /root/bond_scanner.py && echo "OK"
-python3 -c "
- import sys
- sys.path.insert(0, '/root')
- exec(open('/root/bond_scanner.py').read().split('if __name__')[0])
- opps = scan_markets()
- print(f'Found {len(opps)} opportunities:')
- for o in opps[:5]:
-     print(f'  {o[\"ticker\"]} | {o[\"side\"]} @ {o[\"price\"]:.3f} | {o[\"mins_left\"]:.0f}min | +{o[\"profit_pct\"]:.1f}%')
- " 2>/dev/null
-nano /tmp/test_bond.py
-python3 /tmp/test_bond.py
-sed -i 's/YES_HIGH        = 0.96/YES_HIGH        = 0.96/' /root/bond_scanner.py
-nano /tmp/fix_bond.py
-python3 /tmp/fix_bond.py
-nano /tmp/test_bond2.py
-python3 /tmp/test_bond2.py
-nano /tmp/debug_bond.py
 python3 /tmp/debug_bond.py
 nohup python3 -u /root/bond_scanner.py > /root/bond_scanner.log 2>&1 &
 ps aux | grep -E "real_bot|eth_bot|sol_bot|bond_scanner" | grep -v grep
@@ -1998,3 +1969,32 @@ pkill -f watchdog.py
 grep -E "Error|entry_yes" /root/sol_bot.log | grep "$(date -u +%Y-%m-%d)" | tail -5
 source kalshi_env/bin/activate
 grep -E "WIN|LOSS" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR04" | tail -10
+source kalshi_env/bin/activate
+grep -E "WIN|LOSS" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR04" | tail -10
+grep -n "send_telegram\|BOT_NAME" /root/openclaw.py | head -15
+send_telegram(f"{"✅" if won else "❌"} BTC {outcome}...
+nano /tmp/fix_unified_bugs.py
+python3 /tmp/fix_unified_bugs.py
+sed -n '719,720p' /root/openclaw.py
+sed -i 's/send_telegram(f"📊 BTC Hourly ({hour:02d}:00 UTC)/send_telegram(f"📊 {BOT_NAME.split()[1]} Hourly ({hour:02d}:00 UTC)/' /root/openclaw.py
+sed -n '45,75p' /root/dashboard.py
+nano /tmp/fix_stats.py
+python3 /tmp/fix_stats.py
+nano /tmp/check_positions2.py
+python3 /tmp/check_balance.py
+grep -n "Not filled\|resting\|COOLDOWN" /root/openclaw.py | head -10
+sed -n '340,360p' /root/openclaw.py
+nano /tmp/fix_resting.py
+python3 /tmp/fix_resting.py
+sleep 120 && grep -E "Cancelled resting|Not filled|Order.*executed|WIN|LOSS" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR04 1[2-9]\|26APR04 2" | tail -10
+source kalshi_env/bin/activate
+sleep 120 && grep -E "Cancelled resting|Not filled|Order.*executed|WIN|LOSS" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR04 1[2-9]\|26APR04 2" | tail -10
+grep -E "Cancelled resting|Not filled|Order.*executed|WIN|LOSS" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR04 1[2-9]\|26APR04 2" | tail -10
+python3 /tmp/status_all.py
+sleep 120 && grep -E "WIN|LOSS|Settled" /root/bot.log | grep "26APR04" | tail -5
+grep -E "WIN|LOSS|Settled|resting|Cancelled" /root/bot.log | grep "41100\|41115\|41130" | tail -5
+nano /tmp/check_positions2.py
+python3 /tmp/check_positions2.py
+sleep 60 && grep -E "WIN|LOSS|Settled" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "41100" | tail -5
+source kalshi_env/bin/activatesource kalshi_env/bin/activatesource kalshi_env/bin/activsource kalshi_env/bin/activatesource kalshi_env/bin/activatesource kalshi_env/bin/activatesource kalshi_env/bin/activate
+exit
