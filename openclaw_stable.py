@@ -294,6 +294,18 @@ def cancel_resting_orders():
         print(f"[Orders] Cancel failed: {e}")
 
 def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=None):
+    # CORRELATION GUARD — prevent all 3 bots firing simultaneously
+    try:
+        import glob as _gl, time as _t, os as _os
+        lock_path = f'/tmp/openclaw_firing_{MARKET_SERIES}.lock'
+        locks = _gl.glob('/tmp/openclaw_firing_*.lock')
+        recent = [f for f in locks if _t.time()-_os.path.getmtime(f) < 90]
+        if len(recent) >= 2:
+            print(f"[CorrGuard] {len(recent)} bots already fired — skipping to avoid correlated loss")
+            return False
+        open(lock_path, 'w').write(str(_t.time()))
+    except Exception as _e:
+        print(f"[CorrGuard] {_e}")
     global COOLDOWN_REMAINING
     ok,reason=safety_check()
     if not ok:
