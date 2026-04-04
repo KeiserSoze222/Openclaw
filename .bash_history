@@ -1,12 +1,3 @@
-grep -n "OPEN_POSITIONS.append" real_bot.py | head -3
-sed -n '420,435p' real_bot.py
-sed -n '468,485p' real_bot.py
-sed -i 's/            "entry_time":   datetime.datetime.now().isoformat(),/            "entry_time":   datetime.datetime.now().isoformat(),\n            "entry_yes":    mkt_yes if mkt_yes else 0.5,/' real_bot.py
-sed -i "s|open('/root/real_bot.py')|open('/root/eth_bot.py')|g" /tmp/add_cashout.py
-pkill -f real_bot.py
-grep "MARKET_SERIES" /root/real_bot.py | head -1
-pkill -f real_bot.py
-python3 -m py_compile /root/real_bot.py && echo "OK"
 sed -i 's/BOT_NAME = "OpenClaw Bot v3.0"/BOT_NAME = "OpenClaw BTC Bot v3.0"\nEXPECTED_MARKET = "KXBTC15M"/' /root/real_bot.py
 grep -n "print.*OpenClaw\|BOT_NAME\|v3.0\|v1.0" /root/real_bot.py | head -5
 sleep 120 && grep -E "Binance|EXTREME|Settled|WIN|LOSS" /root/bot.log | tail -10
@@ -1998,3 +1989,12 @@ python3 /tmp/status_all.py
 nano /root/OPENCLAW_GUIDE.md
 wc -l /root/OPENCLAW_GUIDE.md
 python3 /tmp/status_all.py
+source kalshi_env/bin/activate
+python3 /tmp/status_all.py
+cat /root/watchdog.log | tail -10
+grep -n "entry_yes" /root/openclaw.py | head -15
+sed -i 's/                    cur_yes=float(ya) if ya and 0.02<float(ya)<0.98 else entry_yes/                    cur_yes=float(ya) if ya and 0.02<float(ya)<0.98 else pos.get("entry_yes",0.5)/' /root/openclaw.py
+pkill -f watchdog.py
+grep -E "Error|entry_yes" /root/sol_bot.log | grep "$(date -u +%Y-%m-%d)" | tail -5
+source kalshi_env/bin/activate
+grep -E "WIN|LOSS" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR04" | tail -10

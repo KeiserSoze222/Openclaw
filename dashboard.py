@@ -44,7 +44,12 @@ def parse_csv(path):
 
 def get_stats():
     stats = {}
-    for market, path in [("BTC","/root/trade_log.csv"),("ETH","/root/eth_trade_log.csv"),("SOL","/root/sol_trade_log.csv")]:
+    configs = [
+        ("BTC","/root/trade_log.csv","/root/bot.log"),
+        ("ETH","/root/eth_trade_log.csv","/root/eth_bot.log"),
+        ("SOL","/root/sol_trade_log.csv","/root/sol_bot.log"),
+    ]
+    for market, path, logf in configs:
         rows = parse_csv(path)
         w=l=0; pnl=0.0
         for row in rows:
@@ -57,7 +62,34 @@ def get_stats():
                 try: pnl-=float(row[2])
                 except: pass
         wr = w/(w+l)*100 if (w+l) else 0
-        stats[market] = {"w":w,"l":l,"wr":round(wr,1),"pnl":round(pnl,2)}
+        # Count extreme, confirmed, cashouts from log
+        extreme=confirmed=cashouts=0
+        streak=0; streak_dir=None; streak_icon=""
+        try:
+            lines = open(logf).readlines()[-500:]
+            for line in lines:
+                if "EXTREME" in line and "firing" in line: extreme+=1
+                if "CONFIRMED" in line and "bet=" in line: confirmed+=1
+                if "[CashOut]" in line or "[ProfitLock]" in line or "[BreakEven]" in line: cashouts+=1
+            # Calculate streak from recent trades
+            recent = [r for r in rows if "WIN" in r[3] or "LOSS" in r[3]][-10:]
+            for row in reversed(recent):
+                result = "WIN" if "WIN" in row[3] else "LOSS"
+                if streak_dir is None:
+                    streak_dir = result; streak = 1
+                elif result == streak_dir:
+                    streak += 1
+                else:
+                    break
+            if streak_dir == "WIN" and streak >= 3: streak_icon = "🔥"
+            elif streak_dir == "LOSS" and streak >= 2: streak_icon = "❄️"
+            else: streak_icon = ""
+        except: pass
+        stats[market] = {
+            "w":w,"l":l,"wr":round(wr,1),"pnl":round(pnl,2),
+            "extreme":extreme,"confirmed":confirmed,"cashouts":cashouts,
+            "streak":streak,"streak_dir":streak_dir,"streak_icon":streak_icon
+        }
     return stats
 
 def get_recent_trades(n=8):

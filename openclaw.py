@@ -692,7 +692,7 @@ def check_open_positions():
             total=session_wins+session_losses
             wr=session_wins/total*100 if total else 0
             print(f"[Settled] {outcome}: {direction} ${bet:.2f} on {ticker} | pnl=${realized:+.2f} | {session_wins}W/{session_losses}L ({wr:.0f}%)")
-            send_telegram(f"{"✅" if won else "❌"} BTC {outcome}: {direction} ${bet:.2f} | pnl=${realized:+.2f}\n{session_wins}W/{session_losses}L ({wr:.0f}%) | Bal=${CURRENT_BALANCE:.2f}")
+            send_telegram(f"{"✅" if won else "❌"} {BOT_NAME.split()[1]} {outcome}: {direction} ${bet:.2f} | pnl=${realized:+.2f}\n{session_wins}W/{session_losses}L ({wr:.0f}%) | Bal=${CURRENT_BALANCE:.2f}")
             features={"signal_type":pos.get("signal_type","STANDARD"),"entry_minute":pos.get("entry_minute",0),
                 "market":MARKET_SERIES,"entry_yes":pos.get("entry_yes",0.5),
                 "min_yes":pos.get("min_yes",0.5),"max_yes":pos.get("max_yes",0.5),
@@ -716,7 +716,7 @@ def send_hourly_summary():
     _last_summary_hour=hour
     total=session_wins+session_losses
     wr=session_wins/total*100 if total else 0
-    send_telegram(f"📊 BTC Hourly ({hour:02d}:00 UTC)\n{session_wins}W/{session_losses}L ({wr:.0f}%) | PnL: ${session_pnl:+.2f} | Bal: ${CURRENT_BALANCE:.2f}")
+    send_telegram(f"📊 {BOT_NAME.split()[1]} Hourly ({hour:02d}:00 UTC)\n{session_wins}W/{session_losses}L ({wr:.0f}%) | PnL: ${session_pnl:+.2f} | Bal: ${CURRENT_BALANCE:.2f}")
 
 def load_existing_positions():
     try:
