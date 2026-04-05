@@ -33954,3 +33954,195 @@ Balance: $158.19 | Regime: CHOP | Session: 13W/0L (100%) | PnL: $+38.32
 Balance: $157.28 | Regime: CHOP | Session: 13W/0L (100%) | PnL: $+38.32
 [Cycle] No signal — YES=0.67 is between 0.30 and 0.70, sum=1.03 >= 0.97
 [Positions] 1 still open
+
+==================================================
+OpenClaw ETH Bot v4.0 — LIVE
+[Startup] Live balance synced: $154.87
+Balance: $154.87 | MaxBet: $0.00 | Threshold: <0.30 or >0.70
+==================================================
+
+[Startup] Restored: KXETH15M-26APR051815-15 $3.16 DOWN
+[Startup] Loaded 1 BTC position(s)
+[Startup] Resting orders cleared
+[Ticker] KXETH15M-26APR051815-15
+[Market] YES=0.14 | NO=0.88 | Sum=1.02
+==================================================
+Balance: $154.59 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
+[Timing] Window 11 min old — skipping
+[Cycle] No signal — YES=0.14 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR051815-15
+[Market] YES=0.04 | NO=0.98 | Sum=1.02
+==================================================
+Balance: $152.68 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | extreme_edge,coinbase_weak,2of3_agree
+[Timing] Window 12 min old — skipping
+[Cycle] No signal — YES=0.04 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR051815-15
+[Market] YES=0.02 | NO=0.99 | Sum=1.01
+==================================================
+Balance: $152.11 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 13 min old — skipping
+[Cycle] No signal — YES=0.02 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR051815-15
+[Market] YES=0.00 | NO=1.00 | Sum=1.00
+==================================================
+Balance: $150.94 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 14 min old — skipping
+[Cycle] No signal — YES=0.00 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR051815-15
+[Market] YES=0.00 | NO=1.00 | Sum=1.00
+==================================================
+Balance: $151.00 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | extreme_edge,coinbase_weak,2of3_agree
+[Timing] Window 0 min old — skipping
+[Cycle] No signal — YES=0.00 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR051830-30
+[Market] YES=0.61 | NO=0.43 | Sum=1.04
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.61 is between 0.30 and 0.70, sum=1.04 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR051830-30
+[Market] YES=0.66 | NO=0.38 | Sum=1.04
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.66 is between 0.30 and 0.70, sum=1.04 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR051830-30
+[Market] YES=0.66 | NO=0.36 | Sum=1.02
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.66 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR051830-30
+[Market] YES=0.59 | NO=0.42 | Sum=1.01
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.59 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR051830-30
+[Market] YES=0.51 | NO=0.54 | Sum=1.05
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.51 is between 0.30 and 0.70, sum=1.05 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR051830-30
+[Market] YES=0.40 | NO=0.64 | Sum=1.04
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.40 is between 0.30 and 0.70, sum=1.04 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR051830-30
+[Market] YES=0.16 | NO=0.85 | Sum=1.01
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
+[Timing] Window 7 min old — skipping
+[Cycle] No signal — YES=0.16 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Positions] Restored KXETH15M-26APR051815-15 expired — removing
+[Ticker] KXETH15M-26APR051830-30
+[Market] YES=0.17 | NO=0.86 | Sum=1.03
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | strong_edge,coinbase_weak,2of3_agree
+[Timing] Window 8 min old — skipping
+[Cycle] No signal — YES=0.17 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Ticker] KXETH15M-26APR051830-30
+[Market] YES=0.24 | NO=0.82 | Sum=1.06
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,all3_agree
+[Timing] Window 9 min old — skipping
+[Cycle] No signal — YES=0.24 is between 0.30 and 0.70, sum=1.06 >= 0.97
+[Ticker] KXETH15M-26APR051830-30
+[Market] YES=0.20 | NO=0.85 | Sum=1.05
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
+[Timing] Window 10 min old — skipping
+[Cycle] No signal — YES=0.20 is between 0.30 and 0.70, sum=1.05 >= 0.97
+[Ticker] KXETH15M-26APR051830-30
+[Market] YES=0.07 | NO=0.95 | Sum=1.02
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,all3_agree
+[Timing] Window 11 min old — skipping
+[Cycle] No signal — YES=0.07 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Ticker] KXETH15M-26APR051830-30
+[Market] YES=0.03 | NO=0.98 | Sum=1.01
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=6/10 | extreme_edge,coinbase_weak,all3_agree
+[Timing] Window 12 min old — skipping
+[Cycle] No signal — YES=0.03 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXETH15M-26APR051830-30
+[Market] YES=0.03 | NO=0.98 | Sum=1.01
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | extreme_edge,coinbase_weak,2of3_agree
+[Timing] Window 13 min old — skipping
+[Cycle] No signal — YES=0.03 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXETH15M-26APR051830-30
+[Market] YES=0.01 | NO=0.99 | Sum=1.00
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | extreme_edge,coinbase_weak,2of3_agree
+[Timing] Window 14 min old — skipping
+[Cycle] No signal — YES=0.01 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[Ticker] KXETH15M-26APR051830-30
+[Market] YES=0.00 | NO=1.00 | Sum=1.00
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | extreme_edge,coinbase_weak,2of3_agree
+[Timing] Window 0 min old — skipping
+[Cycle] No signal — YES=0.00 is between 0.30 and 0.70, sum=1.00 >= 0.97
+[Ticker] KXETH15M-26APR051845-45
+[Market] YES=0.54 | NO=0.49 | Sum=1.03
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.54 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Ticker] KXETH15M-26APR051845-45
+[Market] YES=0.80 | NO=0.23 | Sum=1.03
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Signal] UP candidate | yes=0.80 | waiting (1/2)
+[Cycle] No signal — YES=0.80 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Ticker] KXETH15M-26APR051845-45
+[Market] YES=0.83 | NO=0.21 | Sum=1.04
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Coinbase] Confirms UP | $2057 gap=+4 (0.20%)
+[Kraken] Divergence 3182.39% — bet trimmed
+[Correlation] 2/3 agree UP
+[Signal] CONFIRMED UP | yes=0.83 | edge=0.33 | bet=$1.80
+[Order] KXETH15M-26APR051845-45 | yes | count=4 | $2.00
+[Order] status=resting remaining=-1 filled=False
+[Order] Not filled: order=Order(order_id='a490d178-e3cc-45e7-ab33-1f5b43e2328f', client_order_id='', ticker='KXETH15M-26APR051845-45', side='yes', action='buy', type='limit', status='resting', yes_price=None, no_price=None, count=None, remaining_count=None, expiration_time=None, created_time=datetime.datetime(2026, 4, 5, 22, 33, 8, 793796, tzinfo=TzInfo(0)), updated_time=None)
+[Order] Cancelled resting order a490d178-e3cc-45e7-ab33-1f5b43e2328f
+[Cycle] No signal — YES=0.83 is between 0.30 and 0.70, sum=1.04 >= 0.97
+[Cooldown] 2 cycles remaining
+[Cooldown] 1 cycles remaining
+[Ticker] KXETH15M-26APR051845-45
+[Market] YES=0.79 | NO=0.25 | Sum=1.04
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=2/10 | moderate_edge,coinbase_weak
+[Timing] Window 6 min old — skipping
+[Cycle] No signal — YES=0.79 is between 0.30 and 0.70, sum=1.04 >= 0.97
+[Ticker] KXETH15M-26APR051845-45
+[Market] YES=0.74 | NO=0.29 | Sum=1.03
+==================================================
+Balance: $150.75 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=2/10 | moderate_edge,coinbase_weak
+[Timing] Window 7 min old — skipping
+[Cycle] No signal — YES=0.74 is between 0.30 and 0.70, sum=1.03 >= 0.97

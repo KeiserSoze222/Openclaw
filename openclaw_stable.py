@@ -727,7 +727,29 @@ def check_open_positions():
             except Exception as ce:
                 print(f"[CashOut] Error: {ce}")
         if strategy=="restored" and age_min>16:
-            print(f"[Positions] Restored {ticker} expired — removing")
+            # Try to determine WIN/LOSS for restored position before removing
+            try:
+                murl=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
+                mheader=kalshi.kalshi_auth.create_auth_headers("GET",murl)
+                mr=requests.get(murl,headers=mheader,timeout=5)
+                if mr.status_code==200:
+                    mkt=mr.json().get("market",{})
+                    result=mkt.get("result","")
+                    if result:
+                        bet=pos.get("bet",0)
+                        won=(direction=="UP" and result=="yes") or (direction=="DOWN" and result=="no")
+                        if won:
+                            payout=round(bet/(pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))),2)
+                            realized=round(payout-bet,2)
+                            log_trade(direction,bet,"WIN",notes=f"restored|{ticker}",profit_pct=round(realized/bet*100,1))
+                            send_telegram(f"✅ {BOT_NAME.split()[1]} WIN (restored): {direction} ${bet:.2f} | pnl=${realized:+.2f}")
+                            print(f"[Restored] WIN: {direction} ${bet:.2f} on {ticker}")
+                        else:
+                            log_trade(direction,bet,"LOSS",notes=f"restored|{ticker}")
+                            send_telegram(f"❌ {BOT_NAME.split()[1]} LOSS (restored): {direction} ${bet:.2f}")
+                            print(f"[Restored] LOSS: {direction} ${bet:.2f} on {ticker}")
+            except Exception as re:
+                print(f"[Restored] Settlement check failed: {re}")
             to_remove.append(pos)
             continue
         if age_min<=16:
