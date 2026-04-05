@@ -383,7 +383,7 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
             "entry_time":now_utc.isoformat(),"entry_yes":entry_yes,
             "min_yes":entry_yes,"max_yes":entry_yes,
             "signal_type":"EXTREME" if is_extreme else "STANDARD",
-            "entry_minute":now_utc.minute%15})
+            "entry_minute":now_utc.minute%15,"contracts":contract_count})
         log_trade(direction,bet,"PLACED",notes=f"{strategy_tag}|{ticker}")
         COOLDOWN_REMAINING=0
         return True
@@ -649,12 +649,42 @@ def check_open_positions():
                     reversal=((cur_yes-entry_yes)>0.08) if direction=="DOWN" else ((entry_yes-cur_yes)>0.08)
                     if win_prob>0.70 and reversal:
                         print(f"[ProfitLock] {direction} on {ticker} win={win_prob:.2f} reversing — locking profit")
+                        try:
+                            sell_side = "no" if direction=="UP" else "yes"
+                            contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/0.50)))
+                            sell_p = min(99,max(1,round((1-cur_yes)*100))) if direction=="UP" else min(99,max(1,round(cur_yes*100)))
+                            sell_order = kalshi.create_order(
+                                ticker=ticker, action="sell", side=sell_side,
+                                type="market", count=contracts,
+                                yes_price=sell_p if sell_side=="yes" else None,
+                                no_price=sell_p if sell_side=="no" else None,
+                                time_in_force="ioc"
+                            )
+                            if sell_order and hasattr(sell_order,"order") and sell_order.order:
+                                print(f"[ProfitLock] Sell order: {sell_order.order.status}")
+                        except Exception as se:
+                            print(f"[ProfitLock] Sell failed: {se}")
                         send_telegram(f"🔒 ProfitLock: {direction} {ticker}\nwin={win_prob:.2f} | securing profit")
                         to_remove.append(pos)
                         continue
                     entry_win_prob=(1-entry_yes) if direction=="DOWN" else entry_yes
                     if win_prob<0.40 and age_placed>=3.0 and entry_win_prob>0.65:
                         print(f"[BreakEven] {direction} on {ticker} crossed 50% — exiting")
+                        try:
+                            sell_side = "no" if direction=="UP" else "yes"
+                            contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/0.50)))
+                            sell_p = min(99,max(1,round((1-cur_yes)*100))) if direction=="UP" else min(99,max(1,round(cur_yes*100)))
+                            sell_order = kalshi.create_order(
+                                ticker=ticker, action="sell", side=sell_side,
+                                type="market", count=contracts,
+                                yes_price=sell_p if sell_side=="yes" else None,
+                                no_price=sell_p if sell_side=="no" else None,
+                                time_in_force="ioc"
+                            )
+                            if sell_order and hasattr(sell_order,"order") and sell_order.order:
+                                print(f"[BreakEven] Sell order: {sell_order.order.status}")
+                        except Exception as se:
+                            print(f"[BreakEven] Sell failed: {se}")
                         send_telegram(f"⚖️ BreakEven: {direction} {ticker}\n{entry_win_prob:.0%}→{win_prob:.0%}")
                         to_remove.append(pos)
                         continue
@@ -675,6 +705,22 @@ def check_open_positions():
                         adverse=((entry_yes-cur_yes) if direction=="UP" else (cur_yes-(1-entry_yes)))
                         if adverse>CASHOUT_ADVERSE:
                             print(f"[CashOut] {direction} on {ticker} moved {adverse:.2f} against — exiting early")
+                            # SELL the position on Kalshi to recover remaining value
+                            try:
+                                sell_side = "no" if direction=="UP" else "yes"
+                                contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/0.50)))
+                                sell_p = min(99,max(1,round((1-cur_yes)*100))) if direction=="UP" else min(99,max(1,round(cur_yes*100)))
+                                sell_order = kalshi.create_order(
+                                    ticker=ticker, action="sell", side=sell_side,
+                                    type="market", count=contracts,
+                                    yes_price=sell_p if sell_side=="yes" else None,
+                                    no_price=sell_p if sell_side=="no" else None,
+                                    time_in_force="ioc"
+                                )
+                                if sell_order and hasattr(sell_order,"order") and sell_order.order:
+                                    print(f"[CashOut] Sell order: {sell_order.order.status}")
+                            except Exception as se:
+                                print(f"[CashOut] Sell failed: {se}")
                             send_telegram(f"💸 CashOut: {direction} {ticker}\nadverse={adverse:.2f} | saving capital")
                             to_remove.append(pos)
                             continue

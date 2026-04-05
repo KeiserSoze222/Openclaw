@@ -1,45 +1,3 @@
-sed -n '468,482p' real_bot.py
-sed -n '840,846p' real_bot.py
-python3 -c "
- lines = open('/root/real_bot.py').readlines()
- # Fix line 842 - should be indented to match the if block
- lines[841] = '                            to_remove.append(pos)\n'
- open('/root/real_bot.py', 'w').writelines(lines)
- print('Fixed')
- "
-nano /tmp/fix_indent.py
-python3 /tmp/fix_indent.py
-sed -n '492,506p' real_bot.py
-sed -i 's/            "entry_time":   datetime.datetime.now().isoformat(),/            "entry_time":   datetime.datetime.now().isoformat(),\n            "entry_yes":    mkt_yes if mkt_yes else 0.5,\n            "min_yes":      mkt_yes if mkt_yes else 0.5,\n            "max_yes":      mkt_yes if mkt_yes else 0.5,/' real_bot.py
-grep -n "DAILY_LOSS_LIMIT\|RISK_SCORE\|session_start" real_bot.py | head -5
-nano /tmp/add_tod.py
-python3 /tmp/add_tod.py
-sed -i "s|open('/root/real_bot.py')|open('/root/eth_bot.py')|g" /tmp/add_tod.py
-pkill -f real_bot.py
-sed -i 's/MARKET_SERIES    = "KXSOL15M"/MARKET_SERIES    = "KXBTC15M"/' /root/real_bot.py
-pkill -f real_bot.py
-grep "MaxBet" /root/bot.log | tail -2
-sed -i 's/MARKET_SERIES    = "KXBTC15M"  # ← change to KXETH15M or KXSOL15M for other markets/MARKET_SERIES    = "KXBTC15M"  # DO NOT CHANGE — use eth_bot.py or sol_bot.py for other markets/' /root/real_bot.py
-cp /root/real_bot.py /root/real_bot_v3_stable.py
-source kalshi_env/bin/activate
-python3 /tmp/status_all.py
-for f in /root/real_bot.py /root/eth_bot.py /root/sol_bot.py; do      sed -i 's/INITIAL_BALANCE    = [0-9.]*/INITIAL_BALANCE    = 238.74/' $f;      sed -i 's/SESSION_START_BAL  = [0-9.]*/SESSION_START_BAL  = 238.74/' $f;      sed -i 's/MIN_BALANCE      = [0-9.]*/MIN_BALANCE      = 205.00/' $f;  done
-python3 /tmp/debug_bond.py
-grep "MARKET_SERIES" /root/real_bot.py | head -1
-pkill -f real_bot.py
-nano /root/openclaw.py
-python3 /root/analyze_features.py
-ls -la /root/feature_log.json 2>/dev/null || echo "File doesn't exist"
-cat /root/bot.log | tail -8
-find / -name "feature_log.json" 2>/dev/null
-tail -3 /root/performance_log.json | python3 -m json.tool 2>/dev/null | head -20
-grep "feature_log" /root/analyze_features.py
-python3 /tmp/status_all.py
-grep -A 20 "def log_trade" /root/real_bot.py | head -25
-sed -i 's/def log_trade(direction, bet, action, profit_pct=0, notes=""):/def log_trade(direction, bet, action, profit_pct=0, notes="", features=None):/' /root/real_bot.py
-grep -n "log_path = " /root/real_bot.py | head -3
-grep "log_path\|performance_log\|sol_sol\|eth_eth\|sol_eth" /root/real_bot.py | head -5
-nano /tmp/fix_real_bot_logs.py
 python3 /tmp/fix_real_bot_logs.py
 sed -n '168,180p' real_bot.py
 nano /tmp/fix_indent2.py
@@ -1998,3 +1956,45 @@ nano /root/check_health.py
 python3 /root/check_health.py
 exit
 source kalshi_env/bin/activate
+pkill -f watchdog.py && pkill -f "openclaw.py"
+python3 /tmp/fix_health_check.py
+python3 /root/check_health.py
+source kalshi_env/bin/activate
+python3 /root/check_health.py && python3 /tmp/status_all.py
+sleep 120 && grep -E "Cancelled resting|Not filled|Order.*executed|WIN|LOSS" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR04 1[2-9]\|26APR04 2" | tail -10
+source kalshi_env/bin/activate
+python3 /root/check_health.py && python3 /tmp/status_all.py
+grep "HALTED\|below floor\|MIN_BALANCE" /root/bot.log /root/eth_bot.log /root/sol_bot.log | tail -5
+source kalshi_env/bin/activate
+python3 /root/check_health.py
+python3 /tmp/status_all.
+python3 /tmp/status_all.python3 /tmp/status_all.py
+python3 /tmp/status_all.py
+grep -E "WIN|LOSS|Settled" /root/eth_bot.log | grep "26APR04 22" | tail -5
+grep -E "CashOut|ProfitLock|BreakEven" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR05" | tail -10
+grep -E "age_placed|CASHOUT|ProfitLock|entry_yes" /root/bot.log | grep "26APR05" | tail -10
+tail -20 /root/bot.log
+grep -n "check_open_positions\|OPEN_POSITIONS\|to_remove" /root/openclaw.py | head -10
+source kalshi_env/bin/activate
+python3 /root/check_health.py
+nano /tmp/add_correlation_guard.py
+python3 /tmp/add_correlation_guard.py
+grep -n "def place_order" /root/openclaw.py
+sed -i 's/def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=None):/def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=None):\n    # CORRELATION GUARD\n    try:\n        import glob as _gl, time as _t, os as _os\n        locks = _gl.glob("\/tmp\/openclaw_firing_*.lock")\n        recent = [f for f in locks if _t.time()-_os.path.getmtime(f) < 90]\n        if len(recent) >= 2:\n            print(f"[CorrGuard] {len(recent)} bots firing — skipping correlated bet")\n            return False\n        open(f"\/tmp\/openclaw_firing_{MARKET_SERIES}.lock","w").write(str(_t.time()))\n    except Exception as _cge:\n        print(f"[CorrGuard] {_cge}")/' /root/openclaw.py
+git checkout /root/openclaw.py
+grep -n "TOD_SCHEDULE\|STOP_HOUR\|tod_scale==0" /root/openclaw.py | head -5
+nano /tmp/fix_tod_and_sizing.py
+python3 /tmp/fix_tod_and_sizing.py
+pkill -f watchdog.py && pkill -f "openclaw.py"
+python3 /tmp/status_all.py
+python3 /root/check_health.py
+sed -n '291,295p' /root/openclaw.py
+grep -n "def place_order\|def try_directional\|def try_bond" /root/openclaw.py | head -5
+nano /tmp/add_corr_guard.py
+python3 /tmp/add_corr_guard.py
+pkill -f watchdog.py && pkill -f "openclaw.py"
+source kalshi_env/bin/activate
+python3 /root/check_health.py
+source kalshi_env/bin/activate
+python3 /root/check_health.py
+exit
