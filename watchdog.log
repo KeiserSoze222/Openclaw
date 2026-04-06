@@ -1,82 +1,10 @@
 nohup: ignoring input
-[18:21] Watchdog started
-[Watchdog] Auto-started BTC (PID 590998)
-[Watchdog] Auto-started ETH (PID 591001)
-[Watchdog] Auto-started SOL (PID 591005)
-[18:22] BTC ✅
-[18:22] ETH ✅
-[18:22] SOL ✅
-[18:22] WHALE ✅
-[18:22] BOND ✅
-[18:27] BTC ✅
-[18:27] ETH ✅
-[18:27] SOL ✅
-[18:27] WHALE ✅
-[18:27] BOND ✅
-[18:32] BTC ✅
-[18:32] ETH ✅
-[18:32] SOL ✅
-[18:32] WHALE ✅
-[18:32] BOND ✅
-[18:37] BTC ✅
-[18:37] ETH ✅
-[18:37] SOL ✅
-[18:37] WHALE ✅
-[18:37] BOND ✅
-[18:42] BTC ✅
-[18:42] ETH ✅
-[18:42] SOL ✅
-[18:42] WHALE ✅
-[18:42] BOND ✅
-[18:47] BTC ✅
-[18:47] ETH ✅
-[18:47] SOL ✅
-[18:47] WHALE ✅
-[18:47] BOND ✅
-[18:52] BTC ✅
-[18:52] ETH ✅
-[18:52] SOL ✅
-[18:52] WHALE ✅
-[18:52] BOND ✅
-[18:57] BTC ✅
-[18:57] ETH ✅
-[18:57] SOL ✅
-[18:57] WHALE ✅
-[18:57] BOND ✅
-[19:02] BTC ✅
-[19:02] ETH ✅
-[19:02] SOL ✅
-[19:02] WHALE ✅
-[19:02] BOND ✅
-[19:07] BTC bot is DOWN — restarting
-⚠️ BTC bot crashed and was restarted (PID 591585)
-[19:07] ETH ✅
-[19:07] SOL ✅
-[19:07] WHALE ✅
-[19:07] BOND ✅
-[19:12] BTC ✅
-[19:12] ETH ✅
-[19:12] SOL ✅
-[19:12] WHALE ✅
-[19:12] BOND ✅
-[19:17] BTC ✅
-[19:17] ETH ✅
-[19:17] SOL ✅
-[19:17] WHALE ✅
-[19:17] BOND ✅
-[19:22] BTC bot is DOWN — restarting
-⚠️ BTC bot crashed and was restarted (PID 591866)
-[19:22] ETH ✅
-[19:22] SOL ✅
-[19:22] WHALE ✅
-[19:22] BOND ✅
-[19:27] BTC ✅
-[19:27] ETH ✅
-[19:27] SOL ✅
-[19:27] WHALE ✅
-[19:27] BOND ✅
-[19:32] BTC ✅
-[19:32] ETH ✅
-[19:32] SOL ✅
-[19:32] WHALE ✅
-[19:32] BOND ✅
+[19:34] Watchdog started
+[Watchdog] Auto-started BTC (PID 592150)
+[Watchdog] Auto-started ETH (PID 592153)
+[Watchdog] Auto-started SOL (PID 592158)
+[19:34] BTC ✅
+[19:34] ETH ✅
+[19:34] SOL ✅
+[19:34] WHALE ✅
+[19:34] BOND ✅

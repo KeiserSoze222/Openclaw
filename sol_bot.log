@@ -41230,3 +41230,26 @@ Balance: $115.61 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 ==================================================
 Balance: $115.61 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Cycle] No signal — YES=0.62 is between 0.30 and 0.70, sum=1.04 >= 0.97
+
+==================================================
+OpenClaw SOL Bot v4.0 — LIVE
+[Startup] Live balance synced: $115.61
+Balance: $115.61 | MaxBet: $11.56 | Threshold: <0.30 or >0.70
+==================================================
+
+[Startup] Resting orders cleared
+[Ticker] KXSOL15M-26APR061545-45
+[Market] YES=0.56 | NO=0.47 | Sum=1.03
+==================================================
+Balance: $115.61 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.56 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Ticker] KXSOL15M-26APR061545-45
+[Market] YES=0.60 | NO=0.45 | Sum=1.05
+==================================================
+Balance: $115.61 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.60 is between 0.30 and 0.70, sum=1.05 >= 0.97
+[Ticker] KXSOL15M-26APR061545-45
+[Market] YES=0.63 | NO=0.42 | Sum=1.05
+==================================================
+Balance: $115.61 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.63 is between 0.30 and 0.70, sum=1.05 >= 0.97

@@ -737,7 +737,16 @@ def check_open_positions():
                                     time_in_force="ioc"
                                 )
                                 if sell_order and hasattr(sell_order,"order") and sell_order.order:
-                                    print(f"[CashOut] Sell order: {sell_order.order.status}")
+                                    o=sell_order.order
+                                    print(f"[CashOut] Sell order: {o.status}")
+                                    if o.status=="resting" and o.order_id:
+                                        try:
+                                            du=f"https://api.elections.kalshi.com/trade-api/v2/portfolio/orders/{o.order_id}"
+                                            dh=kalshi.kalshi_auth.create_auth_headers("DELETE",du)
+                                            requests.delete(du,headers=dh,timeout=5)
+                                            print(f"[CashOut] Cancelled resting sell {o.order_id}")
+                                        except Exception as de:
+                                            print(f"[CashOut] Cancel failed: {de}")
                             except Exception as se:
                                 print(f"[CashOut] Sell failed: {se}")
                             send_telegram(f"💸 CashOut: {direction} {ticker}\nadverse={adverse:.2f} | saving capital")
