@@ -1,33 +1,3 @@
-python3 /tmp/fix_real_bot_logs.py
-sed -n '168,180p' real_bot.py
-nano /tmp/fix_indent2.py
-python3 /tmp/fix_indent2.py
-pkill -f real_bot.py
-ps aux | grep -E "real_bot|eth_bot|sol_bot|bond_scanner" | grep -v grep
-cp /root/real_bot.py /root/real_bot_v3_stable.py
-sed -i 's/log_path = "\/root\/sol_performance_log.json"/log_path = "\/root\/eth_performance_log.json"/' /root/eth_bot.py
-sleep 180 && python3 /tmp/status_all.py && grep -E "Settled|WIN|LOSS|EXTREME|Binance" /root/bot.log | tail -10
-cat /root/bot.log | tail -10
-grep -E "PLACED|✅|Settled" /root/eth_bot.log | tail -5
-grep "feature_log" /root/real_bot.py
-grep "trade_log" /root/eth_bot.py | head -2
-ls -la /root/*trade_log* /root/*performance* 2>/dev/null
-rm -f /root/sol_eth_performance_log.json /root/sol_eth_trade_log.csv
-nano /root/watchdog.py
-python3 -m py_compile /root/watchdog.py && echo "OK"
-nano /tmp/fix_balance_sync.py
-python3 /tmp/fix_balance_sync.py
-sed -i 's/    load_existing_positions()/    global CURRENT_BALANCE, SESSION_START_BAL\n    CURRENT_BALANCE = get_live_balance_startup()\n    SESSION_START_BAL = CURRENT_BALANCE\n    print(f"[Startup] Live balance: \${CURRENT_BALANCE:.2f}")\n    load_existing_positions()/' /root/real_bot.py
-sed -n '954,962p' real_bot.py
-nano /tmp/fix_startup.py
-python3 /tmp/fix_startup.py
-sed -i "s|open('/root/real_bot.py')|open('/root/eth_bot.py')|g" /tmp/fix_balance_sync.py
-sed -i "s|open('/root/real_bot.py')|open('/root/eth_bot.py')|g" /tmp/fix_startup.py
-pkill -f real_bot.py
-cat /root/bot.log | tail -15
-grep -n "get_live_balance_startup\|def get_live_balance" /root/real_bot.py | head -5
-sed -i 's/OpenClaw SOL Bot v1.0/OpenClaw BTC Bot v3.0/' /root/real_bot.py
-grep -n "def get_max_bet" /root/real_bot.py | head -1
 sed -i 's/    live_bal = get_live_balance_startup()/    live_bal = get_live_balance()/' /root/real_bot.py
 sed -i 's/    live_bal = get_live_balance_startup()/    live_bal = get_live_balance()/' /root/eth_bot.py
 nohup python3 -u /root/real_bot.py > /root/bot.log 2>&1 &
@@ -1998,3 +1968,33 @@ python3 /root/check_health.py
 source kalshi_env/bin/activate
 python3 /root/check_health.py
 exit
+source kalshi_env/bin/activate
+grep -E "WIN|LOSS|CashOut|ProfitLock|BreakEven" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR05" | tail -20
+grep -E "entry_yes|Error|Traceback" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR05" | tail -10
+sed -n '640,670p' /root/openclaw.py
+sed -n '670,710p' /root/openclaw.py
+nano /tmp/fix_cashout_sell.py
+python3 /tmp/fix_cashout_sell.py
+grep -n "OPEN_POSITIONS.append" /root/openclaw.py | head -3
+sed -n '378,392p' /root/openclaw.py
+sed -i 's/"entry_minute":now_utc.minute%15})/"entry_minute":now_utc.minute%15,"contracts":contract_count})/' /root/openclaw.py
+pkill -f watchdog.py && pkill -f "openclaw.py"
+sleep 120 && grep -E "CashOut|ProfitLock|BreakEven|Sell order|WIN|LOSS" /root/bot.log /root/eth_bot.log | grep "26APR05 22" | tail -10
+grep -E "WIN|LOSS|Settled" /root/bot.log /root/eth_bot.log | grep "26APR05 22" | tail -5
+cat /root/watchdog.log | tail -10
+nano /tmp/fix_restored.py
+python3 /tmp/fix_restored.py
+pkill -f watchdog.py && pkill -f "openclaw.py"
+python3 /root/check_health.py
+python3 /tmp/status_all.py
+grep -E "CashOut|ProfitLock|BreakEven|Sell order|WIN|LOSS" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR06" | tail -20
+grep -E "CashOut|ProfitLock|BreakEven|Sell order" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR06" | tail -10
+grep -E "WIN|LOSS|PLACED" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR05 2\|26APR06" | tail -15 
+sed -i 's/if win_prob<0.40 and age_placed>=3.0 and entry_win_prob>0.65:/if win_prob<0.45 and age_placed>=2.5 and entry_win_prob>0.60:/' /root/openclaw.py
+python3 /tmp/status_all.py
+source kalshi_env/bin/activate
+python3 /root/check_health.py && python3 /tmp/status_all.py
+grep -E "HALTED|below floor|crashed" /root/bot.log /root/eth_bot.log /root/sol_bot.log | tail -10
+ps aux | grep -E "openclaw|watchdog" | grep -v grep
+source kalshi_env/bin/activate
+pkill -f watchdog.py && pkill -f "openclaw.py"
