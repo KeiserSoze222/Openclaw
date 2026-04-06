@@ -668,7 +668,7 @@ def check_open_positions():
                         to_remove.append(pos)
                         continue
                     entry_win_prob=(1-entry_yes) if direction=="DOWN" else entry_yes
-                    if win_prob<0.40 and age_placed>=3.0 and entry_win_prob>0.65:
+                    if win_prob<0.45 and age_placed>=2.5 and entry_win_prob>0.60:
                         print(f"[BreakEven] {direction} on {ticker} crossed 50% — exiting")
                         try:
                             sell_side = "no" if direction=="UP" else "yes"
