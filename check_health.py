@@ -77,9 +77,9 @@ try:
     r = requests.get(url, headers=h, timeout=6)
     d = r.json()
     bal = (d.get("balance",0) + d.get("portfolio_value",0)) / 100
-    if bal >= 140:
+    if bal >= 120:
         ok(f"Balance: ${bal:.2f}")
-    elif bal >= 125:
+    elif bal >= 110:
         warn(f"Balance low: ${bal:.2f}")
     else:
         fail(f"Balance critical: ${bal:.2f}")

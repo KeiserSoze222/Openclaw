@@ -661,7 +661,17 @@ def check_open_positions():
                                 time_in_force="ioc"
                             )
                             if sell_order and hasattr(sell_order,"order") and sell_order.order:
-                                print(f"[ProfitLock] Sell order: {sell_order.order.status}")
+                                o = sell_order.order
+                                label = "ProfitLock"
+                                print(f"[ProfitLock] Sell order: {o.status}")
+                                if o.status == "resting" and o.order_id:
+                                    try:
+                                        del_url = f"https://api.elections.kalshi.com/trade-api/v2/portfolio/orders/{o.order_id}"
+                                        del_h = kalshi.kalshi_auth.create_auth_headers("DELETE", del_url)
+                                        requests.delete(del_url, headers=del_h, timeout=5)
+                                        print(f"[{label}] Cancelled resting sell {o.order_id}")
+                                    except Exception as de:
+                                        print(f"[{label}] Cancel failed: {de}")
                         except Exception as se:
                             print(f"[ProfitLock] Sell failed: {se}")
                         send_telegram(f"🔒 ProfitLock: {direction} {ticker}\nwin={win_prob:.2f} | securing profit")
@@ -682,7 +692,16 @@ def check_open_positions():
                                 time_in_force="ioc"
                             )
                             if sell_order and hasattr(sell_order,"order") and sell_order.order:
-                                print(f"[BreakEven] Sell order: {sell_order.order.status}")
+                                o = sell_order.order
+                                print(f"[BreakEven] Sell order: {o.status}")
+                                if o.status == "resting" and o.order_id:
+                                    try:
+                                        del_url = f"https://api.elections.kalshi.com/trade-api/v2/portfolio/orders/{o.order_id}"
+                                        del_h = kalshi.kalshi_auth.create_auth_headers("DELETE", del_url)
+                                        requests.delete(del_url, headers=del_h, timeout=5)
+                                        print(f"[BreakEven] Cancelled resting sell {o.order_id}")
+                                    except Exception as de:
+                                        print(f"[BreakEven] Cancel failed: {de}")
                         except Exception as se:
                             print(f"[BreakEven] Sell failed: {se}")
                         send_telegram(f"⚖️ BreakEven: {direction} {ticker}\n{entry_win_prob:.0%}→{win_prob:.0%}")
