@@ -635,7 +635,7 @@ def check_open_positions():
             pass
         age_placed=(time.time()-placed_at)/60 if placed_at>0 else 999
         # PROFIT LOCK — exit if winning and reversal detected
-        if age_placed>=1.5 and strategy!="restored" and placed_at>=session_start_time:
+        if age_placed>=1.5:
             try:
                 murl=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
                 mheader=kalshi.kalshi_auth.create_auth_headers("GET",murl)
@@ -690,7 +690,7 @@ def check_open_positions():
                         continue
             except Exception as pe:
                 print(f"[ProfitLock] Error: {pe}")
-        if age_placed>=CASHOUT_MINUTES and strategy!="restored" and placed_at>=session_start_time:
+        if age_placed>=CASHOUT_MINUTES:
             try:
                 murl=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
                 mheader=kalshi.kalshi_auth.create_auth_headers("GET",murl)
