@@ -655,9 +655,9 @@ def check_open_positions():
                             sell_p = min(99,max(1,round((1-cur_yes)*100))) if direction=="UP" else min(99,max(1,round(cur_yes*100)))
                             sell_order = kalshi.create_order(
                                 ticker=ticker, action="sell", side=sell_side,
-                                type="market", count=contracts,
-                                yes_price=sell_p if sell_side=="yes" else None,
-                                no_price=sell_p if sell_side=="no" else None,
+                                type="limit", count=contracts,
+                                yes_price=max(1,sell_p-5) if sell_side=="yes" else None,
+                                no_price=max(1,sell_p-5) if sell_side=="no" else None,
                                 time_in_force="ioc"
                             )
                             if sell_order and hasattr(sell_order,"order") and sell_order.order:
@@ -686,9 +686,9 @@ def check_open_positions():
                             sell_p = min(99,max(1,round((1-cur_yes)*100))) if direction=="UP" else min(99,max(1,round(cur_yes*100)))
                             sell_order = kalshi.create_order(
                                 ticker=ticker, action="sell", side=sell_side,
-                                type="market", count=contracts,
-                                yes_price=sell_p if sell_side=="yes" else None,
-                                no_price=sell_p if sell_side=="no" else None,
+                                type="limit", count=contracts,
+                                yes_price=max(1,sell_p-5) if sell_side=="yes" else None,
+                                no_price=max(1,sell_p-5) if sell_side=="no" else None,
                                 time_in_force="ioc"
                             )
                             if sell_order and hasattr(sell_order,"order") and sell_order.order:
@@ -731,9 +731,9 @@ def check_open_positions():
                                 sell_p = min(99,max(1,round((1-cur_yes)*100))) if direction=="UP" else min(99,max(1,round(cur_yes*100)))
                                 sell_order = kalshi.create_order(
                                     ticker=ticker, action="sell", side=sell_side,
-                                    type="market", count=contracts,
-                                    yes_price=sell_p if sell_side=="yes" else None,
-                                    no_price=sell_p if sell_side=="no" else None,
+                                    type="limit", count=contracts,
+                                    yes_price=max(1,sell_p-5) if sell_side=="yes" else None,
+                                    no_price=max(1,sell_p-5) if sell_side=="no" else None,
                                     time_in_force="ioc"
                                 )
                                 if sell_order and hasattr(sell_order,"order") and sell_order.order:
