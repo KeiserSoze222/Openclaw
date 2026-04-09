@@ -3550,3 +3550,5 @@ Balance: $116.47 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Arena] Cycle 9 done
 [AutoPromote] err:name 'subprocess' is not defined
 [Arena] Cycle 10 done
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 11 done
