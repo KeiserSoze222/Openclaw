@@ -1507,3 +1507,7 @@ Traceback (most recent call last):
 KeyboardInterrupt
 /root/arena.py:1026: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
   state={"cycle":cycle,"ts":str(datetime.datetime.utcnow()),"leaderboard":[{"id":v["id"],"market":v["market"],"wr":v["wins"]/v["trades"] if v["trades"]>0 else 0,"trades":v["trades"],"pnl":v["pnl"],"gen":v["generation"]} for v in pool]}
+Traceback (most recent call last):
+  File "/root/arena.py", line 1029, in <module>
+    time.sleep(CYCLE_SLEEP)
+KeyboardInterrupt
