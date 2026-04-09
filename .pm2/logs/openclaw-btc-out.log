@@ -11263,3 +11263,42 @@ Balance: $110.18 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.47
 [Timing] Window 5 min old — skipping
 [Cycle] No signal — YES=0.20 is between 0.32 and 0.68, sum=1.01 >= 0.97
 [Positions] 2 still open
+[Ticker] KXBTC15M-26APR091300-00
+[Market] YES=0.27 | NO=0.74 | Sum=1.01
+==================================================
+Balance: $109.91 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.47
+[Confidence] Score=5/10 | moderate_edge,coinbase_weak,all3_agree,peak_hour
+[Timing] Window 6 min old — skipping
+[Cycle] No signal — YES=0.27 is between 0.32 and 0.68, sum=1.01 >= 0.97
+[Settled] WIN: DOWN $4.28 on KXBTC15M-26APR091245-45 | pnl=$+3.72 | 2W/0L (100%)
+[ProfitLock] DOWN on KXBTC15M-26APR091300-00 win=0.73 reversing — locking profit
+[ProfitLock] Sell order: executed
+[Ticker] KXBTC15M-26APR091300-00
+[Market] YES=0.35 | NO=0.66 | Sum=1.01
+==================================================
+Balance: $109.16 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+7.19
+[Cycle] No signal — YES=0.35 is between 0.32 and 0.68, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR091300-00
+[Market] YES=0.30 | NO=0.72 | Sum=1.02
+==================================================
+Balance: $108.62 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+7.19
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,2of3_agree,peak_hour
+[Timing] Window 8 min old — skipping
+[Cycle] No signal — YES=0.30 is between 0.32 and 0.68, sum=1.02 >= 0.97
+[Ticker] KXBTC15M-26APR091300-00
+[Market] YES=0.23 | NO=0.78 | Sum=1.01
+==================================================
+Balance: $109.52 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+7.19
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,2of3_agree,peak_hour
+[Timing] Window 9 min old — skipping
+[Cycle] No signal — YES=0.23 is between 0.32 and 0.68, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR091300-00
+[Market] YES=0.38 | NO=0.63 | Sum=1.01
+==================================================
+Balance: $106.64 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+7.19
+[Cycle] No signal — YES=0.38 is between 0.32 and 0.68, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR091300-00
+[Market] YES=0.64 | NO=0.38 | Sum=1.02
+==================================================
+Balance: $100.52 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+7.19
+[Cycle] No signal — YES=0.64 is between 0.32 and 0.68, sum=1.02 >= 0.97

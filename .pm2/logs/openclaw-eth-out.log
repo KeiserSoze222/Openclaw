@@ -11201,3 +11201,36 @@ Balance: $110.44 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Positions] 1 still open
 [Cooldown] 2 cycles remaining
 [Cooldown] 1 cycles remaining
+[Ticker] KXETH15M-26APR091300-00
+[Market] YES=0.32 | NO=0.69 | Sum=1.01
+==================================================
+Balance: $109.82 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.32 is between 0.32 and 0.68, sum=1.01 >= 0.97
+[Settled] WIN: DOWN $4.08 on KXETH15M-26APR091245-45 | pnl=$+3.92 | 1W/0L (100%)
+[Ticker] KXETH15M-26APR091300-00
+[Market] YES=0.54 | NO=0.51 | Sum=1.05
+==================================================
+Balance: $108.98 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.92
+[Cycle] No signal — YES=0.54 is between 0.32 and 0.68, sum=1.05 >= 0.97
+[Ticker] KXETH15M-26APR091300-00
+[Market] YES=0.45 | NO=0.56 | Sum=1.01
+==================================================
+Balance: $108.62 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.92
+[Cycle] No signal — YES=0.45 is between 0.32 and 0.68, sum=1.01 >= 0.97
+[Ticker] KXETH15M-26APR091300-00
+[Market] YES=0.47 | NO=0.57 | Sum=1.04
+==================================================
+Balance: $109.88 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.92
+[Cycle] No signal — YES=0.47 is between 0.32 and 0.68, sum=1.04 >= 0.97
+[Ticker] KXETH15M-26APR091300-00
+[Market] YES=0.67 | NO=0.36 | Sum=1.03
+==================================================
+Balance: $107.36 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.92
+[Cycle] No signal — YES=0.67 is between 0.32 and 0.68, sum=1.03 >= 0.97
+[Ticker] KXETH15M-26APR091300-00
+[Market] YES=0.92 | NO=0.09 | Sum=1.00
+==================================================
+Balance: $102.14 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.92
+[Confidence] Score=4/10 | strong_edge,coinbase_weak,peak_hour
+[Timing] Window 11 min old — skipping
+[Cycle] No signal — YES=0.92 is between 0.32 and 0.68, sum=1.00 >= 0.97
