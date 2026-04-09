@@ -3580,3 +3580,479 @@ Balance: $116.47 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Arena] v007 UP WIN WR=1.0 T=2 PnL=37.46
 [AutoPromote] err:name 'subprocess' is not defined
 [Arena] Cycle 2 done
+[Arena] v004 UP WIN WR=0.89 T=1061 PnL=9586.2
+[Arena] v007 UP WIN WR=1.0 T=3 PnL=56.19
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 3 done
+[Arena] v004 UP WIN WR=0.89 T=1062 PnL=9598.12
+[Arena] v007 UP WIN WR=1.0 T=4 PnL=74.92
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 4 done
+[Arena] v004 UP WIN WR=0.89 T=1063 PnL=9610.04
+[Arena] v007 UP WIN WR=1.0 T=5 PnL=93.65
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 5 done
+[Arena] v004 UP WIN WR=0.89 T=1064 PnL=9621.96
+[Arena] v007 UP WIN WR=1.0 T=6 PnL=112.38
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 6 done
+[Arena] v004 UP WIN WR=0.89 T=1065 PnL=9633.88
+[Arena] v007 UP WIN WR=1.0 T=7 PnL=131.11
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 7 done
+[Arena] v004 UP WIN WR=0.89 T=1066 PnL=9645.8
+[Arena] v007 UP WIN WR=1.0 T=8 PnL=149.84
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 8 done
+[Arena] v004 UP WIN WR=0.89 T=1067 PnL=9657.72
+[Arena] v007 UP WIN WR=1.0 T=9 PnL=168.57
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 9 done
+[Arena] v004 UP WIN WR=0.89 T=1068 PnL=9669.64
+[Arena] v007 UP WIN WR=1.0 T=10 PnL=187.3
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 10 done
+[Arena] v004 UP WIN WR=0.89 T=1069 PnL=9681.56
+[Arena] v007 UP WIN WR=1.0 T=11 PnL=206.03
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 11 done
+[Arena] v004 UP WIN WR=0.89 T=1070 PnL=9693.48
+[Arena] v007 UP WIN WR=1.0 T=12 PnL=224.76
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 12 done
+[Arena] v004 UP WIN WR=0.89 T=1071 PnL=9705.4
+[Arena] v007 UP WIN WR=1.0 T=13 PnL=243.49
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 13 done
+[Arena] v004 UP LOSS WR=0.89 T=1072 PnL=9691.38
+[Arena] v007 UP WIN WR=1.0 T=14 PnL=262.22
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 14 done
+[Arena] v004 UP WIN WR=0.89 T=1073 PnL=9703.3
+[Arena] v007 UP WIN WR=1.0 T=15 PnL=280.95
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 15 done
+[Arena] v004 UP WIN WR=0.89 T=1074 PnL=9715.22
+[Arena] v007 UP WIN WR=1.0 T=16 PnL=299.68
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 16 done
+[Arena] v004 UP WIN WR=0.89 T=1075 PnL=9727.14
+[Arena] v007 UP WIN WR=1.0 T=17 PnL=318.41
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 17 done
+[Arena] v004 UP LOSS WR=0.89 T=1076 PnL=9713.12
+[Arena] v007 UP WIN WR=1.0 T=18 PnL=337.14
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 18 done
+[Arena] v004 UP WIN WR=0.89 T=1077 PnL=9725.04
+[Arena] v007 UP WIN WR=1.0 T=19 PnL=355.87
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 19 done
+[Arena] v004 UP WIN WR=0.89 T=1078 PnL=9736.96
+[Arena] v007 UP WIN WR=1.0 T=20 PnL=374.6
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 20 done
+[Arena] v004 UP WIN WR=0.89 T=1079 PnL=9748.88
+[Arena] v007 UP WIN WR=1.0 T=21 PnL=393.33
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 21 done
+[Arena] v004 UP LOSS WR=0.89 T=1080 PnL=9734.86
+[Arena] v007 UP WIN WR=1.0 T=22 PnL=412.06
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 22 done
+[Arena] v004 UP WIN WR=0.89 T=1081 PnL=9746.78
+[Arena] v007 UP WIN WR=1.0 T=23 PnL=430.79
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 23 done
+[Arena] v004 UP WIN WR=0.89 T=1082 PnL=9758.7
+[Arena] v007 UP WIN WR=1.0 T=24 PnL=449.52
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 24 done
+[Arena] v004 UP WIN WR=0.89 T=1083 PnL=9770.62
+[Arena] v007 UP WIN WR=1.0 T=25 PnL=468.25
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 25 done
+[Arena] v004 UP WIN WR=0.89 T=1084 PnL=9782.54
+[Arena] v007 UP WIN WR=1.0 T=26 PnL=486.98
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 26 done
+[Arena] v004 UP WIN WR=0.89 T=1085 PnL=9794.46
+[Arena] v007 UP WIN WR=1.0 T=27 PnL=505.71
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 27 done
+[Arena] v004 UP WIN WR=0.89 T=1086 PnL=9806.38
+[Arena] v007 UP WIN WR=1.0 T=28 PnL=524.44
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 28 done
+[Arena] v004 UP WIN WR=0.89 T=1087 PnL=9818.3
+[Arena] v007 UP WIN WR=1.0 T=29 PnL=543.17
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 29 done
+[Arena] v004 UP WIN WR=0.89 T=1088 PnL=9830.22
+[Arena] v007 UP WIN WR=1.0 T=30 PnL=561.9
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 30 done
+[Arena] v004 UP WIN WR=0.89 T=1089 PnL=9842.14
+[Arena] v007 UP WIN WR=1.0 T=31 PnL=580.63
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 31 done
+[Arena] v004 UP WIN WR=0.89 T=1090 PnL=9854.06
+[Arena] v007 UP WIN WR=1.0 T=32 PnL=599.36
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 32 done
+[Arena] v004 UP WIN WR=0.89 T=1091 PnL=9865.98
+[Arena] v007 UP WIN WR=1.0 T=33 PnL=618.09
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 33 done
+[Arena] v004 UP WIN WR=0.89 T=1092 PnL=9877.9
+[Arena] v007 UP WIN WR=1.0 T=34 PnL=636.82
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 34 done
+[Arena] v004 UP WIN WR=0.89 T=1093 PnL=9889.82
+[Arena] v007 UP WIN WR=1.0 T=35 PnL=655.55
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 35 done
+[Arena] v004 UP WIN WR=0.89 T=1094 PnL=9901.74
+[Arena] v007 UP LOSS WR=0.97 T=36 PnL=633.52
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 36 done
+[Arena] v004 UP WIN WR=0.89 T=1095 PnL=9913.66
+[Arena] v007 UP WIN WR=0.97 T=37 PnL=652.25
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 37 done
+[Arena] v004 UP WIN WR=0.89 T=1096 PnL=9925.58
+[Arena] v007 UP WIN WR=0.97 T=38 PnL=670.98
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 38 done
+[Arena] v004 UP WIN WR=0.89 T=1097 PnL=9937.5
+[Arena] v007 UP WIN WR=0.97 T=39 PnL=689.71
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 39 done
+[Arena] v004 UP WIN WR=0.89 T=1098 PnL=9949.42
+[Arena] v007 UP WIN WR=0.97 T=40 PnL=708.44
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 40 done
+[Arena] v004 UP WIN WR=0.89 T=1099 PnL=9961.34
+[Arena] v007 UP WIN WR=0.98 T=41 PnL=727.17
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 41 done
+[Arena] v004 UP WIN WR=0.89 T=1100 PnL=9973.26
+[Arena] v007 UP WIN WR=0.98 T=42 PnL=745.9
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 42 done
+[Arena] v004 UP WIN WR=0.89 T=1101 PnL=9985.18
+[Arena] v007 UP WIN WR=0.98 T=43 PnL=764.63
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 43 done
+[Arena] v004 UP WIN WR=0.89 T=1102 PnL=9997.1
+[Arena] v007 UP WIN WR=0.98 T=44 PnL=783.36
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 44 done
+[Arena] v004 UP WIN WR=0.89 T=1103 PnL=10009.02
+[Arena] v007 UP WIN WR=0.98 T=45 PnL=802.09
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 45 done
+[Arena] v004 UP WIN WR=0.89 T=1104 PnL=10020.94
+[Arena] v007 UP WIN WR=0.98 T=46 PnL=820.82
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 46 done
+[Arena] v004 UP WIN WR=0.89 T=1105 PnL=10032.86
+[Arena] v007 UP WIN WR=0.98 T=47 PnL=839.55
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 47 done
+[Arena] v004 UP WIN WR=0.89 T=1106 PnL=10044.78
+[Arena] v007 UP WIN WR=0.98 T=48 PnL=858.28
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 48 done
+[Arena] v004 UP WIN WR=0.89 T=1107 PnL=10056.7
+[Arena] v007 UP WIN WR=0.98 T=49 PnL=877.01
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 49 done
+[Arena] v004 UP LOSS WR=0.89 T=1108 PnL=10042.68
+[Arena] v007 UP WIN WR=0.98 T=50 PnL=895.74
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 50 done
+[Arena] v004 UP WIN WR=0.89 T=1109 PnL=10054.6
+[Arena] v007 UP WIN WR=0.98 T=51 PnL=914.47
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 51 done
+[Arena] v004 UP WIN WR=0.89 T=1110 PnL=10066.52
+[Arena] v007 UP WIN WR=0.98 T=52 PnL=933.2
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 52 done
+[Arena] v004 UP LOSS WR=0.89 T=1111 PnL=10052.5
+[Arena] v007 UP WIN WR=0.98 T=53 PnL=951.93
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 53 done
+[Arena] v004 UP WIN WR=0.89 T=1112 PnL=10064.42
+[Arena] v007 UP WIN WR=0.98 T=54 PnL=970.66
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 54 done
+[Arena] v004 UP WIN WR=0.89 T=1113 PnL=10076.34
+[Arena] v007 UP WIN WR=0.98 T=55 PnL=989.39
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 55 done
+[Arena] v004 UP WIN WR=0.89 T=1114 PnL=10088.26
+[Arena] v007 UP WIN WR=0.98 T=56 PnL=1008.12
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 56 done
+[Arena] v004 UP WIN WR=0.89 T=1115 PnL=10100.18
+[Arena] v007 UP WIN WR=0.98 T=57 PnL=1026.85
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 57 done
+[Arena] v004 UP WIN WR=0.89 T=1116 PnL=10112.1
+[Arena] v007 UP WIN WR=0.98 T=58 PnL=1045.58
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 58 done
+[Arena] v004 UP WIN WR=0.89 T=1117 PnL=10124.02
+[Arena] v007 UP WIN WR=0.98 T=59 PnL=1064.31
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 59 done
+[Arena] v004 UP WIN WR=0.89 T=1118 PnL=10135.94
+[Arena] v007 UP WIN WR=0.98 T=60 PnL=1083.04
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 60 done
+[Arena] v004 UP WIN WR=0.89 T=1119 PnL=10147.86
+[Arena] v007 UP WIN WR=0.98 T=61 PnL=1101.77
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 61 done
+[Arena] v004 UP WIN WR=0.89 T=1120 PnL=10159.78
+[Arena] v007 UP WIN WR=0.98 T=62 PnL=1120.5
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 62 done
+[Arena] v004 UP WIN WR=0.89 T=1121 PnL=10171.7
+[Arena] v007 UP WIN WR=0.98 T=63 PnL=1139.23
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 63 done
+[Arena] v004 UP WIN WR=0.89 T=1122 PnL=10183.62
+[Arena] v007 UP WIN WR=0.98 T=64 PnL=1157.96
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 64 done
+[Arena] v004 UP WIN WR=0.89 T=1123 PnL=10195.54
+[Arena] v007 UP WIN WR=0.98 T=65 PnL=1176.69
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 65 done
+[Arena] v004 UP WIN WR=0.89 T=1124 PnL=10207.46
+[Arena] v007 UP WIN WR=0.98 T=66 PnL=1195.42
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 66 done
+[Arena] v004 UP WIN WR=0.89 T=1125 PnL=10219.38
+[Arena] v007 UP WIN WR=0.99 T=67 PnL=1214.15
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 67 done
+[Arena] v004 UP WIN WR=0.89 T=1126 PnL=10231.3
+[Arena] v007 UP WIN WR=0.99 T=68 PnL=1232.88
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 68 done
+[Arena] v004 UP WIN WR=0.89 T=1127 PnL=10243.22
+[Arena] v007 UP WIN WR=0.99 T=69 PnL=1251.61
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 69 done
+[Arena] v004 UP WIN WR=0.89 T=1128 PnL=10255.14
+[Arena] v007 UP WIN WR=0.99 T=70 PnL=1270.34
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 70 done
+[Arena] v004 UP WIN WR=0.89 T=1129 PnL=10267.06
+[Arena] v007 UP WIN WR=0.99 T=71 PnL=1289.07
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 71 done
+[Arena] v004 UP WIN WR=0.89 T=1130 PnL=10278.98
+[Arena] v007 UP LOSS WR=0.97 T=72 PnL=1267.04
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 72 done
+[Arena] v004 UP WIN WR=0.89 T=1131 PnL=10290.9
+[Arena] v007 UP WIN WR=0.97 T=73 PnL=1285.77
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 73 done
+[Arena] v004 UP WIN WR=0.89 T=1132 PnL=10302.82
+[Arena] v007 UP WIN WR=0.97 T=74 PnL=1304.5
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 74 done
+[Arena] v004 UP WIN WR=0.89 T=1133 PnL=10314.74
+[Arena] v007 UP WIN WR=0.97 T=75 PnL=1323.23
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 75 done
+[Arena] v004 UP WIN WR=0.89 T=1134 PnL=10326.66
+[Arena] v007 UP WIN WR=0.97 T=76 PnL=1341.96
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 76 done
+[Arena] v004 UP WIN WR=0.89 T=1135 PnL=10338.58
+[Arena] v007 UP WIN WR=0.97 T=77 PnL=1360.69
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 77 done
+[Arena] v004 UP WIN WR=0.89 T=1136 PnL=10350.5
+[Arena] v007 UP WIN WR=0.97 T=78 PnL=1379.42
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 78 done
+[Arena] v004 UP WIN WR=0.89 T=1137 PnL=10362.42
+[Arena] v007 UP WIN WR=0.97 T=79 PnL=1398.15
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 79 done
+[Arena] v004 UP WIN WR=0.89 T=1138 PnL=10374.34
+[Arena] v007 UP WIN WR=0.97 T=80 PnL=1416.88
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 80 done
+[Arena] v004 UP WIN WR=0.89 T=1139 PnL=10386.26
+[Arena] v007 UP WIN WR=0.98 T=81 PnL=1435.61
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 81 done
+[Arena] v004 UP WIN WR=0.89 T=1140 PnL=10398.18
+[Arena] v007 UP WIN WR=0.98 T=82 PnL=1454.34
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 82 done
+[Arena] v004 UP WIN WR=0.89 T=1141 PnL=10410.1
+[Arena] v007 UP WIN WR=0.98 T=83 PnL=1473.07
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 83 done
+[Arena] v004 UP WIN WR=0.89 T=1142 PnL=10422.02
+[Arena] v007 UP WIN WR=0.98 T=84 PnL=1491.8
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 84 done
+[Arena] v004 UP LOSS WR=0.89 T=1143 PnL=10408.0
+[Arena] v007 UP WIN WR=0.98 T=85 PnL=1510.53
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 85 done
+[Arena] v004 UP WIN WR=0.89 T=1144 PnL=10419.92
+[Arena] v007 UP WIN WR=0.98 T=86 PnL=1529.26
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 86 done
+[Arena] v004 UP WIN WR=0.89 T=1145 PnL=10431.84
+[Arena] v007 UP WIN WR=0.98 T=87 PnL=1547.99
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 87 done
+[Arena] v004 UP WIN WR=0.89 T=1146 PnL=10443.76
+[Arena] v007 UP WIN WR=0.98 T=88 PnL=1566.72
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 88 done
+[Arena] v004 UP WIN WR=0.89 T=1147 PnL=10455.68
+[Arena] v007 UP WIN WR=0.98 T=89 PnL=1585.45
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 89 done
+[Arena] v004 UP WIN WR=0.89 T=1148 PnL=10467.6
+[Arena] v007 UP WIN WR=0.98 T=90 PnL=1604.18
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 90 done
+[Arena] v004 UP WIN WR=0.89 T=1149 PnL=10479.52
+[Arena] v007 UP WIN WR=0.98 T=91 PnL=1622.91
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 91 done
+[Arena] v004 UP WIN WR=0.89 T=1150 PnL=10491.44
+[Arena] v007 UP WIN WR=0.98 T=92 PnL=1641.64
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 92 done
+[Arena] v004 UP WIN WR=0.89 T=1151 PnL=10503.36
+[Arena] v007 UP WIN WR=0.98 T=93 PnL=1660.37
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 93 done
+[Arena] v004 UP WIN WR=0.89 T=1152 PnL=10515.28
+[Arena] v007 UP WIN WR=0.98 T=94 PnL=1679.1
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 94 done
+[Arena] v004 UP WIN WR=0.89 T=1153 PnL=10527.2
+[Arena] v007 UP WIN WR=0.98 T=95 PnL=1697.83
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 95 done
+[Arena] v004 UP WIN WR=0.89 T=1154 PnL=10539.12
+[Arena] v007 UP WIN WR=0.98 T=96 PnL=1716.56
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 96 done
+[Arena] v004 UP WIN WR=0.89 T=1155 PnL=10551.04
+[Arena] v007 UP WIN WR=0.98 T=97 PnL=1735.29
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 97 done
+[Arena] v004 UP WIN WR=0.89 T=1156 PnL=10562.96
+[Arena] v007 UP WIN WR=0.98 T=98 PnL=1754.02
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 98 done
+[Arena] v004 UP LOSS WR=0.89 T=1157 PnL=10548.94
+[Arena] v007 UP WIN WR=0.98 T=99 PnL=1772.75
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 99 done
+[Arena] v004 UP WIN WR=0.89 T=1158 PnL=10560.86
+[Arena] v007 UP WIN WR=0.98 T=100 PnL=1791.48
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 100 done
+[Arena] v004 UP WIN WR=0.89 T=1159 PnL=10572.78
+[Arena] v007 UP WIN WR=0.98 T=101 PnL=1810.21
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 101 done
+[Arena] v004 UP WIN WR=0.89 T=1160 PnL=10584.7
+[Arena] v007 UP WIN WR=0.98 T=102 PnL=1828.94
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 102 done
+[Arena] v004 UP WIN WR=0.89 T=1161 PnL=10596.62
+[Arena] v007 UP WIN WR=0.98 T=103 PnL=1847.67
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 103 done
+[Arena] v004 UP WIN WR=0.89 T=1162 PnL=10608.54
+[Arena] v007 UP WIN WR=0.98 T=104 PnL=1866.4
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 104 done
+[Arena] v004 UP WIN WR=0.89 T=1163 PnL=10620.46
+[Arena] v007 UP WIN WR=0.98 T=105 PnL=1885.13
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 105 done
+[Arena] v004 UP WIN WR=0.89 T=1164 PnL=10632.38
+[Arena] v007 UP WIN WR=0.98 T=106 PnL=1903.86
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 106 done
+[Arena] v004 UP WIN WR=0.89 T=1165 PnL=10644.3
+[Arena] v007 UP WIN WR=0.98 T=107 PnL=1922.59
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 107 done
+[Arena] v004 UP WIN WR=0.89 T=1166 PnL=10656.22
+[Arena] v007 UP WIN WR=0.98 T=108 PnL=1941.32
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 108 done
+[Arena] v004 UP WIN WR=0.89 T=1167 PnL=10668.14
+[Arena] v007 UP WIN WR=0.98 T=109 PnL=1960.05
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 109 done
+[Arena] v004 UP LOSS WR=0.89 T=1168 PnL=10654.12
+[Arena] v007 UP WIN WR=0.98 T=110 PnL=1978.78
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 110 done
+[Arena] v004 UP LOSS WR=0.89 T=1169 PnL=10640.1
+[Arena] v007 UP WIN WR=0.98 T=111 PnL=1997.51
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 111 done
+[Arena] v004 UP WIN WR=0.89 T=1170 PnL=10652.02
+[Arena] v007 UP WIN WR=0.98 T=112 PnL=2016.24
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 112 done
+[Arena] v004 UP WIN WR=0.89 T=1171 PnL=10663.94
+[Arena] v007 UP WIN WR=0.98 T=113 PnL=2034.97
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 113 done
+[Arena] v004 UP WIN WR=0.89 T=1172 PnL=10675.86
+[Arena] v007 UP WIN WR=0.98 T=114 PnL=2053.7
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 114 done
+[Arena] v004 UP WIN WR=0.89 T=1173 PnL=10687.78
+[Arena] v007 UP WIN WR=0.98 T=115 PnL=2072.43
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 115 done
+[Arena] v004 UP WIN WR=0.89 T=1174 PnL=10699.7
+[Arena] v007 UP WIN WR=0.98 T=116 PnL=2091.16
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 116 done
+[Arena] v004 UP WIN WR=0.89 T=1175 PnL=10711.62
+[Arena] v007 UP WIN WR=0.98 T=117 PnL=2109.89
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 117 done
+[Arena] v004 UP WIN WR=0.89 T=1176 PnL=10723.54
+[Arena] v007 UP WIN WR=0.98 T=118 PnL=2128.62
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 118 done
+[Arena] v004 UP LOSS WR=0.89 T=1177 PnL=10709.52
+[Arena] v007 UP WIN WR=0.98 T=119 PnL=2147.35
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 119 done
+[Arena] v004 UP WIN WR=0.89 T=1178 PnL=10721.44
+[Arena] v007 UP WIN WR=0.98 T=120 PnL=2166.08
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 120 done
+[Arena] v004 UP WIN WR=0.89 T=1179 PnL=10733.36
+[Arena] v007 UP WIN WR=0.98 T=121 PnL=2184.81
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 121 done

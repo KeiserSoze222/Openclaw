@@ -1,3 +1,5 @@
 [user]
 	email = openclaw@bot.com
 	name = OpenClaw
+[credential]
+	helper = store
