@@ -10863,3 +10863,44 @@ Balance: $110.36 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+1.79
 ==================================================
 Balance: $110.44 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+1.79
 [Cycle] No signal — YES=0.60 is between 0.32 and 0.68, sum=1.05 >= 0.97
+[Ticker] KXSOL15M-26APR091300-00
+[Market] YES=0.39 | NO=0.65 | Sum=1.04
+==================================================
+Balance: $110.44 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+1.79
+[Cycle] No signal — YES=0.39 is between 0.32 and 0.68, sum=1.04 >= 0.97
+[Ticker] KXSOL15M-26APR091300-00
+[Market] YES=0.25 | NO=0.78 | Sum=1.03
+==================================================
+Balance: $110.44 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+1.79
+[Confidence] Score=5/10 | moderate_edge,coinbase_weak,all3_agree,peak_hour
+[Signal] DOWN candidate | yes=0.25 | waiting (1/2)
+[Cycle] No signal — YES=0.25 is between 0.32 and 0.68, sum=1.03 >= 0.97
+[Ticker] KXSOL15M-26APR091300-00
+[Market] YES=0.17 | NO=0.85 | Sum=1.02
+==================================================
+Balance: $110.44 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+1.79
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,2of3_agree,peak_hour
+[Coinbase] Confirms DOWN | $83 gap=-0 (0.27%)
+[Kraken] Divergence 86317.76% — bet trimmed
+[Correlation] 2/3 agree DOWN
+[Signal] CONFIRMED DOWN | yes=0.17 | edge=0.33 | bet=$3.28
+[CorrGuard] 2 bots already fired — skipping to avoid correlated loss
+[Cycle] No signal — YES=0.17 is between 0.32 and 0.68, sum=1.02 >= 0.97
+[Ticker] KXSOL15M-26APR091300-00
+[Market] YES=0.08 | NO=0.93 | Sum=1.01
+==================================================
+Balance: $110.36 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+1.79
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,2of3_agree,peak_hour
+[Coinbase] Confirms DOWN | $83 gap=-0 (0.41%)
+[Kraken] Divergence 86472.53% — bet trimmed
+[Correlation] All 3 agree — bet boosted
+[Signal] CONFIRMED DOWN | yes=0.08 | edge=0.42 | bet=$5.42
+[CorrGuard] 2 bots already fired — skipping to avoid correlated loss
+[Cycle] No signal — YES=0.08 is between 0.32 and 0.68, sum=1.01 >= 0.97
+[Ticker] KXSOL15M-26APR091300-00
+[Market] YES=0.11 | NO=0.90 | Sum=1.01
+==================================================
+Balance: $109.73 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+1.79
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,2of3_agree,peak_hour
+[Timing] Window 5 min old — skipping
+[Cycle] No signal — YES=0.11 is between 0.32 and 0.68, sum=1.01 >= 0.97

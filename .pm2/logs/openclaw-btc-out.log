@@ -11221,3 +11221,45 @@ Balance: $110.36 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.47
 Balance: $110.44 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.47
 [Cycle] No signal — YES=0.51 is between 0.32 and 0.68, sum=1.01 >= 0.97
 [Positions] 1 still open
+[Ticker] KXBTC15M-26APR091300-00
+[Market] YES=0.35 | NO=0.67 | Sum=1.02
+==================================================
+Balance: $110.44 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.47
+[Cycle] No signal — YES=0.35 is between 0.32 and 0.68, sum=1.02 >= 0.97
+[Positions] 1 still open
+[Ticker] KXBTC15M-26APR091300-00
+[Market] YES=0.19 | NO=0.82 | Sum=1.01
+==================================================
+Balance: $110.44 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.47
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,2of3_agree,peak_hour
+[Signal] DOWN candidate | yes=0.19 | waiting (1/2)
+[Cycle] No signal — YES=0.19 is between 0.32 and 0.68, sum=1.01 >= 0.97
+[Positions] 1 still open
+[Ticker] KXBTC15M-26APR091300-00
+[Market] YES=0.15 | NO=0.86 | Sum=1.01
+==================================================
+Balance: $110.44 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.47
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,2of3_agree,peak_hour
+[Coinbase] Confirms DOWN | $71799 gap=-175 (0.24%)
+[Correlation] All 3 agree — bet boosted
+[Signal] CONFIRMED DOWN | yes=0.15 | edge=0.35 | bet=$4.63
+[Order] KXBTC15M-26APR091300-00 | no | count=9 | $4.63
+[Order] status=executed remaining=-1 filled=True
+✅ BTC DIRECTIONAL: DOWN $4.63 on KXBTC15M-26APR091300-00
+[Positions] 2 still open
+[Ticker] KXBTC15M-26APR091300-00
+[Market] YES=0.15 | NO=0.86 | Sum=1.01
+==================================================
+Balance: $110.63 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.47
+[Confidence] Score=6/10 | strong_edge,coinbase_weak,all3_agree,peak_hour
+[Signal] DOWN candidate | yes=0.15 | waiting (1/2)
+[Cycle] No signal — YES=0.15 is between 0.32 and 0.68, sum=1.01 >= 0.97
+[Positions] 2 still open
+[Ticker] KXBTC15M-26APR091300-00
+[Market] YES=0.20 | NO=0.81 | Sum=1.01
+==================================================
+Balance: $110.18 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.47
+[Confidence] Score=6/10 | strong_edge,coinbase_weak,all3_agree,peak_hour
+[Timing] Window 5 min old — skipping
+[Cycle] No signal — YES=0.20 is between 0.32 and 0.68, sum=1.01 >= 0.97
+[Positions] 2 still open

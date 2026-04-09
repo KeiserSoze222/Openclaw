@@ -11170,3 +11170,34 @@ Balance: $110.36 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 Balance: $110.44 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Cycle] No signal — YES=0.61 is between 0.32 and 0.68, sum=1.01 >= 0.97
 [Positions] 1 still open
+[Ticker] KXETH15M-26APR091300-00
+[Market] YES=0.39 | NO=0.65 | Sum=1.04
+==================================================
+Balance: $110.44 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.39 is between 0.32 and 0.68, sum=1.04 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR091300-00
+[Market] YES=0.21 | NO=0.82 | Sum=1.03
+==================================================
+Balance: $110.44 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,2of3_agree,peak_hour
+[Signal] DOWN candidate | yes=0.21 | waiting (1/2)
+[Cycle] No signal — YES=0.21 is between 0.32 and 0.68, sum=1.03 >= 0.97
+[Positions] 1 still open
+[Ticker] KXETH15M-26APR091300-00
+[Market] YES=0.16 | NO=0.87 | Sum=1.03
+==================================================
+Balance: $110.44 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | strong_edge,coinbase_weak,2of3_agree,peak_hour
+[Coinbase] Confirms DOWN | $2195 gap=-6 (0.27%)
+[Kraken] Divergence 3170.45% — bet trimmed
+[Correlation] Markets diverging — bet trimmed
+[Signal] CONFIRMED DOWN | yes=0.16 | edge=0.34 | bet=$3.04
+[Order] KXETH15M-26APR091300-00 | no | count=6 | $3.04
+[Order] status=resting remaining=-1 filled=False
+[Order] Not filled: order=Order(order_id='f1b7ab67-46cd-4b85-9c5d-fa9779374a46', client_order_id='', ticker='KXETH15M-26APR091300-00', side='no', action='buy', type='limit', status='resting', yes_price=None, no_price=None, count=None, remaining_count=None, expiration_time=None, created_time=datetime.datetime(2026, 4, 9, 16, 48, 47, 988910, tzinfo=TzInfo(0)), updated_time=None)
+[Order] Cancelled resting order f1b7ab67-46cd-4b85-9c5d-fa9779374a46
+[Cycle] No signal — YES=0.16 is between 0.32 and 0.68, sum=1.03 >= 0.97
+[Positions] 1 still open
+[Cooldown] 2 cycles remaining
+[Cooldown] 1 cycles remaining

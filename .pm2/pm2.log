@@ -15420,3 +15420,10 @@
 2026-04-09T16:39:02: PM2 log: pid=672990 msg=process killed
 2026-04-09T16:39:02: PM2 log: App [bond-scanner:3] starting in -fork mode-
 2026-04-09T16:39:02: PM2 log: App [bond-scanner:3] online
+2026-04-09T16:50:46: PM2 log: Stopping app:arena id:13
+2026-04-09T16:50:46: PM2 log: pid=661713 msg=failed to kill - retrying in 100ms
+2026-04-09T16:50:46: PM2 log: pid=661713 msg=failed to kill - retrying in 100ms
+2026-04-09T16:50:46: PM2 log: App [arena:13] exited with code [0] via signal [SIGINT]
+2026-04-09T16:50:46: PM2 log: pid=661713 msg=process killed
+2026-04-09T16:50:46: PM2 log: App [arena:13] starting in -fork mode-
+2026-04-09T16:50:46: PM2 log: App [arena:13] online

@@ -962,6 +962,28 @@ def evaluate(v):
         v["mutations"].append("tightened threshold wr="+str(round(wr,2)))
         return v,True
     return v,False
+
+def auto_promote(pool):
+    try:
+        candidates=[v for v in pool if v.get("trades",0)>=50]
+        if not candidates: return
+        leader=max(candidates,key=lambda v:v.get("wins",0)/v.get("trades",1))
+        wr=leader.get("wins",0)/leader.get("trades",1)
+        if wr<0.70: return
+        thresh=leader.get("entry_threshold",0.70)
+        cur=subprocess.check_output(["grep","DIRECTIONAL_HIGH","/root/openclaw.py"]).decode()
+        cur_thresh=float([x for x in cur.split() if "=" in x][0].split("=")[1])
+        if abs(thresh-cur_thresh)<0.001: return
+        subprocess.run(["sed","-i","s/DIRECTIONAL_HIGH="+str(cur_thresh)+"/DIRECTIONAL_HIGH="+str(thresh)+"/","/root/openclaw.py"])
+        subprocess.run(["pm2","restart","openclaw-btc","openclaw-eth","openclaw-sol"])
+        msg="[AutoPromote] "+leader["id"]+" WR="+str(round(wr,3))+" thresh="+str(thresh)+" promoted"
+        print(msg)
+        raw=open("/root/real_bot_pre_v4_backup.py").read()
+        tok=raw.split("BOT_TOKEN = '")[1].split("'")[0]
+        cid=raw.split("CHAT_ID   = '")[1].split("'")[0]
+        import requests as _r
+        _r.get("https://api.telegram.org/bot"+tok+"/sendMessage",params={"chat_id":cid,"text":msg},timeout=5)
+    except Exception as e: print("[AutoPromote] err:"+str(e))
 if __name__=="__main__":
     import json,random
     print("[Arena] Starting OpenClaw Arena v1.0")
@@ -1000,6 +1022,7 @@ if __name__=="__main__":
             pool[i],mutated=result if result else (v,False)
             if mutated: print("[Arena] Mutated "+v["id"])
         save_json(GENOME_FILE,pool)
+        auto_promote(pool)
         state={"cycle":cycle,"ts":str(datetime.datetime.utcnow()),"leaderboard":[{"id":v["id"],"market":v["market"],"wr":v["wins"]/v["trades"] if v["trades"]>0 else 0,"trades":v["trades"],"pnl":v["pnl"],"gen":v["generation"]} for v in pool]}
         save_json(ARENA_STATE_FILE,state)
         print("[Arena] Cycle "+str(cycle)+" done")
