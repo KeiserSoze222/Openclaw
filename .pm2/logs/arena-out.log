@@ -1728,3 +1728,1406 @@ Balance: $116.47 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Arena] Cycle 12 done
 [Arena] Cycle 13 done
 [Arena] Cycle 14 done
+[Arena] v004 DOWN LOSS WR=0.88 T=310 PnL=2709.48
+[Arena] Cycle 15 done
+[Arena] v004 DOWN WIN WR=0.88 T=311 PnL=2721.4
+[Arena] Cycle 16 done
+[Arena] v004 DOWN LOSS WR=0.88 T=312 PnL=2707.38
+[Arena] Cycle 17 done
+[Arena] v004 DOWN WIN WR=0.88 T=313 PnL=2719.3
+[Arena] Cycle 18 done
+[Arena] v004 DOWN WIN WR=0.88 T=314 PnL=2731.22
+[Arena] Cycle 19 done
+[Arena] v004 DOWN LOSS WR=0.87 T=315 PnL=2717.2
+[Arena] Cycle 20 done
+[Arena] v004 DOWN WIN WR=0.87 T=316 PnL=2729.12
+[Arena] Cycle 21 done
+[Arena] v004 DOWN WIN WR=0.87 T=317 PnL=2741.04
+[Arena] Cycle 22 done
+[Arena] v004 DOWN WIN WR=0.87 T=318 PnL=2752.96
+[Arena] Cycle 23 done
+[Arena] v004 DOWN LOSS WR=0.87 T=319 PnL=2738.94
+[Arena] Cycle 24 done
+[Arena] v004 DOWN WIN WR=0.87 T=320 PnL=2750.86
+[Arena] Cycle 25 done
+[Arena] v004 DOWN WIN WR=0.87 T=321 PnL=2762.78
+[Arena] Cycle 26 done
+[Arena] v004 DOWN WIN WR=0.87 T=322 PnL=2774.7
+[Arena] Cycle 27 done
+[Arena] Cycle 28 done
+[Arena] v004 DOWN WIN WR=0.87 T=323 PnL=2786.62
+[Arena] Cycle 29 done
+[Arena] v004 UP WIN WR=0.87 T=324 PnL=2798.54
+[Arena] Cycle 30 done
+[Arena] v004 UP WIN WR=0.87 T=325 PnL=2810.46
+[Arena] Cycle 31 done
+[Arena] v004 UP WIN WR=0.87 T=326 PnL=2822.38
+[Arena] Cycle 32 done
+[Arena] v004 UP WIN WR=0.87 T=327 PnL=2834.3
+[Arena] Cycle 33 done
+[Arena] v004 UP WIN WR=0.88 T=328 PnL=2846.22
+[Arena] Cycle 34 done
+[Arena] v004 UP WIN WR=0.88 T=329 PnL=2858.14
+[Arena] Cycle 35 done
+[Arena] v004 UP WIN WR=0.88 T=330 PnL=2870.06
+[Arena] Cycle 36 done
+[Arena] v004 UP WIN WR=0.88 T=331 PnL=2881.98
+[Arena] Cycle 37 done
+[Arena] v004 UP WIN WR=0.88 T=332 PnL=2893.9
+[Arena] Cycle 38 done
+[Arena] v004 UP WIN WR=0.88 T=333 PnL=2905.82
+[Arena] Cycle 39 done
+[Arena] v004 UP WIN WR=0.88 T=334 PnL=2917.74
+[Arena] Cycle 40 done
+[Arena] v004 UP WIN WR=0.88 T=335 PnL=2929.66
+[Arena] Cycle 41 done
+[Arena] Cycle 42 done
+[Arena] v004 UP WIN WR=0.88 T=336 PnL=2941.58
+[Arena] Cycle 43 done
+[Arena] v004 UP WIN WR=0.88 T=337 PnL=2953.5
+[Arena] Cycle 44 done
+[Arena] v004 UP WIN WR=0.88 T=338 PnL=2965.42
+[Arena] Cycle 45 done
+[Arena] v004 UP WIN WR=0.88 T=339 PnL=2977.34
+[Arena] Cycle 46 done
+[Arena] v004 UP WIN WR=0.88 T=340 PnL=2989.26
+[Arena] Cycle 47 done
+[Arena] v004 UP WIN WR=0.88 T=341 PnL=3001.18
+[Arena] Cycle 48 done
+[Arena] v004 UP WIN WR=0.88 T=342 PnL=3013.1
+[Arena] Cycle 49 done
+[Arena] v004 UP LOSS WR=0.88 T=343 PnL=2999.08
+[Arena] Cycle 50 done
+[Arena] v004 UP WIN WR=0.88 T=344 PnL=3011.0
+[Arena] Cycle 51 done
+[Arena] v004 UP WIN WR=0.88 T=345 PnL=3022.92
+[Arena] Cycle 52 done
+[Arena] v004 UP WIN WR=0.88 T=346 PnL=3034.84
+[Arena] Cycle 53 done
+[Arena] v004 UP WIN WR=0.88 T=347 PnL=3046.76
+[Arena] Cycle 54 done
+[Arena] v004 UP WIN WR=0.88 T=348 PnL=3058.68
+[Arena] Cycle 55 done
+[Arena] v004 UP WIN WR=0.88 T=349 PnL=3070.6
+[Arena] Cycle 56 done
+[Arena] Cycle 57 done
+[Arena] v004 UP WIN WR=0.88 T=350 PnL=3082.52
+[Arena] Cycle 58 done
+[Arena] v004 UP WIN WR=0.88 T=351 PnL=3094.44
+[Arena] Cycle 59 done
+[Arena] v004 UP LOSS WR=0.88 T=352 PnL=3080.42
+[Arena] Cycle 60 done
+[Arena] v004 UP WIN WR=0.88 T=353 PnL=3092.34
+[Arena] Cycle 61 done
+[Arena] v004 UP WIN WR=0.88 T=354 PnL=3104.26
+[Arena] Cycle 62 done
+[Arena] v004 UP WIN WR=0.88 T=355 PnL=3116.18
+[Arena] Cycle 63 done
+[Arena] v004 UP WIN WR=0.88 T=356 PnL=3128.1
+[Arena] Cycle 64 done
+[Arena] v004 UP WIN WR=0.88 T=357 PnL=3140.02
+[Arena] Cycle 65 done
+[Arena] v004 UP WIN WR=0.88 T=358 PnL=3151.94
+[Arena] Cycle 66 done
+[Arena] v004 UP WIN WR=0.88 T=359 PnL=3163.86
+[Arena] Cycle 67 done
+[Arena] v004 UP WIN WR=0.88 T=360 PnL=3175.78
+[Arena] Cycle 68 done
+[Arena] v004 UP WIN WR=0.88 T=361 PnL=3187.7
+[Arena] Cycle 69 done
+[Arena] v004 UP LOSS WR=0.88 T=362 PnL=3173.68
+[Arena] Cycle 70 done
+[Arena] v004 DOWN WIN WR=0.88 T=363 PnL=3185.6
+[Arena] Cycle 71 done
+[Arena] Cycle 72 done
+[Arena] v004 DOWN WIN WR=0.88 T=364 PnL=3197.52
+[Arena] Cycle 73 done
+[Arena] v004 DOWN WIN WR=0.88 T=365 PnL=3209.44
+[Arena] Cycle 74 done
+[Arena] v004 DOWN WIN WR=0.88 T=366 PnL=3221.36
+[Arena] Cycle 75 done
+[Arena] v004 DOWN WIN WR=0.88 T=367 PnL=3233.28
+[Arena] Cycle 76 done
+[Arena] v004 UP LOSS WR=0.88 T=368 PnL=3219.26
+[Arena] Cycle 77 done
+[Arena] v004 UP WIN WR=0.88 T=369 PnL=3231.18
+[Arena] Cycle 78 done
+[Arena] v004 UP WIN WR=0.88 T=370 PnL=3243.1
+[Arena] Cycle 79 done
+[Arena] v004 UP WIN WR=0.88 T=371 PnL=3255.02
+[Arena] Cycle 80 done
+[Arena] v004 UP WIN WR=0.88 T=372 PnL=3266.94
+[Arena] Cycle 81 done
+[Arena] v004 UP WIN WR=0.88 T=373 PnL=3278.86
+[Arena] Cycle 82 done
+[Arena] v004 UP WIN WR=0.88 T=374 PnL=3290.78
+[Arena] Cycle 83 done
+[Arena] v004 UP LOSS WR=0.88 T=375 PnL=3276.76
+[Arena] Cycle 84 done
+[Arena] v004 UP WIN WR=0.88 T=376 PnL=3288.68
+[Arena] Cycle 85 done
+[Arena] v004 UP WIN WR=0.88 T=377 PnL=3300.6
+[Arena] Cycle 86 done
+[Arena] Cycle 87 done
+[Arena] v004 UP WIN WR=0.88 T=378 PnL=3312.52
+[Arena] Cycle 88 done
+[Arena] v004 UP WIN WR=0.88 T=379 PnL=3324.44
+[Arena] Cycle 89 done
+[Arena] v004 UP WIN WR=0.88 T=380 PnL=3336.36
+[Arena] Cycle 90 done
+[Arena] v004 UP WIN WR=0.88 T=381 PnL=3348.28
+[Arena] Cycle 91 done
+[Arena] v004 UP WIN WR=0.88 T=382 PnL=3360.2
+[Arena] Cycle 92 done
+[Arena] v004 UP WIN WR=0.88 T=383 PnL=3372.12
+[Arena] Cycle 93 done
+[Arena] v004 UP WIN WR=0.88 T=384 PnL=3384.04
+[Arena] Cycle 94 done
+[Arena] v004 UP WIN WR=0.88 T=385 PnL=3395.96
+[Arena] Cycle 95 done
+[Arena] v004 UP WIN WR=0.88 T=386 PnL=3407.88
+[Arena] Cycle 96 done
+[Arena] v004 UP WIN WR=0.88 T=387 PnL=3419.8
+[Arena] Cycle 97 done
+[Arena] v004 UP WIN WR=0.88 T=388 PnL=3431.72
+[Arena] Cycle 98 done
+[Arena] v004 DOWN WIN WR=0.88 T=389 PnL=3443.64
+[Arena] Cycle 99 done
+[Arena] v004 DOWN WIN WR=0.88 T=390 PnL=3455.56
+[Arena] Cycle 100 done
+[Arena] v004 DOWN WIN WR=0.88 T=391 PnL=3467.48
+[Arena] Cycle 101 done
+[Arena] Cycle 102 done
+[Arena] Cycle 103 done
+[Arena] v004 UP WIN WR=0.88 T=392 PnL=3479.4
+[Arena] Cycle 104 done
+[Arena] v004 UP WIN WR=0.88 T=393 PnL=3491.32
+[Arena] Cycle 105 done
+[Arena] v004 UP WIN WR=0.88 T=394 PnL=3503.24
+[Arena] Cycle 106 done
+[Arena] v004 UP WIN WR=0.88 T=395 PnL=3515.16
+[Arena] Cycle 107 done
+[Arena] v004 UP WIN WR=0.88 T=396 PnL=3527.08
+[Arena] Cycle 108 done
+[Arena] v004 UP WIN WR=0.88 T=397 PnL=3539.0
+[Arena] Cycle 109 done
+[Arena] v004 UP WIN WR=0.88 T=398 PnL=3550.92
+[Arena] Cycle 110 done
+[Arena] v004 UP WIN WR=0.88 T=399 PnL=3562.84
+[Arena] Cycle 111 done
+[Arena] v004 UP WIN WR=0.89 T=400 PnL=3574.76
+[Arena] Cycle 112 done
+[Arena] v004 UP WIN WR=0.89 T=401 PnL=3586.68
+[Arena] Cycle 113 done
+[Arena] v004 UP WIN WR=0.89 T=402 PnL=3598.6
+[Arena] Cycle 114 done
+[Arena] v004 UP WIN WR=0.89 T=403 PnL=3610.52
+[Arena] Cycle 115 done
+[Arena] v004 UP WIN WR=0.89 T=404 PnL=3622.44
+[Arena] Cycle 116 done
+[Arena] v004 UP WIN WR=0.89 T=405 PnL=3634.36
+[Arena] Cycle 117 done
+[Arena] Cycle 118 done
+[Arena] Cycle 119 done
+[Arena] Cycle 120 done
+[Arena] Cycle 121 done
+[Arena] Cycle 122 done
+[Arena] Cycle 123 done
+[Arena] Cycle 124 done
+[Arena] Cycle 125 done
+[Arena] v004 DOWN WIN WR=0.89 T=406 PnL=3646.28
+[Arena] Cycle 126 done
+[Arena] v004 DOWN WIN WR=0.89 T=407 PnL=3658.2
+[Arena] Cycle 127 done
+[Arena] v004 DOWN WIN WR=0.89 T=408 PnL=3670.12
+[Arena] Cycle 128 done
+[Arena] v004 DOWN WIN WR=0.89 T=409 PnL=3682.04
+[Arena] Cycle 129 done
+[Arena] v004 DOWN WIN WR=0.89 T=410 PnL=3693.96
+[Arena] Cycle 130 done
+[Arena] v004 DOWN WIN WR=0.89 T=411 PnL=3705.88
+[Arena] Cycle 131 done
+[Arena] v004 DOWN WIN WR=0.89 T=412 PnL=3717.8
+[Arena] Cycle 132 done
+[Arena] Cycle 133 done
+[Arena] Cycle 134 done
+[Arena] Cycle 135 done
+[Arena] Cycle 136 done
+[Arena] Cycle 137 done
+[Arena] Cycle 138 done
+[Arena] Cycle 139 done
+[Arena] Cycle 140 done
+[Arena] Cycle 141 done
+[Arena] Cycle 142 done
+[Arena] Cycle 143 done
+[Arena] Cycle 144 done
+[Arena] Cycle 145 done
+[Arena] v004 DOWN WIN WR=0.89 T=413 PnL=3729.72
+[Arena] Cycle 146 done
+[Arena] v004 DOWN WIN WR=0.89 T=414 PnL=3741.64
+[Arena] Cycle 147 done
+[Arena] Cycle 148 done
+[Arena] Cycle 149 done
+[Arena] v004 UP LOSS WR=0.89 T=415 PnL=3727.62
+[Arena] Cycle 150 done
+[Arena] v004 UP WIN WR=0.89 T=416 PnL=3739.54
+[Arena] Cycle 151 done
+[Arena] v004 UP WIN WR=0.89 T=417 PnL=3751.46
+[Arena] Cycle 152 done
+[Arena] v004 UP LOSS WR=0.89 T=418 PnL=3737.44
+[Arena] Cycle 153 done
+[Arena] v004 UP WIN WR=0.89 T=419 PnL=3749.36
+[Arena] Cycle 154 done
+[Arena] v004 UP WIN WR=0.89 T=420 PnL=3761.28
+[Arena] Cycle 155 done
+[Arena] v004 UP WIN WR=0.89 T=421 PnL=3773.2
+[Arena] Cycle 156 done
+[Arena] v004 UP WIN WR=0.89 T=422 PnL=3785.12
+[Arena] Cycle 157 done
+[Arena] v004 UP LOSS WR=0.88 T=423 PnL=3771.1
+[Arena] Cycle 158 done
+[Arena] v004 UP WIN WR=0.88 T=424 PnL=3783.02
+[Arena] Cycle 159 done
+[Arena] v004 UP LOSS WR=0.88 T=425 PnL=3769.0
+[Arena] Cycle 160 done
+[Arena] v004 UP WIN WR=0.88 T=426 PnL=3780.92
+[Arena] Cycle 161 done
+[Arena] v004 DOWN WIN WR=0.88 T=427 PnL=3792.84
+[Arena] Cycle 162 done
+[Arena] Cycle 163 done
+[Arena] Cycle 164 done
+[Arena] Cycle 165 done
+[Arena] Cycle 166 done
+[Arena] Cycle 167 done
+[Arena] v004 UP LOSS WR=0.88 T=428 PnL=3778.82
+[Arena] Cycle 168 done
+[Arena] v004 UP WIN WR=0.88 T=429 PnL=3790.74
+[Arena] Cycle 169 done
+[Arena] v004 UP WIN WR=0.88 T=430 PnL=3802.66
+[Arena] Cycle 170 done
+[Arena] v004 UP LOSS WR=0.88 T=431 PnL=3788.64
+[Arena] Cycle 171 done
+[Arena] v004 UP WIN WR=0.88 T=432 PnL=3800.56
+[Arena] Cycle 172 done
+[Arena] v004 UP WIN WR=0.88 T=433 PnL=3812.48
+[Arena] Cycle 173 done
+[Arena] v004 UP WIN WR=0.88 T=434 PnL=3824.4
+[Arena] Cycle 174 done
+[Arena] v004 UP WIN WR=0.88 T=435 PnL=3836.32
+[Arena] Cycle 175 done
+[Arena] v004 UP WIN WR=0.88 T=436 PnL=3848.24
+[Arena] Cycle 176 done
+[Arena] v004 UP WIN WR=0.88 T=437 PnL=3860.16
+[Arena] Cycle 177 done
+[Arena] Cycle 178 done
+[Arena] Cycle 179 done
+[Arena] Cycle 180 done
+[Arena] Cycle 181 done
+[Arena] Cycle 182 done
+[Arena] Cycle 183 done
+[Arena] Cycle 184 done
+[Arena] Cycle 185 done
+[Arena] Cycle 186 done
+[Arena] v004 DOWN WIN WR=0.88 T=438 PnL=3872.08
+[Arena] Cycle 187 done
+[Arena] v004 DOWN WIN WR=0.88 T=439 PnL=3884.0
+[Arena] Cycle 188 done
+[Arena] v004 DOWN WIN WR=0.88 T=440 PnL=3895.92
+[Arena] Cycle 189 done
+[Arena] v004 DOWN WIN WR=0.88 T=441 PnL=3907.84
+[Arena] Cycle 190 done
+[Arena] v004 DOWN WIN WR=0.88 T=442 PnL=3919.76
+[Arena] Cycle 191 done
+[Arena] v004 DOWN WIN WR=0.88 T=443 PnL=3931.68
+[Arena] Cycle 192 done
+[Arena] Cycle 193 done
+[Arena] Cycle 194 done
+[Arena] Cycle 195 done
+[Arena] Cycle 196 done
+[Arena] Cycle 197 done
+[Arena] Cycle 198 done
+[Arena] Cycle 199 done
+[Arena] v004 DOWN WIN WR=0.88 T=444 PnL=3943.6
+[Arena] Cycle 200 done
+[Arena] v004 DOWN WIN WR=0.88 T=445 PnL=3955.52
+[Arena] Cycle 201 done
+[Arena] v004 DOWN WIN WR=0.88 T=446 PnL=3967.44
+[Arena] Cycle 202 done
+[Arena] v004 DOWN WIN WR=0.88 T=447 PnL=3979.36
+[Arena] Cycle 203 done
+[Arena] v004 DOWN WIN WR=0.88 T=448 PnL=3991.28
+[Arena] Cycle 204 done
+[Arena] v004 DOWN WIN WR=0.88 T=449 PnL=4003.2
+[Arena] Cycle 205 done
+[Arena] v004 DOWN WIN WR=0.88 T=450 PnL=4015.12
+[Arena] Cycle 206 done
+[Arena] v004 DOWN WIN WR=0.88 T=451 PnL=4027.04
+[Arena] Cycle 207 done
+[Arena] Cycle 208 done
+[Arena] Cycle 209 done
+[Arena] Cycle 210 done
+[Arena] Cycle 211 done
+[Arena] Cycle 212 done
+[Arena] Cycle 213 done
+[Arena] v004 UP WIN WR=0.88 T=452 PnL=4038.96
+[Arena] Cycle 214 done
+[Arena] v004 UP WIN WR=0.89 T=453 PnL=4050.88
+[Arena] Cycle 215 done
+[Arena] v004 UP WIN WR=0.89 T=454 PnL=4062.8
+[Arena] Cycle 216 done
+[Arena] v004 UP LOSS WR=0.88 T=455 PnL=4048.78
+[Arena] Cycle 217 done
+[Arena] v004 UP WIN WR=0.88 T=456 PnL=4060.7
+[Arena] Cycle 218 done
+[Arena] v004 UP WIN WR=0.88 T=457 PnL=4072.62
+[Arena] Cycle 219 done
+[Arena] v004 UP WIN WR=0.88 T=458 PnL=4084.54
+[Arena] Cycle 220 done
+[Arena] v004 UP WIN WR=0.88 T=459 PnL=4096.46
+[Arena] Cycle 221 done
+[Arena] v004 UP WIN WR=0.88 T=460 PnL=4108.38
+[Arena] Cycle 222 done
+[Arena] Cycle 223 done
+[Arena] v004 UP WIN WR=0.89 T=461 PnL=4120.3
+[Arena] Cycle 224 done
+[Arena] v004 UP WIN WR=0.89 T=462 PnL=4132.22
+[Arena] Cycle 225 done
+[Arena] v004 UP WIN WR=0.89 T=463 PnL=4144.14
+[Arena] Cycle 226 done
+[Arena] v004 DOWN WIN WR=0.89 T=464 PnL=4156.06
+[Arena] Cycle 227 done
+[Arena] v004 DOWN WIN WR=0.89 T=465 PnL=4167.98
+[Arena] Cycle 228 done
+[Arena] v004 DOWN WIN WR=0.89 T=466 PnL=4179.9
+[Arena] Cycle 229 done
+[Arena] v004 DOWN WIN WR=0.89 T=467 PnL=4191.82
+[Arena] Cycle 230 done
+[Arena] v004 DOWN WIN WR=0.89 T=468 PnL=4203.74
+[Arena] Cycle 231 done
+[Arena] v004 DOWN WIN WR=0.89 T=469 PnL=4215.66
+[Arena] Cycle 232 done
+[Arena] v004 DOWN WIN WR=0.89 T=470 PnL=4227.58
+[Arena] Cycle 233 done
+[Arena] v004 DOWN WIN WR=0.89 T=471 PnL=4239.5
+[Arena] Cycle 234 done
+[Arena] v004 DOWN WIN WR=0.89 T=472 PnL=4251.42
+[Arena] Cycle 235 done
+[Arena] v004 DOWN WIN WR=0.89 T=473 PnL=4263.34
+[Arena] Cycle 236 done
+[Arena] v004 DOWN WIN WR=0.89 T=474 PnL=4275.26
+[Arena] Cycle 237 done
+[Arena] Cycle 238 done
+[Arena] Cycle 239 done
+[Arena] Cycle 240 done
+[Arena] Cycle 241 done
+[Arena] Cycle 242 done
+[Arena] v004 UP LOSS WR=0.89 T=475 PnL=4261.24
+[Arena] Cycle 243 done
+[Arena] v004 UP WIN WR=0.89 T=476 PnL=4273.16
+[Arena] Cycle 244 done
+[Arena] v004 UP WIN WR=0.89 T=477 PnL=4285.08
+[Arena] Cycle 245 done
+[Arena] v004 UP WIN WR=0.89 T=478 PnL=4297.0
+[Arena] Cycle 246 done
+[Arena] v004 UP WIN WR=0.89 T=479 PnL=4308.92
+[Arena] Cycle 247 done
+[Arena] v004 UP WIN WR=0.89 T=480 PnL=4320.84
+[Arena] Cycle 248 done
+[Arena] v004 UP WIN WR=0.89 T=481 PnL=4332.76
+[Arena] Cycle 249 done
+[Arena] v004 UP WIN WR=0.89 T=482 PnL=4344.68
+[Arena] Cycle 250 done
+[Arena] v004 UP WIN WR=0.89 T=483 PnL=4356.6
+[Arena] Cycle 251 done
+[Arena] v004 UP WIN WR=0.89 T=484 PnL=4368.52
+[Arena] Cycle 252 done
+[Arena] Cycle 253 done
+[Arena] Cycle 254 done
+[Arena] Cycle 255 done
+[Arena] Cycle 256 done
+[Arena] Cycle 257 done
+[Arena] v004 UP WIN WR=0.89 T=485 PnL=4380.44
+[Arena] Cycle 258 done
+[Arena] v004 UP WIN WR=0.89 T=486 PnL=4392.36
+[Arena] Cycle 259 done
+[Arena] v004 UP WIN WR=0.89 T=487 PnL=4404.28
+[Arena] Cycle 260 done
+[Arena] v004 UP LOSS WR=0.89 T=488 PnL=4390.26
+[Arena] Cycle 261 done
+[Arena] v004 UP WIN WR=0.89 T=489 PnL=4402.18
+[Arena] Cycle 262 done
+[Arena] v004 UP WIN WR=0.89 T=490 PnL=4414.1
+[Arena] Cycle 263 done
+[Arena] v004 UP WIN WR=0.89 T=491 PnL=4426.02
+[Arena] Cycle 264 done
+[Arena] v004 UP WIN WR=0.89 T=492 PnL=4437.94
+[Arena] Cycle 265 done
+[Arena] v004 UP WIN WR=0.89 T=493 PnL=4449.86
+[Arena] Cycle 266 done
+[Arena] v004 UP WIN WR=0.89 T=494 PnL=4461.78
+[Arena] Cycle 267 done
+[Arena] Cycle 268 done
+[Arena] Cycle 269 done
+[Arena] Cycle 270 done
+[Arena] Cycle 271 done
+[Arena] Cycle 272 done
+[Arena] Cycle 273 done
+[Arena] Cycle 274 done
+[Arena] Cycle 275 done
+[Arena] v004 UP LOSS WR=0.89 T=495 PnL=4447.76
+[Arena] Cycle 276 done
+[Arena] v004 UP WIN WR=0.89 T=496 PnL=4459.68
+[Arena] Cycle 277 done
+[Arena] v004 UP WIN WR=0.89 T=497 PnL=4471.6
+[Arena] Cycle 278 done
+[Arena] v004 UP WIN WR=0.89 T=498 PnL=4483.52
+[Arena] Cycle 279 done
+[Arena] v004 UP WIN WR=0.89 T=499 PnL=4495.44
+[Arena] Cycle 280 done
+[Arena] v004 UP WIN WR=0.89 T=500 PnL=4507.36
+[Arena] Cycle 281 done
+[Arena] v004 UP WIN WR=0.89 T=501 PnL=4519.28
+[Arena] Cycle 282 done
+[Arena] Cycle 283 done
+[Arena] Cycle 284 done
+[Arena] v004 DOWN LOSS WR=0.89 T=502 PnL=4505.26
+[Arena] Cycle 285 done
+[Arena] v004 DOWN LOSS WR=0.88 T=503 PnL=4491.24
+[Arena] Cycle 286 done
+[Arena] v004 DOWN WIN WR=0.88 T=504 PnL=4503.16
+[Arena] Cycle 287 done
+[Arena] v004 DOWN WIN WR=0.89 T=505 PnL=4515.08
+[Arena] Cycle 288 done
+[Arena] v004 DOWN WIN WR=0.89 T=506 PnL=4527.0
+[Arena] Cycle 289 done
+[Arena] v004 DOWN WIN WR=0.89 T=507 PnL=4538.92
+[Arena] Cycle 290 done
+[Arena] v004 DOWN WIN WR=0.89 T=508 PnL=4550.84
+[Arena] Cycle 291 done
+[Arena] v004 DOWN WIN WR=0.89 T=509 PnL=4562.76
+[Arena] Cycle 292 done
+[Arena] v004 DOWN WIN WR=0.89 T=510 PnL=4574.68
+[Arena] Cycle 293 done
+[Arena] v004 DOWN LOSS WR=0.88 T=511 PnL=4560.66
+[Arena] Cycle 294 done
+[Arena] v004 DOWN WIN WR=0.88 T=512 PnL=4572.58
+[Arena] Cycle 295 done
+[Arena] v004 DOWN WIN WR=0.88 T=513 PnL=4584.5
+[Arena] Cycle 296 done
+[Arena] Cycle 297 done
+[Arena] v004 DOWN WIN WR=0.89 T=514 PnL=4596.42
+[Arena] Cycle 298 done
+[Arena] v004 UP WIN WR=0.89 T=515 PnL=4608.34
+[Arena] Cycle 299 done
+[Arena] v004 DOWN WIN WR=0.89 T=516 PnL=4620.26
+[Arena] Cycle 300 done
+[Arena] v004 DOWN WIN WR=0.89 T=517 PnL=4632.18
+[Arena] Cycle 301 done
+[Arena] v004 DOWN WIN WR=0.89 T=518 PnL=4644.1
+[Arena] Cycle 302 done
+[Arena] v004 DOWN WIN WR=0.89 T=519 PnL=4656.02
+[Arena] Cycle 303 done
+[Arena] v004 DOWN WIN WR=0.89 T=520 PnL=4667.94
+[Arena] Cycle 304 done
+[Arena] v004 DOWN WIN WR=0.89 T=521 PnL=4679.86
+[Arena] Cycle 305 done
+[Arena] v004 DOWN WIN WR=0.89 T=522 PnL=4691.78
+[Arena] Cycle 306 done
+[Arena] v004 DOWN WIN WR=0.89 T=523 PnL=4703.7
+[Arena] Cycle 307 done
+[Arena] v004 DOWN WIN WR=0.89 T=524 PnL=4715.62
+[Arena] Cycle 308 done
+[Arena] v004 DOWN WIN WR=0.89 T=525 PnL=4727.54
+[Arena] Cycle 309 done
+[Arena] v004 DOWN WIN WR=0.89 T=526 PnL=4739.46
+[Arena] Cycle 310 done
+[Arena] v004 DOWN WIN WR=0.89 T=527 PnL=4751.38
+[Arena] Cycle 311 done
+[Arena] v004 DOWN WIN WR=0.89 T=528 PnL=4763.3
+[Arena] Cycle 312 done
+[Arena] Cycle 313 done
+[Arena] v004 DOWN WIN WR=0.89 T=529 PnL=4775.22
+[Arena] Cycle 314 done
+[Arena] v004 DOWN WIN WR=0.89 T=530 PnL=4787.14
+[Arena] Cycle 315 done
+[Arena] v004 DOWN WIN WR=0.89 T=531 PnL=4799.06
+[Arena] Cycle 316 done
+[Arena] v004 DOWN WIN WR=0.89 T=532 PnL=4810.98
+[Arena] Cycle 317 done
+[Arena] v004 DOWN WIN WR=0.89 T=533 PnL=4822.9
+[Arena] Cycle 318 done
+[Arena] v004 DOWN WIN WR=0.89 T=534 PnL=4834.82
+[Arena] Cycle 319 done
+[Arena] v004 DOWN WIN WR=0.89 T=535 PnL=4846.74
+[Arena] Cycle 320 done
+[Arena] v004 DOWN WIN WR=0.89 T=536 PnL=4858.66
+[Arena] Cycle 321 done
+[Arena] v004 DOWN WIN WR=0.89 T=537 PnL=4870.58
+[Arena] Cycle 322 done
+[Arena] v004 DOWN WIN WR=0.89 T=538 PnL=4882.5
+[Arena] Cycle 323 done
+[Arena] v004 DOWN WIN WR=0.89 T=539 PnL=4894.42
+[Arena] Cycle 324 done
+[Arena] v004 DOWN WIN WR=0.89 T=540 PnL=4906.34
+[Arena] Cycle 325 done
+[Arena] v004 DOWN WIN WR=0.89 T=541 PnL=4918.26
+[Arena] Cycle 326 done
+[Arena] v004 DOWN WIN WR=0.89 T=542 PnL=4930.18
+[Arena] Cycle 327 done
+[Arena] Cycle 328 done
+[Arena] v004 DOWN WIN WR=0.89 T=543 PnL=4942.1
+[Arena] Cycle 329 done
+[Arena] v004 DOWN WIN WR=0.89 T=544 PnL=4954.02
+[Arena] Cycle 330 done
+[Arena] v004 DOWN WIN WR=0.89 T=545 PnL=4965.94
+[Arena] Cycle 331 done
+[Arena] v004 DOWN WIN WR=0.89 T=546 PnL=4977.86
+[Arena] Cycle 332 done
+[Arena] v004 DOWN WIN WR=0.89 T=547 PnL=4989.78
+[Arena] Cycle 333 done
+[Arena] v004 DOWN WIN WR=0.89 T=548 PnL=5001.7
+[Arena] Cycle 334 done
+[Arena] v004 DOWN WIN WR=0.89 T=549 PnL=5013.62
+[Arena] Cycle 335 done
+[Arena] v004 DOWN WIN WR=0.89 T=550 PnL=5025.54
+[Arena] Cycle 336 done
+[Arena] v004 DOWN WIN WR=0.89 T=551 PnL=5037.46
+[Arena] Cycle 337 done
+[Arena] v004 DOWN WIN WR=0.89 T=552 PnL=5049.38
+[Arena] Cycle 338 done
+[Arena] v004 DOWN WIN WR=0.89 T=553 PnL=5061.3
+[Arena] Cycle 339 done
+[Arena] v004 DOWN WIN WR=0.89 T=554 PnL=5073.22
+[Arena] Cycle 340 done
+[Arena] v004 DOWN WIN WR=0.89 T=555 PnL=5085.14
+[Arena] Cycle 341 done
+[Arena] v004 DOWN WIN WR=0.89 T=556 PnL=5097.06
+[Arena] Cycle 342 done
+[Arena] Cycle 343 done
+[Arena] v004 DOWN WIN WR=0.89 T=557 PnL=5108.98
+[Arena] Cycle 344 done
+[Arena] v004 DOWN WIN WR=0.89 T=558 PnL=5120.9
+[Arena] Cycle 345 done
+[Arena] v004 DOWN WIN WR=0.89 T=559 PnL=5132.82
+[Arena] Cycle 346 done
+[Arena] v004 DOWN WIN WR=0.89 T=560 PnL=5144.74
+[Arena] Cycle 347 done
+[Arena] v004 DOWN WIN WR=0.89 T=561 PnL=5156.66
+[Arena] Cycle 348 done
+[Arena] v004 DOWN WIN WR=0.9 T=562 PnL=5168.58
+[Arena] Cycle 349 done
+[Arena] v004 DOWN WIN WR=0.9 T=563 PnL=5180.5
+[Arena] Cycle 350 done
+[Arena] v004 DOWN WIN WR=0.9 T=564 PnL=5192.42
+[Arena] Cycle 351 done
+[Arena] v004 DOWN WIN WR=0.9 T=565 PnL=5204.34
+[Arena] Cycle 352 done
+[Arena] v004 DOWN WIN WR=0.9 T=566 PnL=5216.26
+[Arena] Cycle 353 done
+[Arena] v004 DOWN WIN WR=0.9 T=567 PnL=5228.18
+[Arena] Cycle 354 done
+[Arena] v004 DOWN WIN WR=0.9 T=568 PnL=5240.1
+[Arena] Cycle 355 done
+[Arena] v004 DOWN WIN WR=0.9 T=569 PnL=5252.02
+[Arena] Cycle 356 done
+[Arena] Cycle 357 done
+[Arena] v004 DOWN WIN WR=0.9 T=570 PnL=5263.94
+[Arena] Cycle 358 done
+[Arena] v004 DOWN WIN WR=0.9 T=571 PnL=5275.86
+[Arena] Cycle 359 done
+[Arena] v004 DOWN WIN WR=0.9 T=572 PnL=5287.78
+[Arena] Cycle 360 done
+[Arena] v004 DOWN WIN WR=0.9 T=573 PnL=5299.7
+[Arena] Cycle 361 done
+[Arena] v004 DOWN WIN WR=0.9 T=574 PnL=5311.62
+[Arena] Cycle 362 done
+[Arena] v004 DOWN WIN WR=0.9 T=575 PnL=5323.54
+[Arena] Cycle 363 done
+[Arena] v004 DOWN WIN WR=0.9 T=576 PnL=5335.46
+[Arena] Cycle 364 done
+[Arena] v004 DOWN WIN WR=0.9 T=577 PnL=5347.38
+[Arena] Cycle 365 done
+[Arena] v004 DOWN WIN WR=0.9 T=578 PnL=5359.3
+[Arena] Cycle 366 done
+[Arena] v004 DOWN WIN WR=0.9 T=579 PnL=5371.22
+[Arena] Cycle 367 done
+[Arena] v004 DOWN WIN WR=0.9 T=580 PnL=5383.14
+[Arena] Cycle 368 done
+[Arena] v004 DOWN WIN WR=0.9 T=581 PnL=5395.06
+[Arena] Cycle 369 done
+[Arena] v004 DOWN WIN WR=0.9 T=582 PnL=5406.98
+[Arena] Cycle 370 done
+[Arena] v004 DOWN WIN WR=0.9 T=583 PnL=5418.9
+[Arena] Cycle 371 done
+[Arena] v004 DOWN WIN WR=0.9 T=584 PnL=5430.82
+[Arena] Cycle 372 done
+[Arena] v004 DOWN WIN WR=0.9 T=585 PnL=5442.74
+[Arena] Cycle 373 done
+[Arena] v004 DOWN WIN WR=0.9 T=586 PnL=5454.66
+[Arena] Cycle 374 done
+[Arena] v004 DOWN WIN WR=0.9 T=587 PnL=5466.58
+[Arena] Cycle 375 done
+[Arena] v004 DOWN WIN WR=0.9 T=588 PnL=5478.5
+[Arena] Cycle 376 done
+[Arena] v004 DOWN WIN WR=0.9 T=589 PnL=5490.42
+[Arena] Cycle 377 done
+[Arena] v004 DOWN WIN WR=0.9 T=590 PnL=5502.34
+[Arena] Cycle 378 done
+[Arena] v004 DOWN WIN WR=0.9 T=591 PnL=5514.26
+[Arena] Cycle 379 done
+[Arena] v004 DOWN WIN WR=0.9 T=592 PnL=5526.18
+[Arena] Cycle 380 done
+[Arena] v004 DOWN WIN WR=0.9 T=593 PnL=5538.1
+[Arena] Cycle 381 done
+[Arena] v004 DOWN WIN WR=0.9 T=594 PnL=5550.02
+[Arena] Cycle 382 done
+[Arena] v004 DOWN WIN WR=0.9 T=595 PnL=5561.94
+[Arena] Cycle 383 done
+[Arena] v004 DOWN WIN WR=0.9 T=596 PnL=5573.86
+[Arena] Cycle 384 done
+[Arena] v004 DOWN WIN WR=0.9 T=597 PnL=5585.78
+[Arena] Cycle 385 done
+[Arena] v004 DOWN WIN WR=0.9 T=598 PnL=5597.7
+[Arena] Cycle 386 done
+[Arena] Cycle 387 done
+[Arena] v004 DOWN WIN WR=0.9 T=599 PnL=5609.62
+[Arena] Cycle 388 done
+[Arena] v004 DOWN WIN WR=0.9 T=600 PnL=5621.54
+[Arena] Cycle 389 done
+[Arena] v004 DOWN WIN WR=0.9 T=601 PnL=5633.46
+[Arena] Cycle 390 done
+[Arena] v004 DOWN WIN WR=0.9 T=602 PnL=5645.38
+[Arena] Cycle 391 done
+[Arena] v004 DOWN WIN WR=0.9 T=603 PnL=5657.3
+[Arena] Cycle 392 done
+[Arena] v004 DOWN WIN WR=0.9 T=604 PnL=5669.22
+[Arena] Cycle 393 done
+[Arena] v004 DOWN WIN WR=0.9 T=605 PnL=5681.14
+[Arena] Cycle 394 done
+[Arena] v004 DOWN WIN WR=0.9 T=606 PnL=5693.06
+[Arena] Cycle 395 done
+[Arena] v004 DOWN WIN WR=0.9 T=607 PnL=5704.98
+[Arena] Cycle 396 done
+[Arena] v004 DOWN WIN WR=0.9 T=608 PnL=5716.9
+[Arena] Cycle 397 done
+[Arena] v004 DOWN WIN WR=0.9 T=609 PnL=5728.82
+[Arena] Cycle 398 done
+[Arena] v004 DOWN WIN WR=0.9 T=610 PnL=5740.74
+[Arena] Cycle 399 done
+[Arena] v004 DOWN WIN WR=0.9 T=611 PnL=5752.66
+[Arena] Cycle 400 done
+[Arena] v004 DOWN WIN WR=0.9 T=612 PnL=5764.58
+[Arena] Cycle 401 done
+[Arena] v004 DOWN WIN WR=0.9 T=613 PnL=5776.5
+[Arena] Cycle 402 done
+[Arena] Cycle 403 done
+[Arena] v004 DOWN WIN WR=0.9 T=614 PnL=5788.42
+[Arena] Cycle 404 done
+[Arena] v004 DOWN WIN WR=0.9 T=615 PnL=5800.34
+[Arena] Cycle 405 done
+[Arena] v004 DOWN WIN WR=0.9 T=616 PnL=5812.26
+[Arena] Cycle 406 done
+[Arena] v004 DOWN WIN WR=0.9 T=617 PnL=5824.18
+[Arena] Cycle 407 done
+[Arena] v004 DOWN WIN WR=0.9 T=618 PnL=5836.1
+[Arena] Cycle 408 done
+[Arena] v004 DOWN WIN WR=0.9 T=619 PnL=5848.02
+[Arena] Cycle 409 done
+[Arena] v004 DOWN WIN WR=0.9 T=620 PnL=5859.94
+[Arena] Cycle 410 done
+[Arena] v004 DOWN WIN WR=0.9 T=621 PnL=5871.86
+[Arena] Cycle 411 done
+[Arena] v004 DOWN WIN WR=0.91 T=622 PnL=5883.78
+[Arena] Cycle 412 done
+[Arena] v004 DOWN WIN WR=0.91 T=623 PnL=5895.7
+[Arena] Cycle 413 done
+[Arena] v004 DOWN WIN WR=0.91 T=624 PnL=5907.62
+[Arena] Cycle 414 done
+[Arena] v004 DOWN WIN WR=0.91 T=625 PnL=5919.54
+[Arena] Cycle 415 done
+[Arena] v004 DOWN WIN WR=0.91 T=626 PnL=5931.46
+[Arena] Cycle 416 done
+[Arena] v004 DOWN WIN WR=0.91 T=627 PnL=5943.38
+[Arena] Cycle 417 done
+[Arena] Cycle 418 done
+[Arena] v004 DOWN WIN WR=0.91 T=628 PnL=5955.3
+[Arena] Cycle 419 done
+[Arena] v004 DOWN WIN WR=0.91 T=629 PnL=5967.22
+[Arena] Cycle 420 done
+[Arena] v004 DOWN WIN WR=0.91 T=630 PnL=5979.14
+[Arena] Cycle 421 done
+[Arena] v004 DOWN WIN WR=0.91 T=631 PnL=5991.06
+[Arena] Cycle 422 done
+[Arena] v004 DOWN WIN WR=0.91 T=632 PnL=6002.98
+[Arena] Cycle 423 done
+[Arena] v004 DOWN WIN WR=0.91 T=633 PnL=6014.9
+[Arena] Cycle 424 done
+[Arena] v004 DOWN WIN WR=0.91 T=634 PnL=6026.82
+[Arena] Cycle 425 done
+[Arena] v004 DOWN WIN WR=0.91 T=635 PnL=6038.74
+[Arena] Cycle 426 done
+[Arena] v004 DOWN WIN WR=0.91 T=636 PnL=6050.66
+[Arena] Cycle 427 done
+[Arena] v004 DOWN WIN WR=0.91 T=637 PnL=6062.58
+[Arena] Cycle 428 done
+[Arena] v004 DOWN WIN WR=0.91 T=638 PnL=6074.5
+[Arena] Cycle 429 done
+[Arena] v004 DOWN WIN WR=0.91 T=639 PnL=6086.42
+[Arena] Cycle 430 done
+[Arena] v004 DOWN WIN WR=0.91 T=640 PnL=6098.34
+[Arena] Cycle 431 done
+[Arena] Cycle 432 done
+[Arena] v004 DOWN WIN WR=0.91 T=641 PnL=6110.26
+[Arena] Cycle 433 done
+[Arena] v004 DOWN WIN WR=0.91 T=642 PnL=6122.18
+[Arena] Cycle 434 done
+[Arena] v004 DOWN WIN WR=0.91 T=643 PnL=6134.1
+[Arena] Cycle 435 done
+[Arena] v004 DOWN WIN WR=0.91 T=644 PnL=6146.02
+[Arena] Cycle 436 done
+[Arena] v004 DOWN WIN WR=0.91 T=645 PnL=6157.94
+[Arena] Cycle 437 done
+[Arena] v004 DOWN WIN WR=0.91 T=646 PnL=6169.86
+[Arena] Cycle 438 done
+[Arena] v004 DOWN WIN WR=0.91 T=647 PnL=6181.78
+[Arena] Cycle 439 done
+[Arena] v004 DOWN WIN WR=0.91 T=648 PnL=6193.7
+[Arena] Cycle 440 done
+[Arena] v004 DOWN WIN WR=0.91 T=649 PnL=6205.62
+[Arena] Cycle 441 done
+[Arena] v004 DOWN WIN WR=0.91 T=650 PnL=6217.54
+[Arena] Cycle 442 done
+[Arena] v004 DOWN WIN WR=0.91 T=651 PnL=6229.46
+[Arena] Cycle 443 done
+[Arena] v004 DOWN WIN WR=0.91 T=652 PnL=6241.38
+[Arena] Cycle 444 done
+[Arena] v004 DOWN WIN WR=0.91 T=653 PnL=6253.3
+[Arena] Cycle 445 done
+[Arena] v004 DOWN WIN WR=0.91 T=654 PnL=6265.22
+[Arena] Cycle 446 done
+[Arena] v004 DOWN WIN WR=0.91 T=655 PnL=6277.14
+[Arena] Cycle 447 done
+[Arena] Cycle 448 done
+[Arena] v004 DOWN WIN WR=0.91 T=656 PnL=6289.06
+[Arena] Cycle 449 done
+[Arena] v004 DOWN WIN WR=0.91 T=657 PnL=6300.98
+[Arena] Cycle 450 done
+[Arena] v004 DOWN WIN WR=0.91 T=658 PnL=6312.9
+[Arena] Cycle 451 done
+[Arena] v004 DOWN WIN WR=0.91 T=659 PnL=6324.82
+[Arena] Cycle 452 done
+[Arena] v004 DOWN WIN WR=0.91 T=660 PnL=6336.74
+[Arena] Cycle 453 done
+[Arena] v004 DOWN WIN WR=0.91 T=661 PnL=6348.66
+[Arena] Cycle 454 done
+[Arena] v004 DOWN WIN WR=0.91 T=662 PnL=6360.58
+[Arena] Cycle 455 done
+[Arena] v004 DOWN WIN WR=0.91 T=663 PnL=6372.5
+[Arena] Cycle 456 done
+[Arena] v004 DOWN WIN WR=0.91 T=664 PnL=6384.42
+[Arena] Cycle 457 done
+[Arena] v004 DOWN WIN WR=0.91 T=665 PnL=6396.34
+[Arena] Cycle 458 done
+[Arena] v004 DOWN WIN WR=0.91 T=666 PnL=6408.26
+[Arena] Cycle 459 done
+[Arena] v004 DOWN WIN WR=0.91 T=667 PnL=6420.18
+[Arena] Cycle 460 done
+[Arena] v004 DOWN WIN WR=0.91 T=668 PnL=6432.1
+[Arena] Cycle 461 done
+[Arena] v004 DOWN WIN WR=0.91 T=669 PnL=6444.02
+[Arena] Cycle 462 done
+[Arena] Cycle 463 done
+[Arena] v004 DOWN WIN WR=0.91 T=670 PnL=6455.94
+[Arena] Cycle 464 done
+[Arena] v004 DOWN WIN WR=0.91 T=671 PnL=6467.86
+[Arena] Cycle 465 done
+[Arena] v004 DOWN WIN WR=0.91 T=672 PnL=6479.78
+[Arena] Cycle 466 done
+[Arena] v004 DOWN WIN WR=0.91 T=673 PnL=6491.7
+[Arena] Cycle 467 done
+[Arena] v004 DOWN WIN WR=0.91 T=674 PnL=6503.62
+[Arena] Cycle 468 done
+[Arena] v004 DOWN WIN WR=0.91 T=675 PnL=6515.54
+[Arena] Cycle 469 done
+[Arena] v004 DOWN WIN WR=0.91 T=676 PnL=6527.46
+[Arena] Cycle 470 done
+[Arena] v004 DOWN WIN WR=0.91 T=677 PnL=6539.38
+[Arena] Cycle 471 done
+[Arena] v004 DOWN WIN WR=0.91 T=678 PnL=6551.3
+[Arena] Cycle 472 done
+[Arena] v004 DOWN WIN WR=0.91 T=679 PnL=6563.22
+[Arena] Cycle 473 done
+[Arena] v004 DOWN WIN WR=0.91 T=680 PnL=6575.14
+[Arena] Cycle 474 done
+[Arena] v004 DOWN WIN WR=0.91 T=681 PnL=6587.06
+[Arena] Cycle 475 done
+[Arena] v004 DOWN WIN WR=0.91 T=682 PnL=6598.98
+[Arena] Cycle 476 done
+[Arena] Cycle 477 done
+[Arena] Cycle 478 done
+[Arena] Cycle 479 done
+[Arena] v004 DOWN LOSS WR=0.91 T=683 PnL=6584.96
+[Arena] Cycle 480 done
+[Arena] v004 DOWN WIN WR=0.91 T=684 PnL=6596.88
+[Arena] Cycle 481 done
+[Arena] v004 DOWN WIN WR=0.91 T=685 PnL=6608.8
+[Arena] Cycle 482 done
+[Arena] v004 DOWN WIN WR=0.91 T=686 PnL=6620.72
+[Arena] Cycle 483 done
+[Arena] v004 DOWN WIN WR=0.91 T=687 PnL=6632.64
+[Arena] Cycle 484 done
+[Arena] v004 DOWN WIN WR=0.91 T=688 PnL=6644.56
+[Arena] Cycle 485 done
+[Arena] v004 DOWN LOSS WR=0.91 T=689 PnL=6630.54
+[Arena] Cycle 486 done
+[Arena] v004 DOWN WIN WR=0.91 T=690 PnL=6642.46
+[Arena] Cycle 487 done
+[Arena] v004 DOWN WIN WR=0.91 T=691 PnL=6654.38
+[Arena] Cycle 488 done
+[Arena] v004 DOWN LOSS WR=0.91 T=692 PnL=6640.36
+[Arena] Cycle 489 done
+[Arena] v004 UP WIN WR=0.91 T=693 PnL=6652.28
+[Arena] Cycle 490 done
+[Arena] v004 UP WIN WR=0.91 T=694 PnL=6664.2
+[Arena] Cycle 491 done
+[Arena] Cycle 492 done
+[Arena] Cycle 493 done
+[Arena] Cycle 494 done
+[Arena] Cycle 495 done
+[Arena] v004 UP WIN WR=0.91 T=695 PnL=6676.12
+[Arena] Cycle 496 done
+[Arena] v004 UP WIN WR=0.91 T=696 PnL=6688.04
+[Arena] Cycle 497 done
+[Arena] v004 UP WIN WR=0.91 T=697 PnL=6699.96
+[Arena] Cycle 498 done
+[Arena] v004 UP WIN WR=0.91 T=698 PnL=6711.88
+[Arena] Cycle 499 done
+[Arena] v004 UP WIN WR=0.91 T=699 PnL=6723.8
+[Arena] Cycle 500 done
+[Arena] v004 UP WIN WR=0.91 T=700 PnL=6735.72
+[Arena] Cycle 501 done
+[Arena] v004 UP LOSS WR=0.91 T=701 PnL=6721.7
+[Arena] Cycle 502 done
+[Arena] v004 DOWN WIN WR=0.91 T=702 PnL=6733.62
+[Arena] Cycle 503 done
+[Arena] v004 DOWN WIN WR=0.91 T=703 PnL=6745.54
+[Arena] Cycle 504 done
+[Arena] v004 DOWN WIN WR=0.91 T=704 PnL=6757.46
+[Arena] Cycle 505 done
+[Arena] v004 DOWN WIN WR=0.91 T=705 PnL=6769.38
+[Arena] Cycle 506 done
+[Arena] Cycle 507 done
+[Arena] v004 UP WIN WR=0.91 T=706 PnL=6781.3
+[Arena] Cycle 508 done
+[Arena] v004 UP WIN WR=0.91 T=707 PnL=6793.22
+[Arena] Cycle 509 done
+[Arena] v004 UP WIN WR=0.91 T=708 PnL=6805.14
+[Arena] Cycle 510 done
+[Arena] v004 UP WIN WR=0.91 T=709 PnL=6817.06
+[Arena] Cycle 511 done
+[Arena] v004 UP WIN WR=0.91 T=710 PnL=6828.98
+[Arena] Cycle 512 done
+[Arena] v004 DOWN WIN WR=0.91 T=711 PnL=6840.9
+[Arena] Cycle 513 done
+[Arena] v004 DOWN WIN WR=0.91 T=712 PnL=6852.82
+[Arena] Cycle 514 done
+[Arena] v004 DOWN WIN WR=0.91 T=713 PnL=6864.74
+[Arena] Cycle 515 done
+[Arena] v004 DOWN WIN WR=0.91 T=714 PnL=6876.66
+[Arena] Cycle 516 done
+[Arena] v004 DOWN LOSS WR=0.91 T=715 PnL=6862.64
+[Arena] Cycle 517 done
+[Arena] v004 DOWN WIN WR=0.91 T=716 PnL=6874.56
+[Arena] Cycle 518 done
+[Arena] v004 DOWN WIN WR=0.91 T=717 PnL=6886.48
+[Arena] Cycle 519 done
+[Arena] v004 DOWN WIN WR=0.91 T=718 PnL=6898.4
+[Arena] Cycle 520 done
+[Arena] v004 DOWN WIN WR=0.91 T=719 PnL=6910.32
+[Arena] Cycle 521 done
+[Arena] Cycle 522 done
+[Arena] v004 UP WIN WR=0.91 T=720 PnL=6922.24
+[Arena] Cycle 523 done
+[Arena] v004 UP WIN WR=0.91 T=721 PnL=6934.16
+[Arena] Cycle 524 done
+[Arena] v004 UP LOSS WR=0.91 T=722 PnL=6920.14
+[Arena] Cycle 525 done
+[Arena] v004 UP WIN WR=0.91 T=723 PnL=6932.06
+[Arena] Cycle 526 done
+[Arena] v004 UP WIN WR=0.91 T=724 PnL=6943.98
+[Arena] Cycle 527 done
+[Arena] v004 UP WIN WR=0.91 T=725 PnL=6955.9
+[Arena] Cycle 528 done
+[Arena] v004 UP WIN WR=0.91 T=726 PnL=6967.82
+[Arena] Cycle 529 done
+[Arena] v004 UP WIN WR=0.91 T=727 PnL=6979.74
+[Arena] Cycle 530 done
+[Arena] v004 UP WIN WR=0.91 T=728 PnL=6991.66
+[Arena] Cycle 531 done
+[Arena] v004 UP WIN WR=0.91 T=729 PnL=7003.58
+[Arena] Cycle 532 done
+[Arena] v004 UP WIN WR=0.91 T=730 PnL=7015.5
+[Arena] Cycle 533 done
+[Arena] v004 UP WIN WR=0.91 T=731 PnL=7027.42
+[Arena] Cycle 534 done
+[Arena] v004 UP WIN WR=0.91 T=732 PnL=7039.34
+[Arena] Cycle 535 done
+[Arena] v004 UP WIN WR=0.91 T=733 PnL=7051.26
+[Arena] Cycle 536 done
+[Arena] v004 UP WIN WR=0.91 T=734 PnL=7063.18
+[Arena] Cycle 537 done
+[Arena] Cycle 538 done
+[Arena] Cycle 539 done
+[Arena] Cycle 540 done
+[Arena] Cycle 541 done
+[Arena] Cycle 542 done
+[Arena] Cycle 543 done
+[Arena] v004 DOWN WIN WR=0.91 T=735 PnL=7075.1
+[Arena] Cycle 544 done
+[Arena] v004 DOWN WIN WR=0.91 T=736 PnL=7087.02
+[Arena] Cycle 545 done
+[Arena] v004 DOWN WIN WR=0.91 T=737 PnL=7098.94
+[Arena] Cycle 546 done
+[Arena] v004 DOWN WIN WR=0.91 T=738 PnL=7110.86
+[Arena] Cycle 547 done
+[Arena] v004 DOWN WIN WR=0.91 T=739 PnL=7122.78
+[Arena] Cycle 548 done
+[Arena] v004 DOWN WIN WR=0.91 T=740 PnL=7134.7
+[Arena] Cycle 549 done
+[Arena] v004 DOWN WIN WR=0.91 T=741 PnL=7146.62
+[Arena] Cycle 550 done
+[Arena] v004 DOWN WIN WR=0.91 T=742 PnL=7158.54
+[Arena] Cycle 551 done
+[Arena] v004 DOWN WIN WR=0.91 T=743 PnL=7170.46
+[Arena] Cycle 552 done
+[Arena] Cycle 553 done
+[Arena] Cycle 554 done
+[Arena] Cycle 555 done
+[Arena] v004 UP WIN WR=0.91 T=744 PnL=7182.38
+[Arena] Cycle 556 done
+[Arena] v004 UP LOSS WR=0.91 T=745 PnL=7168.36
+[Arena] Cycle 557 done
+[Arena] v004 UP WIN WR=0.91 T=746 PnL=7180.28
+[Arena] Cycle 558 done
+[Arena] v004 UP LOSS WR=0.91 T=747 PnL=7166.26
+[Arena] Cycle 559 done
+[Arena] v004 UP WIN WR=0.91 T=748 PnL=7178.18
+[Arena] Cycle 560 done
+[Arena] v004 UP WIN WR=0.91 T=749 PnL=7190.1
+[Arena] Cycle 561 done
+[Arena] v004 UP WIN WR=0.91 T=750 PnL=7202.02
+[Arena] Cycle 562 done
+[Arena] v004 UP WIN WR=0.91 T=751 PnL=7213.94
+[Arena] Cycle 563 done
+[Arena] v004 UP WIN WR=0.91 T=752 PnL=7225.86
+[Arena] Cycle 564 done
+[Arena] v004 UP WIN WR=0.91 T=753 PnL=7237.78
+[Arena] Cycle 565 done
+[Arena] v004 UP WIN WR=0.91 T=754 PnL=7249.7
+[Arena] Cycle 566 done
+[Arena] v004 UP WIN WR=0.91 T=755 PnL=7261.62
+[Arena] Cycle 567 done
+[Arena] Cycle 568 done
+[Arena] v004 UP WIN WR=0.91 T=756 PnL=7273.54
+[Arena] Cycle 569 done
+[Arena] v004 DOWN WIN WR=0.91 T=757 PnL=7285.46
+[Arena] Cycle 570 done
+[Arena] v004 DOWN WIN WR=0.91 T=758 PnL=7297.38
+[Arena] Cycle 571 done
+[Arena] v004 DOWN WIN WR=0.91 T=759 PnL=7309.3
+[Arena] Cycle 572 done
+[Arena] v004 DOWN LOSS WR=0.91 T=760 PnL=7295.28
+[Arena] Cycle 573 done
+[Arena] v004 DOWN WIN WR=0.91 T=761 PnL=7307.2
+[Arena] Cycle 574 done
+[Arena] v004 DOWN WIN WR=0.91 T=762 PnL=7319.12
+[Arena] Cycle 575 done
+[Arena] v004 DOWN WIN WR=0.91 T=763 PnL=7331.04
+[Arena] Cycle 576 done
+[Arena] v004 DOWN WIN WR=0.91 T=764 PnL=7342.96
+[Arena] Cycle 577 done
+[Arena] v004 DOWN WIN WR=0.91 T=765 PnL=7354.88
+[Arena] Cycle 578 done
+[Arena] v004 DOWN WIN WR=0.91 T=766 PnL=7366.8
+[Arena] Cycle 579 done
+[Arena] v004 DOWN WIN WR=0.91 T=767 PnL=7378.72
+[Arena] Cycle 580 done
+[Arena] v004 DOWN WIN WR=0.91 T=768 PnL=7390.64
+[Arena] Cycle 581 done
+[Arena] v004 DOWN WIN WR=0.91 T=769 PnL=7402.56
+[Arena] Cycle 582 done
+[Arena] Cycle 583 done
+[Arena] Cycle 584 done
+[Arena] Cycle 585 done
+[Arena] Cycle 586 done
+[Arena] Cycle 587 done
+[Arena] Cycle 588 done
+[Arena] Cycle 589 done
+[Arena] v004 DOWN WIN WR=0.91 T=770 PnL=7414.48
+[Arena] Cycle 590 done
+[Arena] v004 DOWN WIN WR=0.91 T=771 PnL=7426.4
+[Arena] Cycle 591 done
+[Arena] v004 DOWN WIN WR=0.91 T=772 PnL=7438.32
+[Arena] Cycle 592 done
+[Arena] v004 DOWN WIN WR=0.91 T=773 PnL=7450.24
+[Arena] Cycle 593 done
+[Arena] v004 DOWN WIN WR=0.91 T=774 PnL=7462.16
+[Arena] Cycle 594 done
+[Arena] v004 DOWN WIN WR=0.91 T=775 PnL=7474.08
+[Arena] Cycle 595 done
+[Arena] v004 DOWN WIN WR=0.91 T=776 PnL=7486.0
+[Arena] Cycle 596 done
+[Arena] v004 DOWN WIN WR=0.91 T=777 PnL=7497.92
+[Arena] Cycle 597 done
+[Arena] Cycle 598 done
+[Arena] Cycle 599 done
+[Arena] Cycle 600 done
+[Arena] Cycle 601 done
+[Arena] Cycle 602 done
+[Arena] Cycle 603 done
+[Arena] Cycle 604 done
+[Arena] Cycle 605 done
+[Arena] Cycle 606 done
+[Arena] Cycle 607 done
+[Arena] Cycle 608 done
+[Arena] v004 DOWN LOSS WR=0.91 T=778 PnL=7483.9
+[Arena] Cycle 609 done
+[Arena] v004 DOWN WIN WR=0.91 T=779 PnL=7495.82
+[Arena] Cycle 610 done
+[Arena] v004 DOWN WIN WR=0.91 T=780 PnL=7507.74
+[Arena] Cycle 611 done
+[Arena] v004 DOWN WIN WR=0.91 T=781 PnL=7519.66
+[Arena] Cycle 612 done
+[Arena] Cycle 613 done
+[Arena] Cycle 614 done
+[Arena] Cycle 615 done
+[Arena] v004 DOWN WIN WR=0.91 T=782 PnL=7531.58
+[Arena] Cycle 616 done
+[Arena] v004 DOWN WIN WR=0.91 T=783 PnL=7543.5
+[Arena] Cycle 617 done
+[Arena] v004 DOWN WIN WR=0.91 T=784 PnL=7555.42
+[Arena] Cycle 618 done
+[Arena] v004 DOWN WIN WR=0.91 T=785 PnL=7567.34
+[Arena] Cycle 619 done
+[Arena] v004 DOWN WIN WR=0.91 T=786 PnL=7579.26
+[Arena] Cycle 620 done
+[Arena] v004 DOWN WIN WR=0.91 T=787 PnL=7591.18
+[Arena] Cycle 621 done
+[Arena] v004 DOWN LOSS WR=0.91 T=788 PnL=7577.16
+[Arena] Cycle 622 done
+[Arena] v004 DOWN LOSS WR=0.91 T=789 PnL=7563.14
+[Arena] Cycle 623 done
+[Arena] v004 DOWN WIN WR=0.91 T=790 PnL=7575.06
+[Arena] Cycle 624 done
+[Arena] v004 DOWN WIN WR=0.91 T=791 PnL=7586.98
+[Arena] Cycle 625 done
+[Arena] v004 DOWN WIN WR=0.91 T=792 PnL=7598.9
+[Arena] Cycle 626 done
+[Arena] v004 DOWN WIN WR=0.91 T=793 PnL=7610.82
+[Arena] Cycle 627 done
+[Arena] Cycle 628 done
+[Arena] Cycle 629 done
+[Arena] Cycle 630 done
+[Arena] v004 UP WIN WR=0.91 T=794 PnL=7622.74
+[Arena] Cycle 631 done
+[Arena] v004 UP WIN WR=0.91 T=795 PnL=7634.66
+[Arena] Cycle 632 done
+[Arena] v004 UP WIN WR=0.91 T=796 PnL=7646.58
+[Arena] Cycle 633 done
+[Arena] v004 UP WIN WR=0.91 T=797 PnL=7658.5
+[Arena] Cycle 634 done
+[Arena] v004 UP LOSS WR=0.91 T=798 PnL=7644.48
+[Arena] Cycle 635 done
+[Arena] v004 UP WIN WR=0.91 T=799 PnL=7656.4
+[Arena] Cycle 636 done
+[Arena] v004 UP WIN WR=0.91 T=800 PnL=7668.32
+[Arena] Cycle 637 done
+[Arena] v004 UP WIN WR=0.91 T=801 PnL=7680.24
+[Arena] Cycle 638 done
+[Arena] v004 UP WIN WR=0.91 T=802 PnL=7692.16
+[Arena] Cycle 639 done
+[Arena] v004 UP WIN WR=0.91 T=803 PnL=7704.08
+[Arena] Cycle 640 done
+[Arena] v004 UP WIN WR=0.91 T=804 PnL=7716.0
+[Arena] Cycle 641 done
+[Arena] v004 UP WIN WR=0.91 T=805 PnL=7727.92
+[Arena] Cycle 642 done
+[Arena] Cycle 643 done
+[Arena] Cycle 644 done
+[Arena] Cycle 645 done
+[Arena] Cycle 646 done
+[Arena] v004 UP WIN WR=0.91 T=806 PnL=7739.84
+[Arena] Cycle 647 done
+[Arena] v004 UP WIN WR=0.91 T=807 PnL=7751.76
+[Arena] Cycle 648 done
+[Arena] v004 UP LOSS WR=0.91 T=808 PnL=7737.74
+[Arena] Cycle 649 done
+[Arena] v004 UP WIN WR=0.91 T=809 PnL=7749.66
+[Arena] Cycle 650 done
+[Arena] v004 UP WIN WR=0.91 T=810 PnL=7761.58
+[Arena] Cycle 651 done
+[Arena] v004 UP LOSS WR=0.91 T=811 PnL=7747.56
+[Arena] Cycle 652 done
+[Arena] v004 UP WIN WR=0.91 T=812 PnL=7759.48
+[Arena] Cycle 653 done
+[Arena] v004 UP LOSS WR=0.91 T=813 PnL=7745.46
+[Arena] Cycle 654 done
+[Arena] v004 DOWN LOSS WR=0.91 T=814 PnL=7731.44
+[Arena] Cycle 655 done
+[Arena] v004 DOWN LOSS WR=0.91 T=815 PnL=7717.42
+[Arena] Cycle 656 done
+[Arena] v004 DOWN LOSS WR=0.9 T=816 PnL=7703.4
+[Arena] Cycle 657 done
+[Arena] Cycle 658 done
+[Arena] Cycle 659 done
+[Arena] Cycle 660 done
+[Arena] v004 UP WIN WR=0.9 T=817 PnL=7715.32
+[Arena] Cycle 661 done
+[Arena] v004 UP WIN WR=0.9 T=818 PnL=7727.24
+[Arena] Cycle 662 done
+[Arena] v004 UP WIN WR=0.9 T=819 PnL=7739.16
+[Arena] Cycle 663 done
+[Arena] v004 UP WIN WR=0.9 T=820 PnL=7751.08
+[Arena] Cycle 664 done
+[Arena] v004 UP LOSS WR=0.9 T=821 PnL=7737.06
+[Arena] Cycle 665 done
+[Arena] v004 UP LOSS WR=0.9 T=822 PnL=7723.04
+[Arena] Cycle 666 done
+[Arena] v004 UP WIN WR=0.9 T=823 PnL=7734.96
+[Arena] Cycle 667 done
+[Arena] v004 UP WIN WR=0.9 T=824 PnL=7746.88
+[Arena] Cycle 668 done
+[Arena] v004 UP WIN WR=0.9 T=825 PnL=7758.8
+[Arena] Cycle 669 done
+[Arena] v004 UP WIN WR=0.9 T=826 PnL=7770.72
+[Arena] Cycle 670 done
+[Arena] v004 UP WIN WR=0.9 T=827 PnL=7782.64
+[Arena] Cycle 671 done
+[Arena] Cycle 672 done
+[Arena] v004 UP WIN WR=0.9 T=828 PnL=7794.56
+[Arena] Cycle 673 done
+[Arena] v004 UP WIN WR=0.9 T=829 PnL=7806.48
+[Arena] Cycle 674 done
+[Arena] v004 UP WIN WR=0.9 T=830 PnL=7818.4
+[Arena] Cycle 675 done
+[Arena] v004 UP WIN WR=0.9 T=831 PnL=7830.32
+[Arena] Cycle 676 done
+[Arena] v004 UP WIN WR=0.9 T=832 PnL=7842.24
+[Arena] Cycle 677 done
+[Arena] v004 DOWN WIN WR=0.9 T=833 PnL=7854.16
+[Arena] Cycle 678 done
+[Arena] v004 DOWN LOSS WR=0.9 T=834 PnL=7840.14
+[Arena] Cycle 679 done
+[Arena] v004 DOWN WIN WR=0.9 T=835 PnL=7852.06
+[Arena] Cycle 680 done
+[Arena] v004 DOWN WIN WR=0.9 T=836 PnL=7863.98
+[Arena] Cycle 681 done
+[Arena] v004 DOWN WIN WR=0.9 T=837 PnL=7875.9
+[Arena] Cycle 682 done
+[Arena] v004 DOWN WIN WR=0.9 T=838 PnL=7887.82
+[Arena] Cycle 683 done
+[Arena] v004 DOWN WIN WR=0.9 T=839 PnL=7899.74
+[Arena] Cycle 684 done
+[Arena] v004 DOWN LOSS WR=0.9 T=840 PnL=7885.72
+[Arena] Cycle 685 done
+[Arena] v004 UP WIN WR=0.9 T=841 PnL=7897.64
+[Arena] Cycle 686 done
+[Arena] Cycle 687 done
+[Arena] v004 UP WIN WR=0.9 T=842 PnL=7909.56
+[Arena] Cycle 688 done
+[Arena] v004 UP WIN WR=0.9 T=843 PnL=7921.48
+[Arena] Cycle 689 done
+[Arena] v004 DOWN WIN WR=0.9 T=844 PnL=7933.4
+[Arena] Cycle 690 done
+[Arena] v004 DOWN WIN WR=0.9 T=845 PnL=7945.32
+[Arena] Cycle 691 done
+[Arena] v004 DOWN WIN WR=0.9 T=846 PnL=7957.24
+[Arena] Cycle 692 done
+[Arena] v004 DOWN WIN WR=0.9 T=847 PnL=7969.16
+[Arena] Cycle 693 done
+[Arena] v004 DOWN WIN WR=0.9 T=848 PnL=7981.08
+[Arena] Cycle 694 done
+[Arena] v004 DOWN LOSS WR=0.9 T=849 PnL=7967.06
+[Arena] Cycle 695 done
+[Arena] v004 DOWN WIN WR=0.9 T=850 PnL=7978.98
+[Arena] Cycle 696 done
+[Arena] v004 DOWN LOSS WR=0.9 T=851 PnL=7964.96
+[Arena] Cycle 697 done
+[Arena] v004 DOWN WIN WR=0.9 T=852 PnL=7976.88
+[Arena] Cycle 698 done
+[Arena] v004 DOWN WIN WR=0.9 T=853 PnL=7988.8
+[Arena] Cycle 699 done
+[Arena] v004 DOWN WIN WR=0.9 T=854 PnL=8000.72
+[Arena] Cycle 700 done
+[Arena] v004 DOWN WIN WR=0.9 T=855 PnL=8012.64
+[Arena] Cycle 701 done
+[Arena] Cycle 702 done
+[Arena] v004 UP WIN WR=0.9 T=856 PnL=8024.56
+[Arena] Cycle 703 done
+[Arena] v004 UP WIN WR=0.9 T=857 PnL=8036.48
+[Arena] Cycle 704 done
+[Arena] v004 DOWN WIN WR=0.9 T=858 PnL=8048.4
+[Arena] Cycle 705 done
+[Arena] v004 DOWN WIN WR=0.9 T=859 PnL=8060.32
+[Arena] Cycle 706 done
+[Arena] v004 DOWN WIN WR=0.9 T=860 PnL=8072.24
+[Arena] Cycle 707 done
+[Arena] v004 DOWN WIN WR=0.9 T=861 PnL=8084.16
+[Arena] Cycle 708 done
+[Arena] v004 DOWN WIN WR=0.9 T=862 PnL=8096.08
+[Arena] Cycle 709 done
+[Arena] v004 DOWN LOSS WR=0.9 T=863 PnL=8082.06
+[Arena] Cycle 710 done
+[Arena] v004 DOWN WIN WR=0.9 T=864 PnL=8093.98
+[Arena] Cycle 711 done
+[Arena] v004 DOWN WIN WR=0.9 T=865 PnL=8105.9
+[Arena] Cycle 712 done
+[Arena] v004 DOWN LOSS WR=0.9 T=866 PnL=8091.88
+[Arena] Cycle 713 done
+[Arena] v004 DOWN WIN WR=0.9 T=867 PnL=8103.8
+[Arena] Cycle 714 done
+[Arena] v004 DOWN WIN WR=0.9 T=868 PnL=8115.72
+[Arena] Cycle 715 done
+[Arena] v004 UP WIN WR=0.9 T=869 PnL=8127.64
+[Arena] Cycle 716 done
+[Arena] Cycle 717 done
+[Arena] v004 UP WIN WR=0.9 T=870 PnL=8139.56
+[Arena] Cycle 718 done
+[Arena] v004 UP WIN WR=0.9 T=871 PnL=8151.48
+[Arena] Cycle 719 done
+[Arena] v004 UP WIN WR=0.9 T=872 PnL=8163.4
+[Arena] Cycle 720 done
+[Arena] v004 DOWN LOSS WR=0.9 T=873 PnL=8149.38
+[Arena] Cycle 721 done
+[Arena] v004 DOWN WIN WR=0.9 T=874 PnL=8161.3
+[Arena] Cycle 722 done
+[Arena] v004 DOWN WIN WR=0.9 T=875 PnL=8173.22
+[Arena] Cycle 723 done
+[Arena] v004 DOWN WIN WR=0.9 T=876 PnL=8185.14
+[Arena] Cycle 724 done
+[Arena] v004 DOWN WIN WR=0.9 T=877 PnL=8197.06
+[Arena] Cycle 725 done
+[Arena] v004 DOWN WIN WR=0.9 T=878 PnL=8208.98
+[Arena] Cycle 726 done
+[Arena] v004 DOWN WIN WR=0.9 T=879 PnL=8220.9
+[Arena] Cycle 727 done
+[Arena] v004 DOWN WIN WR=0.9 T=880 PnL=8232.82
+[Arena] Cycle 728 done
+[Arena] v004 DOWN WIN WR=0.9 T=881 PnL=8244.74
+[Arena] Cycle 729 done
+[Arena] v004 DOWN WIN WR=0.9 T=882 PnL=8256.66
+[Arena] Cycle 730 done
+[Arena] v004 DOWN WIN WR=0.9 T=883 PnL=8268.58
+[Arena] Cycle 731 done
+[Arena] Cycle 732 done
+[Arena] Cycle 733 done
+[Arena] Cycle 734 done
+[Arena] Cycle 735 done
+[Arena] Cycle 736 done
+[Arena] Cycle 737 done
+[Arena] Cycle 738 done
+[Arena] Cycle 739 done
+[Arena] Cycle 740 done
+[Arena] Cycle 741 done
+[Arena] Cycle 742 done
+[Arena] Cycle 743 done
+[Arena] Cycle 744 done
+[Arena] Cycle 745 done
+[Arena] v004 UP LOSS WR=0.9 T=884 PnL=8254.56
+[Arena] Cycle 746 done
+[Arena] Cycle 747 done
+[Arena] Cycle 748 done
+[Arena] Cycle 749 done
+[Arena] Cycle 750 done
+[Arena] v004 DOWN WIN WR=0.9 T=885 PnL=8266.48
+[Arena] Cycle 751 done
+[Arena] v004 DOWN WIN WR=0.9 T=886 PnL=8278.4
+[Arena] Cycle 752 done
+[Arena] v004 DOWN WIN WR=0.9 T=887 PnL=8290.32
+[Arena] Cycle 753 done
+[Arena] v004 DOWN WIN WR=0.9 T=888 PnL=8302.24
+[Arena] Cycle 754 done
+[Arena] v004 DOWN WIN WR=0.9 T=889 PnL=8314.16
+[Arena] Cycle 755 done
+[Arena] v004 DOWN WIN WR=0.9 T=890 PnL=8326.08
+[Arena] Cycle 756 done
+[Arena] v004 DOWN WIN WR=0.9 T=891 PnL=8338.0
+[Arena] Cycle 757 done
+[Arena] v004 DOWN WIN WR=0.9 T=892 PnL=8349.92
+[Arena] Cycle 758 done
+[Arena] v004 DOWN WIN WR=0.9 T=893 PnL=8361.84
+[Arena] Cycle 759 done
+[Arena] v004 DOWN WIN WR=0.9 T=894 PnL=8373.76
+[Arena] Cycle 760 done
+[Arena] v004 DOWN WIN WR=0.9 T=895 PnL=8385.68
+[Arena] Cycle 761 done
+[Arena] Cycle 762 done
+[Arena] Cycle 763 done
+[Arena] Cycle 764 done
+[Arena] Cycle 765 done
+[Arena] v004 DOWN LOSS WR=0.9 T=896 PnL=8371.66
+[Arena] Cycle 766 done
+[Arena] v004 DOWN LOSS WR=0.9 T=897 PnL=8357.64
+[Arena] Cycle 767 done
+[Arena] v004 DOWN WIN WR=0.9 T=898 PnL=8369.56
+[Arena] Cycle 768 done
+[Arena] v004 DOWN WIN WR=0.9 T=899 PnL=8381.48
+[Arena] Cycle 769 done
+[Arena] v004 DOWN WIN WR=0.9 T=900 PnL=8393.4
+[Arena] Cycle 770 done
+[Arena] v004 DOWN WIN WR=0.9 T=901 PnL=8405.32
+[Arena] Cycle 771 done
+[Arena] v004 DOWN WIN WR=0.9 T=902 PnL=8417.24
+[Arena] Cycle 772 done
+[Arena] v004 DOWN WIN WR=0.9 T=903 PnL=8429.16
+[Arena] Cycle 773 done
+[Arena] v004 DOWN LOSS WR=0.9 T=904 PnL=8415.14
+[Arena] Cycle 774 done
+[Arena] v004 DOWN WIN WR=0.9 T=905 PnL=8427.06
+[Arena] Cycle 775 done
+[Arena] v004 DOWN WIN WR=0.9 T=906 PnL=8438.98
+[Arena] Cycle 776 done
+[Arena] Cycle 777 done
+[Arena] v004 UP WIN WR=0.9 T=907 PnL=8450.9
+[Arena] Cycle 778 done
+[Arena] v004 UP WIN WR=0.9 T=908 PnL=8462.82
+[Arena] Cycle 779 done
+[Arena] v004 UP WIN WR=0.9 T=909 PnL=8474.74
+[Arena] Cycle 780 done
+[Arena] v004 UP WIN WR=0.9 T=910 PnL=8486.66
+[Arena] Cycle 781 done
+[Arena] v004 UP WIN WR=0.9 T=911 PnL=8498.58
+[Arena] Cycle 782 done
+[Arena] v004 UP WIN WR=0.9 T=912 PnL=8510.5
+[Arena] Cycle 783 done
+[Arena] v004 UP WIN WR=0.9 T=913 PnL=8522.42
+[Arena] Cycle 784 done
+[Arena] v004 DOWN WIN WR=0.9 T=914 PnL=8534.34
+[Arena] Cycle 785 done
+[Arena] v004 DOWN WIN WR=0.9 T=915 PnL=8546.26
+[Arena] Cycle 786 done
+[Arena] v004 DOWN LOSS WR=0.9 T=916 PnL=8532.24
+[Arena] Cycle 787 done
+[Arena] v004 DOWN WIN WR=0.9 T=917 PnL=8544.16
+[Arena] Cycle 788 done
+[Arena] v004 DOWN WIN WR=0.9 T=918 PnL=8556.08
+[Arena] Cycle 789 done
+[Arena] v004 DOWN WIN WR=0.9 T=919 PnL=8568.0
+[Arena] Cycle 790 done
+[Arena] v004 DOWN WIN WR=0.9 T=920 PnL=8579.92
+[Arena] Cycle 791 done
+[Arena] Cycle 792 done
+[Arena] v004 UP WIN WR=0.9 T=921 PnL=8591.84
+[Arena] Cycle 793 done
+[Arena] v004 UP WIN WR=0.9 T=922 PnL=8603.76
+[Arena] Cycle 794 done
+[Arena] v004 UP WIN WR=0.9 T=923 PnL=8615.68
+[Arena] Cycle 795 done
+[Arena] v004 DOWN LOSS WR=0.9 T=924 PnL=8601.66
+[Arena] Cycle 796 done
+[Arena] v004 DOWN WIN WR=0.9 T=925 PnL=8613.58
+[Arena] Cycle 797 done
+[Arena] v004 DOWN WIN WR=0.9 T=926 PnL=8625.5
+[Arena] Cycle 798 done
+[Arena] v004 DOWN WIN WR=0.9 T=927 PnL=8637.42
+[Arena] Cycle 799 done

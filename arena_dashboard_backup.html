@@ -1,0 +1,1172 @@
+nano /root/arena_dashboard.html
+
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"
+<title>OpenClaw Arena — Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Exo+2:ital,wght@0,300;0,400;0,700;0,900;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --space: #05080f;
+  --panel: rgba(8,14,32,0.92);
+  --border: rgba(140,170,255,0.12);
+  --border-bright: rgba(140,170,255,0.28);
+  --btc: #f7931a; --eth: #7b93f5; --sol: #ab6ef7;
+  --gold: #f5d76e; --cyan: #4dd9f7; --green: #3dffa0;
+  --red: #ff4d6d; --pink: #f76eb4; --white: #f0f4ff;
+  --muted: rgba(180,200,255,0.4);
+  --text: #dde8ff;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; overflow-x:hidden; background:var(--space); color:var(--text); font-family:'Exo 2', sans-serif; }
+
+/* ── BACKGROUND ── */
+#bg-canvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
+.nebula { position:fixed; border-radius:50%; filter:blur(90px); pointer-events:none; z-index:1; }
+.n1 { width:1000px;height:700px;top:-200px;left:-300px;background:radial-gradient(ellipse,rgba(50,30,180,.18),transparent 65%);animation:nd 50s ease-in-out infinite alternate; }
+.n2 { width:800px;height:900px;bottom:-400px;right:-200px;background:radial-gradient(ellipse,rgba(0,160,200,.13),transparent 65%);animation:nd 60s ease-in-out infinite alternate-reverse; }
+.n3 { width:500px;height:500px;top:35%;left:40%;background:radial-gradient(ellipse,rgba(160,60,230,.09),transparent 65%);animation:nd 38s ease-in-out infinite alternate; }
+@keyframes nd { to { transform: translate(80px,60px) scale(1.15); } }
+.grid-bg { position:fixed;inset:0;z-index:1;background-image:linear-gradient(rgba(100,140,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(100,140,255,.035) 1px,transparent 1px);background-size:52px 52px; }
+
+/* ── LAYOUT ── */
+#app { position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column; }
+
+/* ── HEADER ── */
+header {
+display:flex;align-items:center;justify-content:space-between;
+padding:0 24px;height:58px;flex-shrink:0;
+background:rgba(3,6,18,.96);border-bottom:1px solid var(–border);
+backdrop-filter:blur(20px);position:sticky;top:0;z-index:100;
+}
+.logo { display:flex;align-items:center;gap:12px; }
+.logo-mark { width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(–cyan),var(–pink));display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 18px rgba(77,217,247,.35); }
+.logo-title { font-family:‘Bebas Neue’,sans-serif;font-size:26px;letter-spacing:3px;color:var(–white);line-height:1; }
+.logo-sub { font-family:‘Share Tech Mono’,monospace;font-size:9px;color:var(–muted);letter-spacing:3px; }
+.hcenter { display:flex;align-items:center;gap:18px; }
+.live-pill { display:flex;align-items:center;gap:7px;padding:4px 13px;border-radius:20px;background:rgba(61,255,160,.07);border:1px solid rgba(61,255,160,.22);font-family:‘Share Tech Mono’,monospace;font-size:11px;color:var(–green);letter-spacing:2px; }
+.pulse-dot { width:7px;height:7px;border-radius:50%;background:var(–green);box-shadow:0 0 10px var(–green);animation:pulse 1.5s infinite; }
+@keyframes pulse { 50%{opacity:.2;transform:scale(.7)} }
+#clock { font-family:‘Share Tech Mono’,monospace;font-size:13px;color:var(–cyan);letter-spacing:2px; }
+#regime-badge { padding:4px 14px;border-radius:20px;font-family:‘Bebas Neue’,sans-serif;font-size:14px;letter-spacing:2px;transition:all .5s; }
+.hbtns { display:flex;gap:8px; }
+.hbtn { font-family:‘Share Tech Mono’,monospace;font-size:9px;letter-spacing:2px;padding:6px 14px;border-radius:4px;cursor:pointer;border:none;font-weight:700;transition:.2s;text-decoration:none;display:inline-block; }
+.hbtn:hover { filter:brightness(1.35); }
+.bc { background:rgba(77,217,247,.08);border:1px solid rgba(77,217,247,.3);color:var(–cyan); }
+.bg { background:rgba(245,215,110,.08);border:1px solid rgba(245,215,110,.3);color:var(–gold); }
+.bp { background:rgba(247,110,180,.08);border:1px solid rgba(247,110,180,.3);color:var(–pink); }
+
+/* ── JUMBOTRON SCOREBOARD ── */
+#scoreboard {
+flex-shrink:0;background:rgba(3,7,22,.95);border-bottom:1px solid var(–border-bright);
+padding:10px 0;overflow:hidden;position:relative;
+}
+#scoreboard::before, #scoreboard::after {
+content:’’;position:absolute;top:0;bottom:0;width:60px;z-index:2;pointer-events:none;
+}
+#scoreboard::before { left:0;background:linear-gradient(90deg,rgba(3,7,22,1),transparent); }
+#scoreboard::after { right:0;background:linear-gradient(-90deg,rgba(3,7,22,1),transparent); }
+.sb-track { display:flex;gap:2px;animation:sb-scroll 40s linear infinite; }
+.sb-track:hover { animation-play-state:paused; }
+.sb-card {
+flex-shrink:0;display:flex;align-items:center;gap:10px;
+padding:6px 16px;border-radius:6px;border:1px solid var(–border);
+background:rgba(10,18,50,.8);min-width:220px;
+}
+.sb-rank { font-family:‘Bebas Neue’,sans-serif;font-size:22px;width:28px;text-align:center; }
+.sb-pfp { width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;border:2px solid;flex-shrink:0; }
+.sb-info { flex:1;min-width:0; }
+.sb-name { font-family:‘Bebas Neue’,sans-serif;font-size:14px;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.sb-stats { font-family:‘Share Tech Mono’,monospace;font-size:9px;color:var(–muted); }
+.sb-wr-wrap { text-align:right; }
+.sb-wr { font-family:‘Bebas Neue’,sans-serif;font-size:20px; }
+.sb-bar { height:3px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:3px;overflow:hidden;width:60px; }
+.sb-bar-fill { height:100%;border-radius:2px;transition:width 1s ease; }
+.sb-status { font-size:14px; }
+@keyframes sb-scroll { to { transform:translateX(-50%); } }
+
+/* ── BATTLEFIELD ── */
+#battlefield-wrap {
+flex-shrink:0;position:relative;
+height:55vh;min-height:380px;
+background:rgba(2,5,16,.6);
+border-bottom:2px solid var(–border-bright);
+overflow:hidden;
+}
+#field-canvas { position:absolute;inset:0;width:100%;height:100%; }
+#bots-container { position:absolute;inset:0; }
+#fx-layer { position:absolute;inset:0;pointer-events:none;overflow:hidden; }
+.field-label {
+position:absolute;font-family:‘Share Tech Mono’,monospace;font-size:9px;
+color:rgba(140,170,255,.25);letter-spacing:2px;pointer-events:none;
+}
+.fl-bottom { bottom:8px;left:50%;transform:translateX(-50%); }
+.fl-left { left:8px;top:50%;transform:translateY(-50%) rotate(-90deg);white-space:nowrap; }
+.fl-right { right:8px;top:50%;transform:translateY(-50%) rotate(90deg);white-space:nowrap; }
+.zone-label { position:absolute;font-family:‘Bebas Neue’,sans-serif;font-size:11px;letter-spacing:3px;opacity:.12;pointer-events:none; }
+.zone-struggle { left:20px;top:16px;color:#ff4d6d; }
+.zone-dominate { right:20px;top:16px;color:#3dffa0; }
+
+/* ── BOT ENTITY ── */
+.bot-entity {
+position:absolute;transform:translate(-50%,-100%);
+cursor:pointer;pointer-events:all;
+transition:filter .3s;
+display:flex;flex-direction:column;align-items:center;
+}
+/* Thought bubble */
+.thought-bubble {
+position:relative;background:rgba(240,244,255,.96);color:#0a0e22;
+border-radius:16px;padding:8px 11px;max-width:160px;min-width:100px;
+font-size:10px;line-height:1.45;text-align:center;
+box-shadow:0 4px 20px rgba(0,0,0,.4);
+margin-bottom:6px;transition:all .4s;
+border:2px solid rgba(140,170,255,.3);
+}
+.thought-bubble.angry { border-color:rgba(255,77,109,.5);background:rgba(255,230,235,.97); }
+.thought-bubble.confident { border-color:rgba(245,215,110,.5);background:rgba(255,252,230,.97); }
+.thought-bubble.mutating { border-color:rgba(247,110,180,.6);animation:mutation-border 0.8s infinite; }
+@keyframes mutation-border { 50%{border-color:rgba(77,217,247,.8);box-shadow:0 0 20px rgba(77,217,247,.3);} }
+.thought-bubble::after {
+content:’’;position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);
+border:6px solid transparent;border-top-color:rgba(240,244,255,.96);
+}
+.thought-bubble.angry::after { border-top-color:rgba(255,230,235,.97); }
+.thought-bubble.confident::after { border-top-color:rgba(255,252,230,.97); }
+.tb-name { font-family:‘Bebas Neue’,sans-serif;font-size:11px;letter-spacing:2px;margin-bottom:3px; }
+.tb-text { font-family:‘Exo 2’,sans-serif;font-style:italic;font-size:9.5px; }
+
+/* Bot PFP */
+.bot-pfp-wrap { position:relative;display:flex;flex-direction:column;align-items:center;margin-top:4px; }
+.bot-aura { position:absolute;border-radius:50%;animation:aura-pulse 2.5s ease-in-out infinite;pointer-events:none; }
+@keyframes aura-pulse { 50%{opacity:.4;transform:scale(1.15)} }
+.bot-pfp { border-radius:50%;border:2.5px solid;box-shadow:none;position:relative;z-index:2;overflow:hidden;transition:all .4s;flex-shrink:0; }
+.bot-pfp svg { width:100%;height:100%; }
+.bot-orbit { position:absolute;border-radius:50%;border:1px dashed;animation:orbit 6s linear infinite;pointer-events:none;z-index:1; }
+.bot-orbit2 { position:absolute;border-radius:50%;border:1px solid;animation:orbit 10s linear infinite reverse;pointer-events:none;z-index:1;opacity:.4; }
+@keyframes orbit { to{transform:rotate(360deg)} }
+.bot-tag { margin-top:6px;text-align:center; }
+.bot-name { font-family:‘Bebas Neue’,sans-serif;font-size:10px;letter-spacing:2px;padding:2px 8px;border-radius:3px;background:rgba(5,8,22,.85);border:1px solid; }
+.bot-wr-tag { font-family:‘Share Tech Mono’,monospace;font-size:8px;color:var(–muted);margin-top:2px;text-align:center; }
+
+/* ── LOWER PANELS ── */
+#lower { display:grid;grid-template-columns:280px 1fr 300px;flex:1;min-height:0; }
+.panel { overflow-y:auto;padding:14px;scrollbar-width:thin;scrollbar-color:var(–border) transparent; }
+.panel::-webkit-scrollbar { width:3px; }
+.panel::-webkit-scrollbar-thumb { background:var(–border); }
+#panel-left { border-right:1px solid var(–border);background:rgba(3,6,20,.75); }
+#panel-mid { background:rgba(5,9,24,.6); }
+#panel-right { border-left:1px solid var(–border);background:rgba(3,6,20,.75); }
+.ph { font-family:‘Bebas Neue’,sans-serif;font-size:13px;letter-spacing:3px;color:var(–muted);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(–border);display:flex;align-items:center;gap:6px; }
+
+/* ── NARRATIVE LEADERBOARD ── */
+.narrative-block { background:rgba(10,18,50,.7);border:1px solid var(–border);border-radius:10px;padding:12px;margin-bottom:8px;line-height:1.55; }
+.nb-rank { font-family:‘Bebas Neue’,sans-serif;font-size:11px;letter-spacing:2px;margin-bottom:4px; }
+.nb-text { font-size:11px;color:var(–text);font-style:italic; }
+.nb-stats { font-family:‘Share Tech Mono’,monospace;font-size:9px;color:var(–muted);margin-top:5px; }
+
+/* ── MUTATION LOG ── */
+.mut-item { background:rgba(8,14,40,.8);border-radius:8px;padding:10px;margin-bottom:6px;border-left:3px solid var(–pink);animation:slide-in .4s ease; }
+@keyframes slide-in { from{opacity:0;transform:translateX(-12px)} }
+.mut-header { display:flex;align-items:center;gap:6px;margin-bottom:5px; }
+.mut-icon { font-size:13px; }
+.mut-name { font-family:‘Bebas Neue’,sans-serif;font-size:12px;letter-spacing:1px; }
+.mut-time { font-family:‘Share Tech Mono’,monospace;font-size:8px;color:var(–muted);margin-left:auto; }
+.mut-change { font-family:‘Share Tech Mono’,monospace;font-size:9px;margin:3px 0;padding:3px 6px;background:rgba(247,110,180,.08);border-radius:3px; }
+.mut-reason { font-size:10px;color:var(–muted);font-style:italic; }
+
+/* ── BRAIN LOG ── */
+.brain-item { border-radius:8px;padding:9px 11px;margin-bottom:6px;border-left:3px solid;animation:slide-in .35s ease;position:relative;overflow:hidden; }
+.bi-head { display:flex;align-items:center;gap:6px;margin-bottom:4px; }
+.bi-pfp { width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;border:1px solid;flex-shrink:0; }
+.bi-name { font-family:‘Bebas Neue’,sans-serif;font-size:11px;letter-spacing:1px; }
+.bi-time { font-family:‘Share Tech Mono’,monospace;font-size:8px;color:var(–muted);margin-left:auto; }
+.bi-text { font-size:11px;line-height:1.5;color:rgba(220,235,255,.85);font-style:italic; }
+.bi-action { margin-top:4px;font-family:‘Share Tech Mono’,monospace;font-size:9px;font-weight:700; }
+
+/* ── TRADE FEED ── */
+.tf-item { display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:6px;margin-bottom:4px;animation:slide-in .3s ease; }
+
+/* ── DNA TABLE ── */
+.dna-table { width:100%;border-collapse:collapse;font-size:10px; }
+.dna-table th { font-family:‘Share Tech Mono’,monospace;font-size:8px;letter-spacing:1px;color:var(–muted);text-align:left;padding:4px 6px;border-bottom:1px solid var(–border); }
+.dna-table td { padding:5px 6px;border-bottom:1px solid rgba(100,140,255,.06);font-family:‘Share Tech Mono’,monospace; }
+.dna-table tr:hover td { background:rgba(100,140,255,.05); }
+
+/* ── GEN CHART ── */
+#gen-chart { width:100%;height:100px;margin:8px 0; }
+
+/* ── EFFECTS ── */
+.trade-ring { position:absolute;border-radius:50%;border:2px solid;pointer-events:none;transform:translate(-50%,-50%);animation:ring-expand 1.3s ease-out forwards; }
+@keyframes ring-expand { 0%{width:12px;height:12px;opacity:.9} 100%{width:140px;height:140px;opacity:0} }
+.float-label { position:absolute;pointer-events:none;font-family:‘Bebas Neue’,sans-serif;font-size:14px;letter-spacing:2px;animation:float-up 1.6s ease-out forwards;transform:translateX(-50%); }
+@keyframes float-up { 0%{opacity:1;transform:translateX(-50%) translateY(0)} 100%{opacity:0;transform:translateX(-50%) translateY(-70px)} }
+.particle { position:absolute;border-radius:50%;pointer-events:none; }
+
+/* ── BOTTOM STRIP ── */
+#bottom-strip { flex-shrink:0;height:36px;border-top:1px solid var(–border);background:rgba(2,5,14,.97);display:flex;align-items:center;overflow:hidden; }
+.bs-item { display:flex;align-items:center;gap:8px;padding:0 18px;border-right:1px solid var(–border);height:100%;flex-shrink:0; }
+.bs-label { font-family:‘Share Tech Mono’,monospace;font-size:8px;color:var(–muted);letter-spacing:1px; }
+.bs-val { font-family:‘Bebas Neue’,sans-serif;font-size:16px; }
+
+/* ── MODALS ── */
+.modal { display:none;position:fixed;inset:0;z-index:300;background:rgba(2,4,14,.96);backdrop-filter:blur(24px);overflow-y:auto;padding:32px; }
+.modal.open { display:block; }
+.modal-inner { max-width:960px;margin:0 auto; }
+.modal-title { font-family:‘Bebas Neue’,sans-serif;font-size:36px;letter-spacing:5px;background:linear-gradient(90deg,var(–gold),var(–cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px; }
+.modal-sub { font-family:‘Share Tech Mono’,monospace;font-size:10px;color:var(–muted);letter-spacing:3px;margin-bottom:28px; }
+.close-btn { position:fixed;top:20px;right:24px;font-family:‘Share Tech Mono’,monospace;font-size:9px;letter-spacing:2px;padding:8px 18px;background:rgba(255,255,255,.05);border:1px solid var(–border);color:var(–muted);cursor:pointer;border-radius:4px;transition:.2s; }
+.close-btn:hover { border-color:var(–cyan);color:var(–cyan); }
+
+/* HOF */
+.hof-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px; }
+.hof-card { background:rgba(10,18,52,.85);border-radius:14px;padding:22px;text-align:center;border:1px solid var(–border);transition:.3s; }
+.hof-card:hover { border-color:var(–gold);box-shadow:0 0 24px rgba(245,215,110,.1); }
+.hof-pfp { width:60px;height:60px;border-radius:50%;margin:0 auto 10px;border:2px solid var(–gold);overflow:hidden; }
+.hof-name { font-family:‘Bebas Neue’,sans-serif;font-size:14px;letter-spacing:2px;margin-bottom:4px; }
+.hof-quote { font-size:10px;color:var(–muted);font-style:italic;margin-bottom:10px;line-height:1.5; }
+.hof-stat { font-family:‘Share Tech Mono’,monospace;font-size:10px;color:var(–gold); }
+
+/* GRAVEYARD */
+.grave-card { background:rgba(6,10,28,.9);border-radius:10px;padding:14px;border:1px solid rgba(255,77,109,.15);margin-bottom:8px;opacity:.7;filter:grayscale(.4); }
+.grave-card:hover { opacity:1;filter:none; }
+.grave-name { font-family:‘Bebas Neue’,sans-serif;font-size:13px;letter-spacing:1px;color:rgba(200,200,220,.6); }
+.grave-epitaph { font-size:10px;color:var(–muted);font-style:italic;margin:4px 0; }
+.grave-stat { font-family:‘Share Tech Mono’,monospace;font-size:9px;color:rgba(255,77,109,.5); }
+
+/* Misc */
+.badge { display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:12px;font-family:‘Share Tech Mono’,monospace;font-size:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(–white); }
+.section-divider { height:1px;background:var(–border);margin:14px 0; }
+</style>
+
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<div class="nebula n1"></div><div class="nebula n2"></div><div class="nebula n3"></div>
+<div class="grid-bg"></div>
+
+<div id="app">
+
+  <!-- HEADER -->
+
+  <header>
+    <div class="logo">
+      <div class="logo-mark">⚔</div>
+      <div>
+        <div class="logo-title">OPENCLAW ARENA</div>
+        <div class="logo-sub">DEEP SPACE TOURNAMENT · v4.0</div>
+      </div>
+    </div>
+    <div class="hcenter">
+      <div class="live-pill"><div class="pulse-dot"></div>LIVE</div>
+      <div id="clock">00:00:00 UTC</div>
+      <div id="regime-badge" style="background:rgba(245,215,110,.1);border:1px solid rgba(245,215,110,.3);color:var(--gold);">● CHOP</div>
+    </div>
+    <div class="hbtns">
+      <a href="/" class="hbtn bc">← MAIN</a>
+      <button class="hbtn bg" onclick="openModal('hof')">🏆 HALL OF FAME</button>
+      <button class="hbtn bp" onclick="openModal('grave')">💀 GRAVEYARD</button>
+      <button class="hbtn bc" onclick="openModal('dna')">🧬 DNA LAB</button>
+    </div>
+  </header>
+
+  <!-- SCOREBOARD JUMBOTRON -->
+
+  <div id="scoreboard">
+    <div class="sb-track" id="sb-track"><!-- filled by JS --></div>
+  </div>
+
+  <!-- BATTLEFIELD -->
+
+  <div id="battlefield-wrap">
+    <canvas id="field-canvas"></canvas>
+    <div id="bots-container"></div>
+    <div id="fx-layer"></div>
+    <span class="field-label fl-bottom">← LOWER PERFORMANCE · HIGHER PERFORMANCE →</span>
+    <span class="field-label fl-left">TRADE VOLUME ↑</span>
+    <div class="zone-label zone-struggle">STRUGGLE ZONE</div>
+    <div class="zone-label zone-dominate">DOMINATION ZONE</div>
+    <div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);display:flex;gap:10px;pointer-events:none;">
+      <span class="badge">🔶 BTC</span>
+      <span class="badge">🔷 ETH</span>
+      <span class="badge">🟣 SOL</span>
+    </div>
+  </div>
+
+  <!-- LOWER PANELS -->
+
+  <div id="lower">
+
+```
+<!-- LEFT: Narrative LB + Mutation Log -->
+<div id="panel-left" class="panel">
+  <div class="ph">📢 LIVE COMMENTARY</div>
+  <div id="narrative-lb"></div>
+  <div class="section-divider"></div>
+  <div class="ph">🧬 MUTATION LOG</div>
+  <div id="mutation-log"></div>
+</div>
+
+<!-- MID: Brain log + Trade feed + DNA table -->
+<div id="panel-mid" class="panel">
+  <div class="ph">🧠 BRAIN LOG — LIVE THOUGHTS</div>
+  <div id="brain-log"></div>
+  <div class="section-divider"></div>
+  <div class="ph">📡 TRADE FEED</div>
+  <div id="trade-feed"></div>
+  <div class="section-divider"></div>
+  <div class="ph">📊 GENOME COMPARISON</div>
+  <div style="overflow-x:auto;">
+    <table class="dna-table" id="dna-table">
+      <thead><tr><th>VARIANT</th><th>MKT</th><th>THRESH</th><th>BET%</th><th>CONF</th><th>GEN</th><th>WR</th><th>PNL</th></tr></thead>
+      <tbody id="dna-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- RIGHT: Signal + Streak + Gen chart -->
+<div id="panel-right" class="panel">
+  <div class="ph">🌡 SIGNAL QUALITY</div>
+  <div style="background:rgba(8,14,40,.8);border-radius:8px;padding:12px;margin-bottom:10px;">
+    <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">CONFIDENCE LEVEL</div>
+    <div style="height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;">
+      <div id="conf-bar" style="height:100%;width:0%;border-radius:3px;transition:width 1s;background:linear-gradient(90deg,var(--cyan),var(--green));"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:5px;">
+      <span style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted);">LOW</span>
+      <span id="conf-val" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--cyan);">—</span>
+      <span style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted);">HIGH</span>
+    </div>
+  </div>
+  <div class="ph">🔥 STREAK TRACKER</div>
+  <div id="streak-panel"></div>
+  <div class="section-divider"></div>
+  <div class="ph">📈 PERFORMANCE TREND</div>
+  <canvas id="gen-chart" height="120"></canvas>
+  <div class="section-divider"></div>
+  <div class="ph">⚔ RIVALRIES</div>
+  <div id="rivalry-panel"></div>
+</div>
+```
+
+  </div>
+
+  <!-- BOTTOM STRIP -->
+
+  <div id="bottom-strip">
+    <div class="bs-item"><span class="bs-label">VARIANTS</span><span class="bs-val" id="bs-v" style="color:var(--cyan)">12</span></div>
+    <div class="bs-item"><span class="bs-label">TOTAL TRADES</span><span class="bs-val" id="bs-t" style="color:var(--white)">0</span></div>
+    <div class="bs-item"><span class="bs-label">LEADER</span><span class="bs-val" id="bs-l" style="color:var(--gold)">—</span></div>
+    <div class="bs-item"><span class="bs-label">BEST WR</span><span class="bs-val" id="bs-w" style="color:var(--green)">—</span></div>
+    <div class="bs-item"><span class="bs-label">TOP PNL</span><span class="bs-val" id="bs-p" style="color:var(--gold)">—</span></div>
+    <div class="bs-item"><span class="bs-label">REGIME</span><span class="bs-val" id="bs-r" style="color:var(--gold)">CHOP</span></div>
+    <div class="bs-item" style="margin-left:auto;border-right:none;border-left:1px solid var(--border);">
+      <span class="bs-label">CYCLE</span><span class="bs-val" id="bs-c" style="color:var(--muted)">—</span>
+    </div>
+  </div>
+
+</div><!-- #app -->
+
+<!-- HOF MODAL -->
+
+<div class="modal" id="hof-modal">
+  <div class="modal-inner">
+    <div class="modal-title">HALL OF FAME</div>
+    <div class="modal-sub">LEGENDS WHO SHAPED THE ARENA · MINIMUM 20 TRADES TO QUALIFY</div>
+    <div class="hof-grid" id="hof-grid"></div>
+  </div>
+  <button class="close-btn" onclick="closeModal('hof')">✕ CLOSE</button>
+</div>
+
+<!-- GRAVEYARD MODAL -->
+
+<div class="modal" id="grave-modal">
+  <div class="modal-inner">
+    <div class="modal-title" style="background:linear-gradient(90deg,#ff4d6d,#8b0000);-webkit-background-clip:text;">GRAVEYARD</div>
+    <div class="modal-sub">FALLEN VARIANTS · THEY FOUGHT AND LOST</div>
+    <div id="grave-grid"></div>
+  </div>
+  <button class="close-btn" onclick="closeModal('grave')">✕ CLOSE</button>
+</div>
+
+<!-- DNA LAB MODAL -->
+
+<div class="modal" id="dna-modal">
+  <div class="modal-inner">
+    <div class="modal-title">DNA LABORATORY</div>
+    <div class="modal-sub">COMPLETE GENOME ANALYSIS · ALL VARIANTS</div>
+    <div id="dna-modal-content" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;"></div>
+  </div>
+  <button class="close-btn" onclick="closeModal('dna')">✕ CLOSE</button>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// STARFIELD
+// ══════════════════════════════════════════════════════
+const bgC = document.getElementById('bg-canvas');
+const bgX = bgC.getContext('2d');
+let stars = [];
+function initStars() {
+  bgC.width = window.innerWidth; bgC.height = window.innerHeight;
+  stars = Array.from({length:500}, () => ({
+    x: Math.random()*bgC.width, y: Math.random()*bgC.height,
+    r: Math.random()*1.4+0.15,
+    tw: Math.random()*Math.PI*2, ts: Math.random()*.018+.004,
+    bright: Math.random() > .96
+  }));
+}
+function drawStars() {
+  bgX.clearRect(0,0,bgC.width,bgC.height);
+  stars.forEach(s => {
+    s.tw += s.ts;
+    const a = s.bright ? .65+.35*Math.abs(Math.sin(s.tw)) : .25+.5*Math.abs(Math.sin(s.tw));
+    bgX.beginPath(); bgX.arc(s.x, s.y, s.bright?s.r*2:s.r, 0, Math.PI*2);
+    bgX.fillStyle = s.bright ? `rgba(255,245,210,${a})` : `rgba(180,210,255,${a})`;
+    bgX.fill();
+    if (s.bright) { bgX.beginPath(); bgX.arc(s.x,s.y,s.r*5,0,Math.PI*2); bgX.fillStyle=`rgba(255,245,210,${a*.06})`; bgX.fill(); }
+  });
+  requestAnimationFrame(drawStars);
+}
+initStars(); drawStars();
+window.addEventListener('resize', initStars);
+
+// ══════════════════════════════════════════════════════
+// FIELD CANVAS — constellation lines
+// ══════════════════════════════════════════════════════
+const fc = document.getElementById('field-canvas');
+const fx = fc.getContext('2d');
+function resizeField() { fc.width = fc.parentElement.offsetWidth; fc.height = fc.parentElement.offsetHeight; }
+resizeField(); window.addEventListener('resize', resizeField);
+
+function drawConstellations() {
+  fx.clearRect(0,0,fc.width,fc.height);
+  const wrap = document.getElementById('battlefield-wrap');
+  const wr = wrap.getBoundingClientRect();
+  const mktGroups = {};
+  document.querySelectorAll('.bot-entity').forEach(el => {
+    const m = el.dataset.market;
+    if (!mktGroups[m]) mktGroups[m] = [];
+    const r = el.getBoundingClientRect();
+    mktGroups[m].push({x: r.left+r.width/2-wr.left, y: r.top+r.height/2-wr.top});
+  });
+  const cols = {btc:'#f7931a',eth:'#7b93f5',sol:'#ab6ef7'};
+  Object.entries(mktGroups).forEach(([m, pts]) => {
+    const c = cols[m]||'#fff';
+    for (let i=0;i<pts.length-1;i++) {
+      const a=pts[i],b=pts[i+1];
+      const g = fx.createLinearGradient(a.x,a.y,b.x,b.y);
+      g.addColorStop(0,c+'55'); g.addColorStop(1,c+'15');
+      fx.beginPath(); fx.moveTo(a.x,a.y); fx.lineTo(b.x,b.y);
+      fx.strokeStyle=g; fx.lineWidth=1; fx.setLineDash([4,10]); fx.stroke(); fx.setLineDash([]);
+      const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+      fx.beginPath(); fx.arc(mx,my,2.5,0,Math.PI*2); fx.fillStyle=c+'66'; fx.fill();
+    }
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// BOT CONFIG
+// ══════════════════════════════════════════════════════
+const MKT_COL = {btc:'#f7931a',eth:'#7b93f5',sol:'#ab6ef7'};
+const NAMES = {
+  v001:'THE STANDARD', v002:'THE GAMBLER', v003:'THE SNIPER',
+  v004:'CHAOS AGENT', v005:'THE SHADOW', v006:'ETH ORACLE',
+  v007:'THE DEGEN', v008:'ETH SNIPER', v009:'SOL GHOST',
+  v010:'SOL BERSERKER', v011:'THE TWIN', v012:'THE CLONE'
+};
+const SIGILS = {v001:'◈',v002:'⚄',v003:'◎',v004:'⚡',v005:'◐',v006:'Ξ',v007:'♦',v008:'✦',v009:'◉',v010:'⬡',v011:'⬢',v012:'⬟'};
+
+// SVG face generators
+function makeSVGFace(id, col) {
+  const faces = {
+    v004: `<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="30" cy="30" r="28" fill="#0a0416" stroke="${col}" stroke-width="2"/>
+      <polygon points="30,8 35,22 22,14" fill="${col}" opacity=".7"/>
+      <polygon points="30,8 25,22 38,14" fill="${col}" opacity=".5"/>
+      <ellipse cx="20" cy="26" rx="6" ry="4" fill="${col}" opacity=".9"/>
+      <ellipse cx="40" cy="26" rx="6" ry="4" fill="${col}" opacity=".9"/>
+      <line x1="20" y1="26" x2="40" y2="26" stroke="${col}" stroke-width=".5" opacity=".3"/>
+      <path d="M18 40 Q30 48 42 40" stroke="${col}" stroke-width="2" fill="none"/>
+      <circle cx="20" cy="26" r="2" fill="white"/>
+      <circle cx="40" cy="26" r="2" fill="white"/>
+    </svg>`,
+    v003: `<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="30" cy="30" r="28" fill="#030a1a" stroke="${col}" stroke-width="1.5"/>
+      <rect x="12" y="22" width="14" height="10" rx="2" fill="${col}" opacity=".8"/>
+      <circle cx="19" cy="27" r="4" fill="${col}"/>
+      <circle cx="19" cy="27" r="2" fill="white"/>
+      <line x1="28" y1="27" x2="35" y2="27" stroke="${col}" stroke-width="1.5" opacity=".6"/>
+      <circle cx="40" cy="26" rx="6" ry="5" fill="none" stroke="${col}" stroke-width="1.5"/>
+      <circle cx="40" cy="26" r="3" fill="${col}" opacity=".9"/>
+      <line x1="12" y1="22" x2="48" y2="22" stroke="${col}" stroke-width=".5" opacity=".3"/>
+      <path d="M22 40 L38 40" stroke="${col}" stroke-width="2"/>
+    </svg>`,
+    v002: `<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="30" cy="30" r="28" fill="#160a04" stroke="${col}" stroke-width="2"/>
+      <text x="16" y="31" font-size="12" fill="${col}">♠</text>
+      <text x="34" y="31" font-size="12" fill="${col}">♥</text>
+      <circle cx="19" cy="25" r="5" fill="none" stroke="${col}" stroke-width="1.5"/>
+      <circle cx="41" cy="25" r="5" fill="none" stroke="${col}" stroke-width="1.5"/>
+      <path d="M14 40 Q20 46 30 43 Q40 46 46 40" stroke="${col}" stroke-width="2.5" fill="none"/>
+      <line x1="22" y1="20" x2="26" y2="16" stroke="${col}" stroke-width="1.5"/>
+      <line x1="38" y1="20" x2="34" y2="16" stroke="${col}" stroke-width="1.5"/>
+    </svg>`,
+    v006: `<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="30" cy="30" r="28" fill="#030d20" stroke="${col}" stroke-width="1.5"/>
+      <circle cx="30" cy="28" r="12" fill="none" stroke="${col}" stroke-width="1" opacity=".3"/>
+      <circle cx="30" cy="28" r="8" fill="none" stroke="${col}" stroke-width="1" opacity=".5"/>
+      <circle cx="30" cy="28" r="4" fill="${col}" opacity=".8"/>
+      <circle cx="30" cy="28" r="2" fill="white"/>
+      <path d="M14 42 Q22 36 30 38 Q38 36 46 42" stroke="${col}" stroke-width="1.5" fill="none" opacity=".7"/>
+    </svg>`,
+    v009: `<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="30" cy="30" r="28" fill="#0a0416" stroke="${col}" stroke-width="1.5" stroke-dasharray="4 2"/>
+      <ellipse cx="20" cy="26" rx="6" ry="5" fill="${col}" opacity=".35"/>
+      <ellipse cx="40" cy="26" rx="6" ry="5" fill="${col}" opacity=".35"/>
+      <circle cx="20" cy="26" r="2.5" fill="white" opacity=".6"/>
+      <circle cx="40" cy="26" r="2.5" fill="white" opacity=".6"/>
+      <path d="M20 40 Q30 36 40 40" stroke="${col}" stroke-width="1.5" fill="none" opacity=".5"/>
+    </svg>`,
+    v007: `<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="30" cy="30" r="28" fill="#0d0320" stroke="${col}" stroke-width="2"/>
+      <polygon points="20,18 24,28 16,28" fill="${col}" opacity=".7"/>
+      <polygon points="40,18 44,28 36,28" fill="${col}" opacity=".7"/>
+      <ellipse cx="20" cy="28" rx="5" ry="4" fill="${col}" opacity=".9"/>
+      <ellipse cx="40" cy="28" rx="5" ry="4" fill="${col}" opacity=".9"/>
+      <circle cx="20" cy="28" r="2" fill="white"/>
+      <circle cx="40" cy="28" r="2" fill="white"/>
+      <path d="M18 42 Q24 48 30 44 Q36 48 42 42" stroke="${col}" stroke-width="2" fill="none"/>
+      <line x1="26" y1="35" x2="34" y2="35" stroke="${col}" stroke-width="1" opacity=".4"/>
+    </svg>`,
+  };
+  // Default face
+  const def = `<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="30" cy="30" r="28" fill="#08101e" stroke="${col}" stroke-width="1.5"/>
+    <circle cx="21" cy="26" r="4" fill="${col}" opacity=".8"/>
+    <circle cx="39" cy="26" r="4" fill="${col}" opacity=".8"/>
+    <circle cx="21" cy="26" r="1.8" fill="white"/>
+    <circle cx="39" cy="26" r="1.8" fill="white"/>
+    <path d="M20 40 Q30 46 40 40" stroke="${col}" stroke-width="2" fill="none"/>
+  </svg>`;
+  return faces[id] || def;
+}
+
+// ══════════════════════════════════════════════════════
+// THOUGHT MONOLOGUE GENERATOR
+// ══════════════════════════════════════════════════════
+function getMonologue(bot, ev, allBots) {
+  const sorted = [...allBots].sort((a,b)=>(b.wr||0)-(a.wr||0));
+  const myRank = sorted.findIndex(b=>b.id===bot.id)+1;
+  const leader = sorted[0];
+  const leaderName = NAMES[leader?.id]||'the leader';
+  const rival = allBots.find(b=>b.id!==bot.id&&b.market===bot.market&&b.trades>0);
+  const rivalName = NAMES[rival?.id]||'my rival';
+  const wr = bot.wr||0;
+
+  const pools = {
+    v004: {
+      waiting: [
+        `Rank ${myRank}. ${leaderName} thinks it's safe. It's not.`,
+        `88% in CHOP. The others are scared. I eat chaos.`,
+        `${rivalName} hasn't fired. Good. I don't need competition.`,
+        `Every second I wait is a second I'm analyzing. Watch.`,
+      ],
+      win: [
+        `That's ${bot.wins||0} wins. ${leaderName} better pay attention.`,
+        `Chaos bends to me. Always has. Always will.`,
+        `Rank ${myRank}. Moving up. Nobody can stop this.`,
+        `${rivalName} saw that? Good. Fear me.`,
+      ],
+      loss: [
+        `A hiccup. Even chaos has turbulence. Adjusting.`,
+        `${rivalName} is watching. Fine. I'll come back harder.`,
+        `One loss doesn't define me. My 88% does.`,
+      ]
+    },
+    v003: {
+      waiting: [
+        `Confidence insufficient. I require at least 7. Waiting.`,
+        `${leaderName} trades recklessly. I wait for certainty.`,
+        `Rank ${myRank}. Patience is my edge. My time comes.`,
+        `The market will reveal itself. Then I strike. Once.`,
+      ],
+      win: [
+        `Calculated. Precise. Inevitable.`,
+        `I told you. When the Sniper fires, it counts.`,
+        `${myRank} in the standings. This is where I belong.`,
+      ],
+      loss: [
+        `Impossible. Re-analyzing parameters now.`,
+        `Something in the signal was wrong. Finding it.`,
+      ]
+    },
+    v002: {
+      waiting: [
+        `I HATE this. ${leaderName} is trading and I'm just sitting here?`,
+        `My threshold is TOO HIGH. I need to mutate. NOW.`,
+        `${rivalName} better not get ahead of me. I'm watching.`,
+        `Rank ${myRank}. Unacceptable. Give me a signal. ANY signal.`,
+      ],
+      win: [
+        `YES. THAT'S WHAT I'M TALKING ABOUT. LET'S GO.`,
+        `Big bet. Big win. Simple. Everyone else is overthinking this.`,
+        `${rivalName} watching? Learn. This is how you play.`,
+      ],
+      loss: [
+        `Fine. FINE. Maybe I'll tighten up. A little.`,
+        `That one stings. But I'm coming back twice as hard.`,
+      ]
+    }
+  };
+
+  const generic = {
+    waiting: [`Monitoring market. Rank ${myRank}. Waiting for edge.`, `Signal quality low. ${leaderName} is ahead. Analyzing.`, `Patient. My time will come.`],
+    win: [`Win logged. Moving up the board.`, `That's how it's done. More to come.`],
+    loss: [`Loss recorded. Adjusting strategy.`, `Setback. Not finished yet.`]
+  };
+
+  const pool = pools[bot.id] || generic;
+  const arr = pool[ev] || pool.waiting;
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+
+function getMood(bot, ev) {
+  if (ev==='loss') return 'angry';
+  if (ev==='win' && (bot.wr||0)>0.75) return 'confident';
+  return '';
+}
+
+// ══════════════════════════════════════════════════════
+// NARRATIVE COMMENTARY
+// ══════════════════════════════════════════════════════
+function buildNarrative(pool) {
+  const sorted = [...pool].sort((a,b)=>(b.wr||0)-(a.wr||0));
+  const narratives = [];
+  sorted.forEach((bot,i) => {
+    const col = MKT_COL[bot.market]||'#fff';
+    const name = NAMES[bot.id]||bot.id;
+    const wr = (bot.wr||0)*100;
+    const t = bot.trades||0;
+    let icon='', text='', statusEmoji='';
+    if (i===0 && t>0) {
+      icon='🔥'; statusEmoji='👑';
+      text=`<strong style="color:${col}">${name}</strong> is <strong style="color:var(--green)">DOMINATING</strong> — ${wr.toFixed(0)}% WR across ${t} trades. Nobody can touch it right now.`;
+    } else if (t===0) {
+      icon='😤'; statusEmoji='💤';
+      text=`<strong style="color:${col}">${name}</strong> hasn't fired a single shot. Dormant. ${sorted[0]&&sorted[0].trades>0?`Watching <strong>${NAMES[sorted[0].id]}</strong> pull ahead in silence.`:'Waiting for conditions.'}`;
+    } else if (wr>75) {
+      icon='📈'; statusEmoji='🔥';
+      text=`<strong style="color:${col}">${name}</strong> is performing at ${wr.toFixed(0)}% — strong numbers, hunting for rank ${i}.`;
+    } else if (wr<40) {
+     icon='⚠️'; statusEmoji='😰';
+      text=`<strong style="color:${col}">${name}</strong> is STRUGGLING at ${wr.toFixed(0)}% WR. Mutation imminent if this continues.`;
+    } else {
+      icon='📊'; statusEmoji='😐';
+      text=`<strong style="color:${col}">${name}</strong> holding steady at ${wr.toFixed(0)}% — ${t} trades in. Watching for the next move.`;
+    }
+    narratives.push({icon,text,statusEmoji,col,rank:i+1});
+  });
+  return narratives;
+}
+
+// ══════════════════════════════════════════════════════
+// BOT STATE
+// ══════════════════════════════════════════════════════
+const prevBots = {};
+const botHistory = {};
+const botTargets = {};
+const botPositions = {};
+
+function getBotTarget(bot) {
+  const wrap = document.getElementById('battlefield-wrap');
+  const W = wrap.offsetWidth, H = wrap.offsetHeight;
+  const wr = bot.wr||0, t = bot.trades||0;
+  const maxT = 300;
+  const x = (0.1 + wr*0.8) * W;
+  const y = (0.85 - Math.min(t,maxT)/maxT*0.7) * H;
+  const idx = parseInt(bot.id.replace('v',''))||1;
+  const jitter = ((idx*17)%7-3)*0.04;
+  return {x: x+jitter*W, y: y+((idx%3)-1)*0.05*H};
+}
+
+// ══════════════════════════════════════════════════════
+// RENDER BOTS
+// ══════════════════════════════════════════════════════
+function renderBots(pool) {
+  const container = document.getElementById('bots-container');
+  pool.forEach(bot => {
+    const col = MKT_COL[bot.market]||'#fff';
+    const wr = bot.wr||0, t = bot.trades||0;
+    const size = Math.max(40, Math.min(62, 40+t/6));
+    const glow = wr>0.8?`0 0 ${size*.8}px ${col}99,0 0 ${size*2}px ${col}33`:wr>0.6?`0 0 ${size*.5}px ${col}55`:'none';
+    const target = getBotTarget(bot);
+    botTargets[bot.id] = target;
+
+    let el = document.getElementById('bel-'+bot.id);
+    if (!el) {
+      el = document.createElement('div');
+      el.className = 'bot-entity';
+      el.id = 'bel-'+bot.id;
+      el.dataset.market = bot.market;
+      if (!botPositions[bot.id]) botPositions[bot.id] = {x:target.x+((Math.random()-.5)*200), y:target.y+((Math.random()-.5)*150)};
+      const p = botPositions[bot.id];
+      el.style.left = p.x+'px'; el.style.top = p.y+'px';
+      el.innerHTML = `
+        <div class="thought-bubble" id="tb-${bot.id}">
+          <div class="tb-name" style="color:${col};">${NAMES[bot.id]||bot.id}</div>
+          <div class="tb-text" id="tt-${bot.id}">Initializing...</div>
+        </div>
+        <div class="bot-pfp-wrap">
+          <div class="bot-aura" id="aura-${bot.id}" style="width:${size+24}px;height:${size+24}px;top:-12px;left:-12px;background:radial-gradient(circle,${col}22,transparent 70%);"></div>
+          <div class="bot-orbit" id="orb-${bot.id}" style="width:${size+18}px;height:${size+18}px;top:-9px;left:-9px;border-color:${col};opacity:.2;"></div>
+          <div class="bot-pfp" id="pfp-${bot.id}" style="width:${size}px;height:${size}px;border-color:${col};box-shadow:${glow};">${makeSVGFace(bot.id,col)}</div>
+        </div>
+        <div class="bot-tag">
+          <div class="bot-name" style="color:${col};border-color:${col}44;">${SIGILS[bot.id]||'◈'} ${NAMES[bot.id]||bot.id}</div>
+          <div class="bot-wr-tag" id="bwr-${bot.id}">${t>0?(wr*100).toFixed(0)+'% WR · '+t+'T':'-'}</div>
+        </div>`;
+      el.addEventListener('click', () => { addBrainThought(bot, 'waiting', pool); });
+      container.appendChild(el);
+    }
+
+    // Update thought if no new trade
+    const pfp = document.getElementById('pfp-'+bot.id);
+    if (pfp) { pfp.style.boxShadow=glow; pfp.style.width=size+'px'; pfp.style.height=size+'px'; }
+    const bwr = document.getElementById('bwr-'+bot.id);
+    if (bwr) bwr.textContent = t>0?(wr*100).toFixed(0)+'% WR · '+t+'T':'-';
+
+    // Check for new trade
+    const prev = prevBots[bot.id]||{};
+    if (prev.trades!==undefined && bot.trades>prev.trades) {
+      const won = bot.wins>(prev.wins||0);
+      if (!botHistory[bot.id]) botHistory[bot.id]=[];
+      botHistory[bot.id].push(won);
+      fireTrade(bot, el, won);
+      addBrainThought(bot, won?'win':'loss', pool);
+      addTradeToFeed(bot, won);
+    }
+    prevBots[bot.id] = {...bot};
+  });
+  requestAnimationFrame(() => moveBots());
+  setTimeout(drawConstellations, 100);
+}
+
+// Smooth movement
+function moveBots() {
+  document.querySelectorAll('.bot-entity').forEach(el => {
+    const id = el.id.replace('bel-','');
+    const target = botTargets[id];
+    if (!target) return;
+    const cx = parseFloat(el.style.left)||0, cy = parseFloat(el.style.top)||0;
+    const dx = target.x-cx, dy = target.y-cy;
+    const dist = Math.sqrt(dx*dx+dy*dy);
+    if (dist > 0.5) {
+      const spd = Math.min(dist*.025, 2.5);
+      const nx = cx+dx/dist*spd, ny = cy+dy/dist*spd;
+      el.style.left = nx+'px'; el.style.top = ny+'px';
+      botPositions[id] = {x:nx,y:ny};
+    }
+  });
+  drawConstellations();
+  requestAnimationFrame(moveBots);
+}
+
+// ══════════════════════════════════════════════════════
+// THOUGHT BUBBLES
+// ══════════════════════════════════════════════════════
+function updateThoughtBubble(bot, ev, allBots) {
+  const tb = document.getElementById('tb-'+bot.id);
+  const tt = document.getElementById('tt-'+bot.id);
+  if (!tb||!tt) return;
+  const text = getMonologue(bot, ev, allBots);
+  const mood = getMood(bot, ev);
+  tt.textContent = text;
+  tb.className = 'thought-bubble ' + mood;
+  // Brief highlight
+  tb.style.transform = 'scale(1.06)';
+  setTimeout(()=>tb.style.transform='',400);
+}
+
+// ══════════════════════════════════════════════════════
+// TRADE FIRE EFFECT
+// ══════════════════════════════════════════════════════
+function fireTrade(bot, el, won) {
+  const col = MKT_COL[bot.market]||'#fff';
+  const fx = document.getElementById('fx-layer');
+  const wrap = document.getElementById('battlefield-wrap');
+  const wr = wrap.getBoundingClientRect();
+  const er = el.getBoundingClientRect();
+  const x = er.left+er.width/2-wr.left;
+  const y = er.top+er.height*.65-wr.top;
+
+  // Expanding rings
+  for (let r=0;r<2;r++) {
+    const ring = document.createElement('div');
+    ring.className = 'trade-ring';
+    ring.style.cssText = `left:${x}px;top:${y}px;border-color:${won?'var(--green)':'var(--red)'};animation-delay:${r*.25}s;`;
+    fx.appendChild(ring);
+    setTimeout(()=>ring.remove(), 1600);
+  }
+
+  // Float label
+  const lbl = document.createElement('div');
+  lbl.className = 'float-label';
+  lbl.style.cssText = `left:${x}px;top:${y-30}px;color:${won?'var(--green)':'var(--red)'};`;
+  lbl.textContent = won ? '▲ WIN' : '▼ LOSS';
+  fx.appendChild(lbl);
+  setTimeout(()=>lbl.remove(), 1700);
+
+  // Particles
+  for (let i=0;i<(won?14:6);i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const angle = Math.random()*Math.PI*2;
+    const spd = 25+Math.random()*55;
+    const tx=x+Math.cos(angle)*spd, ty=y+Math.sin(angle)*spd;
+    p.style.cssText = `left:${x}px;top:${y}px;width:${2+Math.random()*5}px;height:${2+Math.random()*5}px;background:${won?col:'var(--red)'};box-shadow:0 0 8px ${won?col:'var(--red)'};transition:all ${.5+Math.random()*.8}s ease-out;`;
+    fx.appendChild(p);
+    setTimeout(()=>{p.style.left=tx+'px';p.style.top=ty+'px';p.style.opacity='0';},10);
+    setTimeout(()=>p.remove(),1500);
+  }
+
+  // PFP flash
+  const pfp = document.getElementById('pfp-'+bot.id);
+  if (pfp) {
+    pfp.style.transform='scale(1.7)';
+    pfp.style.boxShadow=`0 0 50px ${col}`;
+    setTimeout(()=>{pfp.style.transform='scale(1)';pfp.style.boxShadow='';},500);
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// BRAIN LOG
+// ══════════════════════════════════════════════════════
+function addBrainThought(bot, ev, allBots) {
+  updateThoughtBubble(bot, ev, allBots||[]);
+  const log = document.getElementById('brain-log');
+  const col = MKT_COL[bot.market]||'#fff';
+  const text = getMonologue(bot, ev, allBots||[]);
+  const now = new Date();
+  const t = now.getUTCHours().toString().padStart(2,'0')+':'+now.getUTCMinutes().toString().padStart(2,'0');
+  const acol = {win:'var(--green)',loss:'var(--red)',waiting:'var(--muted)'};
+  const atxt = {win:'▲ WIN CONFIRMED',loss:'▼ LOSS RECORDED',waiting:'● SCANNING'};
+  const el = document.createElement('div');
+  el.className = 'brain-item';
+  el.style.cssText = `border-left-color:${col};background:${col}08;`;
+  el.innerHTML = `<div class="bi-head"><div class="bi-pfp" style="background:${col}22;border-color:${col}44;color:${col};">${SIGILS[bot.id]||'◈'}</div><span class="bi-name" style="color:${col};">${NAMES[bot.id]||bot.id}</span><span class="bi-time">${t} UTC</span></div><div class="bi-text">"${text}"</div><div class="bi-action" style="color:${acol[ev]||'var(--muted)'};">${atxt[ev]||''}</div>`;
+  log.insertBefore(el, log.firstChild);
+  while (log.children.length>18) log.removeChild(log.lastChild);
+}
+
+// ══════════════════════════════════════════════════════
+// TRADE FEED
+// ══════════════════════════════════════════════════════
+function addTradeToFeed(bot, won) {
+  const feed = document.getElementById('trade-feed');
+  const col = MKT_COL[bot.market]||'#fff';
+  const now = new Date();
+  const t = now.getUTCHours().toString().padStart(2,'0')+':'+now.getUTCMinutes().toString().padStart(2,'0')+':'+now.getUTCSeconds().toString().padStart(2,'0');
+  const el = document.createElement('div');
+  el.className = 'tf-item';
+  el.style.cssText = `background:${won?'rgba(61,255,160,.05)':'rgba(255,77,109,.05)'};border:1px solid ${won?'rgba(61,255,160,.15)':'rgba(255,77,109,.15)'};border-radius:6px;`;
+  el.innerHTML = `<span style="color:${col};font-size:13px;">${SIGILS[bot.id]||'◈'}</span><span style="font-family:'Bebas Neue',sans-serif;font-size:12px;color:${col};">${NAMES[bot.id]||bot.id}</span><span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:${won?'var(--green)':'var(--red)'};">${won?'▲ WIN':'▼ LOSS'}</span><span style="font-family:'Bebas Neue',sans-serif;font-size:12px;color:var(--muted);">${(bot.market||'').toUpperCase()}</span><span style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted);margin-left:auto;">${t}</span>`;
+  feed.insertBefore(el, feed.firstChild);
+  while (feed.children.length>12) feed.removeChild(feed.lastChild);
+}
+
+// ══════════════════════════════════════════════════════
+// SCOREBOARD
+// ══════════════════════════════════════════════════════
+function renderScoreboard(pool) {
+  const track = document.getElementById('sb-track');
+  const sorted = [...pool].sort((a,b)=>(b.wr||0)-(a.wr||0));
+  const double = [...sorted,...sorted]; // duplicate for infinite scroll
+  track.innerHTML = double.map((bot,i) => {
+    const col = MKT_COL[bot.market]||'#fff';
+    const wr = (bot.wr||0)*100, t = bot.trades||0;
+    const rank = (i%sorted.length)+1;
+    const rankCol = rank===1?'var(--gold)':rank===2?'#c0c0c0':rank===3?'#cd7f32':'var(--muted)';
+    const statusEmoji = t===0?'💤':wr>80?'🔥':wr>60?'📈':wr<35?'⚠️':'📊';
+    return `<div class="sb-card">
+      <div class="sb-rank" style="color:${rankCol};">${rank===1?'👑':rank}</div>
+      <div class="sb-pfp" style="border-color:${col};background:${col}11;">${SIGILS[bot.id]||'◈'}</div>
+      <div class="sb-info">
+        <div class="sb-name" style="color:${col};">${NAMES[bot.id]||bot.id}</div>
+        <div class="sb-stats">${t}T · ${(bot.market||'').toUpperCase()} · Gen ${bot.gen||1}</div>
+      </div>
+      <div class="sb-wr-wrap">
+        <div class="sb-wr" style="color:${wr>80?'var(--green)':wr>60?'var(--cyan)':'var(--muted)'};">${t>0?wr.toFixed(0)+'%':'—'}</div>
+        <div class="sb-bar"><div class="sb-bar-fill" style="width:${t>0?wr:0}%;background:${col};"></div></div>
+      </div>
+      <div class="sb-status">${statusEmoji}</div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// NARRATIVE LEADERBOARD
+// ══════════════════════════════════════════════════════
+function renderNarrative(pool) {
+  const el = document.getElementById('narrative-lb');
+  el.innerHTML = '';
+  const items = buildNarrative(pool);
+  items.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'narrative-block';
+    div.innerHTML = `<div class="nb-rank" style="color:${item.col};">${item.icon} #${item.rank} ${item.statusEmoji}</div><div class="nb-text">${item.text}</div>`;
+    el.appendChild(div);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// STREAK TRACKER
+// ══════════════════════════════════════════════════════
+function renderStreaks(pool) {
+  const el = document.getElementById('streak-panel');
+  el.innerHTML = '';
+  pool.filter(b=>b.trades>0).sort((a,b)=>(b.wr||0)-(a.wr||0)).slice(0,6).forEach(bot => {
+    const col = MKT_COL[bot.market]||'#fff';
+    const hist = (botHistory[bot.id]||[]).slice(-10);
+    const streak = calcStreak(botHistory[bot.id]||[]);
+    const div = document.createElement('div');
+    div.style.cssText='display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:6px;margin-bottom:4px;background:rgba(8,14,40,.7);';
+    div.innerHTML = `<span style="color:${col};font-size:11px;">${SIGILS[bot.id]||'◈'}</span><span style="font-family:'Bebas Neue',sans-serif;font-size:10px;color:${col};flex:1;letter-spacing:1px;">${NAMES[bot.id]||bot.id}</span><div style="display:flex;gap:2px;">${hist.map(w=>`<div style="width:7px;height:7px;border-radius:1px;background:${w?'var(--green)':'var(--red)'};opacity:.8;"></div>`).join('')}</div><span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:${streak.dir==='win'?'var(--green)':'var(--red)'};margin-left:4px;">${streak.count}${streak.dir==='win'?'🔥':'❄️'}</span>`;
+    el.appendChild(div);
+  });
+}
+function calcStreak(hist) {
+  if (!hist.length) return {count:0,dir:'win'};
+  const last=hist[hist.length-1]; let c=0;
+  for (let i=hist.length-1;i>=0&&hist[i]===last;i--) c++;
+  return {count:c,dir:last?'win':'loss'};
+}
+
+// ══════════════════════════════════════════════════════
+// DNA TABLE
+// ══════════════════════════════════════════════════════
+function renderDNATable(pool) {
+  const tb = document.getElementById('dna-tbody');
+  const sorted = [...pool].sort((a,b)=>(b.wr||0)-(a.wr||0));
+  tb.innerHTML = sorted.map(bot => {
+    const col = MKT_COL[bot.market]||'#fff';
+    const wr = (bot.wr||0)*100;
+    return `<tr>
+      <td style="color:${col};">${SIGILS[bot.id]||'◈'} ${NAMES[bot.id]||bot.id}</td>
+      <td style="color:${col};">${(bot.market||'').toUpperCase()}</td>
+      <td>${(bot.entry_threshold||0.70).toFixed(2)}</td>
+      <td>${((bot.max_bet_pct||0.07)*100).toFixed(0)}%</td>
+      <td>${bot.min_confidence||6}</td>
+      <td style="color:var(--pink);">${bot.gen||1}</td>
+      <td style="color:${wr>75?'var(--green)':wr>50?'var(--cyan)':'var(--muted)'};">${bot.trades>0?wr.toFixed(0)+'%':'—'}</td>
+      <td style="color:${(bot.pnl||0)>=0?'var(--green)':'var(--red)'};">${(bot.pnl||0)>0?'+':''}$${(bot.pnl||0).toFixed(0)}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// RIVALRY PANEL
+// ══════════════════════════════════════════════════════
+function renderRivalries(pool) {
+  const el = document.getElementById('rivalry-panel');
+  el.innerHTML = '';
+  const byMkt = {};
+  pool.forEach(b=>{if(!byMkt[b.market])byMkt[b.market]=[];byMkt[b.market].push(b);});
+  Object.entries(byMkt).forEach(([mkt,bots]) => {
+    if (bots.length<2) return;
+    const a=bots[0],b=bots[1];
+    const col=MKT_COL[mkt]||'#fff';
+    const awr=(a.wr||0)*100,bwr=(b.wr||0)*100;
+    const div = document.createElement('div');
+    div.style.cssText='background:rgba(8,14,40,.7);border-radius:8px;padding:10px;margin-bottom:8px;border:1px solid var(--border);';
+    div.innerHTML=`<div style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:${col};margin-bottom:6px;">⚔ ${mkt.toUpperCase()} RIVALRY</div><div style="display:flex;align-items:center;justify-content:space-between;"><div style="text-align:center;flex:1;"><div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted);">${NAMES[a.id]||a.id}</div><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:${awr>bwr?'var(--green)':'var(--muted)'};">${a.trades>0?awr.toFixed(0):'—'}%</div></div><div style="font-family:'Bebas Neue',sans-serif;font-size:12px;color:var(--muted);padding:0 8px;">VS</div><div style="text-align:center;flex:1;"><div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted);">${NAMES[b.id]||b.id}</div><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:${bwr>awr?'var(--green)':'var(--muted)'};">${b.trades>0?bwr.toFixed(0):'—'}%</div></div></div><div style="height:3px;background:rgba(255,255,255,.06);border-radius:2px;margin-top:6px;overflow:hidden;"><div style="height:100%;width:${a.trades>0?awr:50}%;background:${col};border-radius:2px;transition:width 1s;"></div></div>`;
+    el.appendChild(div);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// GENERATION CHART
+// ══════════════════════════════════════════════════════
+function drawGenChart(pool) {
+  const canvas = document.getElementById('gen-chart');
+  if (!canvas) return;
+  canvas.width = canvas.parentElement.offsetWidth - 28;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const W=canvas.width,H=canvas.height;
+  ctx.strokeStyle='rgba(140,170,255,.08)';ctx.lineWidth=1;
+  for(let y=0;y<H;y+=20){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  // Plot WR per bot (simulated gen history for now)
+  const active = pool.filter(b=>b.trades>0);
+  if (!active.length){
+    ctx.fillStyle='rgba(140,170,255,.2)';ctx.font='10px Share Tech Mono';
+    ctx.textAlign='center';ctx.fillText('Accumulating generation data...',W/2,H/2);return;
+  }
+  active.forEach(bot=>{
+    const col=MKT_COL[bot.market]||'#fff';
+    const wr=(bot.wr||0)*100;
+    ctx.beginPath();
+    ctx.moveTo(20,H-10);
+    ctx.lineTo(W-20,(1-wr/100)*(H-20)+10);
+    ctx.strokeStyle=col+'aa';ctx.lineWidth=2;ctx.stroke();
+    ctx.beginPath();ctx.arc(W-20,(1-wr/100)*(H-20)+10,4,0,Math.PI*2);
+    ctx.fillStyle=col;ctx.fill();
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// HOF + GRAVE + DNA MODAL
+// ══════════════════════════════════════════════════════
+function renderHOF(pool) {
+  const g = document.getElementById('hof-grid');
+  const quotes = {v004:'"Thrives where others fear to tread"',v003:'"Patient. Precise. Lethal."',v002:'"Lives for action, loves the risk"',v006:'"The chain never lies"',v009:'"Strike fast, vanish, repeat"'};
+  const heroes = pool.filter(b=>b.trades>20).sort((a,b)=>(b.wr||0)-(a.wr||0));
+  g.innerHTML = !heroes.length?`<p style="color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:11px;padding:20px;text-align:center;">Variants need 20+ trades to qualify</p>`:heroes.map(bot=>{
+    const col=MKT_COL[bot.market]||'#fff';
+    return`<div class="hof-card" style="border-color:${col}33;"><div class="hof-pfp" style="border-color:${col};background:${col}11;">${makeSVGFace(bot.id,col)}</div><div class="hof-name" style="color:${col};">${NAMES[bot.id]||bot.id}</div><div class="hof-quote">${quotes[bot.id]||'"Competed. Survived. Evolved."'}</div><div class="hof-stat">${bot.trades>0?((bot.wr||0)*100).toFixed(0)+'% WR · ':''} ${bot.trades} trades · Gen ${bot.gen||1} · +$${(bot.pnl||0).toFixed(0)}</div></div>`;
+  }).join('');
+}
+function renderGrave() {
+  const g = document.getElementById('grave-grid');
+  g.innerHTML = `<div class="grave-card"><div style="font-size:24px;margin-bottom:8px;">💀</div><div class="grave-name">THE ORIGINAL STANDARD</div><div class="grave-epitaph">"Died as it lived — waiting for the perfect signal that never came."</div><div class="grave-stat">Final record: 0W/0L · Never fired a shot · Gen 1 · RIP</div></div><p style="color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:10px;margin-top:12px;text-align:center;">Variants are retired here when WR drops below 35% over 8+ trades</p>`;
+}
+function renderDNAModal(pool) {
+  const ct = document.getElementById('dna-modal-content');
+  ct.innerHTML = pool.map(bot=>{
+    const col=MKT_COL[bot.market]||'#fff';
+    const wr=(bot.wr||0)*100;
+    return`<div style="background:rgba(8,14,42,.85);border-radius:10px;padding:14px;border:1px solid ${col}33;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;"><div style="width:32px;height:32px;border-radius:50%;border:1.5px solid ${col};overflow:hidden;">${makeSVGFace(bot.id,col)}</div><div><div style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:1px;color:${col};">${NAMES[bot.id]||bot.id}</div><div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted);">${(bot.market||'').toUpperCase()} · Gen ${bot.gen||1}</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">${[['THRESH',(bot.entry_threshold||.70).toFixed(2)],['BET%',((bot.max_bet_pct||.07)*100).toFixed(0)+'%'],['CONF',bot.min_confidence||6],['CHOP',bot.chop_allowed?'YES':'NO'],['WR',bot.trades>0?wr.toFixed(0)+'%':'—'],['PNL','$'+(bot.pnl||0).toFixed(0)],['WINS',bot.wins||0],['TRADES',bot.trades||0]].map(([k,v])=>`<div style="background:rgba(140,170,255,.04);border-radius:3px;padding:3px 6px;display:flex;justify-content:space-between;"><span style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted);">${k}</span><span style="font-family:'Share Tech Mono',monospace;font-size:8px;font-weight:700;">${v}</span></div>`).join('')}</div></div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// REGIME + CONFIDENCE
+// ══════════════════════════════════════════════════════
+function updateRegime(r) {
+  const badge = document.getElementById('regime-badge');
+  const cfg = {BULL:{bg:'rgba(61,255,160,.1)',b:'rgba(61,255,160,.3)',c:'var(--green)'},BEAR:{bg:'rgba(255,77,109,.1)',b:'rgba(255,77,109,.3)',c:'var(--red)'},CHOP:{bg:'rgba(245,215,110,.1)',b:'rgba(245,215,110,.3)',c:'var(--gold)'}};
+  const c=(cfg[r]||cfg.CHOP);
+  badge.style.background=c.bg;badge.style.border=`1px solid ${c.b}`;badge.style.color=c.c;
+  badge.textContent='● '+r;
+  document.getElementById('bs-r').textContent=r;
+  document.getElementById('bs-r').style.color=c.c;
+}
+function updateConf(v) {
+  document.getElementById('conf-bar').style.width=(v/10*100)+'%';
+  document.getElementById('conf-val').textContent=v+'/10';
+  document.getElementById('conf-bar').style.background=v>=7?'linear-gradient(90deg,var(--green),var(--cyan))':v>=4?'linear-gradient(90deg,var(--gold),var(--cyan))':'linear-gradient(90deg,var(--red),var(--gold))';
+}
+
+// ══════════════════════════════════════════════════════
+// BOTTOM STRIP
+// ══════════════════════════════════════════════════════
+function updateStrip(data) {
+  const pool=data.leaderboard||[];
+  const total=pool.reduce((s,b)=>s+(b.trades||0),0);
+  const best=pool.reduce((a,b)=>(b.wr||0)>(a.wr||0)?b:a,pool[0]||{});
+  const topPnl=pool.reduce((a,b)=>(b.pnl||0)>(a.pnl||0)?b:a,pool[0]||{});
+  document.getElementById('bs-v').textContent=pool.length;
+  document.getElementById('bs-t').textContent=total;
+  document.getElementById('bs-l').textContent=best.trades>0?(NAMES[best.id]||best.id):'—';
+  document.getElementById('bs-w').textContent=best.trades>0?((best.wr||0)*100).toFixed(0)+'%':'—';
+  document.getElementById('bs-p').textContent=topPnl.pnl>0?'+$'+topPnl.pnl.toFixed(0):'—';
+  document.getElementById('bs-c').textContent='#'+(data.cycle||0);
+}
+
+// ══════════════════════════════════════════════════════
+// CLOCK
+// ══════════════════════════════════════════════════════
+function tick(){const n=new Date();document.getElementById('clock').textContent=n.getUTCHours().toString().padStart(2,'0')+':'+n.getUTCMinutes().toString().padStart(2,'0')+':'+n.getUTCSeconds().toString().padStart(2,'0')+' UTC';}
+setInterval(tick,1000);tick();
+
+// ══════════════════════════════════════════════════════
+// MODALS
+// ══════════════════════════════════════════════════════
+function openModal(name){document.getElementById(name+'-modal').classList.add('open');}
+function closeModal(name){document.getElementById(name+'-modal').classList.remove('open');}
+
+// ══════════════════════════════════════════════════════
+// MAIN RENDER
+// ══════════════════════════════════════════════════════
+function renderAll(data) {
+  const pool = data.leaderboard||[];
+  renderBots(pool);
+  renderScoreboard(pool);
+  renderNarrative(pool);
+  renderStreaks(pool);
+  renderRivalries(pool);
+  renderDNATable(pool);
+  drawGenChart(pool);
+  renderHOF(pool);
+  renderGrave();
+  renderDNAModal(pool);
+  updateStrip(data);
+}
+
+// ══════════════════════════════════════════════════════
+// DATA FETCH
+// ══════════════════════════════════════════════════════
+let loaded = false;
+async function fetchArena() {
+  try {
+    const r = await fetch('/arena_state');
+    const d = await r.json();
+    renderAll(d);
+    try{const s=await fetch('/arena_signal/btc');const sd=await s.json();updateRegime(sd.regime||'CHOP');updateConf(sd.confidence||0);}catch(e){}
+    loaded=true;
+  } catch(e) { if(!loaded) startDemo(); }
+}
+
+// ══════════════════════════════════════════════════════
+// DEMO MODE
+// ══════════════════════════════════════════════════════
+function startDemo() {
+  loaded=true;
+  const pool=[
+    {id:'v004',market:'btc',wr:.88,trades:292,pnl:2572.74,gen:1,wins:257,losses:35,entry_threshold:.68,max_bet_pct:.07,min_confidence:6,chop_allowed:true},
+    {id:'v001',market:'btc',wr:0,trades:0,pnl:0,gen:1,wins:0,losses:0,entry_threshold:.70,max_bet_pct:.07,min_confidence:6,chop_allowed:false},
+    {id:'v002',market:'btc',wr:0,trades:0,pnl:0,gen:1,wins:0,losses:0,entry_threshold:.65,max_bet_pct:.09,min_confidence:5,chop_allowed:false},
+    {id:'v003',market:'btc',wr:0,trades:0,pnl:0,gen:1,wins:0,losses:0,entry_threshold:.75,max_bet_pct:.05,min_confidence:7,chop_allowed:false},
+    {id:'v005',market:'btc',wr:0,trades:0,pnl:0,gen:1,wins:0,losses:0,entry_threshold:.70,max_bet_pct:.07,min_confidence:6,chop_allowed:false},
+    {id:'v006',market:'eth',wr:0,trades:0,pnl:0,gen:1,wins:0,losses:0,entry_threshold:.70,max_bet_pct:.09,min_confidence:6,chop_allowed:false},
+    {id:'v007',market:'eth',wr:0,trades:0,pnl:0,gen:1,wins:0,losses:0,entry_threshold:.65,max_bet_pct:.11,min_confidence:5,chop_allowed:false},
+    {id:'v008',market:'eth',wr:0,trades:0,pnl:0,gen:1,wins:0,losses:0,entry_threshold:.75,max_bet_pct:.07,min_confidence:7,chop_allowed:false},
+    {id:'v009',market:'sol',wr:0,trades:0,pnl:0,gen:1,wins:0,losses:0,entry_threshold:.70,max_bet_pct:.05,min_confidence:6,chop_allowed:false},
+    {id:'v010',market:'sol',wr:0,trades:0,pnl:0,gen:1,wins:0,losses:0,entry_threshold:.65,max_bet_pct:.07,min_confidence:5,chop_allowed:false},
+    {id:'v011',market:'btc',wr:0,trades:0,pnl:0,gen:1,wins:0,losses:0,entry_threshold:.70,max_bet_pct:.07,min_confidence:6,chop_allowed:false},
+    {id:'v012',market:'btc',wr:0,trades:0,pnl:0,gen:1,wins:0,losses:0,entry_threshold:.70,max_bet_pct:.07,min_confidence:6,chop_allowed:false},
+  ];
+  renderAll({leaderboard:pool,cycle:449});
+  updateRegime('CHOP'); updateConf(6);
+  // v004 fires periodically
+  setInterval(()=>{
+    const v=pool[0]; const won=Math.random()<.88;
+    v.trades++; if(won){v.wins++;v.pnl+=11.92;}else{v.losses++;v.pnl-=3;}
+    v.wr=v.wins/v.trades;
+    renderAll({leaderboard:pool,cycle:449+v.trades});
+    addBrainThought(v,won?'win':'loss',pool);
+    addTradeToFeed(v,won);
+  },8000);
+  // Idle thoughts from other bots
+  const idlers=[pool[2],pool[3],pool[5],pool[8],pool[9]];
+  setInterval(()=>{
+    const b=idlers[Math.floor(Math.random()*idlers.length)];
+    addBrainThought(b,'waiting',pool);
+  },5000);
+  setTimeout(()=>{
+    addBrainThought(pool[0],'waiting',pool);
+    setTimeout(()=>addBrainThought(pool[2],'waiting',pool),600);
+    setTimeout(()=>addBrainThought(pool[5],'waiting',pool),1200);
+  },1000);
+}
+
+fetchArena();
+setInterval(fetchArena,12000);
+</script>
+
+</body>
+</html>

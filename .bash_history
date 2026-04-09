@@ -1,45 +1,3 @@
-kill 495284
-cat /root/eth_bot.log | tail -15
-grep -E "HALT|MIN_BALANCE|SystemExit|Error|Traceback" /root/bot.log | tail -10
-grep "Settled" /root/bot.log | tail -10
-python3 /tmp/check_balance.py
-for f in /root/real_bot.py /root/eth_bot.py /root/sol_bot.py; do      sed -i 's/INITIAL_BALANCE    = [0-9.]*/INITIAL_BALANCE    = 216.65/' $f;      sed -i 's/SESSION_START_BAL  = [0-9.]*/SESSION_START_BAL  = 216.65/' $f;      sed -i 's/MIN_BALANCE      = [0-9.]*/MIN_BALANCE      = 185.00/' $f;  done
-grep -E "Error|Traceback|assert|WRONG MARKET" /root/watchdog.log | tail -10
-pkill -f real_bot.py && pkill -f eth_bot.py && pkill -f sol_bot.py
-cp /root/real_bot.py /root/real_bot_v3_stable.py
-grep -E "assert|AssertionError|WRONG MARKET" /root/bot.log /root/eth_bot.log /root/sol_bot.log 2>/dev/null | head -10
-python3 /tmp/check_balance.py
-python3 -c "
- import requests, tempfile
- from kalshi_python import KalshiClient
- from kalshi_python.configuration import Configuration
- raw = open('/root/real_bot.py').read()
- KEY = raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]
- SEC = raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]
- tf = tempfile.NamedTemporaryFile(delete=False, suffix='.pem', mode='w')
- tf.write(SEC); tf.close()
- config = Configuration()
- config.host = 'https://api.elections.kalshi.com/trade-api/v2'
- kalshi = KalshiClient(config)
- kalshi.set_kalshi_auth(KEY, tf.name)
- url = 'https://api.elections.kalshi.com/trade-api/v2/portfolio/positions'
- headers = kalshi.kalshi_auth.create_auth_headers('GET', url)
- resp = requests.get(url, headers=headers, params={'limit':20}, timeout=8)
- positions = resp.json().get('market_positions', [])
- print(f'Open positions: {len(positions)}')
- for p in positions:
-     print(f'  {p.get(\"ticker\")} | exposure=\${float(p.get(\"market_exposure_dollars\",0)):.2f}')
- " 2>/dev/null
-nano /tmp/check_positions.py
-python3 /tmp/check_positions.py
-for f in /root/real_bot.py /root/eth_bot.py /root/sol_bot.py; do      sed -i 's/INITIAL_BALANCE    = 216.65/INITIAL_BALANCE    = 213.85/' $f;      sed -i 's/SESSION_START_BAL  = 216.65/SESSION_START_BAL  = 213.85/' $f;  done
-cat /root/sol_bot.log | tail -8
-grep "2026-04-01.*LOSS" /root/trade_log.csv | tail -5
-for f in /root/real_bot.py /root/eth_bot.py /root/sol_bot.py; do      sed -i 's/MAX_BET_PCT        = 0.07    # 7% of balance per order/MAX_BET_PCT        = 0.05    # 5% of balance per order/' $f;  done
-pkill -f real_bot.py && pkill -f eth_bot.py && pkill -f sol_bot.py
-cp /root/real_bot.py /root/real_bot_v3_stable.py
-grep "Directional" /root/bot.log | head -1
-cat /root/bot.log | tail -8
 grep "2026-04-01 17" /root/sol_trade_log.csv | tail -5
 grep "2026-04-01" /root/trade_log.csv | grep "LOSS\|WIN" | tail -10
 grep "2026-04-01 17" /root/trade_log.csv | tail -5
@@ -1998,3 +1956,45 @@ source kalshi_env/bin/activate
 pm2 list
 python3 /tmp/status_all.py
 pm2 delete watchdog
+source kalshi_env/bin/activate
+pm2 list
+python3 /tmp/status_all.py
+cat /root/arena_state.json | python3 -m json.tool | head -30
+cat /root/arena_state.json | python3 -m json.tool | grep -A 8 "v004"
+pm2 logs arena --lines 20 --nostream
+grep -n "def evaluate" /root/arena.py
+sed -n '956,990p' /root/arena.py
+sed -i 's/        v\["mutations"\].append("tightened threshold wr="+str(round(wr,2)))/        v["mutations"].append("tightened threshold wr="+str(round(wr,2)))\n        return v,True\n    return v,False/' /root/arena.py
+grep -n "write_arena_signal" /root/openclaw.py | head -3
+grep -n "conf_score\|confidence_score\|Score=" /root/openclaw.py | head -10
+sed -n '460,490p' /root/openclaw.py
+nano /root/openclaw.py
+grep -n "arena signal\|write_arena_signal" /root/openclaw.py
+sed -i 's/write_arena_signal(market=_args.market,yes_prob=yes_price,regime=REGIME,confidence=0,window_age=window_minute,ticker=live_ticker)/write_arena_signal(market=_args.market,yes_prob=yes_price,regime=REGIME,confidence=confidence,window_age=window_minute,ticker=live_ticker)/' /root/openclaw.py
+nano /root/openclaw.py +485
+python3 -m py_compile /root/openclaw.py && echo "OK"
+pm2 restart openclaw-btc openclaw-eth openclaw-sol arena
+pm2 save
+git add -A && git commit -m "Fix arena: wire real confidence score, fix evaluate() return bug"
+pm2 logs arena --lines 10 --nostream
+grep -n "DIRECTIONAL_HIGH\|DIRECTIONAL_LOW\|REGIME\|CHOP" /root/openclaw.py | head -10
+grep -n "CHOP\|regime\|REGIME" /root/openclaw.py | grep -v "^82:\|^118:\|^217:\|^224:\|^226:\|^228:" | head -10 
+sed -i 's/DIRECTIONAL_HIGH=0.70/DIRECTIONAL_HIGH=0.68/' /root/openclaw.py
+sed -i 's/DIRECTIONAL_LOW=0.30/DIRECTIONAL_LOW=0.32/' /root/openclaw.py
+python3 -m py_compile /root/openclaw.py && echo "OK"
+grep -n "DIRECTIONAL_HIGH\|DIRECTIONAL_LOW" /root/openclaw.py | head -4
+pm2 restart openclaw-btc openclaw-eth openclaw-sol
+scp /path/to/arena_v2.html root@167.172.244.100:/root/arena_dashboard.html
+nano /root/arena_dashboard.html 
+nano /root/arena_dashboard.html
+cp /root/arena_dashboard.html /root/arena_dashboard_backup.html
+nano /root/arena_dashboard.html
+python3 << 'PYEOF'
+ content = open('/mnt/user-data/outputs/arena_v4.html').read() if False else None
+ PYEOF
+
+nano /root/arena_dashboard.html
+exit
+source kalshi_env/bin/activate
+nano /root/arena_dashboard.html
+pm2 restart dashboard

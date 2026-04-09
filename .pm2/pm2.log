@@ -14934,3 +14934,332 @@
 2026-04-09T01:17:17: PM2 log: pid=661708 msg=process killed
 2026-04-09T01:17:17: PM2 log: App [openclaw-sol:12] starting in -fork mode-
 2026-04-09T01:17:17: PM2 log: App [openclaw-sol:12] online
+2026-04-09T01:23:36: PM2 log: Stopping app:dashboard id:14
+2026-04-09T01:23:36: PM2 log: pid=640640 msg=failed to kill - retrying in 100ms
+2026-04-09T01:23:36: PM2 log: pid=640640 msg=failed to kill - retrying in 100ms
+2026-04-09T01:23:36: PM2 log: App [dashboard:14] exited with code [0] via signal [SIGINT]
+2026-04-09T01:23:36: PM2 log: pid=640640 msg=process killed
+2026-04-09T01:23:36: PM2 log: App [dashboard:14] starting in -fork mode-
+2026-04-09T01:23:36: PM2 log: App [dashboard:14] online
+2026-04-09T01:31:28: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T01:31:28: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T01:31:28: PM2 log: App [openclaw-btc:10] online
+2026-04-09T01:31:35: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T01:31:35: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T01:31:35: PM2 log: App [openclaw-btc:10] online
+2026-04-09T01:31:42: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T01:31:42: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T01:31:42: PM2 log: App [openclaw-btc:10] online
+2026-04-09T01:31:49: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T01:31:49: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T01:31:49: PM2 log: App [openclaw-btc:10] online
+2026-04-09T01:31:56: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T01:31:56: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T01:31:56: PM2 log: App [openclaw-btc:10] online
+2026-04-09T01:32:03: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T01:32:03: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T01:32:03: PM2 log: App [openclaw-btc:10] online
+2026-04-09T01:33:12: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T01:33:12: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T01:33:12: PM2 log: App [openclaw-btc:10] online
+2026-04-09T01:33:32: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T01:33:32: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T01:33:32: PM2 log: App [openclaw-eth:11] online
+2026-04-09T02:02:39: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T02:02:39: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T02:02:39: PM2 log: App [openclaw-eth:11] online
+2026-04-09T02:19:30: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T02:19:30: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T02:19:30: PM2 log: App [openclaw-sol:12] online
+2026-04-09T02:19:46: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T02:19:46: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T02:19:46: PM2 log: App [openclaw-eth:11] online
+2026-04-09T02:30:43: PM2 log: Stopping app:dashboard id:14
+2026-04-09T02:30:43: PM2 log: pid=662540 msg=failed to kill - retrying in 100ms
+2026-04-09T02:30:43: PM2 log: App [dashboard:14] exited with code [0] via signal [SIGINT]
+2026-04-09T02:30:43: PM2 log: pid=662540 msg=process killed
+2026-04-09T02:30:43: PM2 log: App [dashboard:14] starting in -fork mode-
+2026-04-09T02:30:43: PM2 log: App [dashboard:14] online
+2026-04-09T02:46:54: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T02:46:54: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T02:46:54: PM2 log: App [openclaw-eth:11] online
+2026-04-09T02:47:22: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T02:47:22: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T02:47:22: PM2 log: App [openclaw-btc:10] online
+2026-04-09T02:48:29: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T02:48:29: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T02:48:29: PM2 log: App [openclaw-btc:10] online
+2026-04-09T02:49:08: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T02:49:08: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T02:49:08: PM2 log: App [openclaw-eth:11] online
+2026-04-09T03:32:17: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T03:32:17: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T03:32:17: PM2 log: App [openclaw-eth:11] online
+2026-04-09T03:32:36: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T03:32:36: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T03:32:36: PM2 log: App [openclaw-btc:10] online
+2026-04-09T03:34:24: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T03:34:24: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T03:34:24: PM2 log: App [openclaw-eth:11] online
+2026-04-09T04:03:31: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T04:03:31: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T04:03:31: PM2 log: App [openclaw-eth:11] online
+2026-04-09T04:04:37: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T04:04:37: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T04:04:37: PM2 log: App [openclaw-eth:11] online
+2026-04-09T04:33:44: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T04:33:44: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T04:33:44: PM2 log: App [openclaw-eth:11] online
+2026-04-09T04:34:50: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T04:34:50: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T04:34:50: PM2 log: App [openclaw-eth:11] online
+2026-04-09T04:49:44: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T04:49:44: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T04:49:44: PM2 log: App [openclaw-btc:10] online
+2026-04-09T05:34:36: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T05:34:36: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T05:34:36: PM2 log: App [openclaw-sol:12] online
+2026-04-09T05:34:58: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T05:34:58: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T05:34:58: PM2 log: App [openclaw-eth:11] online
+2026-04-09T05:47:51: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T05:47:51: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T05:47:51: PM2 log: App [openclaw-btc:10] online
+2026-04-09T05:48:04: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T05:48:04: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T05:48:04: PM2 log: App [openclaw-eth:11] online
+2026-04-09T05:49:45: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T05:49:45: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T05:49:45: PM2 log: App [openclaw-sol:12] online
+2026-04-09T05:50:01: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T05:50:01: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T05:50:01: PM2 log: App [openclaw-btc:10] online
+2026-04-09T06:01:12: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T06:01:12: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T06:01:12: PM2 log: App [openclaw-btc:10] online
+2026-04-09T06:01:14: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T06:01:14: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T06:01:14: PM2 log: App [openclaw-eth:11] online
+2026-04-09T06:02:53: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T06:02:53: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T06:02:53: PM2 log: App [openclaw-sol:12] online
+2026-04-09T06:03:22: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T06:03:22: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T06:03:22: PM2 log: App [openclaw-btc:10] online
+2026-04-09T06:04:30: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T06:04:30: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T06:04:30: PM2 log: App [openclaw-btc:10] online
+2026-04-09T06:05:02: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T06:05:02: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T06:05:02: PM2 log: App [openclaw-sol:12] online
+2026-04-09T06:16:14: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T06:16:14: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T06:16:14: PM2 log: App [openclaw-sol:12] online
+2026-04-09T06:16:25: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T06:16:25: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T06:16:25: PM2 log: App [openclaw-eth:11] online
+2026-04-09T06:18:24: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T06:18:24: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T06:18:24: PM2 log: App [openclaw-sol:12] online
+2026-04-09T06:18:35: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T06:18:35: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T06:18:35: PM2 log: App [openclaw-eth:11] online
+2026-04-09T06:31:32: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T06:31:32: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T06:31:32: PM2 log: App [openclaw-sol:12] online
+2026-04-09T06:31:40: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T06:31:40: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T06:31:40: PM2 log: App [openclaw-btc:10] online
+2026-04-09T06:33:43: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T06:33:43: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T06:33:43: PM2 log: App [openclaw-sol:12] online
+2026-04-09T06:33:50: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T06:33:50: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T06:33:50: PM2 log: App [openclaw-eth:11] online
+2026-04-09T06:46:48: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T06:46:48: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T06:46:48: PM2 log: App [openclaw-btc:10] online
+2026-04-09T06:46:56: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T06:46:56: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T06:46:56: PM2 log: App [openclaw-sol:12] online
+2026-04-09T06:48:58: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T06:48:58: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T06:48:58: PM2 log: App [openclaw-btc:10] online
+2026-04-09T06:49:04: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T06:49:04: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T06:49:04: PM2 log: App [openclaw-eth:11] online
+2026-04-09T07:01:04: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T07:01:04: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T07:01:04: PM2 log: App [openclaw-sol:12] online
+2026-04-09T07:01:14: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T07:01:14: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T07:01:14: PM2 log: App [openclaw-btc:10] online
+2026-04-09T07:03:13: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T07:03:13: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T07:03:13: PM2 log: App [openclaw-sol:12] online
+2026-04-09T07:03:19: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T07:03:19: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T07:03:19: PM2 log: App [openclaw-eth:11] online
+2026-04-09T07:31:22: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T07:31:22: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T07:31:22: PM2 log: App [openclaw-btc:10] online
+2026-04-09T07:31:22: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T07:31:22: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T07:31:22: PM2 log: App [openclaw-sol:12] online
+2026-04-09T07:33:30: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T07:33:30: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T07:33:30: PM2 log: App [openclaw-eth:11] online
+2026-04-09T07:33:35: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T07:33:35: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T07:33:35: PM2 log: App [openclaw-btc:10] online
+2026-04-09T07:46:32: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T07:46:32: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T07:46:32: PM2 log: App [openclaw-sol:12] online
+2026-04-09T07:46:41: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T07:46:41: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T07:46:41: PM2 log: App [openclaw-sol:12] online
+2026-04-09T07:46:41: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T07:46:41: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T07:46:41: PM2 log: App [openclaw-eth:11] online
+2026-04-09T07:48:43: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T07:48:43: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T07:48:43: PM2 log: App [openclaw-btc:10] online
+2026-04-09T07:48:52: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T07:48:52: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T07:48:52: PM2 log: App [openclaw-eth:11] online
+2026-04-09T08:01:50: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T08:01:50: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T08:01:50: PM2 log: App [openclaw-btc:10] online
+2026-04-09T08:01:51: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T08:01:51: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T08:01:51: PM2 log: App [openclaw-sol:12] online
+2026-04-09T08:04:01: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T08:04:01: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T08:04:01: PM2 log: App [openclaw-btc:10] online
+2026-04-09T08:04:01: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T08:04:01: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T08:04:01: PM2 log: App [openclaw-eth:11] online
+2026-04-09T08:16:14: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T08:16:14: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T08:16:14: PM2 log: App [openclaw-btc:10] online
+2026-04-09T08:16:15: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T08:16:15: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T08:16:15: PM2 log: App [openclaw-eth:11] online
+2026-04-09T08:18:04: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T08:18:04: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T08:18:04: PM2 log: App [openclaw-sol:12] online
+2026-04-09T08:18:30: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T08:18:30: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T08:18:30: PM2 log: App [openclaw-btc:10] online
+2026-04-09T08:19:42: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T08:19:42: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T08:19:42: PM2 log: App [openclaw-btc:10] online
+2026-04-09T08:31:15: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T08:31:15: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T08:31:15: PM2 log: App [openclaw-sol:12] online
+2026-04-09T08:31:26: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T08:31:26: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T08:31:26: PM2 log: App [openclaw-sol:12] online
+2026-04-09T08:31:29: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T08:31:29: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T08:31:29: PM2 log: App [openclaw-eth:11] online
+2026-04-09T08:33:40: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T08:33:40: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T08:33:40: PM2 log: App [openclaw-sol:12] online
+2026-04-09T08:33:43: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T08:33:43: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T08:33:43: PM2 log: App [openclaw-eth:11] online
+2026-04-09T08:46:48: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T08:46:48: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T08:46:48: PM2 log: App [openclaw-btc:10] online
+2026-04-09T08:46:56: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T08:46:56: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T08:46:56: PM2 log: App [openclaw-btc:10] online
+2026-04-09T08:46:57: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T08:46:57: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T08:46:57: PM2 log: App [openclaw-sol:12] online
+2026-04-09T08:49:01: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T08:49:01: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T08:49:01: PM2 log: App [openclaw-eth:11] online
+2026-04-09T08:49:08: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T08:49:08: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T08:49:08: PM2 log: App [openclaw-btc:10] online
+2026-04-09T09:03:11: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T09:03:11: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T09:03:11: PM2 log: App [openclaw-eth:11] online
+2026-04-09T09:03:17: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T09:03:17: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T09:03:17: PM2 log: App [openclaw-btc:10] online
+2026-04-09T09:19:07: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T09:19:07: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T09:19:07: PM2 log: App [openclaw-sol:12] online
+2026-04-09T09:19:18: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T09:19:18: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T09:19:18: PM2 log: App [openclaw-eth:11] online
+2026-04-09T09:47:25: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T09:47:25: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T09:47:25: PM2 log: App [openclaw-btc:10] online
+2026-04-09T09:48:26: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T09:48:26: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T09:48:26: PM2 log: App [openclaw-eth:11] online
+2026-04-09T09:49:33: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T09:49:33: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T09:49:33: PM2 log: App [openclaw-eth:11] online
+2026-04-09T09:49:34: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T09:49:34: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T09:49:34: PM2 log: App [openclaw-btc:10] online
+2026-04-09T10:18:41: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T10:18:41: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T10:18:41: PM2 log: App [openclaw-eth:11] online
+2026-04-09T10:19:48: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T10:19:48: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T10:19:48: PM2 log: App [openclaw-eth:11] online
+2026-04-09T10:32:44: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T10:32:44: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T10:32:44: PM2 log: App [openclaw-btc:10] online
+2026-04-09T11:04:13: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T11:04:13: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T11:04:13: PM2 log: App [openclaw-sol:12] online
+2026-04-09T11:18:55: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T11:18:55: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T11:18:55: PM2 log: App [openclaw-eth:11] online
+2026-04-09T11:19:20: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T11:19:20: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T11:19:20: PM2 log: App [openclaw-sol:12] online
+2026-04-09T11:49:52: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T11:49:52: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T11:49:52: PM2 log: App [openclaw-btc:10] online
+2026-04-09T11:50:04: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T11:50:04: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T11:50:04: PM2 log: App [openclaw-eth:11] online
+2026-04-09T12:04:12: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T12:04:12: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T12:04:12: PM2 log: App [openclaw-eth:11] online
+2026-04-09T12:05:03: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T12:05:03: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T12:05:03: PM2 log: App [openclaw-btc:10] online
+2026-04-09T13:04:13: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T13:04:13: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T13:04:14: PM2 log: App [openclaw-btc:10] online
+2026-04-09T13:04:23: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T13:04:23: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T13:04:23: PM2 log: App [openclaw-eth:11] online
+2026-04-09T13:34:33: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T13:34:33: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T13:34:33: PM2 log: App [openclaw-eth:11] online
+2026-04-09T13:49:28: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T13:49:28: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T13:49:28: PM2 log: App [openclaw-sol:12] online
+2026-04-09T14:18:42: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T14:18:42: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T14:18:42: PM2 log: App [openclaw-eth:11] online
+2026-04-09T14:19:24: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T14:19:24: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T14:19:24: PM2 log: App [openclaw-btc:10] online
+2026-04-09T14:21:32: PM2 log: Stopping app:dashboard id:14
+2026-04-09T14:21:33: PM2 log: pid=665142 msg=failed to kill - retrying in 100ms
+2026-04-09T14:21:33: PM2 log: pid=665142 msg=failed to kill - retrying in 100ms
+2026-04-09T14:21:33: PM2 log: App [dashboard:14] exited with code [0] via signal [SIGINT]
+2026-04-09T14:21:33: PM2 log: pid=665142 msg=process killed
+2026-04-09T14:21:33: PM2 log: App [dashboard:14] starting in -fork mode-
+2026-04-09T14:21:33: PM2 log: App [dashboard:14] online
