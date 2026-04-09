@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/root/watchdog.py", line 123, in <module>
+    time.sleep(300)  # check every 5 minutes
+    ^^^^^^^^^^^^^^^
+KeyboardInterrupt

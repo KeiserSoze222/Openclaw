@@ -260,6 +260,14 @@ def update_live_ticker():
     return live_ticker,None
 
 
+def write_arena_signal(market, yes_prob, regime, confidence, window_age, ticker, news_score=0, bond_score=0, whale_score=0):
+    signal={"yes_prob":yes_prob,"regime":regime,"confidence":confidence,"window_age":window_age,"ticker":ticker,"news_score":news_score,"bond_score":bond_score,"whale_score":whale_score,"ts":datetime.datetime.utcnow().isoformat()}
+    path=f"/root/arena_signal_{market}.json"
+    try:
+        open(path,"w").write(__import__("json").dumps(signal))
+    except Exception as e:
+        print(f"[ArenaSignal] write error: {e}")
+
 def safety_check():
     global CURRENT_BALANCE
     CURRENT_BALANCE=get_live_balance()
@@ -474,6 +482,7 @@ def try_directional(yes_price,no_price):
 
     confidence, conf_reasons = score_confidence()
     print(f"[Confidence] Score={confidence}/10 | {','.join(conf_reasons)}")
+    write_arena_signal(market=_args.market,yes_prob=yes_price,regime=REGIME,confidence=confidence,window_age=window_minute,ticker=live_ticker)
 
     # HIGH CONFIDENCE: score 8+ in minute 0-1 = fire immediately with larger bet
     if confidence >= 8 and window_minute <= 1:

@@ -89,7 +89,7 @@ def get_processes():
 class Handler(http.server.BaseHTTPRequestHandler):
     def log_message(self, *a): pass
     def do_GET(self):
-        if self.path == '/api/data':
+        if self.path.split("?")[0] == "/api/data":
             try:
                 data = {"balance":get_balance(),"version_balance":VERSION_BALANCE,"stats":get_stats(),"procs":get_processes(),"trades":get_recent_trades(8),"whales":get_whales(6),"positions":get_positions()}
                 self.send_response(200)
@@ -100,6 +100,30 @@ class Handler(http.server.BaseHTTPRequestHandler):
             except Exception as e:
                 self.send_response(500); self.end_headers()
                 self.wfile.write(str(e).encode())
+        elif self.path.split("?")[0] == "/arena_state":
+            try:
+                d=json.load(open('/root/arena_state.json'))
+                self.send_response(200)
+                self.send_header('Content-Type','application/json')
+                self.send_header('Access-Control-Allow-Origin','*')
+                self.end_headers()
+                self.wfile.write(json.dumps(d).encode())
+            except: self.send_response(500); self.end_headers()
+        elif self.path.split("?")[0] == "/arena":
+            self.send_response(200)
+            self.send_header('Content-Type','text/html')
+            self.end_headers()
+            self.wfile.write(open('/root/arena_dashboard.html','rb').read())
+        elif self.path.startswith('/arena_signal/'):
+            mkt=self.path.split('/')[-1]
+            try:
+                d=json.load(open(f'/root/arena_signal_{mkt}.json'))
+                self.send_response(200)
+                self.send_header('Content-Type','application/json')
+                self.send_header('Access-Control-Allow-Origin','*')
+                self.end_headers()
+                self.wfile.write(json.dumps(d).encode())
+            except: self.send_response(500); self.end_headers()
         else:
             self.send_response(200)
             self.send_header('Content-Type','text/html')

@@ -1,0 +1,102 @@
+{
+  "cycle": 464,
+  "ts": "2026-04-09 01:02:14.725744",
+  "leaderboard": [
+    {
+      "id": "v001",
+      "market": "btc",
+      "wr": 0,
+      "trades": 0,
+      "pnl": 0.0,
+      "gen": 1
+    },
+    {
+      "id": "v002",
+      "market": "btc",
+      "wr": 0,
+      "trades": 0,
+      "pnl": 0.0,
+      "gen": 1
+    },
+    {
+      "id": "v003",
+      "market": "btc",
+      "wr": 0,
+      "trades": 0,
+      "pnl": 0.0,
+      "gen": 1
+    },
+    {
+      "id": "v004",
+      "market": "btc",
+      "wr": 0.8807947019867549,
+      "trades": 302,
+      "pnl": 2666.0,
+      "gen": 1
+    },
+    {
+      "id": "v005",
+      "market": "btc",
+      "wr": 0,
+      "trades": 0,
+      "pnl": 0.0,
+      "gen": 1
+    },
+    {
+      "id": "v006",
+      "market": "eth",
+      "wr": 0.0,
+      "trades": 1,
+      "pnl": -18.03,
+      "gen": 1
+    },
+    {
+      "id": "v007",
+      "market": "eth",
+      "wr": 0.0,
+      "trades": 1,
+      "pnl": -22.03,
+      "gen": 1
+    },
+    {
+      "id": "v008",
+      "market": "eth",
+      "wr": 1.0,
+      "trades": 1,
+      "pnl": 11.92,
+      "gen": 1
+    },
+    {
+      "id": "v009",
+      "market": "sol",
+      "wr": 0,
+      "trades": 0,
+      "pnl": 0.0,
+      "gen": 1
+    },
+    {
+      "id": "v010",
+      "market": "sol",
+      "wr": 0,
+      "trades": 0,
+      "pnl": 0.0,
+      "gen": 1
+    },
+    {
+      "id": "v011",
+      "market": "btc",
+      "wr": 0,
+      "trades": 0,
+      "pnl": 0.0,
+      "gen": 1
+    },
+    {
+      "id": "v012",
+      "market": "btc",
+      "wr": 0,
+      "trades": 0,
+      "pnl": 0.0,
+      "gen": 1
+    }
+  ]
+}

@@ -1,0 +1,1704 @@
+
+==================================================
+OpenClaw BTC Bot v4.0 — LIVE
+[Startup] Live balance synced: $116.47
+Balance: $116.47 | MaxBet: $11.65 | Threshold: <0.30 or >0.70
+==================================================
+
+[Startup] Resting orders cleared
+[Ticker] KXBTC15M-26APR081215-15
+[Market] YES=0.72 | NO=0.30 | Sum=1.02
+==================================================
+Balance: $116.47 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | moderate_edge,coinbase_weak,peak_hour
+[Signal] UP candidate | yes=0.72 | waiting (1/2)
+[Cycle] No signal — YES=0.72 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Ticker] KXBTC15M-26APR081215-15
+[Market] YES=0.78 | NO=0.24 | Sum=1.02
+==================================================
+Balance: $116.47 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | moderate_edge,coinbase_weak,peak_hour
+[Coinbase] Confirms UP | $71396 gap=+90 (0.13%)
+[Correlation] Markets diverging — bet trimmed
+[Signal] CONFIRMED UP | yes=0.78 | edge=0.28 | bet=$2.93
+[Safety] Balance $116.47 below floor $120.00
+🛑 OpenClaw BTC Bot v4.0 halted: Balance $116.47 below floor $120.00
+
+==================================================
+OpenClaw BTC Bot v4.0 — LIVE
+[Startup] Live balance synced: $116.47
+Balance: $116.47 | MaxBet: $11.65 | Threshold: <0.30 or >0.70
+==================================================
+
+[Startup] Resting orders cleared
+[Ticker] KXBTC15M-26APR081215-15
+[Market] YES=0.78 | NO=0.24 | Sum=1.02
+==================================================
+Balance: $116.47 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | moderate_edge,coinbase_weak,peak_hour
+[Signal] UP candidate | yes=0.78 | waiting (1/2)
+[Cycle] No signal — YES=0.78 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Ticker] KXBTC15M-26APR081215-15
+[Market] YES=0.77 | NO=0.24 | Sum=1.01
+==================================================
+Balance: $116.47 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | moderate_edge,coinbase_weak,peak_hour
+[Timing] Window 5 min old — skipping
+[Cycle] No signal — YES=0.77 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR081215-15
+[Market] YES=0.82 | NO=0.20 | Sum=1.02
+==================================================
+Balance: $116.47 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | strong_edge,coinbase_weak,peak_hour
+[Timing] Window 6 min old — skipping
+[Cycle] No signal — YES=0.82 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Ticker] KXBTC15M-26APR081215-15
+[Market] YES=0.91 | NO=0.10 | Sum=1.01
+==================================================
+Balance: $116.47 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | strong_edge,coinbase_weak,peak_hour
+[Timing] Window 7 min old — skipping
+[Cycle] No signal — YES=0.91 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR081215-15
+[Market] YES=0.79 | NO=0.22 | Sum=1.01
+==================================================
+Balance: $116.47 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | moderate_edge,coinbase_weak,peak_hour
+[Timing] Window 8 min old — skipping
+[Cycle] No signal — YES=0.79 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR081215-15
+[Market] YES=0.68 | NO=0.33 | Sum=1.01
+==================================================
+Balance: $116.47 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.68 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR081215-15
+[Market] YES=0.49 | NO=0.53 | Sum=1.02
+==================================================
+Balance: $116.47 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.49 is between 0.30 and 0.70, sum=1.02 >= 0.97
+[Ticker] KXBTC15M-26APR081215-15
+[Market] YES=0.57 | NO=0.44 | Sum=1.01
+==================================================
+Balance: $116.47 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Cycle] No signal — YES=0.57 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR081215-15
+[Market] YES=0.83 | NO=0.18 | Sum=1.01
+==================================================
+Balance: $116.47 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | strong_edge,coinbase_weak,peak_hour
+[Timing] Window 12 min old — skipping
+[Cycle] No signal — YES=0.83 is between 0.30 and 0.70, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR081215-15
+[Market] YES=0.88 | NO=0.15 | Sum=1.03
+==================================================
+Balance: $116.47 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,peak_hour
+[Timing] Window 13 min old — skipping
+[Cycle] No signal — YES=0.88 is between 0.30 and 0.70, sum=1.03 >= 0.97
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Cycle 1 | signals=3
+[Arena] Cycle 2 | signals=3
+[Arena] Cycle 3 | signals=3
+[Arena] Cycle 4 | signals=3
+[Arena] Cycle 5 | signals=3
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] Cycle 1 done
+[Arena] Cycle 2 done
+[Arena] Cycle 3 done
+[Arena] Cycle 4 done
+[Arena] Cycle 5 done
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] Cycle 1 done
+[Arena] Cycle 2 done
+[Arena] Cycle 3 done
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 DOWN WIN WR=1.0 T=1 PnL=11.92
+[Arena] Cycle 1 done
+[Arena] v004 DOWN WIN WR=1.0 T=2 PnL=23.84
+[Arena] Cycle 2 done
+[Arena] v004 DOWN WIN WR=1.0 T=3 PnL=35.76
+[Arena] Cycle 3 done
+[Arena] v004 DOWN LOSS WR=0.75 T=4 PnL=21.74
+[Arena] Cycle 4 done
+[Arena] v004 DOWN WIN WR=0.8 T=5 PnL=33.66
+[Arena] Cycle 5 done
+[Arena] Cycle 6 done
+[Arena] Cycle 7 done
+[Arena] v004 UP LOSS WR=0.67 T=6 PnL=19.64
+[Arena] Cycle 8 done
+[Arena] v004 UP WIN WR=0.71 T=7 PnL=31.56
+[Arena] Cycle 9 done
+[Arena] Cycle 10 done
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] Cycle 1 done
+[Arena] Cycle 2 done
+[Arena] Cycle 3 done
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] Cycle 1 done
+[Arena] Cycle 2 done
+[Arena] Cycle 3 done
+[Arena] Cycle 4 done
+[Arena] Cycle 5 done
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] Cycle 1 done
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.62 T=8 PnL=17.54
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP WIN WR=0.75 T=8 PnL=43.48
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] Cycle 1 done
+[Arena] Cycle 2 done
+[Arena] Cycle 3 done
+[Arena] Cycle 4 done
+[Arena] Cycle 5 done
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] Cycle 1 done
+[Arena] Cycle 2 done
+[Arena] Cycle 3 done
+[Arena] Cycle 4 done
+[Arena] v004 DOWN WIN WR=0.75 T=8 PnL=43.48
+[Arena] Cycle 5 done
+[Arena] v004 DOWN WIN WR=0.78 T=9 PnL=55.4
+[Arena] Cycle 6 done
+[Arena] v004 DOWN WIN WR=0.8 T=10 PnL=67.32
+[Arena] Cycle 7 done
+[Arena] v004 DOWN WIN WR=0.82 T=11 PnL=79.24
+[Arena] Cycle 8 done
+[Arena] v004 DOWN WIN WR=0.83 T=12 PnL=91.16
+[Arena] Cycle 9 done
+[Arena] v004 DOWN WIN WR=0.85 T=13 PnL=103.08
+[Arena] Cycle 10 done
+[Arena] v004 DOWN WIN WR=0.86 T=14 PnL=115.0
+[Arena] Cycle 11 done
+[Arena] Cycle 12 done
+[Arena] v004 DOWN WIN WR=0.87 T=15 PnL=126.92
+[Arena] Cycle 13 done
+[Arena] v004 UP LOSS WR=0.81 T=16 PnL=112.9
+[Arena] Cycle 14 done
+[Arena] v004 UP LOSS WR=0.76 T=17 PnL=98.88
+[Arena] Cycle 15 done
+[Arena] v004 UP WIN WR=0.78 T=18 PnL=110.8
+[Arena] Cycle 16 done
+[Arena] v004 UP WIN WR=0.79 T=19 PnL=122.72
+[Arena] Cycle 17 done
+[Arena] v004 UP WIN WR=0.8 T=20 PnL=134.64
+[Arena] Cycle 18 done
+[Arena] v004 UP WIN WR=0.81 T=21 PnL=146.56
+[Arena] Cycle 19 done
+[Arena] v004 UP WIN WR=0.82 T=22 PnL=158.48
+[Arena] Cycle 20 done
+[Arena] v004 UP WIN WR=0.83 T=23 PnL=170.4
+[Arena] Cycle 21 done
+[Arena] v004 UP WIN WR=0.83 T=24 PnL=182.32
+[Arena] Cycle 22 done
+[Arena] v004 UP WIN WR=0.84 T=25 PnL=194.24
+[Arena] Cycle 23 done
+[Arena] v004 UP WIN WR=0.85 T=26 PnL=206.16
+[Arena] Cycle 24 done
+[Arena] v004 UP WIN WR=0.85 T=27 PnL=218.08
+[Arena] Cycle 25 done
+[Arena] v004 UP WIN WR=0.86 T=28 PnL=230.0
+[Arena] Cycle 26 done
+[Arena] Cycle 27 done
+[Arena] Cycle 28 done
+[Arena] Cycle 29 done
+[Arena] Cycle 30 done
+[Arena] Cycle 31 done
+[Arena] v004 UP WIN WR=0.86 T=29 PnL=241.92
+[Arena] Cycle 32 done
+[Arena] Cycle 33 done
+[Arena] Cycle 34 done
+[Arena] Cycle 35 done
+[Arena] v004 UP WIN WR=0.87 T=30 PnL=253.84
+[Arena] Cycle 36 done
+[Arena] Cycle 37 done
+[Arena] v004 UP WIN WR=0.87 T=31 PnL=265.76
+[Arena] Cycle 38 done
+[Arena] v004 UP WIN WR=0.88 T=32 PnL=277.68
+[Arena] Cycle 39 done
+[Arena] v004 UP WIN WR=0.88 T=33 PnL=289.6
+[Arena] Cycle 40 done
+[Arena] v004 UP WIN WR=0.88 T=34 PnL=301.52
+[Arena] Cycle 41 done
+[Arena] Cycle 42 done
+[Arena] Cycle 43 done
+[Arena] v004 DOWN WIN WR=0.89 T=35 PnL=313.44
+[Arena] Cycle 44 done
+[Arena] Cycle 45 done
+[Arena] Cycle 46 done
+[Arena] v004 DOWN WIN WR=0.89 T=36 PnL=325.36
+[Arena] Cycle 47 done
+[Arena] Cycle 48 done
+[Arena] v004 DOWN WIN WR=0.89 T=37 PnL=337.28
+[Arena] Cycle 49 done
+[Arena] v004 DOWN WIN WR=0.89 T=38 PnL=349.2
+[Arena] Cycle 50 done
+[Arena] Cycle 51 done
+[Arena] v004 DOWN WIN WR=0.9 T=39 PnL=361.12
+[Arena] Cycle 52 done
+[Arena] v004 DOWN WIN WR=0.9 T=40 PnL=373.04
+[Arena] Cycle 53 done
+[Arena] v004 DOWN WIN WR=0.9 T=41 PnL=384.96
+[Arena] Cycle 54 done
+[Arena] v004 DOWN WIN WR=0.9 T=42 PnL=396.88
+[Arena] Cycle 55 done
+[Arena] v004 DOWN WIN WR=0.91 T=43 PnL=408.8
+[Arena] Cycle 56 done
+[Arena] Cycle 57 done
+[Arena] Cycle 58 done
+[Arena] Cycle 59 done
+[Arena] Cycle 60 done
+[Arena] v004 DOWN WIN WR=0.91 T=44 PnL=420.72
+[Arena] Cycle 61 done
+[Arena] v004 DOWN WIN WR=0.91 T=45 PnL=432.64
+[Arena] v006 DOWN LOSS WR=0.0 T=1 PnL=-18.03
+[Arena] v007 DOWN LOSS WR=0.0 T=1 PnL=-22.03
+[Arena] v008 DOWN WIN WR=1.0 T=1 PnL=11.92
+[Arena] Cycle 62 done
+[Arena] v004 DOWN WIN WR=0.91 T=46 PnL=444.56
+[Arena] Cycle 63 done
+[Arena] v004 DOWN WIN WR=0.91 T=47 PnL=456.48
+[Arena] Cycle 64 done
+[Arena] v004 DOWN WIN WR=0.92 T=48 PnL=468.4
+[Arena] Cycle 65 done
+[Arena] v004 DOWN WIN WR=0.92 T=49 PnL=480.32
+[Arena] Cycle 66 done
+[Arena] v004 DOWN WIN WR=0.92 T=50 PnL=492.24
+[Arena] Cycle 67 done
+[Arena] v004 DOWN WIN WR=0.92 T=51 PnL=504.16
+[Arena] Cycle 68 done
+[Arena] v004 DOWN WIN WR=0.92 T=52 PnL=516.08
+[Arena] Cycle 69 done
+[Arena] v004 DOWN WIN WR=0.92 T=53 PnL=528.0
+[Arena] Cycle 70 done
+[Arena] v004 DOWN WIN WR=0.93 T=54 PnL=539.92
+[Arena] Cycle 71 done
+[Arena] Cycle 72 done
+[Arena] v004 UP WIN WR=0.93 T=55 PnL=551.84
+[Arena] Cycle 73 done
+[Arena] v004 UP WIN WR=0.93 T=56 PnL=563.76
+[Arena] Cycle 74 done
+[Arena] v004 UP WIN WR=0.93 T=57 PnL=575.68
+[Arena] Cycle 75 done
+[Arena] v004 UP WIN WR=0.93 T=58 PnL=587.6
+[Arena] Cycle 76 done
+[Arena] v004 UP WIN WR=0.93 T=59 PnL=599.52
+[Arena] Cycle 77 done
+[Arena] v004 UP WIN WR=0.93 T=60 PnL=611.44
+[Arena] Cycle 78 done
+[Arena] v004 UP WIN WR=0.93 T=61 PnL=623.36
+[Arena] Cycle 79 done
+[Arena] v004 UP WIN WR=0.94 T=62 PnL=635.28
+[Arena] Cycle 80 done
+[Arena] v004 UP WIN WR=0.94 T=63 PnL=647.2
+[Arena] Cycle 81 done
+[Arena] v004 UP LOSS WR=0.92 T=64 PnL=633.18
+[Arena] Cycle 82 done
+[Arena] v004 UP WIN WR=0.92 T=65 PnL=645.1
+[Arena] Cycle 83 done
+[Arena] Cycle 84 done
+[Arena] Cycle 85 done
+[Arena] Cycle 86 done
+[Arena] v004 DOWN WIN WR=0.92 T=66 PnL=657.02
+[Arena] Cycle 87 done
+[Arena] Cycle 88 done
+[Arena] Cycle 89 done
+[Arena] Cycle 90 done
+[Arena] Cycle 91 done
+[Arena] Cycle 92 done
+[Arena] Cycle 93 done
+[Arena] v004 DOWN WIN WR=0.93 T=67 PnL=668.94
+[Arena] Cycle 94 done
+[Arena] v004 DOWN LOSS WR=0.91 T=68 PnL=654.92
+[Arena] Cycle 95 done
+[Arena] v004 DOWN LOSS WR=0.9 T=69 PnL=640.9
+[Arena] Cycle 96 done
+[Arena] v004 DOWN WIN WR=0.9 T=70 PnL=652.82
+[Arena] Cycle 97 done
+[Arena] v004 DOWN WIN WR=0.9 T=71 PnL=664.74
+[Arena] Cycle 98 done
+[Arena] v004 DOWN WIN WR=0.9 T=72 PnL=676.66
+[Arena] Cycle 99 done
+[Arena] v004 DOWN WIN WR=0.9 T=73 PnL=688.58
+[Arena] Cycle 100 done
+[Arena] Cycle 101 done
+[Arena] v004 DOWN WIN WR=0.91 T=74 PnL=700.5
+[Arena] Cycle 102 done
+[Arena] Cycle 103 done
+[Arena] Cycle 104 done
+[Arena] Cycle 105 done
+[Arena] Cycle 106 done
+[Arena] Cycle 107 done
+[Arena] Cycle 108 done
+[Arena] Cycle 109 done
+[Arena] v004 UP WIN WR=0.91 T=75 PnL=712.42
+[Arena] Cycle 110 done
+[Arena] v004 UP WIN WR=0.91 T=76 PnL=724.34
+[Arena] Cycle 111 done
+[Arena] v004 UP WIN WR=0.91 T=77 PnL=736.26
+[Arena] Cycle 112 done
+[Arena] v004 UP WIN WR=0.91 T=78 PnL=748.18
+[Arena] Cycle 113 done
+[Arena] v004 UP WIN WR=0.91 T=79 PnL=760.1
+[Arena] Cycle 114 done
+[Arena] v004 UP WIN WR=0.91 T=80 PnL=772.02
+[Arena] Cycle 115 done
+[Arena] Cycle 116 done
+[Arena] v004 UP WIN WR=0.91 T=81 PnL=783.94
+[Arena] Cycle 117 done
+[Arena] Cycle 118 done
+[Arena] Cycle 119 done
+[Arena] Cycle 120 done
+[Arena] v004 DOWN WIN WR=0.91 T=82 PnL=795.86
+[Arena] Cycle 121 done
+[Arena] Cycle 122 done
+[Arena] Cycle 123 done
+[Arena] Cycle 124 done
+[Arena] v004 DOWN WIN WR=0.92 T=83 PnL=807.78
+[Arena] Cycle 125 done
+[Arena] v004 DOWN LOSS WR=0.9 T=84 PnL=793.76
+[Arena] Cycle 126 done
+[Arena] Cycle 127 done
+[Arena] Cycle 128 done
+[Arena] v004 DOWN WIN WR=0.91 T=85 PnL=805.68
+[Arena] Cycle 129 done
+[Arena] v004 DOWN WIN WR=0.91 T=86 PnL=817.6
+[Arena] Cycle 130 done
+[Arena] Cycle 131 done
+[Arena] v004 DOWN WIN WR=0.91 T=87 PnL=829.52
+[Arena] Cycle 132 done
+[Arena] Cycle 133 done
+[Arena] Cycle 134 done
+[Arena] v004 UP LOSS WR=0.9 T=88 PnL=815.5
+[Arena] Cycle 135 done
+[Arena] Cycle 136 done
+[Arena] Cycle 137 done
+[Arena] Cycle 138 done
+[Arena] v004 UP WIN WR=0.9 T=89 PnL=827.42
+[Arena] Cycle 139 done
+[Arena] v004 UP WIN WR=0.9 T=90 PnL=839.34
+[Arena] Cycle 140 done
+[Arena] v004 UP WIN WR=0.9 T=91 PnL=851.26
+[Arena] Cycle 141 done
+[Arena] v004 UP WIN WR=0.9 T=92 PnL=863.18
+[Arena] Cycle 142 done
+[Arena] v004 UP WIN WR=0.9 T=93 PnL=875.1
+[Arena] Cycle 143 done
+[Arena] v004 UP LOSS WR=0.89 T=94 PnL=861.08
+[Arena] Cycle 144 done
+[Arena] v004 UP WIN WR=0.89 T=95 PnL=873.0
+[Arena] Cycle 145 done
+[Arena] Cycle 146 done
+[Arena] v004 UP WIN WR=0.9 T=96 PnL=884.92
+[Arena] Cycle 147 done
+[Arena] Cycle 148 done
+[Arena] Cycle 149 done
+[Arena] Cycle 150 done
+[Arena] v004 UP WIN WR=0.9 T=97 PnL=896.84
+[Arena] Cycle 151 done
+[Arena] v004 UP WIN WR=0.9 T=98 PnL=908.76
+[Arena] Cycle 152 done
+[Arena] v004 UP WIN WR=0.9 T=99 PnL=920.68
+[Arena] Cycle 153 done
+[Arena] v004 UP WIN WR=0.9 T=100 PnL=932.6
+[Arena] Cycle 154 done
+[Arena] v004 UP LOSS WR=0.89 T=101 PnL=918.58
+[Arena] Cycle 155 done
+[Arena] v004 UP LOSS WR=0.88 T=102 PnL=904.56
+[Arena] Cycle 156 done
+[Arena] Cycle 157 done
+[Arena] Cycle 158 done
+[Arena] Cycle 159 done
+[Arena] Cycle 160 done
+[Arena] Cycle 161 done
+[Arena] v004 UP WIN WR=0.88 T=103 PnL=916.48
+[Arena] Cycle 162 done
+[Arena] v004 UP WIN WR=0.88 T=104 PnL=928.4
+[Arena] Cycle 163 done
+[Arena] v004 UP WIN WR=0.89 T=105 PnL=940.32
+[Arena] Cycle 164 done
+[Arena] v004 UP WIN WR=0.89 T=106 PnL=952.24
+[Arena] Cycle 165 done
+[Arena] v004 UP WIN WR=0.89 T=107 PnL=964.16
+[Arena] Cycle 166 done
+[Arena] v004 UP WIN WR=0.89 T=108 PnL=976.08
+[Arena] Cycle 167 done
+[Arena] v004 UP WIN WR=0.89 T=109 PnL=988.0
+[Arena] Cycle 168 done
+[Arena] v004 UP WIN WR=0.89 T=110 PnL=999.92
+[Arena] Cycle 169 done
+[Arena] v004 UP WIN WR=0.89 T=111 PnL=1011.84
+[Arena] Cycle 170 done
+[Arena] v004 UP WIN WR=0.89 T=112 PnL=1023.76
+[Arena] Cycle 171 done
+[Arena] v004 UP WIN WR=0.89 T=113 PnL=1035.68
+[Arena] Cycle 172 done
+[Arena] v004 UP WIN WR=0.89 T=114 PnL=1047.6
+[Arena] Cycle 173 done
+[Arena] v004 UP WIN WR=0.9 T=115 PnL=1059.52
+[Arena] Cycle 174 done
+[Arena] v004 UP WIN WR=0.9 T=116 PnL=1071.44
+[Arena] Cycle 175 done
+[Arena] v004 UP WIN WR=0.9 T=117 PnL=1083.36
+[Arena] Cycle 176 done
+[Arena] Cycle 177 done
+[Arena] v004 UP WIN WR=0.9 T=118 PnL=1095.28
+[Arena] Cycle 178 done
+[Arena] Cycle 179 done
+[Arena] Cycle 180 done
+[Arena] Cycle 181 done
+[Arena] v004 UP WIN WR=0.9 T=119 PnL=1107.2
+[Arena] Cycle 182 done
+[Arena] Cycle 183 done
+[Arena] Cycle 184 done
+[Arena] Cycle 185 done
+[Arena] v004 DOWN WIN WR=0.9 T=120 PnL=1119.12
+[Arena] Cycle 186 done
+[Arena] Cycle 187 done
+[Arena] Cycle 188 done
+[Arena] Cycle 189 done
+[Arena] Cycle 190 done
+[Arena] v004 UP WIN WR=0.9 T=121 PnL=1131.04
+[Arena] Cycle 191 done
+[Arena] Cycle 192 done
+[Arena] v004 UP WIN WR=0.9 T=122 PnL=1142.96
+[Arena] Cycle 193 done
+[Arena] Cycle 194 done
+[Arena] Cycle 195 done
+[Arena] Cycle 196 done
+[Arena] v004 DOWN WIN WR=0.9 T=123 PnL=1154.88
+[Arena] Cycle 197 done
+[Arena] v004 DOWN WIN WR=0.9 T=124 PnL=1166.8
+[Arena] Cycle 198 done
+[Arena] v004 DOWN WIN WR=0.9 T=125 PnL=1178.72
+[Arena] Cycle 199 done
+[Arena] v004 DOWN WIN WR=0.9 T=126 PnL=1190.64
+[Arena] Cycle 200 done
+[Arena] v004 DOWN WIN WR=0.91 T=127 PnL=1202.56
+[Arena] Cycle 201 done
+[Arena] v004 DOWN WIN WR=0.91 T=128 PnL=1214.48
+[Arena] Cycle 202 done
+[Arena] v004 DOWN WIN WR=0.91 T=129 PnL=1226.4
+[Arena] Cycle 203 done
+[Arena] v004 DOWN WIN WR=0.91 T=130 PnL=1238.32
+[Arena] Cycle 204 done
+[Arena] v004 DOWN WIN WR=0.91 T=131 PnL=1250.24
+[Arena] Cycle 205 done
+[Arena] v004 DOWN WIN WR=0.91 T=132 PnL=1262.16
+[Arena] Cycle 206 done
+[Arena] Cycle 207 done
+[Arena] v004 UP WIN WR=0.91 T=133 PnL=1274.08
+[Arena] Cycle 208 done
+[Arena] Cycle 209 done
+[Arena] Cycle 210 done
+[Arena] Cycle 211 done
+[Arena] Cycle 212 done
+[Arena] Cycle 213 done
+[Arena] v004 UP LOSS WR=0.9 T=134 PnL=1260.06
+[Arena] Cycle 214 done
+[Arena] Cycle 215 done
+[Arena] v004 UP LOSS WR=0.9 T=135 PnL=1246.04
+[Arena] Cycle 216 done
+[Arena] v004 UP WIN WR=0.9 T=136 PnL=1257.96
+[Arena] Cycle 217 done
+[Arena] v004 UP WIN WR=0.9 T=137 PnL=1269.88
+[Arena] Cycle 218 done
+[Arena] v004 UP WIN WR=0.9 T=138 PnL=1281.8
+[Arena] Cycle 219 done
+[Arena] v004 UP WIN WR=0.9 T=139 PnL=1293.72
+[Arena] Cycle 220 done
+[Arena] v004 UP WIN WR=0.9 T=140 PnL=1305.64
+[Arena] Cycle 221 done
+[Arena] Cycle 222 done
+[Arena] v004 UP WIN WR=0.9 T=141 PnL=1317.56
+[Arena] Cycle 223 done
+[Arena] Cycle 224 done
+[Arena] Cycle 225 done
+[Arena] Cycle 226 done
+[Arena] Cycle 227 done
+[Arena] Cycle 228 done
+[Arena] Cycle 229 done
+[Arena] v004 UP WIN WR=0.9 T=142 PnL=1329.48
+[Arena] Cycle 230 done
+[Arena] v004 UP WIN WR=0.9 T=143 PnL=1341.4
+[Arena] Cycle 231 done
+[Arena] v004 UP LOSS WR=0.9 T=144 PnL=1327.38
+[Arena] Cycle 232 done
+[Arena] v004 UP WIN WR=0.9 T=145 PnL=1339.3
+[Arena] Cycle 233 done
+[Arena] v004 UP WIN WR=0.9 T=146 PnL=1351.22
+[Arena] Cycle 234 done
+[Arena] v004 UP WIN WR=0.9 T=147 PnL=1363.14
+[Arena] Cycle 235 done
+[Arena] v004 UP WIN WR=0.9 T=148 PnL=1375.06
+[Arena] Cycle 236 done
+[Arena] Cycle 237 done
+[Arena] v004 UP WIN WR=0.9 T=149 PnL=1386.98
+[Arena] Cycle 238 done
+[Arena] Cycle 239 done
+[Arena] Cycle 240 done
+[Arena] Cycle 241 done
+[Arena] Cycle 242 done
+[Arena] v004 UP LOSS WR=0.89 T=150 PnL=1372.96
+[Arena] Cycle 243 done
+[Arena] v004 UP WIN WR=0.89 T=151 PnL=1384.88
+[Arena] Cycle 244 done
+[Arena] v004 UP WIN WR=0.89 T=152 PnL=1396.8
+[Arena] Cycle 245 done
+[Arena] v004 UP WIN WR=0.9 T=153 PnL=1408.72
+[Arena] Cycle 246 done
+[Arena] v004 UP WIN WR=0.9 T=154 PnL=1420.64
+[Arena] Cycle 247 done
+[Arena] v004 UP WIN WR=0.9 T=155 PnL=1432.56
+[Arena] Cycle 248 done
+[Arena] v004 UP WIN WR=0.9 T=156 PnL=1444.48
+[Arena] Cycle 249 done
+[Arena] v004 UP WIN WR=0.9 T=157 PnL=1456.4
+[Arena] Cycle 250 done
+[Arena] v004 UP WIN WR=0.9 T=158 PnL=1468.32
+[Arena] Cycle 251 done
+[Arena] Cycle 252 done
+[Arena] v004 UP WIN WR=0.9 T=159 PnL=1480.24
+[Arena] Cycle 253 done
+[Arena] v004 DOWN WIN WR=0.9 T=160 PnL=1492.16
+[Arena] Cycle 254 done
+[Arena] Cycle 255 done
+[Arena] Cycle 256 done
+[Arena] v004 DOWN WIN WR=0.9 T=161 PnL=1504.08
+[Arena] Cycle 257 done
+[Arena] v004 DOWN WIN WR=0.9 T=162 PnL=1516.0
+[Arena] Cycle 258 done
+[Arena] v004 DOWN WIN WR=0.9 T=163 PnL=1527.92
+[Arena] Cycle 259 done
+[Arena] v004 DOWN WIN WR=0.9 T=164 PnL=1539.84
+[Arena] Cycle 260 done
+[Arena] v004 DOWN WIN WR=0.9 T=165 PnL=1551.76
+[Arena] Cycle 261 done
+[Arena] v004 DOWN LOSS WR=0.9 T=166 PnL=1537.74
+[Arena] Cycle 262 done
+[Arena] v004 DOWN WIN WR=0.9 T=167 PnL=1549.66
+[Arena] Cycle 263 done
+[Arena] v004 DOWN WIN WR=0.9 T=168 PnL=1561.58
+[Arena] Cycle 264 done
+[Arena] v004 DOWN WIN WR=0.9 T=169 PnL=1573.5
+[Arena] Cycle 265 done
+[Arena] v004 DOWN WIN WR=0.9 T=170 PnL=1585.42
+[Arena] Cycle 266 done
+[Arena] Cycle 267 done
+[Arena] v004 UP WIN WR=0.9 T=171 PnL=1597.34
+[Arena] Cycle 268 done
+[Arena] Cycle 269 done
+[Arena] Cycle 270 done
+[Arena] Cycle 271 done
+[Arena] Cycle 272 done
+[Arena] Cycle 273 done
+[Arena] Cycle 274 done
+[Arena] Cycle 275 done
+[Arena] v004 UP LOSS WR=0.9 T=172 PnL=1583.32
+[Arena] Cycle 276 done
+[Arena] v004 UP LOSS WR=0.89 T=173 PnL=1569.3
+[Arena] Cycle 277 done
+[Arena] Cycle 278 done
+[Arena] v004 DOWN WIN WR=0.89 T=174 PnL=1581.22
+[Arena] Cycle 279 done
+[Arena] v004 DOWN WIN WR=0.89 T=175 PnL=1593.14
+[Arena] Cycle 280 done
+[Arena] v004 DOWN WIN WR=0.89 T=176 PnL=1605.06
+[Arena] Cycle 281 done
+[Arena] Cycle 282 done
+[Arena] Cycle 283 done
+[Arena] Cycle 284 done
+[Arena] v004 DOWN WIN WR=0.89 T=177 PnL=1616.98
+[Arena] Cycle 285 done
+[Arena] v004 DOWN WIN WR=0.89 T=178 PnL=1628.9
+[Arena] Cycle 286 done
+[Arena] v004 DOWN LOSS WR=0.89 T=179 PnL=1614.88
+[Arena] Cycle 287 done
+[Arena] v004 DOWN WIN WR=0.89 T=180 PnL=1626.8
+[Arena] Cycle 288 done
+[Arena] Cycle 289 done
+[Arena] Cycle 290 done
+[Arena] Cycle 291 done
+[Arena] Cycle 292 done
+[Arena] v004 DOWN WIN WR=0.89 T=181 PnL=1638.72
+[Arena] Cycle 293 done
+[Arena] v004 DOWN WIN WR=0.89 T=182 PnL=1650.64
+[Arena] Cycle 294 done
+[Arena] v004 DOWN WIN WR=0.89 T=183 PnL=1662.56
+[Arena] Cycle 295 done
+[Arena] v004 DOWN WIN WR=0.89 T=184 PnL=1674.48
+[Arena] Cycle 296 done
+[Arena] Cycle 297 done
+[Arena] Cycle 298 done
+[Arena] Cycle 299 done
+[Arena] v004 DOWN LOSS WR=0.89 T=185 PnL=1660.46
+[Arena] Cycle 300 done
+[Arena] Cycle 301 done
+[Arena] v004 DOWN WIN WR=0.89 T=186 PnL=1672.38
+[Arena] Cycle 302 done
+[Arena] v004 DOWN WIN WR=0.89 T=187 PnL=1684.3
+[Arena] Cycle 303 done
+[Arena] v004 DOWN WIN WR=0.89 T=188 PnL=1696.22
+[Arena] Cycle 304 done
+[Arena] v004 DOWN WIN WR=0.89 T=189 PnL=1708.14
+[Arena] Cycle 305 done
+[Arena] v004 DOWN WIN WR=0.89 T=190 PnL=1720.06
+[Arena] Cycle 306 done
+[Arena] v004 DOWN WIN WR=0.89 T=191 PnL=1731.98
+[Arena] Cycle 307 done
+[Arena] v004 DOWN WIN WR=0.89 T=192 PnL=1743.9
+[Arena] Cycle 308 done
+[Arena] v004 DOWN LOSS WR=0.89 T=193 PnL=1729.88
+[Arena] Cycle 309 done
+[Arena] v004 DOWN WIN WR=0.89 T=194 PnL=1741.8
+[Arena] Cycle 310 done
+[Arena] v004 DOWN WIN WR=0.89 T=195 PnL=1753.72
+[Arena] Cycle 311 done
+[Arena] Cycle 312 done
+[Arena] v004 UP WIN WR=0.89 T=196 PnL=1765.64
+[Arena] Cycle 313 done
+[Arena] v004 DOWN LOSS WR=0.88 T=197 PnL=1751.62
+[Arena] Cycle 314 done
+[Arena] Cycle 315 done
+[Arena] v004 UP WIN WR=0.88 T=198 PnL=1763.54
+[Arena] Cycle 316 done
+[Arena] v004 UP WIN WR=0.88 T=199 PnL=1775.46
+[Arena] Cycle 317 done
+[Arena] v004 UP WIN WR=0.89 T=200 PnL=1787.38
+[Arena] Cycle 318 done
+[Arena] v004 UP WIN WR=0.89 T=201 PnL=1799.3
+[Arena] Cycle 319 done
+[Arena] v004 UP WIN WR=0.89 T=202 PnL=1811.22
+[Arena] Cycle 320 done
+[Arena] v004 UP WIN WR=0.89 T=203 PnL=1823.14
+[Arena] Cycle 321 done
+[Arena] v004 UP WIN WR=0.89 T=204 PnL=1835.06
+[Arena] Cycle 322 done
+[Arena] v004 UP WIN WR=0.89 T=205 PnL=1846.98
+[Arena] Cycle 323 done
+[Arena] v004 UP WIN WR=0.89 T=206 PnL=1858.9
+[Arena] Cycle 324 done
+[Arena] v004 UP WIN WR=0.89 T=207 PnL=1870.82
+[Arena] Cycle 325 done
+[Arena] v004 UP WIN WR=0.89 T=208 PnL=1882.74
+[Arena] Cycle 326 done
+[Arena] Cycle 327 done
+[Arena] Cycle 328 done
+[Arena] Cycle 329 done
+[Arena] Cycle 330 done
+[Arena] Cycle 331 done
+[Arena] Cycle 332 done
+[Arena] Cycle 333 done
+[Arena] Cycle 334 done
+[Arena] Cycle 335 done
+[Arena] v004 DOWN WIN WR=0.89 T=209 PnL=1894.66
+[Arena] Cycle 336 done
+[Arena] v004 DOWN WIN WR=0.89 T=210 PnL=1906.58
+[Arena] Cycle 337 done
+[Arena] v004 DOWN WIN WR=0.89 T=211 PnL=1918.5
+[Arena] Cycle 338 done
+[Arena] v004 DOWN WIN WR=0.89 T=212 PnL=1930.42
+[Arena] Cycle 339 done
+[Arena] v004 DOWN WIN WR=0.89 T=213 PnL=1942.34
+[Arena] Cycle 340 done
+[Arena] v004 DOWN WIN WR=0.89 T=214 PnL=1954.26
+[Arena] Cycle 341 done
+[Arena] Cycle 342 done
+[Arena] Cycle 343 done
+[Arena] v004 DOWN LOSS WR=0.89 T=215 PnL=1940.24
+[Arena] Cycle 344 done
+[Arena] v004 DOWN WIN WR=0.89 T=216 PnL=1952.16
+[Arena] Cycle 345 done
+[Arena] v004 DOWN WIN WR=0.89 T=217 PnL=1964.08
+[Arena] Cycle 346 done
+[Arena] v004 DOWN LOSS WR=0.89 T=218 PnL=1950.06
+[Arena] Cycle 347 done
+[Arena] v004 DOWN WIN WR=0.89 T=219 PnL=1961.98
+[Arena] Cycle 348 done
+[Arena] v004 DOWN LOSS WR=0.88 T=220 PnL=1947.96
+[Arena] Cycle 349 done
+[Arena] v004 DOWN WIN WR=0.88 T=221 PnL=1959.88
+[Arena] Cycle 350 done
+[Arena] Cycle 351 done
+[Arena] v004 DOWN WIN WR=0.88 T=222 PnL=1971.8
+[Arena] Cycle 352 done
+[Arena] Cycle 353 done
+[Arena] v004 UP WIN WR=0.88 T=223 PnL=1983.72
+[Arena] Cycle 354 done
+[Arena] v004 UP WIN WR=0.88 T=224 PnL=1995.64
+[Arena] Cycle 355 done
+[Arena] v004 UP WIN WR=0.88 T=225 PnL=2007.56
+[Arena] Cycle 356 done
+[Arena] Cycle 357 done
+[Arena] Cycle 358 done
+[Arena] Cycle 359 done
+[Arena] Cycle 360 done
+[Arena] v004 DOWN LOSS WR=0.88 T=226 PnL=1993.54
+[Arena] Cycle 361 done
+[Arena] v004 DOWN WIN WR=0.88 T=227 PnL=2005.46
+[Arena] Cycle 362 done
+[Arena] v004 DOWN WIN WR=0.88 T=228 PnL=2017.38
+[Arena] Cycle 363 done
+[Arena] v004 DOWN LOSS WR=0.88 T=229 PnL=2003.36
+[Arena] Cycle 364 done
+[Arena] v004 DOWN WIN WR=0.88 T=230 PnL=2015.28
+[Arena] Cycle 365 done
+[Arena] v004 DOWN WIN WR=0.88 T=231 PnL=2027.2
+[Arena] Cycle 366 done
+[Arena] v004 DOWN WIN WR=0.88 T=232 PnL=2039.12
+[Arena] Cycle 367 done
+[Arena] v004 DOWN WIN WR=0.88 T=233 PnL=2051.04
+[Arena] Cycle 368 done
+[Arena] v004 DOWN WIN WR=0.88 T=234 PnL=2062.96
+[Arena] Cycle 369 done
+[Arena] v004 DOWN WIN WR=0.88 T=235 PnL=2074.88
+[Arena] Cycle 370 done
+[Arena] v004 DOWN WIN WR=0.88 T=236 PnL=2086.8
+[Arena] Cycle 371 done
+[Arena] Cycle 372 done
+[Arena] Cycle 373 done
+[Arena] Cycle 374 done
+[Arena] v004 DOWN WIN WR=0.88 T=237 PnL=2098.72
+[Arena] Cycle 375 done
+[Arena] v004 DOWN WIN WR=0.88 T=238 PnL=2110.64
+[Arena] Cycle 376 done
+[Arena] Cycle 377 done
+[Arena] Cycle 378 done
+[Arena] v004 UP WIN WR=0.88 T=239 PnL=2122.56
+[Arena] Cycle 379 done
+[Arena] v004 UP WIN WR=0.88 T=240 PnL=2134.48
+[Arena] Cycle 380 done
+[Arena] v004 UP WIN WR=0.88 T=241 PnL=2146.4
+[Arena] Cycle 381 done
+[Arena] v004 UP WIN WR=0.88 T=242 PnL=2158.32
+[Arena] Cycle 382 done
+[Arena] v004 UP WIN WR=0.88 T=243 PnL=2170.24
+[Arena] Cycle 383 done
+[Arena] v004 UP WIN WR=0.89 T=244 PnL=2182.16
+[Arena] Cycle 384 done
+[Arena] v004 UP WIN WR=0.89 T=245 PnL=2194.08
+[Arena] Cycle 385 done
+[Arena] v004 UP WIN WR=0.89 T=246 PnL=2206.0
+[Arena] Cycle 386 done
+[Arena] Cycle 387 done
+[Arena] Cycle 388 done
+[Arena] Cycle 389 done
+[Arena] Cycle 390 done
+[Arena] Cycle 391 done
+[Arena] v004 UP WIN WR=0.89 T=247 PnL=2217.92
+[Arena] Cycle 392 done
+[Arena] v004 UP WIN WR=0.89 T=248 PnL=2229.84
+[Arena] Cycle 393 done
+[Arena] v004 UP LOSS WR=0.88 T=249 PnL=2215.82
+[Arena] Cycle 394 done
+[Arena] v004 UP LOSS WR=0.88 T=250 PnL=2201.8
+[Arena] Cycle 395 done
+[Arena] v004 UP WIN WR=0.88 T=251 PnL=2213.72
+[Arena] Cycle 396 done
+[Arena] v004 UP LOSS WR=0.88 T=252 PnL=2199.7
+[Arena] Cycle 397 done
+[Arena] v004 UP WIN WR=0.88 T=253 PnL=2211.62
+[Arena] Cycle 398 done
+[Arena] v004 UP LOSS WR=0.87 T=254 PnL=2197.6
+[Arena] Cycle 399 done
+[Arena] v004 UP WIN WR=0.87 T=255 PnL=2209.52
+[Arena] Cycle 400 done
+[Arena] v004 UP WIN WR=0.88 T=256 PnL=2221.44
+[Arena] Cycle 401 done
+[Arena] Cycle 402 done
+[Arena] v004 DOWN LOSS WR=0.87 T=257 PnL=2207.42
+[Arena] Cycle 403 done
+[Arena] v004 DOWN WIN WR=0.87 T=258 PnL=2219.34
+[Arena] Cycle 404 done
+[Arena] v004 DOWN WIN WR=0.87 T=259 PnL=2231.26
+[Arena] Cycle 405 done
+[Arena] v004 DOWN WIN WR=0.87 T=260 PnL=2243.18
+[Arena] Cycle 406 done
+[Arena] v004 DOWN WIN WR=0.87 T=261 PnL=2255.1
+[Arena] Cycle 407 done
+[Arena] Cycle 408 done
+[Arena] Cycle 409 done
+[Arena] v004 DOWN WIN WR=0.87 T=262 PnL=2267.02
+[Arena] Cycle 410 done
+[Arena] v004 DOWN WIN WR=0.87 T=263 PnL=2278.94
+[Arena] Cycle 411 done
+[Arena] v004 DOWN WIN WR=0.88 T=264 PnL=2290.86
+[Arena] Cycle 412 done
+[Arena] v004 DOWN WIN WR=0.88 T=265 PnL=2302.78
+[Arena] Cycle 413 done
+[Arena] v004 DOWN WIN WR=0.88 T=266 PnL=2314.7
+[Arena] Cycle 414 done
+[Arena] v004 DOWN WIN WR=0.88 T=267 PnL=2326.62
+[Arena] Cycle 415 done
+[Arena] Cycle 416 done
+[Arena] v004 DOWN WIN WR=0.88 T=268 PnL=2338.54
+[Arena] Cycle 417 done
+[Arena] Cycle 418 done
+[Arena] Cycle 419 done
+[Arena] Cycle 420 done
+[Arena] v004 DOWN WIN WR=0.88 T=269 PnL=2350.46
+[Arena] Cycle 421 done
+[Arena] v004 DOWN WIN WR=0.88 T=270 PnL=2362.38
+[Arena] Cycle 422 done
+[Arena] v004 DOWN WIN WR=0.88 T=271 PnL=2374.3
+[Arena] Cycle 423 done
+[Arena] v004 DOWN WIN WR=0.88 T=272 PnL=2386.22
+[Arena] Cycle 424 done
+[Arena] v004 DOWN WIN WR=0.88 T=273 PnL=2398.14
+[Arena] Cycle 425 done
+[Arena] v004 DOWN WIN WR=0.88 T=274 PnL=2410.06
+[Arena] Cycle 426 done
+[Arena] v004 DOWN WIN WR=0.88 T=275 PnL=2421.98
+[Arena] Cycle 427 done
+[Arena] v004 DOWN WIN WR=0.88 T=276 PnL=2433.9
+[Arena] Cycle 428 done
+[Arena] v004 DOWN WIN WR=0.88 T=277 PnL=2445.82
+[Arena] Cycle 429 done
+[Arena] v004 DOWN WIN WR=0.88 T=278 PnL=2457.74
+[Arena] Cycle 430 done
+[Arena] Cycle 431 done
+[Arena] v004 DOWN WIN WR=0.88 T=279 PnL=2469.66
+[Arena] Cycle 432 done
+[Arena] v004 DOWN WIN WR=0.88 T=280 PnL=2481.58
+[Arena] Cycle 433 done
+[Arena] v004 DOWN WIN WR=0.88 T=281 PnL=2493.5
+[Arena] Cycle 434 done
+[Arena] v004 DOWN LOSS WR=0.88 T=282 PnL=2479.48
+[Arena] Cycle 435 done
+[Arena] v004 DOWN LOSS WR=0.88 T=283 PnL=2465.46
+[Arena] Cycle 436 done
+[Arena] v004 DOWN WIN WR=0.88 T=284 PnL=2477.38
+[Arena] Cycle 437 done
+[Arena] v004 DOWN WIN WR=0.88 T=285 PnL=2489.3
+[Arena] Cycle 438 done
+[Arena] v004 DOWN WIN WR=0.88 T=286 PnL=2501.22
+[Arena] Cycle 439 done
+[Arena] Cycle 440 done
+[Arena] v004 DOWN WIN WR=0.88 T=287 PnL=2513.14
+[Arena] Cycle 441 done
+[Arena] v004 DOWN WIN WR=0.88 T=288 PnL=2525.06
+[Arena] Cycle 442 done
+[Arena] v004 DOWN WIN WR=0.88 T=289 PnL=2536.98
+[Arena] Cycle 443 done
+[Arena] v004 DOWN WIN WR=0.88 T=290 PnL=2548.9
+[Arena] Cycle 444 done
+[Arena] v004 DOWN WIN WR=0.88 T=291 PnL=2560.82
+[Arena] Cycle 445 done
+[Arena] v004 DOWN WIN WR=0.88 T=292 PnL=2572.74
+[Arena] Cycle 446 done
+[Arena] Cycle 447 done
+[Arena] Cycle 448 done
+[Arena] Cycle 449 done
+[Arena] Cycle 450 done
+[Arena] v004 DOWN WIN WR=0.88 T=293 PnL=2584.66
+[Arena] Cycle 451 done
+[Arena] v004 DOWN WIN WR=0.88 T=294 PnL=2596.58
+[Arena] Cycle 452 done
+[Arena] v004 DOWN WIN WR=0.88 T=295 PnL=2608.5
+[Arena] Cycle 453 done
+[Arena] v004 DOWN WIN WR=0.88 T=296 PnL=2620.42
+[Arena] Cycle 454 done
+[Arena] v004 DOWN WIN WR=0.88 T=297 PnL=2632.34
+[Arena] Cycle 455 done
+[Arena] v004 DOWN WIN WR=0.88 T=298 PnL=2644.26
+[Arena] Cycle 456 done
+[Arena] v004 DOWN LOSS WR=0.88 T=299 PnL=2630.24
+[Arena] Cycle 457 done
+[Arena] Cycle 458 done
+[Arena] v004 UP WIN WR=0.88 T=300 PnL=2642.16
+[Arena] Cycle 459 done
+[Arena] v004 UP WIN WR=0.88 T=301 PnL=2654.08
+[Arena] Cycle 460 done
+[Arena] v004 UP WIN WR=0.88 T=302 PnL=2666.0
+[Arena] Cycle 461 done
+[Arena] Cycle 462 done
+[Arena] Cycle 463 done
+[Arena] Cycle 464 done

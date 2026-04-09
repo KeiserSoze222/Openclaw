@@ -1,318 +1,3 @@
-sed -i 's/    live_bal = get_live_balance_startup()/    live_bal = get_live_balance()/' /root/real_bot.py
-sed -i 's/    live_bal = get_live_balance_startup()/    live_bal = get_live_balance()/' /root/eth_bot.py
-nohup python3 -u /root/real_bot.py > /root/bot.log 2>&1 &
-grep "MARKET_SERIES" /root/real_bot.py | head -1
-pkill -f real_bot.py
-sed -i 's/MARKET_SERIES    = "KXBTC15M"  # DO NOT CHANGE — BTC bot only/MARKET_SERIES    = "KXBTC15M"  # DO NOT CHANGE — BTC bot only\nassert MARKET_SERIES == "KXBTC15M", f"WRONG MARKET {MARKET_SERIES} in real_bot.py — check file"/' /root/real_bot.py
-cp /root/real_bot.py /root/real_bot_v3_stable.py
-nano /root/dashboard.py
-python3 -m py_compile /root/dashboard.py && echo "OK"
-curl -s ifconfig.me
-ps aux | grep -E "real_bot|eth_bot|sol_bot|bond_scanner|watchdog|dashboard" | grep -v grep
-cp /root/real_bot.py /root/real_bot_v3_stable.py
-python3 /tmp/status_all.py
-nano /root/dashboard.py
-pkill -f dashboard.py
-nano /tmp/fix_dashboard.py
-python3 /tmp/fix_dashboard.py
-python3 /tmp/status_all.py
-nano /tmp/add_equity.py
-python3 /tmp/add_equity.py
-grep -n "equity_svg\|equity_start\|equity_points" /root/dashboard.py | head -5
-cat /root/dashboard.log | tail -10
-grep -n "active = " /root/dashboard.py
-sed -n '150,162p' /root/dashboard.py
-sed -n '160,180p' /root/dashboard.py
-nano /tmp/fix_chart.py
-python3 /tmp/fix_chart.py
-grep -n "equity_svg\|equity_start\|SVG\|viewBox" /root/dashboard.py | head -8
-cat /root/dashboard.log | tail -15
-grep -n "equity_points.append(balance)" /root/dashboard.py
-nano /tmp/fix_equity_svg.py
-python3 /tmp/fix_equity_svg.py
-python3 /tmp/status_all.py
-cat /root/dashboard.log | tail -10
-grep -n "equity_svg\|SVG generation" /root/dashboard.py | head -6
-nano /tmp/fix_remove_equity.py
-python3 /tmp/fix_remove_equity.py
-cp /root/dashboard.py /root/dashboard_v2_stable.py
-pkill -f dashboard.py
-python3 -m py_compile /root/dashboard.py && echo "OK"
-python3 /tmp/status_all.py
-cp /root/dashboard.py /root/dashboard_v3_stable.py
-ls -la /root/feature_log.json 2>/dev/null && wc -l /root/feature_log.json || echo "No feature log yet"
-grep -n "features=mae\|features=feat\|feature_log" /root/real_bot.py | head -8
-nano /tmp/add_dashboard_v31.py
-python3 /tmp/add_dashboard_v31.py
-grep -n "^def generate_html" /root/dashboard.py
-nano /tmp/inject_functions.py
-python3 /tmp/inject_functions.py
-grep -n "def log_trade" /root/real_bot.py | head -3
-cat /root/dashboard.log | tail -5
-sed -n '134,175p' /root/real_bot.py
-nano /tmp/fix_logtrade.py
-python3 /tmp/fix_logtrade.py
-grep -n "log_trade.*WIN\|log_trade.*LOSS\|log_trade.*outcome" real_bot.py | head -8
-sed -n '689,697p' real_bot.py
-sed -i 's/                          notes=f"{strategy}|{ticker}")/                          notes=f"{strategy}|{ticker}",\n                          features={"signal_type": pos.get("signal_type","STANDARD"), "entry_minute": pos.get("entry_minute",0), "market": MARKET_SERIES, "entry_yes": pos.get("entry_yes", 0.5), "min_yes": pos.get("min_yes", 0.5), "max_yes": pos.get("max_yes", 0.5)})/' real_bot.py
-grep -n "signal_type\|entry_minute" real_bot.py | head -5
-sed -n '490,508p' real_bot.py
-grep -n "OPEN_POSITIONS.append" real_bot.py | head -3
-grep -n "OPEN_POSITIONS.append" real_bot.py | head -1
-sed -n '465,482p' real_bot.py
-sed -n '434,452p' real_bot.py
-sed -i 's/            "entry_time":   datetime.datetime.now().isoformat(),/            "entry_time":   datetime.datetime.now().isoformat(),\n            "entry_yes":    mkt_yes if mkt_yes else 0.5,\n            "min_yes":      mkt_yes if mkt_yes else 0.5,\n            "max_yes":      mkt_yes if mkt_yes else 0.5,\n            "signal_type":  "EXTREME" if mkt_yes and (mkt_yes > 0.80 or mkt_yes < 0.20) else "STANDARD",\n            "entry_minute": datetime.datetime.now(datetime.timezone.utc).minute % 15,/' real_bot.py
-pkill -f real_bot.py
-grep "MARKET_SERIES" /root/real_bot.py | head -1
-cp /root/real_bot.py /root/real_bot_v3_stable.py
-nano /tmp/fix_parse_log.py
-python3 /tmp/fix_parse_log.py
-cp /root/dashboard.py /root/dashboard_v3_stable.py
-python3 /tmp/status_all.py
-grep -c "WIN\|LOSS" /root/trade_log.csv
-grep -E "Settled|WIN|LOSS" /root/bot.log | tail -5
-nano /tmp/fix_status_all.py
-python3 /tmp/fix_status_all.py
-cp /root/dashboard.py /root/dashboard_v3_stable.py
-python3 /tmp/status_all.py
-python3 -c "
- import json
- entries = [json.loads(l) for l in open('/root/feature_log.json') if l.strip()]
- settled = [e for e in entries if e.get('action') in ('WIN','LOSS')]
- print(f'Feature log entries: {len(entries)} total, {len(settled)} settled')
- mins = [e.get('features',{}).get('entry_minute',-1) for e in settled]
- from collections import Counter
- print('Entry minutes:', Counter(mins))
- sigs = [e.get('features',{}).get('signal_type','?') for e in settled]
- print('Signal types:', Counter(sigs))
- wins_by_sig = {}
- for e in settled:
-     s = e.get('features',{}).get('signal_type','?')
-     if s not in wins_by_sig: wins_by_sig[s] = {'w':0,'l':0}
-     wins_by_sig[s]['w' if e['action']=='WIN' else 'l'] += 1
- for s,v in wins_by_sig.items():
-     t=v['w']+v['l']
-     print(f'  {s}: {v[\"w\"]}W/{v[\"l\"]}L ({v[\"w\"]/t*100:.0f}%)')
- "
-grep -n "feature_table\|ai_insight\|sys_html" /root/dashboard.py | grep -v "def \|build_\|html =" | head -10
-nano /tmp/fix_fstring.py
-python3 /tmp/fix_fstring.py
-nano /tmp/feat_analysis.py
-python3 /tmp/feat_analysis.py
-grep -c "CashOut" /root/bot.log /root/eth_bot.log /root/sol_bot.log 2>/dev/null
-grep -n "Mid-trade\|CashOut\|cash" /root/real_bot.py | head -8
-grep "LOSS" /root/trade_log.csv | tail -10
-python3 -c "
- import csv
- from collections import defaultdict
- wins_by_hour = defaultdict(lambda:{'w':0,'l':0,'wpnl':0.0,'lpnl':0.0})
- for f in ['/root/trade_log.csv','/root/eth_trade_log.csv','/root/sol_trade_log.csv']:
-     for row in csv.reader(open(f)):
-         if len(row)<5 or row[0]<'2026-03-25': continue
-         try:
-             h = int(row[0][11:13])
-             bet = float(row[2])
-             if row[3]=='WIN':
-                 wins_by_hour[h]['w']+=1
-                 wins_by_hour[h]['wpnl']+=bet*float(row[4].replace('%',''))/100
-             elif row[3]=='LOSS':
-                 wins_by_hour[h]['l']+=1
-                 wins_by_hour[h]['lpnl']+=bet
-         except: pass
- print('Hour | W | L | WR% | Net PnL')
- print('-'*45)
- for h in sorted(wins_by_hour):
-     v=wins_by_hour[h]
-     t=v['w']+v['l']
-     wr=v['w']/t*100 if t else 0
-     net=v['wpnl']-v['lpnl']
-     flag='🔴' if wr<60 else '🟡' if wr<75 else '🟢'
-     print(f'{h:02d}:00 | {v[\"w\"]:3d}W | {v[\"l\"]:2d}L | {wr:5.1f}% | \${net:+.2f} {flag}')
- " 2>/dev/null
-nano /tmp/hourly_analysis.py
-python3 /tmp/hourly_analysis.py
-nano /tmp/fix_tod2.py
-python3 /tmp/fix_tod2.py
-nano /tmp/fix_cashout.py
-python3 /tmp/fix_tod2.py
-sed -i "s|open('/root/real_bot.py')|open('/root/eth_bot.py')|g" /tmp/fix_tod2.py
-sed -i "s|open('/root/real_bot.py')|open('/root/eth_bot.py')|g" /tmp/fix_cashout.py
-pkill -f real_bot.py
-nano /tmp/hourly_by_bot.py
-python3 /tmp/hourly_by_bot.py
-nano /tmp/fix_smart_tod.py
-cpython3 /tmp/fix_smart_tod.py
-python3 /tmp/fix_smart_tod.py
-grep -n "def place_order" /root/real_bot.py | head -1
-for f in /root/real_bot.py /root/eth_bot.py /root/sol_bot.py; do      sed -i 's/def place_order(direction, bet, strategy_tag="directional", mkt_yes=None, mkt_no=None):/def place_order(direction, bet, strategy_tag="directional", mkt_yes=None, mkt_no=None):\n    if get_max_bet() == 0.00:\n        print(f"[TOD] Skipping trade — bad hour for this bot")\n        return False/' $f;  done
-pkill -f real_bot.py
-grep "TOD\|Skipping" /root/eth_bot.log | tail -5
-nano /root/auto_tune_tod.py
-python3 /root/auto_tune_tod.py
-(crontab -l 2>/dev/null; echo "0 6 */2 * * python3 /root/auto_tune_tod.py >> /root/auto_tune.log 2>&1") | crontab -
-cp /root/real_bot.py /root/real_bot_v3_stable.py
-cat /root/eth_bot.log | tail -8
-python3 -c "
- import json
- items = []
- for line in open('/root/news_log.json'):
-     try:
-         d = json.loads(line.strip())
-         if d.get('score',0) >= 7:
-             items.append(d)
-     except: pass
- items.sort(key=lambda x: x.get('score',0), reverse=True)
- for item in items[:10]:
-     print(f\"[{item['score']}] {item.get('source','')} — {item.get('title','')[:80]}\")
-     print(f\"  {item.get('link','')}\")
-     print()
- " 2>/dev/null
-nano /tmp/show_news.py
-python3 /tmp/show_news.py
-python3 /tmp/status_all.py
-cp /root/real_bot.py /root/real_bot_v3_stable.py
-grep -n "sys_html" /root/dashboard.py | head -8
-sed -n '538,548p' /root/dashboard.py
-grep -n "return f'''" /root/dashboard.py
-sed -n '370,380p' /root/dashboard.py
-grep -n "feature_table\|ai_insight" /root/dashboard.py | grep -v "def \|build_\|#" | head -10
-cat /root/dashboard.log | tail -5
-nano /tmp/add_polyrouter.py
-python3 /tmp/add_polyrouter.py
-grep -n "Binance.*Confirms\|spot_price = get_binance" real_bot.py | head -5
-sed -n '650,670p' real_bot.py
-nano /tmp/add_poly_wire.py
-python3 /tmp/add_poly_wire.py
-sed -n '650,653p' real_bot.py | cat -A
-grep -n "consecutive=2 | bet" real_bot.py | head -3
-sed -n '650,653p' real_bot.py | cat -A
-nano /tmp/add_kraken.py
-python3 /tmp/add_kraken.py
-python3 /tmp/test_prices.py
-pkill -f real_bot.py
-cp /root/eth_bot.py /root/eth_bot_v1_stable.py
-sed -n '500,530p' /root/real_bot.py
-grep -n "window_minute\|EXTREME\|consecutive_signal_count < 2\|Strong first" /root/real_bot.py | head -10
-sed -n '578,605p' /root/real_bot.py
-nano /tmp/fix_early_entry.py
-python3 /tmp/fix_early_entry.py
-sed -n '606,620p' real_bot.py
-nano /tmp/fix_else.py
-python3 /tmp/fix_else.py
-# Item 2: Tighten threshold to 0.75/0.25
-# Item 2: Tighten thresholds on all three bots
-grep "MAX_BET_PCT" /root/real_bot.py | head -5
-# BTC and ETH: 7% base
-# Apply early entry fix to ETH and SOL
-pkill -f real_bot.py
-grep "assert MARKET_SERIES" /root/real_bot.py
-sed -i 's/MARKET_SERIES    = "KXBTC15M"  # DO NOT CHANGE — BTC bot only/MARKET_SERIES    = "KXBTC15M"  # DO NOT CHANGE — BTC bot only\nassert MARKET_SERIES == "KXBTC15M", "WRONG MARKET in real_bot.py"/' /root/real_bot.py
-cp /root/real_bot.py /root/real_bot_v3_stable.py
-pkill -f dashboard.py
-python3 -m py_compile /root/dashboard.py && echo "OK"
-cp /root/dashboard.py /root/dashboard_v3_stable.py
-grep "TOD\|Skipping" /root/eth_bot.log | tail -5
-grep "Settled.*LOSS" /root/eth_bot.log | tail -5
-nano /tmp/fix_feature_table.py
-python3 /tmp/fix_feature_table.py
-grep -n "def build_feature_table" /root/dashboard.py
-sed -n '1,30p' /root/dashboard.py | grep -n "def build_feature"
-grep -n "def build_feature_table\|def build_ai_insight" /root/dashboard.py
-nano /tmp/fix_feat2.py
-python3 /tmp/fix_feat2.py
-nano /tmp/new_feature_func.py
-python3 /tmp/new_feature_func.py
-cp /root/dashboard.py /root/dashboard_v3_stable.py
-grep -n "spot_price = get_binance" /root/real_bot.py | head -3
-grep "Settled.*LOSS" /root/sol_bot.log | tail -3
-sed -n '595,650p' /root/real_bot.py
-nano /tmp/add_correlation.py
-python3 /tmp/add_correlation.py
-grep -n "CONFIRMED.*consecutive=2\|consecutive=2.*bet=" real_bot.py | head -3
-nano /tmp/add_corr2.py
-python3 /tmp/add_corr2.py
-pkill -f real_bot.py
-cp /root/real_bot.py /root/real_bot_v3_stable.py
-source kalshi_env/bin/activate
-python3 /tmp/status_all.py
-grep -n "Cross-market correlation\|TOD.*Skipping\|get_max_bet.*0.00" /root/real_bot.py | head -5
-grep -n "bet = round(bet \* 0.80\|bet = round(bet \* 0.40" /root/real_bot.py | head -5
-grep "STRONG MIN1" /root/bot.log /root/eth_bot.log /root/sol_bot.log 2>/dev/null | head -5
-nano /tmp/fix_correlation.py
-python3 /tmp/fix_correlation.py
-sed -n '628,635p' real_bot.py
-nano /tmp/fix_indent3.py
-python3 /tmp/fix_indent3.py
-# Apply correlation fix to ETH and SOL
-pkill -f real_bot.py
-nohup python3 -u /root/real_bot.py > /root/bot.log 2>&1 &
-grep -c "Correlation\|STRONG MIN1\|TOD.*Skipping\|DIRECTIONAL_HIGH = 0.75" /root/real_bot.py
-sed -i 's/MAX_BET_PCT        = 0.05    # 5% of balance per order/MAX_BET_PCT        = 0.07    # 7% of balance per order/' /root/real_bot.py
-sed -n '628,636p' /root/real_bot.py
-nano /tmp/fix_corr_guard.py
-python3 /tmp/fix_corr_guard.py
-grep -n "Cross-market correlation" /root/eth_bot.py
-sed -n '628,634p' /root/real_bot.py
-nano /tmp/add_corr_eth_sol.py
-python3 /tmp/add_corr_eth_sol.py
-pkill -f real_bot.py && pkill -f eth_bot.py && pkill -f sol_bot.py
-grep -n "def log_trade" /root/eth_bot.py | head -2
-grep -A3 "def log_trade" /root/eth_bot.py | head -6
-nano /tmp/fix_logtrade_eth_sol.py
-python3 /tmp/fix_logtrade_eth_sol.py
-grep -n "log_trade.*outcome\|log_trade.*WIN\|log_trade.*LOSS" /root/eth_bot.py | head -5
-nano /tmp/add_features_settlement.py
-python3 /tmp/add_features_settlement.py
-grep -n "OPEN_POSITIONS.append" /root/eth_bot.py | head -2
-sed -n '461,475p' /root/eth_bot.py
-for f in /root/eth_bot.py /root/sol_bot.py; do      sed -i 's/            "entry_time":   datetime.datetime.now().isoformat(),/            "entry_time":   datetime.datetime.now().isoformat(),\n            "entry_yes":    mkt_yes if mkt_yes else 0.5,\n            "min_yes":      mkt_yes if mkt_yes else 0.5,\n            "max_yes":      mkt_yes if mkt_yes else 0.5,\n            "signal_type":  "EXTREME" if mkt_yes and (mkt_yes > 0.80 or mkt_yes < 0.20) else "STANDARD",\n            "entry_minute": datetime.datetime.now(datetime.timezone.utc).minute % 15,/' $f;  done
-pkill -f eth_bot.py && pkill -f sol_bot.py
-nano /root/OPENCLAW_GUIDE.md
-wc -l /root/OPENCLAW_GUIDE.md
-nano /tmp/add_docs.py
-source kalshi_env/bin/activate
-code = open('/root/dashboard.py').read()
-nano /tmp/add_docs.py
-python3 /tmp/add_docs.py
-sed -i 's|<div class="footer">Auto-refresh 20s • OpenClaw v3.1</div>|<div class="footer">Auto-refresh 20s • OpenClaw v3.1 • <a href="/docs" style="color:var(--blue)">📖 Guide</a></div>|' /root/dashboard.py
-cp /root/dashboard.py /root/dashboard_v3_stable.py
-source kalshi_env/bin/activate
-python3 -c "
- import requests, tempfile
- from kalshi_python import KalshiClient
- from kalshi_python.configuration import Configuration
- 
- raw = open('/root/real_bot.py').read()
- KEY = raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]
- SEC = raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]
- 
- tf = tempfile.NamedTemporaryFile(delete=False, suffix='.pem', mode='w')
- tf.write(SEC); tf.close()
- 
- config = Configuration()
- config.host = 'https://api.elections.kalshi.com/trade-api/v2'
- kalshi = KalshiClient(config)
- kalshi.set_kalshi_auth(KEY, tf.name)
- 
- url = 'https://api.elections.kalshi.com/trade-api/v2/portfolio/settlements'
- headers = kalshi.kalshi_auth.create_auth_headers('GET', url)
- resp = requests.get(url, headers=headers, params={'limit': 50}, timeout=8)
- print(resp.status_code)
- if resp.status_code == 200:
-     data = resp.json()
-     print(list(data.keys()))
-     print(str(data)[:500])
- " 2>/dev/null
-nano /tmp/fix_deposits.py
-python3 /tmp/fix_deposits.py
-grep -n "Total Portfolio Value\|bal-sub\|TOD.*badge" /root/dashboard.py | head -5
-sed -i 's|<div class="bal-sub">Total Portfolio Value — TOD: <span style="color:{tod_col}">{tod_size} bet size</span> at {utc_hour:02d}:00 UTC</div>|<div class="bal-sub">Total Portfolio Value — TOD: <span style="color:{tod_col}">{tod_size} bet size</span> at {utc_hour:02d}:00 UTC</div>\n<div style="display:flex;gap:12px;margin-top:6px;font-size:11px;flex-wrap:wrap">\n  <span style="color:var(--muted)">Deposited: <span style="color:var(--text)">\${TOTAL_DEPOSITED:.2f}</span></span>\n  <span style="color:var(--muted)">True P\\&amp;L: <span style="color:{"var(--green)" if balance>=TOTAL_DEPOSITED else "var(--red)"}">\${balance-TOTAL_DEPOSITED:+.2f}</span></span>\n  <span style="color:var(--muted)">Since Mar 25: <span style="color:{"var(--green)" if balance>=CLEAN_START_DEPOSITED else "var(--red)"}">\${balance-CLEAN_START_DEPOSITED:+.2f}</span></span>\n</div>|' /root/dashboard.py
-pkill -f dashboard.py
-cp /root/dashboard.py /root/dashboard_v3_stable.py
-grep -E "Correlation|STRONG|Settled|WIN|LOSS" /root/bot.log | tail -10
-source kalshi_env/bin/activate
-nohup python3 -u /root/real_bot.py > /root/bot.log 2>&1 &
-cat /root/watchdog.log | tail -10
 kill 495284
 cat /root/eth_bot.log | tail -15
 grep -E "HALT|MIN_BALANCE|SystemExit|Error|Traceback" /root/bot.log | tail -10
@@ -1998,3 +1683,318 @@ grep -E "HALTED|below floor|crashed" /root/bot.log /root/eth_bot.log /root/sol_b
 ps aux | grep -E "openclaw|watchdog" | grep -v grep
 source kalshi_env/bin/activate
 pkill -f watchdog.py && pkill -f "openclaw.py"
+source kalshi_env/bin/activate
+sleep 300 && grep -E "WIN|LOSS|CashOut|ProfitLock|BreakEven|Sell order|resting" /root/bot.log /root/eth_bot.log /root/sol_bot.log | grep "26APR06 19\|26APR06 20" | tail -15
+tail -5 /root/bot.log
+pkill -f watchdog.py && pkill -f "openclaw.py"
+sed -n '653,665p' /root/openclaw.py
+sed -n '653,665p' /root/openclaw.py 
+sed -n '684,696p' /root/openclaw.py
+sed -n '729,741p' /root/openclaw.py
+nano /tmp/fix_sell_limit.py
+python3 /tmp/fix_sell_limit.py
+source kalshi_env/bin/activate
+grep "26APR06 0[6-9]\|26APR06 1[012]" /root/bot.log | tail -20
+grep "HALTED\|below floor\|Startup\|LIVE started" /root/bot.log | tail -10
+grep "HALTED\|below floor\|Startup\|LIVE started" /root/eth_bot.log | tail -10
+grep "26APR06 0[2-5]" /root/sol_bot.log | tail -20
+cp /root/openclaw.py /root/openclaw_stable.py
+sed -i 's/elif bal >= 140:/elif bal >= 125:/' /root/check_health.py
+head -30 /root/bot.log
+head -30 /root/eth_bot.log
+head -30 /root/sol_bot.log
+nano /tmp/check_kalshi_history.py
+python3 /tmp/check_kalshi_history.py
+nano /tmp/check_kalshi_history.py
+python3 /tmp/check_kalshi_history.py 2>/dev/null | head -5
+nano /tmp/check_kalshi_history.py
+python3 /tmp/check_kalshi_history.py 2>/dev/null
+grep -n "TOD_SCHEDULE\|MARKET_SERIES\|elif MARKET" /root/openclaw.py | head -10
+sed -i 's/TOD_SCHEDULE={0:0.25,1:0.00,2:0.00,3:0.25,4:0.00,5:0.00,6:1.00,7:1.00,8:1.00,9:1.00,10:1.00,11:1.00,12:0.50,13:0.50,14:1.00,15:1.00,16:1.00,17:0.75,18:0.75,19:1.00,20:0.75,21:1.00,22:0.00,23:0.50}/TOD_SCHEDULE={0:0.00,1:0.00,2:0.00,3:0.00,4:0.00,5:0.00,6:1.00,7:1.00,8:1.00,9:1.00,10:1.00,11:1.00,12:0.50,13:0.50,14:1.00,15:1.00,16:1.00,17:0.75,18:0.75,19:1.00,20:0.75,21:1.00,22:0.00,23:0.00}/' /root/openclaw.py
+grep "0:0.00\|23:0.00" /root/openclaw.py
+pkill -f watchdog.py && pkill -f "openclaw.py"
+python3 /root/check_health.py
+tail -15 /root/bot.log
+python3 /tmp/status_all.py
+grep -E "PLACED|✅ BTC|Order.*exec" /root/bot.log | tail -5
+grep "KXBTC15M-26APR061300\|KXBTC15M-26APR061100" /root/bot.log | tail -10
+grep -n "session_start_time\|placed_at>=session" /root/openclaw.py | head -5
+nano /tmp/fix_session_time.py
+python3 /tmp/fix_session_time.py
+sed -i 's/if bal >= 140:/if bal >= 120:/' /root/check_health.py
+grep -E "KXBTC15M-26APR061300|BreakEven|CashOut|ProfitLock" /root/bot.log | tail -15
+nano /tmp/fix_sell_resting.py
+python3 /tmp/fix_sell_resting.py
+nano /tmp/fix_all_sell_resting.py
+python3 /tmp/fix_all_sell_resting.py
+grep -n "CashOut.*Sell order" /root/openclaw.py
+sed -n '737,748p' /root/openclaw.py
+sed -i 's/                                    print(f"\[CashOut\] Sell order: {sell_order.order.status}")/                                    o=sell_order.order\n                                    print(f"[CashOut] Sell order: {o.status}")\n                                    if o.status=="resting" and o.order_id:\n                                        try:\n                                            du=f"https:\/\/api.elections.kalshi.com\/trade-api\/v2\/portfolio\/orders\/{o.order_id}"\n                                            dh=kalshi.kalshi_auth.create_auth_headers("DELETE",du)\n                                            requests.delete(du,headers=dh,timeout=5)\n                                            print(f"[CashOut] Cancelled resting sell {o.order_id}")\n                                        except Exception as de:\n                                            print(f"[CashOut] Cancel failed: {de}")/' /root/openclaw.py
+grep -n "CashOut.*Cancelled\|CashOut.*resting" /root/openclaw.py
+pkill -f watchdog.py && pkill -f "openclaw.py"
+source kalshi_env/bin/activate
+# Copy arena.py to server
+grep -n "yes_ask\|window_age\|confidence_score\|REGIME\|Confidence\|Score=" ~/openclaw.py | head -30
+cat > ~/arena.py << 'ARENAEOF'
+scp arena.py root@167.172.244.100:~/arena.py
+nano ~/arena.py
+head -20 ~/openclaw.py
+nano ~/arena.py
+wc -l ~/arena.py
+head -20 ~/openclaw.py
+sed -i "s/KALSHI_API_KEY = os.environ.get(\"KALSHI_API_KEY\", \"\")/KALSHI_API_KEY='2d0a8c45-b76a-4459-a0e1-9a5e4d63fd8b'/" ~/arena.py
+head -30 ~/openclaw.py | grep -A 20 "KALSHI_API_KEY"
+cp ~/openclaw.py ~/arena_creds_temp.py
+python3 -c "
+ import re
+ creds = open('/root/openclaw.py').read()
+ arena = open('/root/arena.py').read()
+ m = re.search(r\"KALSHI_API_KEY='[^']+'\", creds)
+ if m: arena = re.sub(r\"KALSHI_API_KEY = os.environ.get\([^)]+\)\", m.group(), arena)
+ s = re.search(r\"KALSHI_SECRET='''.*?'''\", creds, re.DOTALL)
+ if s: arena = re.sub(r\"KALSHI_SECRET\s*=\s*os.environ.get\([^)]+\)\", s.group(), arena)
+ b = re.search(r\"BOT_TOKEN='[^']+'\", creds)
+ if b: arena = re.sub(r\"BOT_TOKEN\s*=\s*os.environ.get\([^)]+\)\", b.group(), arena)
+ open('/root/arena.py','w').write(arena)
+ print('Credentials merged successfully')
+ "
+grep -n "KALSHI_API_KEY\|BOT_TOKEN\|KALSHI_SECRET" ~/arena.py | head -5
+cat > /tmp/merge_creds.py << 'EOF'
+ import re
+ creds = open('/root/openclaw.py').read()
+ arena = open('/root/arena.py').read()
+ m = re.search(r"KALSHI_API_KEY='[^']+'", creds)
+ if m: arena = re.sub(r"KALSHI_API_KEY = os\.environ\.get\([^)]+\)", m.group(), arena)
+ s = re.search(r"KALSHI_SECRET='''.*?'''", creds, re.DOTALL)
+ if s: arena = re.sub(r"KALSHI_SECRET\s*=\s*os\.environ\.get\([^)]+\)", s.group(), arena)
+ b = re.search(r"BOT_TOKEN='[^']+'", creds)
+ if b: arena = re.sub(r"BOT_TOKEN\s*=\s*os\.environ\.get\([^)]+\)", b.group(), arena)
+ open('/root/arena.py','w').write(arena)
+ print('Done')
+ EOF
+ python3 /tmp/merge_creds.py
+
+cat > /tmp/merge_creds.py << 'EOF'
+ import re
+ creds = open('/root/openclaw.py').read()
+ arena = open('/root/arena.py').read()
+ m = re.search(r"KALSHI_API_KEY='[^']+'", creds)
+ if m: arena = re.sub(r"KALSHI_API_KEY = os\.environ\.get\([^)]+\)", m.group(), arena)
+ s = re.search(r"KALSHI_SECRET='''.*?'''", creds, re.DOTALL)
+ if s: arena = re.sub(r"KALSHI_SECRET\s*=\s*os\.environ\.get\([^)]+\)", s.group(), arena)
+ b = re.search(r"BOT_TOKEN='[^']+'", creds)
+ if b: arena = re.sub(r"BOT_TOKEN\s*=\s*os\.environ\.get\([^)]+\)", b.group(), arena)
+ open('/root/arena.py','w').write(arena)
+ print('Done')
+ EOF
+
+python3 /root/openclaw.py --help 2>/dev/null; python3 - << 'PYEOF'
+ import re
+ creds = open('/root/openclaw.py').read()
+ arena = open('/root/arena.py').read()
+ m = re.search(r"KALSHI_API_KEY='[^']+'", creds)
+ if m: arena = re.sub(r"KALSHI_API_KEY = os\.environ\.get\([^)]+\)", m.group(), arena)
+ s = re.search(r"KALSHI_SECRET='''.*?'''", creds, re.DOTALL)
+ if s: arena = re.sub(r"KALSHI_SECRET\s*=\s*os\.environ\.get\([^)]+\)", s.group(), arena)
+ b = re.search(r"BOT_TOKEN='[^']+'", creds)
+ if b: arena = re.sub(r"BOT_TOKEN\s*=\s*os\.environ\.get\([^)]+\)", b.group(), arena)
+ open('/root/arena.py','w').write(arena)
+ print('Done')
+ PYEOF
+
+nano ~/arena.py
+sed -n '7,20p' ~/openclaw.py
+nano ~/arena.py
+grep "BOT_TOKEN" ~/openclaw.py | head -1
+python3 -c "import ast; ast.parse(open('/root/arena.py').read()); print('Syntax OK')"
+sed -i 's/\u201c/"/g; s/\u201d/"/g; s/\u2018/'"'"'/g; s/\u2019/'"'"'/g' ~/arena.py
+python3 -c "import ast; ast.parse(open('/root/arena.py').read()); print('Syntax OK')"
+kalshi_env) root@OpenClaw-bot:~# sed -i 's/\u201c/"/g; s/\u201d/"/g; s/\u2018/'"'"'/g; s/\u2019/'"'"'/g' ~/arena.py
+grep -n $'\u201c\|\u201d\|\u2018\|\u2019' ~/arena.py | head -20
+python3 << PYEOF
+ content = open('/root/openclaw.py').read()
+ import re
+ 
+ # Extract credentials from openclaw.py
+ api_key = re.search(r"KALSHI_API_KEY='([^']+)'", content).group(1)
+ secret = re.search(r"KALSHI_SECRET='''(.*?)'''", content, re.DOTALL).group(1)
+ bot_token = re.search(r"BOT_TOKEN='([^']+)'", content).group(1)
+ 
+ print(f"API Key: {api_key[:8]}...")
+ print(f"Bot Token: {bot_token[:8]}...")
+ print(f"Secret lines: {len(secret.splitlines())}")
+ PYEOF
+
+nano /tmp/fix_arena.py
+python3 /tmp/fix_arena.py
+sed -n '95,105p' ~/arena.py
+rm ~/arena.py
+scp /path/to/arena.py root@167.172.244.100:~/arena.py
+scp ~/Downloads/arena.py root@167.172.244.100:~/arena.py
+which wget
+pm2 logs openclaw-btc --lines 15 --nostream
+grep -n "ENTRY_THRESHOLD\|MIN_CONF\|min_conf\|threshold" ~/openclaw.py | head -20
+grep -n "waiting (1/2)\|waiting (2/2)\|confirmation" ~/openclaw.py | head -10
+sed -n '490,540p' ~/openclaw.py
+source kalshi_env/bin/activate
+pm2 list
+# Step out of venv, find pm2 
+# Step out of venv, find pm2
+source kalshi_env/bin/activate
+# Reinstall pm2
+ls ~/
+source ~/kalshi_env/bin/activate
+head -50 ~/openclaw.py
+diff ~/openclaw.py ~/real_bot_v4_stable.py | head -30
+# Check what the two improved functions look like in openclaw.py
+sed -n '230,270p' ~/openclaw.py
+pm2 stop openclaw-btc openclaw-eth openclaw-sol
+source kalshi_env/bin/activate
+pm2 stop openclaw-btc openclaw-eth openclaw-sol
+pm2 logs openclaw-btc --lines 30 --nostream
+source kalshi_env/bin/activate
+grep -n "ENTRY_THRESHOLD\|MAX_BET_PCT\|MIN_CONFIDENCE\|PROFIT_LOCK\|CHOP\|TOD\|CYCLE_SLEEP\|MAX_WINDOW\|HEDGE\|NEWS" ~/openclaw.py | head -40
+source kalshi_env/bin/activate
+sed -n '490,540p' ~/openclaw.py
+sed -n '470,490p' ~/openclaw.py 
+curl -o ~/arena.py https://gist.githubusercontent.com/raw/arena.py
+printf '\e[?2004h'
+echo "test"
+python3 /tmp/build_arena.py << 'EOF'
+ line1
+ line2
+ line3
+ EOF
+
+python3 -c "open('/root/arena.py','w').write(open('/root/openclaw.py').read())"
+sed -i 's/OpenClaw BTC Bot v4.0 — Clean Rebuild/OpenClaw Arena v1.0 — Self-Adjusting Tournament Engine/' ~/arena.py
+sed -i 's/CYCLE_SLEEP=60/CYCLE_SLEEP=60\nARENA_LOG="\/root\/arena_log.json"\nGENOME_FILE="\/root\/genome.json"\nARENA_STATE_FILE="\/root\/arena_state.json"\nARENA_BUDGET=3.00\nMIN_TRADES_EVAL=8\nMAX_VARIANTS=12\nPROMOTE_THRESHOLD=0.68\nKILL_THRESHOLD=0.35\nTOURNAMENT_MODE=False/' ~/arena.py
+grep -n "ARENA_LOG\|GENOME_FILE\|TOURNAMENT_MODE\|Arena" ~/arena.py | head -10
+sed -i 's/ARENA_BUDGET=3.00/ARENA_BUDGET=3.00\nARENA_STATE_FILE="\/root\/arena_state.json"/' ~/arena.py
+sed -i 's/def safety_check/def write_arena_signal(market, yes_prob, regime, confidence, window_age, ticker, news_score=0, bond_score=0, whale_score=0):\n    signal={"yes_prob":yes_prob,"regime":regime,"confidence":confidence,"window_age":window_age,"ticker":ticker,"news_score":news_score,"bond_score":bond_score,"whale_score":whale_score,"ts":datetime.datetime.utcnow().isoformat()}\n    path=f"\/root\/arena_signal_{market}.json"\n    try:\n        open(path,"w").write(__import__("json").dumps(signal))\n    except Exception as e:\n        print(f"[ArenaSignal] write error: {e}")\n\ndef safety_check/' ~/arena.py
+grep -n "write_arena_signal\|ARENA_STATE_FILE" ~/arena.py | head -5
+grep -n "window_minute\|yes_ask\|yes_price" ~/arena.py | head -20
+sed -n '428,445p' ~/arena.py
+sed -i 's/window_minute=now_utc.minute%15/window_minute=now_utc.minute%15\n    write_arena_signal(market=_args.market,yes_prob=yes_price,regime=REGIME,confidence=0,window_age=window_minute,ticker=live_ticker)/' ~/arena.py
+sed -n '430,435p' ~/arena.py
+python3 -c "import ast; ast.parse(open('/root/arena.py').read()); print('Syntax OK')"
+sed -i 's/window_minute=now_utc.minute%15/window_minute=now_utc.minute%15\n    write_arena_signal(market=_args.market,yes_prob=yes_price,regime=REGIME,confidence=0,window_age=window_minute,ticker=live_ticker)/' ~/openclaw.py
+sed -i 's/def safety_check/def write_arena_signal(market, yes_prob, regime, confidence, window_age, ticker, news_score=0, bond_score=0, whale_score=0):\n    signal={"yes_prob":yes_prob,"regime":regime,"confidence":confidence,"window_age":window_age,"ticker":ticker,"news_score":news_score,"bond_score":bond_score,"whale_score":whale_score,"ts":datetime.datetime.utcnow().isoformat()}\n    path=f"\/root\/arena_signal_{market}.json"\n    try:\n        open(path,"w").write(__import__("json").dumps(signal))\n    except Exception as e:\n        print(f"[ArenaSignal] write error: {e}")\n\ndef safety_check/' ~/openclaw.py
+python3 -c "import ast; ast.parse(open('/root/openclaw.py').read()); print('openclaw OK')"
+pm2 restart openclaw-btc openclaw-eth openclaw-sol
+pm2 logs arena --lines 30 --nostream
+grep -n "if __name__\|while True\|def main\|LIVE\|Startup" ~/arena.py | tail -20
+tail -50 ~/arena.py
+head -940 ~/arena.py > /tmp/arena_head.py
+wc -l /tmp/arena_head.py
+cat >> /tmp/arena_head.py << 'EOF'
+ def load_json(path, default):
+     try:
+         if os.path.exists(path):
+             with open(path) as f:
+                 return json.load(f)
+     except Exception:
+         pass
+     return default
+ EOF
+
+tail -10 /tmp/arena_head.py
+python3 /tmp/write_loop.py
+nano /tmp/write_loop.py 
+source kalshi_env/bin/activate
+echo 'if __name__=="__main__":' >> /tmp/arena_head.py
+cp /tmp/arena_head.py ~/arena.py
+sleep 65 && pm2 logs arena --lines 15 --nostream
+wc -l /tmp/arena_head.py
+head -940 /tmp/arena_head.py > /tmp/arena_base.py
+echo 'def load_json(p,d):' >> /tmp/arena_base.py
+echo 'if __name__=="__main__":' >> /tmp/arena_base.py
+cp /tmp/arena_base.py ~/arena.py
+python3 -c "import ast; ast.parse(open('/root/arena.py').read()); print('OK')"
+pm2 restart arena
+sleep 70 && pm2 logs arena --lines 20 --nostream
+sed -i 's/v\["mutations"\].append(f"tightened threshold to {v\[\\"entry_threshold\\"\]:.2f} wr={wr:.0%}")/v["mutations"].append("tightened threshold wr="+str(round(wr,2)))/' ~/arena.py
+sed -i 's/v\["mutations"\].append(f"boosted bet to {v\[\\"max_bet_pct\\"\]:.2f} wr={wr:.0%}")/v["mutations"].append("boosted bet wr="+str(round(wr,2)))/' ~/arena.py
+python3 -c "import ast; ast.parse(open('/root/arena.py').read()); print('OK')"
+sed -i 's/print(f"\[Arena\] {v\[\\"id\\"\]} {direction} {outcome} | WR={wr:.0%} T={v\[\\"trades\\"\]} PnL=\${v\[\\"pnl\\"\]:+.2f}")/print("[Arena] "+v["id"]+" "+direction+" "+outcome+" WR="+str(round(wr,2))+" T="+str(v["trades"])+" PnL="+str(v["pnl"]))/' ~/arena.py
+sed -i 's/print(f"\[Arena\] Mutated {v\[\\"id\\"\]}: {v\[\\"mutations\\"\]\[-1\]}")/print("[Arena] Mutated "+v["id"])/' ~/arena.py
+grep -n '\\"' ~/arena.py | grep -v "^Binary"
+sed -i 's/print(f"\[Arena\] Cycle {cycle} done | {len(\[v for v in pool if v\[\\"status\\"\]==\\"active\\"\]\)} active variants")/print("[Arena] Cycle "+str(cycle)+" done | "+str(len([v for v in pool if v["status"]=="active"]))+" active variants")/' ~/arena.py
+python3 -c "import ast; ast.parse(open('/root/arena.py').read()); print('OK')"
+python3 -c "
+ content = open('/root/arena.py').read()
+ old = '''        print(f\"[Arena] Cycle {cycle} done | {len([v for v in pool if v[\\\"status\\\"]==\\\"active\\\"])} active variants\")'''
+ new = '        print(\"[Arena] Cycle \"+str(cycle)+\" done | \"+str(len([v for v in pool if v[\"status\"]==\"active\"]))+\" active variants\")'
+ content = content.replace(old, new)
+ open('/root/arena.py', 'w').write(content)
+ print('Done')
+ "
+python3 -c "import ast; ast.parse(open('/root/arena.py').read()); print('OK')"
+nano +1002 ~/arena.py 
+nano +1002 ~/arena.py
+python3 -c "import ast; ast.parse(open('/root/arena.py').read()); print('OK')"
+pm2 restart arena
+cat ~/genome.json | python3 -m json.tool | head -40
+cat ~/arena_state.json | python3 -m json.tool
+sed -i 's/if age>5: continue/if age>13: continue/' ~/arena.py
+sleep 90 && pm2 logs arena --lines 20 --nostream
+sed -i 's/if conf<v.get("min_confidence",6): continue/if conf<0: continue/' ~/arena.py
+cat ~/arena_state.json | python3 -m json.tool | grep -A 5 '"trades": [^0]' 
+cat ~/arena_signal_btc.json
+grep -n "def.*route\|@app.route\|flask\|Flask" ~/dashboard_v4.py | head -20
+head -30 ~/dashboard_v4.py
+grep -n "port\|run\|server\|listen\|http" ~/dashboard_v4.py | head -20
+sed -n '89,130p' ~/dashboard_v4.py
+sed -i "s|elif self.path == '/api/data':|elif self.path == '/arena_state':\n            try:\n                d = json.load(open('/root/arena_state.json'))\n                self.send_response(200)\n                self.send_header('Content-Type','application/json')\n                self.send_header('Access-Control-Allow-Origin','*')\n                self.end_headers()\n                self.wfile.write(json.dumps(d).encode())\n            except Exception as e:\n                self.send_response(500); self.end_headers(); self.wfile.write(str(e).encode())\n        elif self.path == '/api/data':|" ~/dashboard_v4.py
+nano +103 ~/dashboard_v4.py
+grep -n "arena_state\|arena_signal\|arena'" ~/dashboard_v4.py | head -10
+sed -i "s|        else:|        elif self.path == '/arena':\n            self.send_response(200)\n            self.send_header('Content-Type','text/html')\n            self.end_headers()\n            self.wfile.write(open('/root/arena_dashboard.html','rb').read())\n        elif self.path.startswith('/arena_signal/'):\n            mkt=self.path.split('/')[-1]\n            try:\n                d=json.load(open(f'/root/arena_signal_{mkt}.json'))\n                self.send_response(200)\n                self.send_header('Content-Type','application/json')\n                self.send_header('Access-Control-Allow-Origin','*')\n                self.end_headers()\n                self.wfile.write(json.dumps(d).encode())\n            except: self.send_response(500); self.end_headers()\n        else:|" ~/dashboard_v4.py
+grep -n "arena" ~/dashboard_v4.py
+sed -n '100,140p' ~/dashboard_v4.py 
+nano /tmp/fix_dashboard.py
+python3 /tmp/fix_dashboard.py
+sed -n '108,125p' ~/dashboard_v4.py
+nano /tmp/fix_dashboard.py
+python3 /tmp/fix_dashboard.py
+echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>OpenClaw Arena</title>' > /root/arena_dashboard.html
+pm2 restart dashboard
+pm2 save
+curl -s http://localhost:8080/arena | head -3
+sed -n '89,125p' ~/dashboard_v4.py
+curl -s http://localhost:8080/arena | head -3
+curl -s http://localhost:8080/arena | grep -i "arena\|ARENA"
+cat ~/arena_dashboard.html
+curl -v http://localhost:8080/arena 2>&1 | grep "< HTTP\|Content-Type\|Location"
+curl -s http://localhost:8080/arena | head -8
+grep -n "self.path\|arena" ~/dashboard_v4.py | head -20
+grep -n "dashboard_v4.html\|dashboard.html" ~/dashboard_v4.py
+sed -i 's/if self.path == .\/api\/data.:/if self.path.split("?")[0] == "\/api\/data":/' ~/dashboard_v4.py
+sed -i "s|elif self.path.split..Q...\[0\] == '/arena':|elif self.path.split('?')[0] == '/arena_state':\n            try:\n                d=json.load(open('/root/arena_state.json'))\n                self.send_response(200)\n                self.send_header('Content-Type','application/json')\n                self.send_header('Access-Control-Allow-Origin','*')\n                self.end_headers()\n                self.wfile.write(json.dumps(d).encode())\n            except: self.send_response(500); self.end_headers()\n        elif self.path.split('?')[0] == '/arena':|" ~/dashboard_v4.py
+python3 -c "import ast; ast.parse(open('/root/dashboard_v4.py').read()); print('OK')"
+sed -n '89,130p' ~/dashboard_v4.py
+pm2 stop dashboard
+nano /tmp/test_handler.py
+python3 /tmp/test_handler.py &
+md5sum ~/dashboard_v4.py
+kill 546833
+pm2 list
+pm2 restart dashboard
+grep -r "dashboard.py" /etc/systemd/ 2>/dev/null
+curl -s http://localhost:8080/arena_state | head -3
+nano +103 ~/dashboard_v4.py
+nano /tmp/add_arena_state.py
+python3 /tmp/add_arena_state.py
+curl -v http://localhost:8080/arena_state 2>&1 | head -15
+grep -n "arena_state" ~/dashboard_v4.py
+python3 -c "import json; d=json.load(open('/root/arena_state.json')); print('OK', d['cycle'])"
+sed -n '103,115p' ~/dashboard_v4.py
+pm2 logs arena --lines 10 --nostream
+ls -la ~/arena_state.json
+curl -s -w "\nHTTP_STATUS:%{http_code}\n" http://localhost:8080/arena_state
+sed -i 's/    return v,False$/    return v, False/' ~/arena.py
+pm2 save
+sed -i 's|<a href="/bible"|<a href="/arena" style="font-family:Orbitron,sans-serif;font-size:10px;letter-spacing:2px;padding:6px 12px;border:1px solid #00ffe0;color:#00ffe0;text-decoration:none;margin-right:8px;">⚔ ARENA</a><a href="/bible"|' ~/dashboard_v4.html
+source kalshi_env/bin/activate
+pm2 list
+python3 /tmp/status_all.py
+pm2 delete watchdog

@@ -1,0 +1,318 @@
+#!/usr/bin/env python3
+ """
+ OpenClaw Paper Trading Engine
+ Runs 3 agents simultaneously with different parameters
+ Logs all signals and simulated outcomes for analysis
+ """
+ import time, datetime, requests, json, csv, os, argparse
+ from collections import defaultdict
+ from kalshi_python import KalshiClient
+ from kalshi_python.configuration import Configuration
+ 
+ # Load credentials
+ raw = open('/root/real_bot_pre_v4_backup.py').read()
+ KEY = raw.split("KALSHI_API_KEY = '")[1].split("'")[0]
+ SEC = raw.split("KALSHI_SECRET  = '''")[1].split("'''")[0]
+ import tempfile
+ tf = tempfile.NamedTemporaryFile(delete=False, suffix='.pem', mode='w')
+ tf.write(SEC); tf.close()
+ config = Configuration()
+ config.host = "https://api.elections.kalshi.com/trade-api/v2"
+ kalshi = KalshiClient(config)
+ kalshi.set_kalshi_auth(KEY, tf.name)
+ 
+ # AGENT CONFIGURATIONS
+ AGENTS = {
+     "A_baseline": {
+         "low": 0.30, "high": 0.70,
+         "extreme_low": 0.20, "extreme_high": 0.80,
+         "min_edge": 0.20, "bet_pct": 0.07,
+         "breakeven_prob": 0.45, "breakeven_age": 2.5,
+         "cashout_adverse": 0.25, "cashout_minutes": 3.0,
+     },
+     "B_conservative": {
+         "low": 0.25, "high": 0.75,
+         "extreme_low": 0.15, "extreme_high": 0.85,
+         "min_edge": 0.25, "bet_pct": 0.05,
+         "breakeven_prob": 0.50, "breakeven_age": 2.0,
+         "cashout_adverse": 0.20, "cashout_minutes": 2.5,
+     },
+     "C_aggressive": {
+         "low": 0.32, "high": 0.68,
+         "extreme_low": 0.22, "extreme_high": 0.78,
+         "min_edge": 0.18, "bet_pct": 0.09,
+         "breakeven_prob": 0.40, "breakeven_age": 3.0,
+         "cashout_adverse": 0.30, "cashout_minutes": 3.5,
+     },
+ }
+ 
+ MARKETS = [
+     ("KXBTC15M", "BTC"),
+     ("KXETH15M", "ETH"),
+     ("KXSOL15M", "SOL"),
+ ]
+ 
+ LOG_FILE = "/root/paper_trade_log.csv"
+ BALANCE = 150.0  # Simulated starting balance
+ 
+ # Init log
+ if not os.path.exists(LOG_FILE):
+     with open(LOG_FILE, 'w', newline='') as f:
+         csv.writer(f).writerow([
+             "timestamp","agent","market","direction","yes_price",
+             "edge","signal_type","simulated_bet","entry_minute",
+             "outcome","pnl","exit_reason","exit_minute"
+         ])
+ 
+ def get_market_data(series):
+     try:
+         url = "https://api.elections.kalshi.com/trade-api/v2/markets"
+         h = kalshi.kalshi_auth.create_auth_headers("GET", url)
+         r = requests.get(url, headers=h,
+             params={"status":"open","series_ticker":series,"limit":5}, timeout=6)
+         markets = r.json().get("markets", [])
+         hits = [m for m in markets if m.get("ticker","").startswith(series)]
+         if not hits: return None
+         m = sorted(hits, key=lambda x: x.get("close_time",""))[0]
+         yes = m.get("yes_ask_dollars") or m.get("yes_bid_dollars")
+         no = m.get("no_ask_dollars") or m.get("no_bid_dollars")
+         if yes and no:
+             return {
+                 "ticker": m.get("ticker"),
+                 "yes": float(yes),
+                 "no": float(no),
+                 "close_time": m.get("close_time",""),
+             }
+     except: pass
+     return None
+ 
+ def get_coinbase_price(symbol):
+     try:
+         r = requests.get(
+             f"https://api.coinbase.com/v2/prices/{symbol}-USD/spot",
+             timeout=3)
+         if r.status_code == 200:
+             return float(r.json()["data"]["amount"])
+     except: pass
+     return None
+ 
+ def check_signal(mkt, agent_cfg, cb_price=None, series="KXBTC15M"):
+     yes = mkt["yes"]
+     no = mkt["no"]
+     price_sum = yes + no
+     if price_sum < 0.97: return None  # arb opportunity, skip
+     
+     direction = None
+     edge = 0
+     signal_type = "NONE"
+     
+     if yes > agent_cfg["extreme_high"]:
+         direction = "UP"
+         edge = yes - 0.5
+         signal_type = "EXTREME"
+     elif yes < agent_cfg["extreme_low"]:
+         direction = "DOWN"
+         edge = 0.5 - yes
+         signal_type = "EXTREME"
+     elif yes > agent_cfg["high"] and edge >= agent_cfg["min_edge"]:
+         direction = "UP"
+         edge = yes - 0.5
+         signal_type = "STANDARD"
+     elif yes < agent_cfg["low"] and edge >= agent_cfg["min_edge"]:
+         direction = "DOWN"
+         edge = 0.5 - yes
+         signal_type = "STANDARD"
+     
+     if not direction: return None
+     edge = abs(yes - 0.5)
+     if edge < agent_cfg["min_edge"]: return None
+     
+     return {
+         "direction": direction,
+         "edge": round(edge, 3),
+         "signal_type": signal_type,
+         "yes_price": yes,
+     }
+ 
+ # Track open paper positions
+ paper_positions = []  # {agent, market, ticker, direction, yes_price, entry_time, bet, signal_type}
+ 
+ def simulate_bet(agent_name, market_name, signal, ticker, entry_minute):
+     cfg = AGENTS[agent_name]
+     bet = round(BALANCE * cfg["bet_pct"], 2)
+     paper_positions.append({
+         "agent": agent_name,
+         "market": market_name,
+         "ticker": ticker,
+         "direction": signal["direction"],
+         "yes_price": signal["yes_price"],
+         "entry_time": time.time(),
+         "entry_minute": entry_minute,
+         "bet": bet,
+         "signal_type": signal["signal_type"],
+         "edge": signal["edge"],
+     })
+     print(f"[Paper] {agent_name} | {market_name} {signal['direction']} | "
+           f"yes={signal['yes_price']:.2f} edge={signal['edge']:.2f} "
+           f"bet=${bet:.2f} | {signal['signal_type']}")
+ 
+ def check_paper_positions():
+     global paper_positions
+     to_remove = []
+     for pos in paper_positions:
+         ticker = pos["ticker"]
+         age_min = (time.time() - pos["entry_time"]) / 60
+         if age_min < 1: continue
+         
+         # Check market result
+         try:
+             murl = f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
+             mh = kalshi.kalshi_auth.create_auth_headers("GET", murl)
+             mr = requests.get(murl, headers=mh, timeout=4)
+             if mr.status_code != 200: continue
+             mkt = mr.json().get("market", {})
+             result = mkt.get("result", "")
+             cur_yes = float(mkt.get("yes_ask_dollars") or mkt.get("yes_bid_dollars") or pos["yes_price"])
+             cfg = AGENTS[pos["agent"]]
+             
+             # Check cash out conditions
+             direction = pos["direction"]
+             entry_yes = pos["yes_price"]
+             win_prob = cur_yes if direction=="UP" else (1-cur_yes)
+             entry_win_prob = entry_yes if direction=="UP" else (1-entry_yes)
+             adverse = (entry_yes-cur_yes) if direction=="UP" else (cur_yes-(1-entry_yes))
+             exit_reason = None
+             
+             if age_min >= 1.5:
+                 reversal = ((cur_yes-entry_yes)>0.08) if direction=="DOWN" else ((entry_yes-cur_yes)>0.08)
+                 if win_prob > 0.70 and reversal:
+                     exit_reason = "ProfitLock"
+             if not exit_reason and age_min >= cfg["breakeven_age"]:
+                 if win_prob < cfg["breakeven_prob"] and entry_win_prob > 0.60:
+                     exit_reason = "BreakEven"
+             if not exit_reason and age_min >= cfg["cashout_minutes"]:
+                 if adverse > cfg["cashout_adverse"]:
+                     exit_reason = "CashOut"
+             
+             # Check settlement
+             if result:
+                 won = (direction=="UP" and result=="yes") or (direction=="DOWN" and result=="no")
+                 if exit_reason:
+                     # Simulated partial recovery
+                     recovery = cur_yes if direction=="UP" else (1-cur_yes)
+                     pnl = round(pos["bet"] * (recovery - pos["yes_price"]), 2)
+                     outcome = "CASHOUT"
+                 else:
+                     if won:
+                         payout_price = pos["yes_price"] if direction=="UP" else (1-pos["yes_price"])
+                         pnl = round(pos["bet"] * (1-payout_price) / payout_price, 2)
+                         outcome = "WIN"
+                     else:
+                         pnl = -pos["bet"]
+                         outcome = "LOSS"
+                 
+                 exit_min = round(age_min, 1)
+                 with open(LOG_FILE, 'a', newline='') as f:
+                     csv.writer(f).writerow([
+                         datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                         pos["agent"], pos["market"], direction,
+                         pos["yes_price"], pos["edge"], pos["signal_type"],
+                         pos["bet"], pos["entry_minute"],
+                         outcome, pnl, exit_reason or "natural", exit_min
+                     ])
+                 print(f"[Paper] {pos['agent']} | {outcome} | {direction} ${pos['bet']:.2f} "
+                       f"pnl=${pnl:+.2f} | exit={exit_reason or 'natural'}")
+                 to_remove.append(pos)
+             elif age_min > 20:
+                 to_remove.append(pos)
+         except Exception as e:
+             if age_min > 20: to_remove.append(pos)
+     
+     paper_positions = [p for p in paper_positions if p not in to_remove]
+ 
+ def print_summary():
+     try:
+         stats = defaultdict(lambda: {"w":0,"l":0,"co":0,"pnl":0.0})
+         with open(LOG_FILE) as f:
+             for row in csv.DictReader(f):
+                 a = row["agent"]
+                 if row["outcome"] == "WIN": stats[a]["w"] += 1
+                 elif row["outcome"] == "LOSS": stats[a]["l"] += 1
+                 else: stats[a]["co"] += 1
+                 stats[a]["pnl"] += float(row["pnl"])
+         print("\n" + "="*60)
+         print("PAPER TRADING SUMMARY")
+         print("="*60)
+         for agent, s in sorted(stats.items()):
+             total = s["w"] + s["l"] + s["co"]
+             wr = s["w"]/total*100 if total else 0
+             print(f"{agent:20} | {total:3} trades | {wr:.0f}% WR | "
+                   f"PnL: ${s['pnl']:+.2f} | CashOuts: {s['co']}")
+         print("="*60 + "\n")
+     except: pass
+ 
+ print("🦀 OpenClaw Paper Trading Engine starting...")
+ print(f"Agents: {list(AGENTS.keys())}")
+ print(f"Markets: {[m[1] for m in MARKETS]}")
+ print(f"Log: {LOG_FILE}")
+ print()
+ 
+ cycle = 0
+ last_summary = time.time()
+ last_signal = defaultdict(float)  # prevent duplicate signals
+ 
+ while True:
+     try:
+         cycle += 1
+         now = datetime.datetime.now(datetime.timezone.utc)
+         hour = now.hour
+         
+         # Check open positions
+         check_paper_positions()
+         
+         # Print summary every hour
+         if time.time() - last_summary > 3600:
+             print_summary()
+             last_summary = time.time()
+         
+         # Scan markets
+         for series, market_name in MARKETS:
+             # TOD check - skip thin hours for ETH/SOL
+             if series != "KXBTC15M" and hour in range(22, 24) or hour in range(0, 6):
+                 continue
+             
+             mkt = get_market_data(series)
+             if not mkt: continue
+             
+             ticker = mkt["ticker"]
+             entry_minute = now.minute % 15
+             
+             # Skip old windows
+             if entry_minute > 13: continue
+             
+             # Prevent duplicate signals same ticker
+             sig_key = f"{ticker}"
+             if time.time() - last_signal[sig_key] < 600: continue
+             
+             # Check each agent
+             for agent_name, cfg in AGENTS.items():
+                 # Skip if agent already has position in this market
+                 if any(p["agent"]==agent_name and p["market"]==market_name 
+                        for p in paper_positions):
+                     continue
+                 
+                 signal = check_signal(mkt, cfg, series=series)
+                 if signal:
+                    simulate_bet(agent_name, market_name, signal, ticker, entry_minute)
+                    last_signal[sig_key] = time.time()
+
+        time.sleep(30)
+
+    except KeyboardInterrupt:
+        print("\nPaper trader stopped.")
+        print_summary()
+        break
+    except Exception as e:
+        print(f"[Error] {e}")
+        time.sleep(30)
+

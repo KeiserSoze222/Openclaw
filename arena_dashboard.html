@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>OpenClaw Arena</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head><body style="background:#030712;color:#c8d8e8;font-family:monospace;padding:20px;">
+<h1 style="color:#00ffe0;font-size:24px;letter-spacing:4px;">OPENCLAW ARENA</h1>
+<div id="status" style="color:#4a6a8a;font-size:12px;margin:10px 0;">Loading...</div>
+<div id="board" style="margin-top:20px;"></div>
+<script>
+async function refresh(){
+  const r=await fetch("/arena_state");
+  const d=await r.json();
+  document.getElementById("status").textContent="Cycle "+d.cycle+" | "+d.leaderboard.length+" variants | "+d.ts;
+  const sorted=[...d.leaderboard].sort((a,b)=>b.wr-a.wr||b.pnl-a.pnl);
+  document.getElementById("board").innerHTML=sorted.map((v,i)=>`<div style="padding:8px;margin:4px 0;background:#0a1020;border-left:3px solid ${v.wr>=0.68?"#00ff88":v.wr>=0.5?"#00ffe0":v.trades>0?"#ff3355":"#1a2a3a"};display:flex;gap:16px;align-items:center;"><span style="color:#00ffe0;min-width:60px;">${v.id}</span><span style="color:#4a6a8a;font-size:10px;min-width:30px;">${v.market.toUpperCase()}</span><span style="font-size:20px;font-weight:bold;color:${v.wr>=0.68?"#00ff88":v.wr>=0.5?"#00ffe0":v.trades>0?"#ff3355":"#4a6a8a"};min-width:55px;">${v.trades>0?Math.round(v.wr*100)+"%":"—"}</span><span style="font-size:11px;color:#4a6a8a;">T:${v.trades}</span><span style="font-size:11px;color:${v.pnl>=0?"#00ff88":"#ff3355"};">${v.pnl>=0?"+":""}$${v.pnl.toFixed(2)}</span><span style="font-size:9px;color:#4a6a8a;">Gen${v.gen}</span></div>`).join("");
+}
+refresh();setInterval(refresh,15000);
+</script></body></html>
