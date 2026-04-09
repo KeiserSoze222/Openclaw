@@ -28,6 +28,9 @@ MIN_MINUTES     = 5      # minimum minutes remaining to place bet
 MAX_MINUTES     = 45     # skip if more than 60 min remaining (too long to wait)
 SCAN_INTERVAL   = 120    # scan every 2 minutes
 LOG_FILE        = '/root/bond_log.json'
+ARB_LOG = '/root/arb_log.json'
+ARB_MAX_COST = 10.0
+ARB_MIN_PCT = 2.0
 
 # Track placed positions to avoid duplicates
 placed_markets = set()
@@ -222,6 +225,66 @@ def check_settled():
                 if result in ("yes", "no"):
                     placed_markets.discard(ticker)
 
+def fetch_markets():
+     url="https://api.elections.kalshi.com/trade-api/v2/markets"
+     headers=get_auth_headers("GET",url)
+     all_markets=[]
+     cursor=""
+     while True:
+         p={"status":"open","limit":100}
+         if cursor: p["cursor"]=cursor
+         r=requests.get(url,headers=headers,params=p,timeout=10)
+         if r.status_code!=200: break
+         d=r.json()
+         mkts=d.get("markets",[])
+         if not mkts: break
+         all_markets.extend(mkts)
+         cursor=d.get("cursor","")
+         if not cursor: break
+     return all_markets
+ 
+ def scan_bundle_arb(markets):
+     arbs=[]
+     for m in markets:
+         tk=m.get("ticker","")
+         ya=m.get("yes_ask_dollars")
+         na=m.get("no_ask_dollars")
+         ct=m.get("close_time") or m.get("expiration_time")
+         vol=m.get("volume",0) or 0
+         if not ya or not na or not ct: continue
+         if tk in placed_markets: continue
+         if vol<1000: continue
+         yp=float(ya); np2=float(na); cb=yp+np2
+         if cb>=0.97 or cb<=0.50: continue
+         try:
+             cd=datetime.datetime.fromisoformat(ct.replace("Z","+00:00"))
+             ml=(cd-datetime.datetime.now(datetime.timezone.utc)).total_seconds()/60
+         except: continue
+         if ml<MIN_MINUTES or ml>MAX_MINUTES: continue
+         net=(1.0-cb)*0.93; pct=(net/cb)*100
+         if pct<ARB_MIN_PCT: continue
+         arbs.append({"ticker":tk,"yp":yp,"np":np2,"cb":cb,"pct":pct,"ml":ml})
+     return sorted(arbs,key=lambda x:x["pct"],reverse=True)
+ 
+ def place_bundle_arb(arb):
+     tk=arb["ticker"]; yp=arb["yp"]; np2=arb["np"]
+     n=max(1,int(ARB_MAX_COST/arb["cb"]))
+     yc=min(99,max(1,round(yp*100)+1))
+     nc=min(99,max(1,round(np2*100)+1))
+     try:
+         kalshi.create_order(ticker=tk,action="buy",side="yes",type="market",count=n,yes_price=yc,time_in_force="ioc")
+         kalshi.create_order(ticker=tk,action="buy",side="no",type="market",count=n,no_price=nc,time_in_force="ioc")
+         placed_markets.add(tk)
+         cost=n*arb["cb"]; profit=n*(1.0-arb["cb"])
+         msg="ARB "+tk+" YES@"+str(round(yp,3))+"+NO@"+str(round(np2,3))+"="+str(round(arb["cb"],3))+" x"+str(n)+" cost=$"+str(round(cost,2))+" profit=$"+str(round(profit,2))+" ("+str(round(arb["pct"],1))+"%) "+str(round(arb["ml"],0))+"min"
+         print(msg); send_telegram(msg)
+         with open(ARB_LOG,"a") as f:
+             import json as _j
+             f.write(_j.dumps({"ts":datetime.datetime.now().isoformat(),"ticker":tk,"cb":arb["cb"],"n":n,"cost":cost,"profit":profit})+"
+")
+     except Exception as e: print("[Arb] fail: "+str(e))
+ 
+ 
 # ── MAIN LOOP ─────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     print("OpenClaw Bond Scanner starting...")
@@ -234,6 +297,7 @@ if __name__ == "__main__":
 
         try:
             opps = scan_markets()
+            arbs = [m for m in fetch_arbs() if m]
             bal  = get_balance()
             print(f"[{datetime.datetime.now().strftime('%H:%M')}] "
                   f"Scanned markets | Found {len(opps)} opportunities | "

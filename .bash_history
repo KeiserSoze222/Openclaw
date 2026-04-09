@@ -1,216 +1,3 @@
-grep "2026-04-01 17" /root/sol_trade_log.csv | tail -5
-grep "2026-04-01" /root/trade_log.csv | grep "LOSS\|WIN" | tail -10
-grep "2026-04-01 17" /root/trade_log.csv | tail -5
-grep "csv_path\|csv_files\|botfile" /root/sol_bot.py | head -8
-grep -A 8 "csv_files = {" /root/sol_bot.py | head -10
-python3 /tmp/check_positions.py
-for f in /root/real_bot.py /root/eth_bot.py /root/sol_bot.py; do      sed -i 's/"eth_bot.py": "\/root\/eth_trade_log.csv",/"btc_bot.py": "\/root\/trade_log.csv",\n        "real_bot.py": "\/root\/trade_log.csv",\n        "eth_bot.py": "\/root\/eth_trade_log.csv",/' $f;  done
-cat /root/bot.log | tail -5
-cp /root/real_bot.py /root/real_bot_v3_stable.py
-source kalshi_env/bin/activate
-python3 /tmp/status_all.py
-python3 /tmp/check_balance.py
-touch /root/STOP_ETH
-touch /root/STOP
-grep "MARKET_SERIES" /root/real_bot.py | head -1
-source kalshi_env/bin/activate
-grep -n "def get_live_ticker\|live_ticker\|series_ticker" /root/real_bot.py | head -10
-grep -n "^live_ticker\|^LIVE_TICKER" /root/real_bot.py | head -5
-grep -n "def get_live_ticker" /root/real_bot.py
-grep -n "def get_live_ticker" /root/real_bot.py | head -1
-sed -n '188,245p' /root/real_bot.py
-grep -n "def build_ticker" /root/real_bot.py
-grep -n "restart_bot\|Popen\|subprocess" /root/watchdog.py | head -10
-sed -n '55,75p' /root/watchdog.py
-nano /tmp/fix_watchdog.py
-python3 /tmp/fix_watchdog.py
-rm -f /root/STOP /root/STOP_ETH /root/STOP_SOL
-kill 508433
-ps aux | grep -E "real_bot|eth_bot|sol_bot" | grep -v grep | wc -l
-nano /root/RESTART_PROCEDURE.md
-sed -n '70,95p' /root/watchdog.py
-nano /tmp/fix_watchdog_autostart.py
-python3 /tmp/fix_watchdog_autostart.py
-sed -i 's/8. Watchdog will start all three bots automatically within 5 minutes/8. Watchdog auto-starts all bots immediately on launch/' /root/RESTART_PROCEDURE.md
-cp /root/watchdog.py /root/watchdog_stable.py
-python3 /tmp/status_all.py
-source kalshi_env/bin/activate
-python3 /tmp/check_balance.py
-grep -n "DAILY_LOSS\|daily_loss\|SESSION_START_BAL\|loss_pct" /root/real_bot.py | head -10
-cat /root/bot.log | tail -8
-grep -n "SESSION_START_BAL\|get_live_balance\|live_bal" /root/real_bot.py | head -10
-sed -i 's/DIRECTIONAL_HIGH = 0.75/DIRECTIONAL_HIGH = 0.70/' /root/real_bot.py
-sed -n '958,975p' /root/real_bot.py
-nano /tmp/fix_session_start.py
-python3 /tmp/fix_session_start.py
-pkill -f watchdog.py
-grep "Live balance\|Startup" /root/bot.log | head -5
-ps aux | grep -E "real_bot|eth_bot|sol_bot|watchdog" | grep -v grep
-tail -5 /root/bot.log
-cp /root/real_bot.py /root/real_bot_v3_stable.py
-python3 /tmp/status_all.py
-source kalshi_env/bin/activate
-grep -n "CashOut\|Mid-trade\|cash_out\|adverse" /root/real_bot.py | head -10
-grep -n "Mid-trade\|CashOut\|adverse_move\|age_min" /root/real_bot.py | head -10
-grep -n "Restored position\|load_existing_positions\|OPEN_POSITIONS.append" /root/real_bot.py | head -8
-sed -n '718,770p' /root/real_bot.py
-nano /tmp/fix_cashout_restore.py
-python3 /tmp/fix_cashout_restore.py
-grep -n "MARKET_SERIES in ticker" /root/real_bot.py | head -3
-sed -i 's/OpenClaw SOL Bot v1.0/OpenClaw BTC Bot v3.0/' /root/real_bot.py
-pkill -f watchdog.py
-sed -i 's/                if ticker and exposure > 0:/                if ticker and exposure > 0 and MARKET_SERIES in ticker:/' /root/real_bot.py
-grep "Settled.*LOSS" /root/eth_bot.log /root/sol_bot.log | tail -10
-grep "TOD\|Skipping\|bad hour" /root/sol_bot.log | tail -5
-pkill -f watchdog.py
-grep "MARKET_SERIES in ticker" /root/real_bot.py
-nohup python3 -u /root/real_bot.py > /root/bot.log 2>&1 &
-python3 /tmp/check_positions.py
-pkill -f real_bot.py
-grep "Restored\|Live balance" /root/eth_bot.log | tail -5
-ps aux | grep -E "real_bot|eth_bot|sol_bot|watchdog" | grep -v grep
-python3 /tmp/check_positions.py
-cat /root/bot.log | tail -6
-cp /root/real_bot.py /root/real_bot_v3_stable.py
-sleep 120 && grep -E "CONFIRMED|EXTREME|Settled|WIN|LOSS|CashOut" /root/bot.log /root/eth_bot.log /root/sol_bot.log 2>/dev/null | tail -15
-grep -n "if get_max_bet.*0.00\|TOD.*Skipping" /root/sol_bot.py | head -5
-nano /tmp/fix_tod_extreme.py
-python3 /tmp/fix_tod_extreme.py
-pkill -f watchdog.py
-sed -n '1,100p' /root/real_bot.py
-sed -n '100,200p' /root/real_bot.py
-grep "KALSHI_API_KEY\|BOT_TOKEN\|CHAT_ID" /root/real_bot.py | head -5
-grep "KALSHI_API_KEY\|KALSHI_SECRET\|BOT_TOKEN\|CHAT_ID" /root/real_bot.py | head -6
-grep -n "def \|class \|import \|^[A-Z]" /root/real_bot.py | head -60
-57:BOT_TOKEN = '8716034840:AAHBhhlM0nFOQCIAhVOzYW8iXamumTAZypU'
-grep -n "def " /root/real_bot.py
-grep -n "def get_trend_validator\|get_btc_prices\|send_hourly\|numpy\|np\." /root/real_bot.py | head -10
-grep -n "RISK_SCORE\|update_regime\|circuit_breaker\|session_start_time" /root/real_bot.py | head -10
-sed -n '240,265p' /root/real_bot.py
-cat > /root/openclaw_btc_v4.py << 'ENDOFFILE'
- #!/usr/bin/env python3
- """
- OpenClaw BTC Bot v4.0 — Complete Clean Rebuild
- ================================================
- Market: Kalshi KXBTC15M (15-minute Bitcoin up/down contracts)
- Strategy: Favorite-longshot bias + calibration edge
- Signals: EXTREME > STRONG_MIN1 > STANDARD
- Confirmations: Coinbase spot + Kraken cross-check + 3-market correlation
- Risk: Smart TOD scaling, daily loss limit, cash out monitor, circuit breaker
- Author: OpenClaw / Claude — April 2026
- """
- 
- import os, time, csv, datetime, requests, tempfile, json, numpy as np
- from kalshi_python import KalshiClient
- from kalshi_python.configuration import Configuration
- 
- # ── CREDENTIALS ───────────────────────────────────────────────────────────────
- # Read from existing bot to avoid re-entering
- _raw           = open('/root/real_bot.py').read()
- KALSHI_API_KEY = _raw.split("KALSHI_API_KEY = '")[1].split("'")[0]
- KALSHI_SECRET  = _raw.split("KALSHI_SECRET  = '''")[1].split("'''")[0]
- BOT_TOKEN      = _raw.split("BOT_TOKEN = '")[1].split("'")[0]
- CHAT_ID        = _raw.split("CHAT_ID   = '")[1].split("'")[0]
- del _raw
- 
- # ── KALSHI CLIENT ─────────────────────────────────────────────────────────────
- _tf = tempfile.NamedTemporaryFile(delete=False, suffix=".pem", mode="w")
- _tf.write(KALSHI_SECRET); _tf.close()
- _config = Configuration()
- _config.host = "https://api.elections.kalshi.com/trade-api/v2"
- kalshi = KalshiClient(_config)
- kalshi.set_kalshi_auth(KALSHI_API_KEY, _tf.name)
- 
- # ── BOT IDENTITY ──────────────────────────────────────────────────────────────
- BOT_NAME      = "OpenClaw BTC Bot v4.0"
- MARKET_SERIES = "KXBTC15M"  # DO NOT CHANGE — BTC bot only
- assert MARKET_SERIES == "KXBTC15M", f"WRONG MARKET: {MARKET_SERIES}"
- STOP_FILE     = "/root/STOP"
- LOG_CSV       = "/root/trade_log.csv"
- PERF_LOG      = "/root/performance_log.json"
- FEAT_LOG      = "/root/feature_log.json"
- 
- # ── TRADING CONFIG ────────────────────────────────────────────────────────────
- DRY_RUN          = False
- MAX_BET_PCT      = 0.07      # 7% base — scales with TOD
- PEAK_BET_PCT     = 0.10      # 10% during peak hours
- MIN_BALANCE      = 185.00    # hard floor — halt if below
- DAILY_LOSS_LIMIT = 0.12      # 12% daily loss triggers halt
- CYCLE_SLEEP      = 60        # seconds between cycles
- COOLDOWN_CYCLES  = 2         # cycles to skip after failed order
- ARB_THRESHOLD    = 0.97      # YES+NO below this = arb opportunity
- DIRECTIONAL_HIGH = 0.70      # signal fires above this
- DIRECTIONAL_LOW  = 0.30      # signal fires below this
- EXTREME_HIGH     = 0.80      # immediate fire, no confirmation needed
- EXTREME_LOW      = 0.20      # immediate fire, no confirmation needed
- STRONG_MIN1_EDGE = 0.30      # min edge for early minute-1 entry
- MIN_EDGE         = 0.20      # skip signals with edge below this (avoid weak trades)
- CASHOUT_MINUTES  = 5         # start checking cashout after this many minutes
- CASHOUT_ADVERSE  = 0.30      # adverse move threshold to trigger cashout
- 
- # ── TOD SCHEDULE ─────────────────────────────────────────────────────────────
- # Based on real historical win rate data (274 trades analyzed)
- # 0.0 = stop completely, 1.0 = full size, peak hours get PEAK_BET_PCT
- TOD_SCHEDULE = {
-     0: 0.40,   # 62% WR — reduced
-     1: 0.25,   # 56% WR — poor
-     2: 1.00,   # 76% WR — good
-     3: 1.00,   # 94% WR — PEAK
-     4: 0.40,   # 56% WR — poor
-     5: 0.00,   # 43% WR — STOP (net negative)
-     6: 1.00,   # 93% WR — PEAK
-     7: 1.00,   # 90% WR — PEAK
-     8: 1.00,   # 87% WR — PEAK
-     9: 1.00,   # 92% WR — PEAK
-     10: 1.00,  # 81% WR — PEAK
-     11: 1.00,  # 91% WR — PEAK
-     12: 0.50,  # 60% WR — reduced
-     13: 0.50,  # 60% WR — reduced
-     14: 1.00,  # 89% WR — PEAK
-     15: 1.00,  # 100% WR — PEAK
-     16: 1.00,  # 88% WR — PEAK
-     17: 0.75,  # 69% WR — moderate
-     18: 0.75,  # 67% WR — moderate
-     19: 1.00,  # 91% WR — PEAK
-     20: 0.75,  # 67% WR — moderate
-     21: 1.00,  # 95% WR — PEAK
-     22: 0.25,  # 56% WR — poor
-     23: 0.75,  # 67% WR — moderate
- }
- PEAK_HOURS = {3,6,7,8,9,10,11,14,15,16,19,21}
- 
- # ── BALANCE & SESSION STATE ───────────────────────────────────────────────────
- INITIAL_BALANCE   = 200.29
- SESSION_START_BAL = 200.29
- CURRENT_BALANCE   = INITIAL_BALANCE
- 
- # ── RUNTIME STATE ─────────────────────────────────────────────────────────────
- OPEN_POSITIONS           = []
- COOLDOWN_REMAINING       = 0
- REGIME                   = "CHOP"
- RISK_SCORE               = 0.4
- last_signal_direction    = None
- consecutive_signal_count = 0
- session_wins             = 0
- session_losses           = 0
- session_pnl              = 0.0
- live_ticker              = None
- session_start_time       = time.time()
- _last_summary_hour       = -1
- 
- # ─────────────────────────────────────────────────────────────────────────────
- # BET SIZING — Kelly-informed with TOD scaling
- # ─────────────────────────────────────────────────────────────────────────────
- def get_max_bet(is_extreme=False):
-     """
-     Dynamic bet sizing based on:
-     - Time of day (historical win rate per hour)
-     - Peak vs normal hours
-     - Extreme signal bypass during bad hours (3% floor)
-     - Balance-proportional with hard caps
-     """
-     hour      = datetime.datetime.now(datetime.timezone.utc).hour
-     tod_scale = TOD_SCHEDULE.get(hour, 1.0)
  
      # Extreme signals always get a minimum bet even in bad hours
      if tod_scale == 0.0:
@@ -1998,3 +1785,216 @@ exit
 source kalshi_env/bin/activate
 nano /root/arena_dashboard.html
 pm2 restart dashboard
+source kalshi_env/bin/activate
+cp /root/arena_dashboard.html /root/arena_dashboard_backup.html
+pm2 restart dashboard
+python3 /tmp/status_all.py
+nano /root/arena_dashboard.html
+pm2 restart dashboard
+sed -i 's/MIN_BALANCE=120/MIN_BALANCE=100/' /root/openclaw.py
+cat /root/bond_scanner.py
+cp /root/bond_scanner.py /root/bond_scanner_backup.py
+pm2 restart bond-scanner
+python3 -c "
+ content = open('/root/bond_scanner.py').read()
+ print(repr(content[:200]))
+ "
+sed -i '1,6d' /root/bond_scanner.py
+cp /root/bond_scanner_backup.py /root/bond_scanner.py
+python3 << 'PYEOF'
+ with open('/root/bond_scanner_backup.py', 'r') as f:
+     content = f.read()
+ 
+ arb_config = "\nARB_MIN_PROFIT_PCT = 2.0\nARB_MAX_COST = 10.0\nARB_LOG_FILE = '/root/arb_log.json'\n"
+ content = content.replace("LOG_FILE        = '/root/bond_log.json'", "LOG_FILE        = '/root/bond_log.json'" + arb_config)
+ 
+ fetch_fn = "\ndef fetch_markets():\n    url = 'https://api.elections.kalshi.com/trade-api/v2/markets'\n    headers = get_auth_headers('GET', url)\n    all_markets = []\n    cursor = ''\n    while True:\n        params = {'status': 'open', 'limit': 100}\n        if cursor:\n            params['cursor'] = cursor\n        resp = requests.get(url, headers=headers, params=params, timeout=10)\n        if resp.status_code != 200:\n            break\n        data = resp.json()\n        markets = data.get('markets', [])\n        if not markets:\n            break\n        all_markets.extend(markets)\n        cursor = data.get('cursor', '')\n        if not cursor:\n            break\n    return all_markets\n\n"
+ content = content.replace('def scan_markets():', fetch_fn + 'def scan_markets():')
+ 
+ arb_fns = "\ndef scan_bundle_arb(markets):\n    arbs = []\n    for m in markets:\n        ticker = m.get('ticker', '')\n        yes_ask = m.get('yes_ask_dollars')\n        no_ask = m.get('no_ask_dollars')\n        close_ts = m.get('close_time') or m.get('expiration_time')\n        volume = m.get('volume', 0) or 0\n        if not yes_ask or not no_ask or not close_ts:\n            continue\n        if ticker in placed_markets:\n            continue\n        if volume < 1000:\n            continue\n        yes_price = float(yes_ask)\n        no_price = float(no_ask)\n        combined = yes_price + no_price\n        if combined >= 0.97 or combined <= 0.50:\n            continue\n        try:\n            close_dt = datetime.datetime.fromisoformat(close_ts.replace('Z', '+00:00'))\n            now_utc = datetime.datetime.now(datetime.timezone.utc)\n            mins_left = (close_dt - now_utc).total_seconds() / 60\n        except Exception:\n            continue\n        if mins_left < MIN_MINUTES or mins_left > MAX_MINUTES:\n            continue\n        gross = 1.0 - combined\n        net = gross - (0.07 * gross)\n        net_pct = (net / combined) * 100\n        if net_pct < ARB_MIN_PROFIT_PCT:\n            continue\n        arbs.append({'ticker': ticker, 'yes_price': yes_price, 'no_price': no_price, 'combined': combined, 'net_profit_pct': net_pct, 'mins_left': mins_left, 'volume': volume})\n    return sorted(arbs, key=lambda x: x['net_profit_pct'], reverse=True)\n\ndef place_bundle_arb(arb):\n    ticker = arb['ticker']\n    yes_price = arb['yes_price']\n    no_price = arb['no_price']\n    contracts = max(1, int(ARB_MAX_COST / arb['combined']))\n    yes_cents = min(99, max(1, round(yes_price * 100) + 1))\n    no_cents = min(99, max(1, round(no_price * 100) + 1))\n    try:\n        kalshi.create_order(ticker=ticker, action='buy', side='yes', type='market', count=contracts, yes_price=yes_cents, time_in_force='ioc')\n        kalshi.create_order(ticker=ticker, action='buy', side='no', type='market', count=contracts, no_price=no_cents, time_in_force='ioc')\n        placed_markets.add(ticker)\n        total_cost = contracts * arb['combined']\n        net_profit = contracts * (1.0 - arb['combined'])\n        msg = 'ARB: ' + ticker + ' YES@' + str(round(yes_price,3)) + ' + NO@' + str(round(no_price,3)) + ' combined=' + str(round(arb['combined'],3)) + ' contracts=' + str(contracts) + ' cost=$' + str(round(total_cost,2)) + ' profit=$' + str(round(net_profit,2)) + ' (' + str(round(arb['net_profit_pct'],1)) + '%) ' + str(round(arb['mins_left'],0)) + 'min'\n        print(msg)\n        send_telegram(msg)\n        import json as _j\n        with open(ARB_LOG_FILE, 'a') as f:\n            f.write(_j.dumps({'timestamp': datetime.datetime.now().isoformat(), 'ticker': ticker, 'yes_price': yes_price, 'no_price': no_price, 'combined': arb['combined'], 'contracts': contracts, 'total_cost': total_cost, 'expected_profit': net_profit}) + '\\n')\n        return True\n    except Exception as e:\n        print('[Arb] Failed: ' + str(e))\n        return False\n\n"
+ content = content.replace('# ── MAIN LOOP', arb_fns + '# ── MAIN LOOP')
+ 
+ old_loop = "            opps = scan_markets()\n            bal  = get_balance()\n            print(f\"[{datetime.datetime.now().strftime('%H:%M')}] \"\n                  f\"Scanned markets | Found {len(opps)} opportunities | \"\n                  f\"Balance: ${bal:.2f}\")\n\n            for opp in opps[:3]:  # max 3 bets per scan\n                print(f\"  -> {opp['ticker']} | {opp['side']} @ {opp['price']:.3f} | \"\n                      f\"{opp['mins_left']:.0f}min left | +{opp['profit_pct']:.1f}%\")\n                place_bond_bet(opp)"
+ new_loop = "            markets = fetch_markets()\n            bal = get_balance()\n            opps = scan_markets()\n            arbs = scan_bundle_arb(markets)\n            print('[' + datetime.datetime.now().strftime('%H:%M') + '] Scanned ' + str(len(markets)) + ' markets | ' + str(len(opps)) + ' bond | ' + str(len(arbs)) + ' arb | Balance: $' + str(round(bal,2)))\n            if arbs:\n                a = arbs[0]\n                print('  TOP ARB: ' + a['ticker'] + ' combined=' + str(round(a['combined'],3)) + ' net=' + str(round(a['net_profit_pct'],1)) + '%')\n            for arb in arbs[:2]:\n                place_bundle_arb(arb)\n            for opp in opps[:3]:\n                print('  BOND: ' + opp['ticker'] + ' ' + opp['side'] + ' @' + str(round(opp['price'],3)))\n                place_bond_bet(opp)"
+ 
+ if old_loop in content:
+     content = content.replace(old_loop, new_loop)
+     print('Loop replaced OK')
+ else:
+     print('Loop pattern not found - check manually')
+ 
+ with open('/root/bond_scanner.py', 'w') as f:
+     f.write(content)
+ print('Written OK')
+ PYEOF
+ python3 -m py_compile /root/bond_scanner.py && echo "SYNTAX OK"
+ pm2 restart bond-scanner
+ pm2 logs bond-scanner --lines 5 --nostream
+
+cat > /root/arb_scanner.py << 'EOF'
+ import requests, time, datetime, json, os, tempfile
+ raw=open('/root/real_bot_pre_v4_backup.py').read()
+ KALSHI_KEY=raw.split("KALSHI_API_KEY = '")[1].split("'")[0]
+ KALSHI_SEC=raw.split("KALSHI_SECRET  = '''")[1].split("'''")[0]
+ BOT_TOKEN=raw.split("BOT_TOKEN = '")[1].split("'")[0]
+ CHAT_ID=raw.split("CHAT_ID   = '")[1].split("'")[0]
+ ARB_LOG='/root/arb_log.json'
+ MIN_MINUTES=5
+ MAX_MINUTES=45
+ ARB_MAX_COST=10.0
+ placed=set()
+ tf=tempfile.NamedTemporaryFile(delete=False,suffix=".pem",mode="w")
+ tf.write(KALSHI_SEC)
+ tf.close()
+ from kalshi_python import KalshiClient
+ from kalshi_python.configuration import Configuration
+ config=Configuration()
+ config.host="https://api.elections.kalshi.com/trade-api/v2"
+ kalshi=KalshiClient(config)
+ kalshi.set_kalshi_auth(KALSHI_KEY,tf.name)
+ def hdrs(m,u): return kalshi.kalshi_auth.create_auth_headers(m,u)
+ def tg(msg):
+     try: requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",params={"chat_id":CHAT_ID,"text":msg},timeout=5)
+     except: pass
+ def bal():
+     r=requests.get("https://api.elections.kalshi.com/trade-api/v2/portfolio/balance",headers=hdrs("GET","https://api.elections.kalshi.com/trade-api/v2/portfolio/balance"),timeout=5)
+     if r.status_code==200:
+         d=r.json(); return (d.get('balance',0)+d.get('portfolio_value',0))/100
+     return 0
+ def scan():
+     url="https://api.elections.kalshi.com/trade-api/v2/markets"
+     arbs=[]
+     cursor=""
+     while True:
+         p={"status":"open","limit":100}
+         if cursor: p["cursor"]=cursor
+         r=requests.get(url,headers=hdrs("GET",url),params=p,timeout=10)
+         if r.status_code!=200: break
+         d=r.json()
+         for m in d.get("markets",[]):
+             tk=m.get("ticker","")
+             ya=m.get("yes_ask_dollars")
+             na=m.get("no_ask_dollars")
+             ct=m.get("close_time") or m.get("expiration_time")
+             vol=m.get("volume",0) or 0
+             if not ya or not na or not ct or tk in placed or vol<1000: continue
+             yp=float(ya); np2=float(na); cb=yp+np2
+             if cb>=0.97 or cb<=0.50: continue
+             try:
+                 cd=datetime.datetime.fromisoformat(ct.replace("Z","+00:00"))
+                 ml=(cd-datetime.datetime.now(datetime.timezone.utc)).total_seconds()/60
+             except: continue
+             if ml<MIN_MINUTES or ml>MAX_MINUTES: continue
+             gross=1.0-cb; net=gross*0.93; pct=(net/cb)*100
+             if pct<2.0: continue
+             arbs.append({"ticker":tk,"yp":yp,"np":np2,"cb":cb,"pct":pct,"ml":ml,"vol":vol})
+         cursor=d.get("cursor","")
+         if not cursor: break
+     return sorted(arbs,key=lambda x:x["pct"],reverse=True)
+ def execute(arb):
+     tk=arb["ticker"]; yp=arb["yp"]; np2=arb["np"]
+     n=max(1,int(ARB_MAX_COST/arb["cb"]))
+     yc=min(99,max(1,round(yp*100)+1)); nc=min(99,max(1,round(np2*100)+1))
+     try:
+         kalshi.create_order(ticker=tk,action="buy",side="yes",type="market",count=n,yes_price=yc,time_in_force="ioc")
+         kalshi.create_order(ticker=tk,action="buy",side="no",type="market",count=n,no_price=nc,time_in_force="ioc")
+         placed.add(tk)
+         cost=n*arb["cb"]; profit=n*(1.0-arb["cb"])
+         msg=f"ARB {tk} YES@{yp:.3f}+NO@{np2:.3f}={arb['cb']:.3f} x{n} cost=${cost:.2f} profit=${profit:.2f} ({arb['pct']:.1f}%) {arb['ml']:.0f}min"
+         print(msg); tg(msg)
+         with open(ARB_LOG,"a") as f:
+             f.write(json.dumps({"ts":datetime.datetime.now().isoformat(),"ticker":tk,"yp":yp,"np":np2,"cb":arb["cb"],"n":n,"cost":cost,"profit":profit})+"\n")
+     except Exception as e: print(f"[Arb] fail: {e}")
+ print("Arb scanner started")
+ tg("Arb scanner started - hunting bundle arb opportunities")
+ while True:
+     if os.path.exists('/root/STOP_ARB'): break
+     try:
+         arbs=scan()
+         b=bal()
+         print(f"[{datetime.datetime.now().strftime('%H:%M')}] {len(arbs)} arbs found | bal=${b:.2f}")
+         if arbs: print(f"  TOP: {arbs[0]['ticker']} cb={arbs[0]['cb']:.3f} net={arbs[0]['pct']:.1f}%")
+         for arb in arbs[:2]: execute(arb)
+     except Exception as e: print(f"[Arb] scan err: {e}")
+     time.sleep(120)
+ EOF
+ python3 -m py_compile /root/arb_scanner.py && echo "OK"
+
+cd /root
+python3 -c "import urllib.request; open('arb_scanner.py','wb').write(urllib.request.urlopen('http://167.172.244.100:8080/bible').read())"
+curl -s http://167.172.244.100:8080/ > /dev/null && echo "server up"
+sed -n '1,5p' /root/bond_scanner.py
+# Fix the curly quotes in the docstring first
+# Add arb config after LOG_FILE line
+grep -c "def scan_markets" /root/bond_scanner.py
+# Add fetch_markets and scan_bundle_arb functions before the main loop
+python3 -c "
+ lines=[
+ 'import requests,time,datetime,json,os,tempfile',
+ 'raw=open(\"/root/real_bot_pre_v4_backup.py\").read()',
+ 'KALSHI_KEY=raw.split(\"KALSHI_API_KEY = \x27\")[1].split(\"\x27\")[0]',
+ 'KALSHI_SEC=raw.split(\"KALSHI_SECRET  = \x27\x27\x27\")[1].split(\"\x27\x27\x27\")[0]',
+ 'BOT_TOKEN=raw.split(\"BOT_TOKEN = \x27\")[1].split(\"\x27\")[0]',
+ 'CHAT_ID=raw.split(\"CHAT_ID   = \x27\")[1].split(\"\x27\")[0]',
+ 'ARB_LOG,MIN_MIN,MAX_MIN,MAX_COST=\"/root/arb_log.json\",5,45,10.0',
+ 'placed=set()',
+ 'import tempfile as _tf',
+ 'tf=_tf.NamedTemporaryFile(delete=False,suffix=\".pem\",mode=\"w\")',
+ 'tf.write(KALSHI_SEC)',
+ 'tf.close()',
+ 'from kalshi_python import KalshiClient',
+ 'from kalshi_python.configuration import Configuration',
+ 'cfg=Configuration()',
+ 'cfg.host=\"https://api.elections.kalshi.com/trade-api/v2\"',
+ 'k=KalshiClient(cfg)',
+ 'k.set_kalshi_auth(KALSHI_KEY,tf.name)',
+ 'def h(m,u): return k.kalshi_auth.create_auth_headers(m,u)',
+ 'def tg(msg):\n try: requests.get(f\"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage\",params={\"chat_id\":CHAT_ID,\"text\":msg},timeout=5)\n except: pass',
+ 'def bal():\n r=requests.get(\"https://api.elections.kalshi.com/trade-api/v2/portfolio/balance\",headers=h(\"GET\",\"https://api.elections.kalshi.com/trade-api/v2/portfolio/balance\"),timeout=5)\n if r.status_code==200:\n  d=r.json();return (d.get(\"balance\",0)+d.get(\"portfolio_value\",0))/100\n return 0',
+ 'def scan():\n url=\"https://api.elections.kalshi.com/trade-api/v2/markets\"\n arbs=[];cursor=\"\"\n while True:\n  p={\"status\":\"open\",\"limit\":100}\n  if cursor: p[\"cursor\"]=cursor\n  r=requests.get(url,headers=h(\"GET\",url),params=p,timeout=10)\n  if r.status_code!=200: break\n  d=r.json()\n  for m in d.get(\"markets\",[]):\n   tk=m.get(\"ticker\",\"\");ya=m.get(\"yes_ask_dollars\");na=m.get(\"no_ask_dollars\")\n   ct=m.get(\"close_time\") or m.get(\"expiration_time\");vol=m.get(\"volume\",0) or 0\n   if not ya or not na or not ct or tk in placed or vol<1000: continue\n   yp=float(ya);np2=float(na);cb=yp+np2\n   if cb>=0.97 or cb<=0.50: continue\n   try:\n    cd=datetime.datetime.fromisoformat(ct.replace(\"Z\",\"+00:00\"))\n    ml=(cd-datetime.datetime.now(datetime.timezone.utc)).total_seconds()/60\n   except: continue\n   if ml<MIN_MIN or ml>MAX_MIN: continue\n   net=(1.0-cb)*0.93;pct=(net/cb)*100\n   if pct<2.0: continue\n   arbs.append({\"tk\":tk,\"yp\":yp,\"np\":np2,\"cb\":cb,\"pct\":pct,\"ml\":ml})\n  cursor=d.get(\"cursor\",\"\")\n  if not cursor: break\n return sorted(arbs,key=lambda x:x[\"pct\"],reverse=True)',
+ 'def go(arb):\n tk=arb[\"tk\"];yp=arb[\"yp\"];np2=arb[\"np\"]\n n=max(1,int(MAX_COST/arb[\"cb\"]))\n yc=min(99,max(1,round(yp*100)+1));nc=min(99,max(1,round(np2*100)+1))\n try:\n  k.create_order(ticker=tk,action=\"buy\",side=\"yes\",type=\"market\",count=n,yes_price=yc,time_in_force=\"ioc\")\n  k.create_order(ticker=tk,action=\"buy\",side=\"no\",type=\"market\",count=n,no_price=nc,time_in_force=\"ioc\")\n  placed.add(tk)\n  cost=n*arb[\"cb\"];profit=n*(1.0-arb[\"cb\"])\n  msg=\"ARB \"+tk+\" \"+str(round(yp,3))+\"+\"+str(round(np2,3))+\"=\"+str(round(arb[\"cb\"],3))+\" x\"+str(n)+\" $\"+str(round(cost,2))+\" pft $\"+str(round(profit,2))+\" (\"+str(round(arb[\"pct\"],1))+\"%)\"\n  print(msg);tg(msg)\n  with open(ARB_LOG,\"a\") as f: f.write(json.dumps({\"ts\":datetime.datetime.now().isoformat(),\"tk\":tk,\"cb\":arb[\"cb\"],\"n\":n,\"cost\":cost,\"profit\":profit})+\"\\n\")\n except Exception as e: print(\"[Arb] \"+str(e))',
+ 'print(\"Arb scanner v1 started\")',
+ 'tg(\"Arb scanner started\")',
+ 'while True:\n if os.path.exists(\"/root/STOP_ARB\"): break\n try:\n  arbs=scan();b=bal()\n  print(\"[\"+datetime.datetime.now().strftime(\"%H:%M\")+\"] \"+str(len(arbs))+\" arbs | bal=$\"+str(round(b,2)))\n  if arbs: print(\"  TOP: \"+arbs[0][\"tk\"]+\" cb=\"+str(round(arbs[0][\"cb\"],3))+\" \"+str(round(arbs[0][\"pct\"],1))+\"%\")\n  for arb in arbs[:2]: go(arb)\n except Exception as e: print(\"[Arb] \"+str(e))\n time.sleep(120)',
+ ]
+ open('/root/arb_scanner.py','w').write('\n'.join(lines)+'\n')
+ print('written')
+ "
+python3 -c "
+ lines=[
+ 'import requests,time,datetime,json,os,tempfile',
+ 'raw=open(\"/root/real_bot_pre_v4_backup.py\").read()',
+ 'KALSHI_KEY=raw.split(\"KALSHI_API_KEY = \x27\")[1].split(\"\x27\")[0]',
+ 'KALSHI_SEC=raw.split(\"KALSHI_SECRET  = \x27\x27\x27\")[1].split(\"\x27\x27\x27\")[0]',
+ 'BOT_TOKEN=raw.split(\"BOT_TOKEN = \x27\")[1].split(\"\x27\")[0]',
+ 'CHAT_ID=raw.split(\"CHAT_ID   = \x27\")[1].split(\"\x27\")[0]',
+ 'ARB_LOG,MIN_MIN,MAX_MIN,MAX_COST=\"/root/arb_log.json\",5,45,10.0',
+ 'placed=set()',
+ 'import tempfile as _tf',
+ 'tf=_tf.NamedTemporaryFile(delete=False,suffix=\".pem\",mode=\"w\")',
+ 'tf.write(KALSHI_SEC)',
+ 'tf.close()',
+ 'from kalshi_python import KalshiClient',
+ 'from kalshi_python.configuration import Configuration',
+ 'cfg=Configuration()',
+ 'cfg.host=\"https://api.elections.kalshi.com/trade-api/v2\"',
+ 'k=KalshiClient(cfg)',
+ 'k.set_kalshi_auth(KALSHI_KEY,tf.name)',
+ 'def h(m,u): return k.kalshi_auth.create_auth_headers(m,u)',
+ 'def tg(msg):\n try: requests.get(f\"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage\",params={\"chat_id\":CHAT_ID,\"text\":msg},timeout=5)\n except: pass',
+ 'def bal():\n r=requests.get(\"https://api.elections.kalshi.com/trade-api/v2/portfolio/balance\",headers=h(\"GET\",\"https://api.elections.kalshi.com/trade-api/v2/portfolio/balance\"),timeout=5)\n if r.status_code==200:\n  d=r.json();return (d.get(\"balance\",0)+d.get(\"portfolio_value\",0))/100\n return 0',
+ 'def scan():\n url=\"https://api.elections.kalshi.com/trade-api/v2/markets\"\n arbs=[];cursor=\"\"\n while True:\n  p={\"status\":\"open\",\"limit\":100}\n  if cursor: p[\"cursor\"]=cursor\n  r=requests.get(url,headers=h(\"GET\",url),params=p,timeout=10)\n  if r.status_code!=200: break\n  d=r.json()\n  for m in d.get(\"markets\",[]):\n   tk=m.get(\"ticker\",\"\");ya=m.get(\"yes_ask_dollars\");na=m.get(\"no_ask_dollars\")\n   ct=m.get(\"close_time\") or m.get(\"expiration_time\");vol=m.get(\"volume\",0) or 0\n   if not ya or not na or not ct or tk in placed or vol<1000: continue\n   yp=float(ya);np2=float(na);cb=yp+np2\n   if cb>=0.97 or cb<=0.50: continue\n   try:\n    cd=datetime.datetime.fromisoformat(ct.replace(\"Z\",\"+00:00\"))\n    ml=(cd-datetime.datetime.now(datetime.timezone.utc)).total_seconds()/60\n   except: continue\n   if ml<MIN_MIN or ml>MAX_MIN: continue\n   net=(1.0-cb)*0.93;pct=(net/cb)*100\n   if pct<2.0: continue\n   arbs.append({\"tk\":tk,\"yp\":yp,\"np\":np2,\"cb\":cb,\"pct\":pct,\"ml\":ml})\n  cursor=d.get(\"cursor\",\"\")\n  if not cursor: break\n return sorted(arbs,key=lambda x:x[\"pct\"],reverse=True)',
+ 'def go(arb):\n tk=arb[\"tk\"];yp=arb[\"yp\"];np2=arb[\"np\"]\n n=max(1,int(MAX_COST/arb[\"cb\"]))\n yc=min(99,max(1,round(yp*100)+1));nc=min(99,max(1,round(np2*100)+1))\n try:\n  k.create_order(ticker=tk,action=\"buy\",side=\"yes\",type=\"market\",count=n,yes_price=yc,time_in_force=\"ioc\")\n  k.create_order(ticker=tk,action=\"buy\",side=\"no\",type=\"market\",count=n,no_price=nc,time_in_force=\"ioc\")\n  placed.add(tk)\n  cost=n*arb[\"cb\"];profit=n*(1.0-arb[\"cb\"])\n  msg=\"ARB \"+tk+\" \"+str(round(yp,3))+\"+\"+str(round(np2,3))+\"=\"+str(round(arb[\"cb\"],3))+\" x\"+str(n)+\" $\"+str(round(cost,2))+\" pft $\"+str(round(profit,2))+\" (\"+str(round(arb[\"pct\"],1))+\"%)\"\n  print(msg);tg(msg)\n  with open(ARB_LOG,\"a\") as f: f.write(json.dumps({\"ts\":datetime.datetime.now().isoformat(),\"tk\":tk,\"cb\":arb[\"cb\"],\"n\":n,\"cost\":cost,\"profit\":profit})+\"\\n\")\n except Exception as e: print(\"[Arb] \"+str(e))',
+ 'print(\"Arb scanner v1 started\")',
+ 'tg(\"Arb scanner started\")',
+ 'while True:\n if os.path.exists(\"/root/STOP_ARB\"): break\n try:\n  arbs=scan();b=bal()\n  print(\"[\"+datetime.datetime.now().strftime(\"%H:%M\")+\"] \"+str(len(arbs))+\" arbs | bal=$\"+str(round(b,2)))\n  if arbs: print(\"  TOP: \"+arbs[0][\"tk\"]+\" cb=\"+str(round(arbs[0][\"cb\"],3))+\" \"+str(round(arbs[0][\"pct\"],1))+\"%\")\n  for arb in arbs[:2]: go(arb)\n except Exception as e: print(\"[Arb] \"+str(e))\n time.sleep(120)',
+ ]
+ open('/root/arb_scanner.py','w').write('\n'.join(lines)+'\n')
+ print('written')
+ "
+grep -n "arena_dashboard" /root/dashboard_v4.py | head -5
+python3 -c "open('/root/arb_scanner.py','w').write(open('/root/bond_scanner.py').read())"
+python3 -m py_compile /root/arb_scanner.py && echo "OK"
+cp /root/bond_scanner_backup.py /root/bond_scanner.py
+pm2 logs openclaw-btc --lines 20 --nostream
+exit

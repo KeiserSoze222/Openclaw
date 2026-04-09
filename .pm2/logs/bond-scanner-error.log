@@ -100,3 +100,71 @@ SyntaxError: unterminated triple-quoted string literal (detected at line 301)
     """
     ^
 SyntaxError: unterminated triple-quoted string literal (detected at line 301)
+  File "/root/bond_scanner.py", line 2
+    “””
+    ^
+SyntaxError: invalid character '“' (U+201C)
+  File "/root/bond_scanner.py", line 2
+    “””
+    ^
+SyntaxError: invalid character '“' (U+201C)
+  File "/root/bond_scanner.py", line 2
+    “””
+    ^
+SyntaxError: invalid character '“' (U+201C)
+  File "/root/bond_scanner.py", line 2
+    “””
+    ^
+SyntaxError: invalid character '“' (U+201C)
+  File "/root/bond_scanner.py", line 2
+    “””
+    ^
+SyntaxError: invalid character '“' (U+201C)
+  File "/root/bond_scanner.py", line 2
+    “””
+    ^
+SyntaxError: invalid character '“' (U+201C)
+  File "/root/bond_scanner.py", line 2
+    “””
+    ^
+SyntaxError: invalid character '“' (U+201C)
+  File "/root/bond_scanner.py", line 2
+    “””
+    ^
+SyntaxError: invalid character '“' (U+201C)
+  File "/root/bond_scanner.py", line 2
+    “””
+    ^
+SyntaxError: invalid character '“' (U+201C)
+  File "/root/bond_scanner.py", line 2
+    “””
+    ^
+SyntaxError: invalid character '“' (U+201C)
+  File "/root/bond_scanner.py", line 2
+    “””
+    ^
+SyntaxError: invalid character '“' (U+201C)
+  File "/root/bond_scanner.py", line 2
+    “””
+    ^
+SyntaxError: invalid character '“' (U+201C)
+  File "/root/bond_scanner.py", line 2
+    “””
+    ^
+SyntaxError: invalid character '“' (U+201C)
+  File "/root/bond_scanner.py", line 2
+    “””
+    ^
+SyntaxError: invalid character '“' (U+201C)
+  File "/root/bond_scanner.py", line 2
+    “””
+    ^
+SyntaxError: invalid character '“' (U+201C)
+  File "/root/bond_scanner.py", line 2
+    “””
+    ^
+SyntaxError: invalid character '“' (U+201C)
+Traceback (most recent call last):
+  File "/root/bond_scanner.py", line 250, in <module>
+    time.sleep(SCAN_INTERVAL)
+KeyboardInterrupt
