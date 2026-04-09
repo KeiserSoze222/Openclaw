@@ -45,3 +45,7 @@ Traceback (most recent call last):
   File "/root/openclaw.py", line 961, in <module>
     time.sleep(max(0,CYCLE_SLEEP-elapsed))
 KeyboardInterrupt
+Traceback (most recent call last):
+  File "/root/openclaw.py", line 961, in <module>
+    time.sleep(max(0,CYCLE_SLEEP-elapsed))
+KeyboardInterrupt
