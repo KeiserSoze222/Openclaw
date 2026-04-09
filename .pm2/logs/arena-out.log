@@ -3570,3 +3570,13 @@ Balance: $116.47 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Arena] v004 UP WIN WR=0.89 T=1058 PnL=9576.38
 [AutoPromote] err:name 'subprocess' is not defined
 [Arena] Cycle 17 done
+[Arena] Starting OpenClaw Arena v1.0
+[Arena] Loaded 12 variants
+[Arena] v004 UP LOSS WR=0.89 T=1059 PnL=9562.36
+[Arena] v007 UP WIN WR=1.0 T=1 PnL=18.73
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 1 done
+[Arena] v004 UP WIN WR=0.89 T=1060 PnL=9574.28
+[Arena] v007 UP WIN WR=1.0 T=2 PnL=37.46
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 2 done

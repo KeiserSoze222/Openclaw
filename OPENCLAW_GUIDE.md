@@ -252,3 +252,33 @@ Sections:
 - Whale Feed — large trades ($2k+) detected on Kalshi markets
 
 Bible: Click the BIBLE button in the dashboard header to view this guide.
+
+
+---
+## UPDATE April 9 2026
+
+### System Changes
+- MIN_BALANCE=100 (bots stopped at 95.66, awaiting deposit)
+- DIRECTIONAL_HIGH=0.68/LOW=0.32 promoted from v004
+- Bots STOPPED - resume after deposit with: pm2 start openclaw-btc openclaw-eth openclaw-sol
+
+### New PM2 Processes
+- mentions-scanner: watches FOMC/earnings word markets, alerts on Telegram
+- arena auto-promote: promotes leader to live bot when WR>=70% 50+ trades
+
+### Arena v5
+- Space background, planets, shooting stars, parallax scroll
+- SVG bot faces, thought bubbles, scoreboard, narrative leaderboard
+- http://167.172.244.100:8080/arena
+
+### Genome Updates
+- v004: CHAMPION 1058T 89%WR thresh=0.68 chop=True
+- v007: REPLACED weak ETH, now aggressive BTC thresh=0.65 chop=True
+- v005: RETUNED thresh=0.72 chop=False sniper
+
+### Backlog
+1. Arb scanner (file transfer issue)
+2. Cross-platform arb (needs network unblock)
+3. Fade-the-headlines
+4. Macro signal integration
+5. Weather NO scanner
