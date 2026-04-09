@@ -1,144 +1,64 @@
-  File "/root/arb_scanner.py", line 246
-    def scan_bundle_arb(markets):
-                                 ^
-IndentationError: unindent does not match any outer indentation level
-  File "/root/arb_scanner.py", line 246
-    def scan_bundle_arb(markets):
-                                 ^
-IndentationError: unindent does not match any outer indentation level
-  File "/root/arb_scanner.py", line 246
-    def scan_bundle_arb(markets):
-                                 ^
-IndentationError: unindent does not match any outer indentation level
-  File "/root/arb_scanner.py", line 246
-    def scan_bundle_arb(markets):
-                                 ^
-IndentationError: unindent does not match any outer indentation level
-  File "/root/arb_scanner.py", line 246
-    def scan_bundle_arb(markets):
-                                 ^
-IndentationError: unindent does not match any outer indentation level
-  File "/root/arb_scanner.py", line 246
-    def scan_bundle_arb(markets):
-                                 ^
-IndentationError: unindent does not match any outer indentation level
-  File "/root/arb_scanner.py", line 246
-    def scan_bundle_arb(markets):
-                                 ^
-IndentationError: unindent does not match any outer indentation level
-  File "/root/arb_scanner.py", line 246
-    def scan_bundle_arb(markets):
-                                 ^
-IndentationError: unindent does not match any outer indentation level
-  File "/root/arb_scanner.py", line 246
-    def scan_bundle_arb(markets):
-                                 ^
-IndentationError: unindent does not match any outer indentation level
-  File "/root/arb_scanner.py", line 246
-    def scan_bundle_arb(markets):
-                                 ^
-IndentationError: unindent does not match any outer indentation level
-  File "/root/arb_scanner.py", line 246
-    def scan_bundle_arb(markets):
-                                 ^
-IndentationError: unindent does not match any outer indentation level
-  File "/root/arb_scanner.py", line 246
-    def scan_bundle_arb(markets):
-                                 ^
-IndentationError: unindent does not match any outer indentation level
-  File "/root/arb_scanner.py", line 246
-    def scan_bundle_arb(markets):
-                                 ^
-IndentationError: unindent does not match any outer indentation level
-  File "/root/arb_scanner.py", line 246
-    def scan_bundle_arb(markets):
-                                 ^
-IndentationError: unindent does not match any outer indentation level
-  File "/root/arb_scanner.py", line 246
-    def scan_bundle_arb(markets):
-                                 ^
-IndentationError: unindent does not match any outer indentation level
-  File "/root/arb_scanner.py", line 246
-    def scan_bundle_arb(markets):
-                                 ^
-IndentationError: unindent does not match any outer indentation level
-Traceback (most recent call last):
-  File "/root/arb_scanner.py", line 4, in <module>
-    SEC=raw.split("KALSHI_SECRET } = '''")[1].split("'''")[0]
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
-IndexError: list index out of range
-Traceback (most recent call last):
-  File "/root/arb_scanner.py", line 4, in <module>
-    SEC=raw.split("KALSHI_SECRET } = '''")[1].split("'''")[0]
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
-IndexError: list index out of range
-Traceback (most recent call last):
-  File "/root/arb_scanner.py", line 4, in <module>
-    SEC=raw.split("KALSHI_SECRET } = '''")[1].split("'''")[0]
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
-IndexError: list index out of range
-Traceback (most recent call last):
-  File "/root/arb_scanner.py", line 4, in <module>
-    SEC=raw.split("KALSHI_SECRET } = '''")[1].split("'''")[0]
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
-IndexError: list index out of range
-Traceback (most recent call last):
-  File "/root/arb_scanner.py", line 4, in <module>
-    SEC=raw.split("KALSHI_SECRET } = '''")[1].split("'''")[0]
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
-IndexError: list index out of range
-Traceback (most recent call last):
-  File "/root/arb_scanner.py", line 4, in <module>
-    SEC=raw.split("KALSHI_SECRET } = '''")[1].split("'''")[0]
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
-IndexError: list index out of range
-Traceback (most recent call last):
-  File "/root/arb_scanner.py", line 4, in <module>
-    SEC=raw.split("KALSHI_SECRET } = '''")[1].split("'''")[0]
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
-IndexError: list index out of range
-Traceback (most recent call last):
-  File "/root/arb_scanner.py", line 4, in <module>
-    SEC=raw.split("KALSHI_SECRET } = '''")[1].split("'''")[0]
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
-IndexError: list index out of range
-Traceback (most recent call last):
-  File "/root/arb_scanner.py", line 4, in <module>
-    SEC=raw.split("KALSHI_SECRET } = '''")[1].split("'''")[0]
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
-IndexError: list index out of range
-Traceback (most recent call last):
-  File "/root/arb_scanner.py", line 4, in <module>
-    SEC=raw.split("KALSHI_SECRET } = '''")[1].split("'''")[0]
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
-IndexError: list index out of range
-Traceback (most recent call last):
-  File "/root/arb_scanner.py", line 4, in <module>
-    SEC=raw.split("KALSHI_SECRET } = '''")[1].split("'''")[0]
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
-IndexError: list index out of range
-Traceback (most recent call last):
-  File "/root/arb_scanner.py", line 4, in <module>
-    SEC=raw.split("KALSHI_SECRET } = '''")[1].split("'''")[0]
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
-IndexError: list index out of range
-Traceback (most recent call last):
-  File "/root/arb_scanner.py", line 4, in <module>
-    SEC=raw.split("KALSHI_SECRET } = '''")[1].split("'''")[0]
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
-IndexError: list index out of range
-Traceback (most recent call last):
-  File "/root/arb_scanner.py", line 4, in <module>
-    SEC=raw.split("KALSHI_SECRET } = '''")[1].split("'''")[0]
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
-IndexError: list index out of range
-Traceback (most recent call last):
-  File "/root/arb_scanner.py", line 4, in <module>
-    SEC=raw.split("KALSHI_SECRET } = '''")[1].split("'''")[0]
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
-IndexError: list index out of range
-Traceback (most recent call last):
-  File "/root/arb_scanner.py", line 4, in <module>
-    SEC=raw.split("KALSHI_SECRET } = '''")[1].split("'''")[0]
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
-IndexError: list index out of range
+  File "/root/arb_scanner.py", line 29
+    return k.kalshi_auth.create_auth_headers(m, u)
+    ^
+IndentationError: expected an indented block after function definition on line 28
+  File "/root/arb_scanner.py", line 29
+    return k.kalshi_auth.create_auth_headers(m, u)
+    ^
+IndentationError: expected an indented block after function definition on line 28
+  File "/root/arb_scanner.py", line 29
+    return k.kalshi_auth.create_auth_headers(m, u)
+    ^
+IndentationError: expected an indented block after function definition on line 28
+  File "/root/arb_scanner.py", line 29
+    return k.kalshi_auth.create_auth_headers(m, u)
+    ^
+IndentationError: expected an indented block after function definition on line 28
+  File "/root/arb_scanner.py", line 29
+    return k.kalshi_auth.create_auth_headers(m, u)
+    ^
+IndentationError: expected an indented block after function definition on line 28
+  File "/root/arb_scanner.py", line 29
+    return k.kalshi_auth.create_auth_headers(m, u)
+    ^
+IndentationError: expected an indented block after function definition on line 28
+  File "/root/arb_scanner.py", line 29
+    return k.kalshi_auth.create_auth_headers(m, u)
+    ^
+IndentationError: expected an indented block after function definition on line 28
+  File "/root/arb_scanner.py", line 29
+    return k.kalshi_auth.create_auth_headers(m, u)
+    ^
+IndentationError: expected an indented block after function definition on line 28
+  File "/root/arb_scanner.py", line 29
+    return k.kalshi_auth.create_auth_headers(m, u)
+    ^
+IndentationError: expected an indented block after function definition on line 28
+  File "/root/arb_scanner.py", line 29
+    return k.kalshi_auth.create_auth_headers(m, u)
+    ^
+IndentationError: expected an indented block after function definition on line 28
+  File "/root/arb_scanner.py", line 29
+    return k.kalshi_auth.create_auth_headers(m, u)
+    ^
+IndentationError: expected an indented block after function definition on line 28
+  File "/root/arb_scanner.py", line 29
+    return k.kalshi_auth.create_auth_headers(m, u)
+    ^
+IndentationError: expected an indented block after function definition on line 28
+  File "/root/arb_scanner.py", line 29
+    return k.kalshi_auth.create_auth_headers(m, u)
+    ^
+IndentationError: expected an indented block after function definition on line 28
+  File "/root/arb_scanner.py", line 29
+    return k.kalshi_auth.create_auth_headers(m, u)
+    ^
+IndentationError: expected an indented block after function definition on line 28
+  File "/root/arb_scanner.py", line 29
+    return k.kalshi_auth.create_auth_headers(m, u)
+    ^
+IndentationError: expected an indented block after function definition on line 28
+  File "/root/arb_scanner.py", line 29
+    return k.kalshi_auth.create_auth_headers(m, u)
+    ^
+IndentationError: expected an indented block after function definition on line 28
