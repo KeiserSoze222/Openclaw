@@ -11330,3 +11330,61 @@ Balance: $95.66 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+7.19
 [Market] YES=0.81 | NO=0.20 | Sum=1.01
 ==================================================
 Balance: $95.66 | Regime: CHOP | Session: 2W/0L (100%) | PnL: $+7.19
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Signal] EXTREME UP | yes=0.81 | edge=0.31 | firing immediately
+[Coinbase] Confirms UP | $72231 gap=+154 (0.21%)
+[Correlation] 2/3 agree UP
+[Signal] CONFIRMED UP | yes=0.81 | edge=0.31 | bet=$2.00
+[Safety] Balance $95.66 below floor $100.00
+🛑 OpenClaw BTC Bot v4.0 halted: Balance $95.66 below floor $100.00
+
+==================================================
+OpenClaw BTC Bot v4.0 — LIVE
+[Startup] Live balance synced: $95.66
+Balance: $95.66 | MaxBet: $5.02 | Threshold: <0.32 or >0.68
+==================================================
+
+[Startup] Resting orders cleared
+[Ticker] KXBTC15M-26APR091315-15
+[Market] YES=0.88 | NO=0.13 | Sum=1.01
+==================================================
+Balance: $95.66 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Signal] EXTREME UP | yes=0.88 | edge=0.38 | firing immediately
+[Coinbase] Confirms UP | $72240 gap=+163 (0.23%)
+[Correlation] Markets diverging — bet trimmed
+[Signal] CONFIRMED UP | yes=0.88 | edge=0.38 | bet=$1.80
+[CorrGuard] 2 bots already fired — skipping to avoid correlated loss
+[Cycle] No signal — YES=0.88 is between 0.32 and 0.68, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR091315-15
+[Market] YES=0.86 | NO=0.15 | Sum=1.01
+==================================================
+Balance: $95.66 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Signal] UP candidate | yes=0.86 | waiting (1/2)
+[Cycle] No signal — YES=0.86 is between 0.32 and 0.68, sum=1.01 >= 0.97
+[Ticker] KXBTC15M-26APR091315-15
+[Market] YES=0.96 | NO=0.05 | Sum=1.01
+==================================================
+Balance: $95.66 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=5/10 | extreme_edge,coinbase_strong
+[Coinbase] Confirms UP | $72506 gap=+429 (0.60%)
+[Correlation] 2/3 agree UP
+[Signal] CONFIRMED UP | yes=0.96 | edge=0.46 | bet=$2.60
+[Safety] Balance $95.66 below floor $100.00
+🛑 OpenClaw BTC Bot v4.0 halted: Balance $95.66 below floor $100.00
+
+==================================================
+OpenClaw BTC Bot v4.0 — LIVE
+[Startup] Live balance synced: $95.66
+Balance: $95.66 | MaxBet: $5.02 | Threshold: <0.32 or >0.68
+==================================================
+
+[Startup] Resting orders cleared
+[Ticker] KXBTC15M-26APR091315-15
+[Market] YES=0.95 | NO=0.05 | Sum=1.00
+==================================================
+Balance: $95.66 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | extreme_edge,coinbase_weak
+[Signal] UP candidate | yes=0.95 | waiting (1/2)
+[Cycle] No signal — YES=0.95 is between 0.32 and 0.68, sum=1.00 >= 0.97

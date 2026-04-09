@@ -55,10 +55,10 @@
     "min_confidence": 6,
     "chop_allowed": true,
     "news_weight": 0.3,
-    "wins": 935,
+    "wins": 938,
     "losses": 117,
-    "trades": 1052,
-    "pnl": 9504.86,
+    "trades": 1055,
+    "pnl": 9540.62,
     "generation": 1,
     "status": "active",
     "mutations": []

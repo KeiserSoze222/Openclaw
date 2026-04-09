@@ -10970,3 +10970,49 @@ Balance: $95.66 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+1.79
 [Market] YES=0.82 | NO=0.21 | Sum=1.03
 ==================================================
 Balance: $95.66 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+1.79
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Signal] EXTREME UP | yes=0.82 | edge=0.32 | firing immediately
+[Coinbase] Confirms UP | $84 gap=+0 (0.30%)
+[Kraken] Divergence 85982.92% — bet trimmed
+[Correlation] 2/3 agree UP
+[Signal] CONFIRMED UP | yes=0.82 | edge=0.32 | bet=$2.34
+[Safety] Balance $95.66 below floor $100.00
+🛑 OpenClaw SOL Bot v4.0 halted: Balance $95.66 below floor $100.00
+
+==================================================
+OpenClaw SOL Bot v4.0 — LIVE
+[Startup] Live balance synced: $95.66
+Balance: $95.66 | MaxBet: $3.59 | Threshold: <0.32 or >0.68
+==================================================
+
+[Startup] Resting orders cleared
+[Ticker] KXSOL15M-26APR091315-15
+[Market] YES=0.84 | NO=0.18 | Sum=1.02
+==================================================
+Balance: $95.66 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Signal] EXTREME UP | yes=0.84 | edge=0.34 | firing immediately
+[Coinbase] Confirms UP | $84 gap=+0 (0.34%)
+[Kraken] Divergence 85989.08% — bet trimmed
+[Correlation] 2/3 agree UP
+[Signal] CONFIRMED UP | yes=0.84 | edge=0.34 | bet=$2.34
+[CorrGuard] 2 bots already fired — skipping to avoid correlated loss
+[Cycle] No signal — YES=0.84 is between 0.32 and 0.68, sum=1.02 >= 0.97
+[Ticker] KXSOL15M-26APR091315-15
+[Market] YES=0.87 | NO=0.16 | Sum=1.03
+==================================================
+Balance: $95.66 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Signal] UP candidate | yes=0.87 | waiting (1/2)
+[Cycle] No signal — YES=0.87 is between 0.32 and 0.68, sum=1.03 >= 0.97
+[Ticker] KXSOL15M-26APR091315-15
+[Market] YES=0.94 | NO=0.07 | Sum=1.01
+==================================================
+Balance: $95.66 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | strong_edge,coinbase_strong
+[Coinbase] Confirms UP | $84 gap=+1 (0.67%)
+[Kraken] Divergence 85841.84% — bet trimmed
+[Correlation] Markets diverging — bet trimmed
+[Signal] CONFIRMED UP | yes=0.94 | edge=0.44 | bet=$2.11
+[CorrGuard] 2 bots already fired — skipping to avoid correlated loss
+[Cycle] No signal — YES=0.94 is between 0.32 and 0.68, sum=1.01 >= 0.97

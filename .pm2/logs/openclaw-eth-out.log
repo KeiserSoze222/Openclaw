@@ -11264,3 +11264,43 @@ Balance: $95.66 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.92
 [Market] YES=0.77 | NO=0.24 | Sum=1.01
 ==================================================
 Balance: $95.66 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.92
+[Confidence] Score=4/10 | moderate_edge,coinbase_weak,all3_agree
+[Signal] UP candidate | yes=0.77 | waiting (1/2)
+[Cycle] No signal — YES=0.77 is between 0.32 and 0.68, sum=1.01 >= 0.97
+[Ticker] KXETH15M-26APR091315-15
+[Market] YES=0.87 | NO=0.15 | Sum=1.02
+==================================================
+Balance: $95.66 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.92
+[Confidence] Score=3/10 | strong_edge,coinbase_weak
+[Coinbase] Confirms UP | $2213 gap=+6 (0.27%)
+[Kraken] Divergence 3165.62% — bet trimmed
+[Correlation] 2/3 agree UP
+[Signal] CONFIRMED UP | yes=0.87 | edge=0.37 | bet=$2.03
+[CorrGuard] 2 bots already fired — skipping to avoid correlated loss
+[Cycle] No signal — YES=0.87 is between 0.32 and 0.68, sum=1.02 >= 0.97
+[Ticker] KXETH15M-26APR091315-15
+[Market] YES=0.96 | NO=0.05 | Sum=1.01
+==================================================
+Balance: $95.66 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.92
+[Confidence] Score=4/10 | extreme_edge,coinbase_weak
+[Coinbase] Confirms UP | $2221 gap=+13 (0.60%)
+[Kraken] Divergence 3164.80% — bet trimmed
+[Correlation] 2/3 agree UP
+[Signal] CONFIRMED UP | yes=0.96 | edge=0.46 | bet=$2.65
+[Safety] Balance $95.66 below floor $100.00
+🛑 OpenClaw ETH Bot v4.0 halted: Balance $95.66 below floor $100.00
+
+==================================================
+OpenClaw ETH Bot v4.0 — LIVE
+[Startup] Live balance synced: $95.66
+Balance: $95.66 | MaxBet: $6.46 | Threshold: <0.32 or >0.68
+==================================================
+
+[Startup] Resting orders cleared
+[Ticker] KXETH15M-26APR091315-15
+[Market] YES=0.95 | NO=0.06 | Sum=1.01
+==================================================
+Balance: $95.66 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
+[Confidence] Score=4/10 | strong_edge,coinbase_strong
+[Signal] UP candidate | yes=0.95 | waiting (1/2)
+[Cycle] No signal — YES=0.95 is between 0.32 and 0.68, sum=1.01 >= 0.97
