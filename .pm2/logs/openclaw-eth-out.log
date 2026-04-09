@@ -11234,3 +11234,24 @@ Balance: $102.14 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.92
 [Confidence] Score=4/10 | strong_edge,coinbase_weak,peak_hour
 [Timing] Window 11 min old — skipping
 [Cycle] No signal — YES=0.92 is between 0.32 and 0.68, sum=1.00 >= 0.97
+[Ticker] KXETH15M-26APR091300-00
+[Market] YES=0.95 | NO=0.07 | Sum=1.02
+==================================================
+Balance: $104.12 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.92
+[Confidence] Score=4/10 | strong_edge,coinbase_weak,peak_hour
+[Timing] Window 12 min old — skipping
+[Cycle] No signal — YES=0.95 is between 0.32 and 0.68, sum=1.02 >= 0.97
+[Ticker] KXETH15M-26APR091300-00
+[Market] YES=0.99 | NO=0.01 | Sum=1.00
+==================================================
+Balance: $97.11 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.92
+[Confidence] Score=5/10 | extreme_edge,coinbase_weak,peak_hour
+[Timing] Window 13 min old — skipping
+[Cycle] No signal — YES=0.99 is between 0.32 and 0.68, sum=1.00 >= 0.97
+[Ticker] KXETH15M-26APR091300-00
+[Market] YES=1.00 | NO=0.01 | Sum=1.01
+==================================================
+Balance: $95.71 | Regime: CHOP | Session: 1W/0L (100%) | PnL: $+3.92
+[Confidence] Score=5/10 | extreme_edge,coinbase_weak,peak_hour
+[Timing] Window 14 min old — skipping
+[Cycle] No signal — YES=1.00 is between 0.32 and 0.68, sum=1.01 >= 0.97

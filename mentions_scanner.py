@@ -64,11 +64,7 @@ while True:
     analysis=analyze(m)
     if analysis and tk not in alerted:
      alerted.add(tk)
-     msg="MENTIONS EDGE: "+analysis["ticker"]+"
-Word: "+analysis["word"]+" | Base rate: "+str(round(analysis["base_rate"]*100))+"%
-Market price: "+str(round(analysis["market_price"]*100))+"% | Edge: "+str(round(analysis["edge"]*100,1))+"%
-Trade: "+analysis["side"].upper()+" @ "+str(round(analysis["price"]*100))+"c
-"+analysis["title"]
+     msg="MENTIONS: "+analysis["ticker"]+" "+analysis["word"]+" base="+str(round(analysis["base_rate"]*100))+"% mkt="+str(round(analysis["market_price"]*100))+"% edge="+str(round(analysis["edge"]*100,1))+"% "+analysis["side"].upper()+"@"+str(round(analysis["price"]*100))+"c"
      print(msg)
      tg(msg)
   else:

@@ -15476,3 +15476,5 @@
 2026-04-09T16:57:28: PM2 log: App [mentions-scanner:15] online
 2026-04-09T16:57:28: PM2 log: App [mentions-scanner:15] exited with code [1] via signal [SIGINT]
 2026-04-09T16:57:28: PM2 log: Script /root/mentions_scanner.py had too many unstable restarts (16). Stopped. "errored"
+2026-04-09T17:00:03: PM2 log: App [mentions-scanner:15] starting in -fork mode-
+2026-04-09T17:00:03: PM2 log: App [mentions-scanner:15] online
