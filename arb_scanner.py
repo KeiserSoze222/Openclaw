@@ -1,314 +1,155 @@
-"""
-OpenClaw Bond Scanner
-=====================
-Scans all open Kalshi markets for near-certain outcomes (YES < 0.04 or YES > 0.96)
-and places small bets on the near-certain side.
-3-5% return per trade, very high win rate, runs alongside main bots.
-Kill: touch /root/STOP_BOND
-"""
+import requests, time, datetime, json, os, tempfile
 
-import requests
-import time
-import json
-import datetime
-import tempfile
-import os
+raw = open(’/root/real_bot_pre_v4_backup.py’).read()
+KALSHI_KEY = raw.split(“KALSHI_API_KEY = ‘”)[1].split(”’”)[0]
+KALSHI_SEC = raw.split(“KALSHI_SECRET  = ‘’’”)[1].split(”’’’”)[0]
+BOT_TOKEN  = raw.split(“BOT_TOKEN = ‘”)[1].split(”’”)[0]
+CHAT_ID    = raw.split(“CHAT_ID   = ‘”)[1].split(”’”)[0]
 
-# ── CONFIG ────────────────────────────────────────────────────────────────────
-raw         = open('/root/real_bot_pre_v4_backup.py').read()
-KALSHI_KEY  = raw.split("KALSHI_API_KEY = '")[1].split("'")[0]
-KALSHI_SEC  = raw.split("KALSHI_SECRET  = '''")[1].split("'''")[0]
-BOT_TOKEN   = raw.split("BOT_TOKEN = '")[1].split("'")[0]
-CHAT_ID     = raw.split("CHAT_ID   = '")[1].split("'")[0]
+ARB_LOG      = ‘/root/arb_log.json’
+MIN_MINUTES  = 5
+MAX_MINUTES  = 45
+MAX_COST     = 10.0
+MIN_NET_PCT  = 2.0
+SCAN_SLEEP   = 120
+placed       = set()
 
-BET_SIZE        = 3.00   # dollars per bond trade
-YES_HIGH        = 0.96   # bet YES when above this
-YES_LOW         = 0.04   # bet NO when below this
-MIN_MINUTES     = 5      # minimum minutes remaining to place bet
-MAX_MINUTES     = 45     # skip if more than 60 min remaining (too long to wait)
-SCAN_INTERVAL   = 120    # scan every 2 minutes
-LOG_FILE        = '/root/bond_log.json'
-ARB_LOG = '/root/arb_log.json'
-ARB_MAX_COST = 10.0
-ARB_MIN_PCT = 2.0
-
-# Track placed positions to avoid duplicates
-placed_markets = set()
-session_wins   = 0
-session_losses = 0
-session_pnl    = 0.0
-
-# ── AUTH SETUP ────────────────────────────────────────────────────────────────
-tf = tempfile.NamedTemporaryFile(delete=False, suffix=".pem", mode="w")
+tf = tempfile.NamedTemporaryFile(delete=False, suffix=”.pem”, mode=“w”)
 tf.write(KALSHI_SEC)
 tf.close()
 
 from kalshi_python import KalshiClient
 from kalshi_python.configuration import Configuration
-config      = Configuration()
-config.host = "https://api.elections.kalshi.com/trade-api/v2"
-kalshi      = KalshiClient(config)
-kalshi.set_kalshi_auth(KALSHI_KEY, tf.name)
+cfg = Configuration()
+cfg.host = “https://api.elections.kalshi.com/trade-api/v2”
+k = KalshiClient(cfg)
+k.set_kalshi_auth(KALSHI_KEY, tf.name)
 
-def send_telegram(msg):
-    try:
-        requests.get(
-            f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
-            params={"chat_id": CHAT_ID, "text": msg},
-            timeout=5
-        )
-    except Exception:
-        pass
+def hdrs(m, u):
+return k.kalshi_auth.create_auth_headers(m, u)
 
-def get_auth_headers(method, url):
-    return kalshi.kalshi_auth.create_auth_headers(method, url)
+def tg(msg):
+try:
+requests.get(
+“https://api.telegram.org/bot” + BOT_TOKEN + “/sendMessage”,
+params={“chat_id”: CHAT_ID, “text”: msg}, timeout=5
+)
+except Exception:
+pass
 
 def get_balance():
-    url     = "https://api.elections.kalshi.com/trade-api/v2/portfolio/balance"
-    headers = get_auth_headers("GET", url)
-    resp    = requests.get(url, headers=headers, timeout=5)
-    if resp.status_code == 200:
-        data = resp.json()
-        return (data.get('balance', 0) + data.get('portfolio_value', 0)) / 100
-    return 0
+url = “https://api.elections.kalshi.com/trade-api/v2/portfolio/balance”
+r = requests.get(url, headers=hdrs(“GET”, url), timeout=5)
+if r.status_code == 200:
+d = r.json()
+return (d.get(‘balance’, 0) + d.get(‘portfolio_value’, 0)) / 100
+return 0
 
-def scan_markets():
-    """Fetch all open markets and find near-certain outcomes."""
-    url     = "https://api.elections.kalshi.com/trade-api/v2/markets"
-    headers = get_auth_headers("GET", url)
-    opportunities = []
-    cursor = ""
+def scan_arb():
+url = “https://api.elections.kalshi.com/trade-api/v2/markets”
+arbs = []
+cursor = “”
+while True:
+params = {“status”: “open”, “limit”: 100}
+if cursor:
+params[“cursor”] = cursor
+r = requests.get(url, headers=hdrs(“GET”, url), params=params, timeout=10)
+if r.status_code != 200:
+break
+data = r.json()
+for m in data.get(“markets”, []):
+ticker  = m.get(“ticker”, “”)
+yes_ask = m.get(“yes_ask_dollars”)
+no_ask  = m.get(“no_ask_dollars”)
+close_ts = m.get(“close_time”) or m.get(“expiration_time”)
+volume  = m.get(“volume”, 0) or 0
+if not yes_ask or not no_ask or not close_ts:
+continue
+if ticker in placed or volume < 1000:
+continue
+yp = float(yes_ask)
+np = float(no_ask)
+cb = yp + np
+if cb >= 0.97 or cb <= 0.50:
+continue
+try:
+cd = datetime.datetime.fromisoformat(close_ts.replace(“Z”, “+00:00”))
+ml = (cd - datetime.datetime.now(datetime.timezone.utc)).total_seconds() / 60
+except Exception:
+continue
+if ml < MIN_MINUTES or ml > MAX_MINUTES:
+continue
+gross = 1.0 - cb
+net = gross * 0.93
+pct = (net / cb) * 100
+if pct < MIN_NET_PCT:
+continue
+arbs.append({
+“ticker”: ticker, “yp”: yp, “np”: np,
+“cb”: cb, “pct”: pct, “ml”: ml, “vol”: volume
+})
+cursor = data.get(“cursor”, “”)
+if not cursor:
+break
+return sorted(arbs, key=lambda x: x[“pct”], reverse=True)
 
-    while True:
-        params = {"status": "open", "limit": 100}
-        if cursor:
-            params["cursor"] = cursor
-        resp = requests.get(url, headers=headers, params=params, timeout=10)
-        if resp.status_code != 200:
-            break
-        data    = resp.json()
-        markets = data.get("markets", [])
-        if not markets:
-            break
+def execute(arb):
+ticker = arb[“ticker”]
+yp     = arb[“yp”]
+np     = arb[“np”]
+n      = max(1, int(MAX_COST / arb[“cb”]))
+yc     = min(99, max(1, round(yp * 100) + 1))
+nc     = min(99, max(1, round(np * 100) + 1))
+try:
+k.create_order(ticker=ticker, action=“buy”, side=“yes”,
+type=“market”, count=n, yes_price=yc, time_in_force=“ioc”)
+k.create_order(ticker=ticker, action=“buy”, side=“no”,
+type=“market”, count=n, no_price=nc, time_in_force=“ioc”)
+placed.add(ticker)
+cost   = n * arb[“cb”]
+profit = n * (1.0 - arb[“cb”])
+msg = (“ARB “ + ticker +
+“ YES@” + str(round(yp, 3)) +
+“+NO@” + str(round(np, 3)) +
+“=” + str(round(arb[“cb”], 3)) +
+“ x” + str(n) +
+“ cost=$” + str(round(cost, 2)) +
+“ profit=$” + str(round(profit, 2)) +
+“ (” + str(round(arb[“pct”], 1)) + “%)” +
+“ “ + str(round(arb[“ml”], 0)) + “min”)
+print(msg)
+tg(msg)
+with open(ARB_LOG, “a”) as f:
+f.write(json.dumps({
+“ts”: datetime.datetime.now().isoformat(),
+“ticker”: ticker, “yp”: yp, “np”: np,
+“cb”: arb[“cb”], “n”: n,
+“cost”: cost, “profit”: profit
+}) + “\n”)
+return True
+except Exception as e:
+print(”[Arb] fail: “ + str(e))
+return False
 
-        for m in markets:
-            ticker   = m.get("ticker", "")
-            yes_ask  = m.get("yes_ask_dollars")
-            no_ask   = m.get("no_ask_dollars")
-            close_ts = m.get("close_time") or m.get("expiration_time")
+print(“Arb scanner v1 started”)
+tg(“Arb scanner started - hunting YES+NO < 0.97 opportunities”)
 
-            if not yes_ask or not no_ask or not close_ts:
-                continue
-            if ticker in placed_markets:
-                continue
-            # Skip sports parlay/multi-event markets (already resolved, no edge)
-            if any(x in ticker for x in ("KXMVE", "MULTIGAME", "CROSSCAT", "PARLAY")):
-                continue
-            # Skip markets already at 0 or 1 (no cash out value)
-            if float(yes_ask) <= 0.01 or float(yes_ask) >= 0.99:
-                continue
-            if float(yes_ask) + float(no_ask) > 1.02:
-                continue
-
-            yes_price = float(yes_ask)
-            no_price  = float(no_ask)
-
-            # Calculate minutes remaining
-            try:
-                close_dt  = datetime.datetime.fromisoformat(
-                    close_ts.replace("Z", "+00:00"))
-                now_utc   = datetime.datetime.now(datetime.timezone.utc)
-                mins_left = (close_dt - now_utc).total_seconds() / 60
-            except Exception:
-                continue
-
-            if mins_left < MIN_MINUTES or mins_left > MAX_MINUTES:
-                continue
-
-            # Check for near-certain outcome
-            if yes_price >= YES_HIGH and yes_price < 0.99:
-                profit = (1 - yes_price) / yes_price * 100
-                if profit >= 0.5:  # minimum 0.5% profit
-                    opportunities.append({
-                        "ticker":    ticker,
-                        "side":      "yes",
-                        "price":     yes_price,
-                        "mins_left": mins_left,
-                        "profit_pct": profit,
-                    })
-            elif yes_price <= YES_LOW and no_price < 0.99:
-                profit = (1 - no_price) / no_price * 100
-                if profit >= 0.5:
-                    opportunities.append({
-                        "ticker":    ticker,
-                        "side":      "no",
-                        "price":     no_price,
-                        "mins_left": mins_left,
-                        "profit_pct": profit,
-                    })
-
-        cursor = data.get("cursor", "")
-        if not cursor:
-            break
-
-    return sorted(opportunities, key=lambda x: x["profit_pct"], reverse=True)
-
-def place_bond_bet(opp):
-    """Place a bond bet on a near-certain outcome."""
-    global session_wins, session_losses, session_pnl
-
-    ticker = opp["ticker"]
-    side   = opp["side"]
-    price  = opp["price"]
-    price_cents = min(99, max(1, round(price * 100) + 1))
-    count  = max(1, int(BET_SIZE / price))
-
-    try:
-        order = kalshi.create_order(
-            ticker=ticker,
-            action="buy",
-            side=side,
-            type="market",
-            count=count,
-            yes_price=price_cents if side == "yes" else None,
-            no_price=price_cents if side == "no" else None,
-            time_in_force="ioc",
-        )
-        placed_markets.add(ticker)
-        cost = count * price
-        msg  = (f"🔒 BOND: {side.upper()} on {ticker}\n"
-                f"Price: {price:.2f} | Cost: ${cost:.2f} | "
-                f"Profit if wins: ${count*(1-price):.2f} ({opp['profit_pct']:.1f}%)\n"
-                f"Time left: {opp['mins_left']:.0f} min")
-        print(msg)
-        send_telegram(msg)
-
-        # Log it
-        entry = {
-            "timestamp": datetime.datetime.now().isoformat(),
-            "ticker":    ticker,
-            "side":      side,
-            "price":     price,
-            "count":     count,
-            "cost":      cost,
-            "mins_left": opp["mins_left"],
-        }
-        with open(LOG_FILE, 'a') as f:
-            f.write(json.dumps(entry) + '\n')
-        return True
-    except Exception as e:
-        print(f"[Bond] Order failed: {e}")
-        return False
-
-def check_settled():
-    """Check if any placed markets have settled."""
-    global session_wins, session_losses, session_pnl
-    if not placed_markets:
-        return
-
-    url     = "https://api.elections.kalshi.com/trade-api/v2/portfolio/positions"
-    headers = get_auth_headers("GET", url)
-    resp    = requests.get(url, headers=headers,
-                           params={"limit": 100}, timeout=8)
-    if resp.status_code != 200:
-        return
-
-    settled = {p["ticker"] for p in resp.json().get("market_positions", [])}
-    for ticker in list(placed_markets):
-        if ticker not in settled:
-            # Check if it finalized
-            murl    = f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
-            mheader = get_auth_headers("GET", murl)
-            mr      = requests.get(murl, headers=mheader, timeout=5)
-            if mr.status_code == 200:
-                result = mr.json().get("market", {}).get("result", "")
-                if result in ("yes", "no"):
-                    placed_markets.discard(ticker)
-
-def fetch_markets():
-     url="https://api.elections.kalshi.com/trade-api/v2/markets"
-     headers=get_auth_headers("GET",url)
-     all_markets=[]
-     cursor=""
-     while True:
-         p={"status":"open","limit":100}
-         if cursor: p["cursor"]=cursor
-         r=requests.get(url,headers=headers,params=p,timeout=10)
-         if r.status_code!=200: break
-         d=r.json()
-         mkts=d.get("markets",[])
-         if not mkts: break
-         all_markets.extend(mkts)
-         cursor=d.get("cursor","")
-         if not cursor: break
-     return all_markets
- 
- def scan_bundle_arb(markets):
-     arbs=[]
-     for m in markets:
-         tk=m.get("ticker","")
-         ya=m.get("yes_ask_dollars")
-         na=m.get("no_ask_dollars")
-         ct=m.get("close_time") or m.get("expiration_time")
-         vol=m.get("volume",0) or 0
-         if not ya or not na or not ct: continue
-         if tk in placed_markets: continue
-         if vol<1000: continue
-         yp=float(ya); np2=float(na); cb=yp+np2
-         if cb>=0.97 or cb<=0.50: continue
-         try:
-             cd=datetime.datetime.fromisoformat(ct.replace("Z","+00:00"))
-             ml=(cd-datetime.datetime.now(datetime.timezone.utc)).total_seconds()/60
-         except: continue
-         if ml<MIN_MINUTES or ml>MAX_MINUTES: continue
-         net=(1.0-cb)*0.93; pct=(net/cb)*100
-         if pct<ARB_MIN_PCT: continue
-         arbs.append({"ticker":tk,"yp":yp,"np":np2,"cb":cb,"pct":pct,"ml":ml})
-     return sorted(arbs,key=lambda x:x["pct"],reverse=True)
- 
- def place_bundle_arb(arb):
-     tk=arb["ticker"]; yp=arb["yp"]; np2=arb["np"]
-     n=max(1,int(ARB_MAX_COST/arb["cb"]))
-     yc=min(99,max(1,round(yp*100)+1))
-     nc=min(99,max(1,round(np2*100)+1))
-     try:
-         kalshi.create_order(ticker=tk,action="buy",side="yes",type="market",count=n,yes_price=yc,time_in_force="ioc")
-         kalshi.create_order(ticker=tk,action="buy",side="no",type="market",count=n,no_price=nc,time_in_force="ioc")
-         placed_markets.add(tk)
-         cost=n*arb["cb"]; profit=n*(1.0-arb["cb"])
-         msg="ARB "+tk+" YES@"+str(round(yp,3))+"+NO@"+str(round(np2,3))+"="+str(round(arb["cb"],3))+" x"+str(n)+" cost=$"+str(round(cost,2))+" profit=$"+str(round(profit,2))+" ("+str(round(arb["pct"],1))+"%) "+str(round(arb["ml"],0))+"min"
-         print(msg); send_telegram(msg)
-         with open(ARB_LOG,"a") as f:
-             import json as _j
-             f.write(_j.dumps({"ts":datetime.datetime.now().isoformat(),"ticker":tk,"cb":arb["cb"],"n":n,"cost":cost,"profit":profit})+"
-")
-     except Exception as e: print("[Arb] fail: "+str(e))
- 
- 
-# ── MAIN LOOP ─────────────────────────────────────────────────────────────────
-if __name__ == "__main__":
-    print("OpenClaw Bond Scanner starting...")
-    send_telegram("🔒 Bond Scanner started — hunting near-certain outcomes")
-
-    while True:
-        if os.path.exists('/root/STOP_BOND'):
-            print("STOP_BOND detected — halting")
-            break
-
-        try:
-            opps = scan_markets()
-            arbs = [m for m in fetch_arbs() if m]
-            bal  = get_balance()
-            print(f"[{datetime.datetime.now().strftime('%H:%M')}] "
-                  f"Scanned markets | Found {len(opps)} opportunities | "
-                  f"Balance: ${bal:.2f}")
-
-            for opp in opps[:3]:  # max 3 bets per scan
-                print(f"  → {opp['ticker']} | {opp['side']} @ {opp['price']:.3f} | "
-                      f"{opp['mins_left']:.0f}min left | +{opp['profit_pct']:.1f}%")
-                place_bond_bet(opp)
-
-        except Exception as e:
-            print(f"[Bond] Scan error: {e}")
-
-        time.sleep(SCAN_INTERVAL)
+while True:
+if os.path.exists(”/root/STOP_ARB”):
+print(“STOP_ARB detected - halting”)
+break
+try:
+arbs = scan_arb()
+bal  = get_balance()
+print(”[” + datetime.datetime.now().strftime(”%H:%M”) + “] “ +
+str(len(arbs)) + “ arbs found | bal=$” + str(round(bal, 2)))
+if arbs:
+a = arbs[0]
+print(”  TOP: “ + a[“ticker”] +
+“ cb=” + str(round(a[“cb”], 3)) +
+“ net=” + str(round(a[“pct”], 1)) + “%”)
+for arb in arbs[:2]:
+execute(arb)
+except Exception as e:
+print(”[Arb] scan err: “ + str(e))
+time.sleep(SCAN_SLEEP)
