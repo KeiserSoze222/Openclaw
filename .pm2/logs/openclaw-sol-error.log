@@ -107,3 +107,9 @@ KeyboardInterrupt
   signal={"yes_prob":yes_prob,"regime":regime,"confidence":confidence,"window_age":window_age,"ticker":ticker,"news_score":news_score,"bond_score":bond_score,"whale_score":whale_score,"ts":datetime.datetime.utcnow().isoformat()}
 /root/openclaw.py:264: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
   signal={"yes_prob":yes_prob,"regime":regime,"confidence":confidence,"window_age":window_age,"ticker":ticker,"news_score":news_score,"bond_score":bond_score,"whale_score":whale_score,"ts":datetime.datetime.utcnow().isoformat()}
+Traceback (most recent call last):
+  File "/root/openclaw.py", line 961, in <module>
+    time.sleep(max(0,CYCLE_SLEEP-elapsed))
+KeyboardInterrupt
+/root/openclaw.py:264: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  signal={"yes_prob":yes_prob,"regime":regime,"confidence":confidence,"window_age":window_age,"ticker":ticker,"news_score":news_score,"bond_score":bond_score,"whale_score":whale_score,"ts":datetime.datetime.utcnow().isoformat()}

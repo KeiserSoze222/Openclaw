@@ -15281,3 +15281,84 @@
 2026-04-09T15:05:45: PM2 log: pid=671720 msg=process killed
 2026-04-09T15:05:45: PM2 log: App [dashboard:14] starting in -fork mode-
 2026-04-09T15:05:45: PM2 log: App [dashboard:14] online
+2026-04-09T15:07:30: PM2 log: Stopping app:openclaw-btc id:10
+2026-04-09T15:07:30: PM2 log: pid=672122 msg=failed to kill - retrying in 100ms
+2026-04-09T15:07:30: PM2 log: pid=672122 msg=failed to kill - retrying in 100ms
+2026-04-09T15:07:30: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-09T15:07:31: PM2 log: pid=672122 msg=process killed
+2026-04-09T15:07:31: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-09T15:07:31: PM2 log: App [openclaw-btc:10] online
+2026-04-09T15:07:31: PM2 log: Stopping app:openclaw-eth id:11
+2026-04-09T15:07:31: PM2 log: pid=672131 msg=failed to kill - retrying in 100ms
+2026-04-09T15:07:31: PM2 log: pid=672131 msg=failed to kill - retrying in 100ms
+2026-04-09T15:07:31: PM2 log: pid=672131 msg=failed to kill - retrying in 100ms
+2026-04-09T15:07:31: PM2 log: pid=672131 msg=failed to kill - retrying in 100ms
+2026-04-09T15:07:31: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-09T15:07:31: PM2 log: pid=672131 msg=process killed
+2026-04-09T15:07:31: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-09T15:07:31: PM2 log: App [openclaw-eth:11] online
+2026-04-09T15:07:31: PM2 log: Stopping app:openclaw-sol id:12
+2026-04-09T15:07:31: PM2 log: pid=672128 msg=failed to kill - retrying in 100ms
+2026-04-09T15:07:31: PM2 log: pid=672128 msg=failed to kill - retrying in 100ms
+2026-04-09T15:07:32: PM2 log: pid=672128 msg=failed to kill - retrying in 100ms
+2026-04-09T15:07:32: PM2 log: pid=672128 msg=failed to kill - retrying in 100ms
+2026-04-09T15:07:32: PM2 log: pid=672128 msg=failed to kill - retrying in 100ms
+2026-04-09T15:07:32: PM2 log: pid=672128 msg=failed to kill - retrying in 100ms
+2026-04-09T15:07:32: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-09T15:07:32: PM2 log: pid=672128 msg=process killed
+2026-04-09T15:07:32: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-09T15:07:32: PM2 log: App [openclaw-sol:12] online
+2026-04-09T16:24:07: PM2 log: Stopping app:bond-scanner id:3
+2026-04-09T16:24:07: PM2 log: pid=628620 msg=failed to kill - retrying in 100ms
+2026-04-09T16:24:07: PM2 log: pid=628620 msg=failed to kill - retrying in 100ms
+2026-04-09T16:24:07: PM2 log: App [bond-scanner:3] exited with code [0] via signal [SIGINT]
+2026-04-09T16:24:08: PM2 log: pid=628620 msg=process killed
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] starting in -fork mode-
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] online
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] exited with code [1] via signal [SIGINT]
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] starting in -fork mode-
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] online
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] exited with code [1] via signal [SIGINT]
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] starting in -fork mode-
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] online
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] exited with code [1] via signal [SIGINT]
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] starting in -fork mode-
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] online
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] exited with code [1] via signal [SIGINT]
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] starting in -fork mode-
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] online
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] exited with code [1] via signal [SIGINT]
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] starting in -fork mode-
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] online
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] exited with code [1] via signal [SIGINT]
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] starting in -fork mode-
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] online
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] exited with code [1] via signal [SIGINT]
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] starting in -fork mode-
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] online
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] exited with code [1] via signal [SIGINT]
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] starting in -fork mode-
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] online
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] exited with code [1] via signal [SIGINT]
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] starting in -fork mode-
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] online
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] exited with code [1] via signal [SIGINT]
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] starting in -fork mode-
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] online
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] exited with code [1] via signal [SIGINT]
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] starting in -fork mode-
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] online
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] exited with code [1] via signal [SIGINT]
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] starting in -fork mode-
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] online
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] exited with code [1] via signal [SIGINT]
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] starting in -fork mode-
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] online
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] exited with code [1] via signal [SIGINT]
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] starting in -fork mode-
+2026-04-09T16:24:08: PM2 log: App [bond-scanner:3] online
+2026-04-09T16:24:09: PM2 log: App [bond-scanner:3] exited with code [1] via signal [SIGINT]
+2026-04-09T16:24:09: PM2 log: App [bond-scanner:3] starting in -fork mode-
+2026-04-09T16:24:09: PM2 log: App [bond-scanner:3] online
+2026-04-09T16:24:09: PM2 log: App [bond-scanner:3] exited with code [1] via signal [SIGINT]
+2026-04-09T16:24:09: PM2 log: Script /root/bond_scanner.py had too many unstable restarts (16). Stopped. "errored"
