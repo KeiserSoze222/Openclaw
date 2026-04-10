@@ -1,47 +1,3 @@
-         resp = requests.get(
-             "https://api.kraken.com/0/public/OHLC",
-             params={"pair": "XBTUSD", "interval": 1},
-             timeout=8)
-         if resp.status_code == 200:
-             candles = resp.json().get("result", {}).get("XXBTZUSD", [])
-             closes  = [float(c[4]) for c in candles[-minutes:]]
-             if closes:
-                 return np.array(closes)
-     except Exception as e:
-         print(f"[Prices] Kraken failed: {e}")
-     return np.array([83000] * minutes)
- 
- def get_kraken_btc():
-     """Current BTC price from Kraken for cross-check."""
-     try:
-         resp = requests.get(
-             "https://api.kraken.com/0/public/Ticker",
-             params={"pair": "XBTUSD"}, timeout=3)
-         if resp.status_code == 200:
-             result = resp.json().get("result", {})
-             if result:
-                 return float(list(result.values())[0]["c"][0])
-     except Exception:
-         pass
-     return None
- 
- def get_market_prices(ticker):
-     """Fetch YES ask, NO ask, and strike from Kalshi."""
-     try:
-         url     = f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
-         headers = kalshi.kalshi_auth.create_auth_headers("GET", url)
-         resp    = requests.get(url, headers=headers, timeout=5)
-         if resp.status_code == 200:
-             m       = resp.json().get("market", {})
-             yes_ask = m.get("yes_ask_dollars")
-             no_ask  = m.get("no_ask_dollars")
-             strike  = m.get("floor_strike", 0)
-             if yes_ask is not None and no_ask is not None:
-                 return float(yes_ask), float(no_ask), float(strike or 0)
-     except Exception as e:
-         print(f"[Prices] {e}")
-     return None, None, None
- 
  def get_trend_validator():
      """
      Fetch Kalshi 1-hour BTC market as trend validator.
@@ -1998,3 +1954,47 @@ python3 -c "
  print('done')
  " && python3 -m py_compile /root/arb_scanner.py && echo "OK"
 pm2 stop arb-scanner
+source kalshi_env/bin/activate
+python3 /tmp/status_all.py
+wc -l /root/openclaw.py
+sed -n '405,435p' /root/openclaw.py
+sed -n '890,965p' /root/openclaw.py
+sed -n '845,890p' /root/openclaw.py
+grep -n "ARB_THRESHOLD" /root/openclaw.py | head -10
+grep -n "simulate_trade\|try_arb\|try_directional" /root/openclaw.py | head -20 
+sed -n '1,92p' /root/openclaw.py
+sed -i 's/ARB_THRESHOLD=0.97/ARB_THRESHOLD=0.50/' /root/openclaw.py
+sed -i 's/INITIAL_BALANCE=200.29/INITIAL_BALANCE=295.66/' /root/openclaw.py
+python3 -m py_compile /root/openclaw.py && echo "OK"
+pip install ruff vulture --break-system-packages
+ruff check /root/openclaw.py
+vulture /root/openclaw.py
+sed -i 's/session_start_time=time.time()//' /root/openclaw.py
+sed -i 's/ticker,market_data=update_live_ticker()/ticker,_=update_live_ticker()/' /root/openclaw.py
+ruff check /root/openclaw.py --select F541,F841 --fix
+sed -i 's/no_price=min(99,max(1,round((mkt_no or 0.50)\*100)+2)) if side=="no" else None/_=None/' /root/openclaw.py
+python3 -c "open('/root/.gitignore','w').write('kalshi_env/\n.cache/\n__pycache__/\n*.pyc\n.pm2/logs/\n.pm2/pids/\n*.pid\n')" 
+ruff check /root/openclaw.py
+ruff check /root/openclaw.py --fix 
+python3 -c "content=open('/root/.gitignore').read(); open('/root/.gitignore','w').write(content+'*.log\narena_state.json\nbond_log.json\narb_log.json\nfeature_log.json\nperformance_log.json\neth_performance_log.json\nsol_performance_log.json\n')"
+python3 -c "content=open('/root/.gitignore').read(); open('/root/.gitignore','w').write(content+'.pm2/logs/\n__pycache__/\ngenome.json\nbond_scanner.log\narena_state.json\n')"
+git rm -r --cached .pm2/logs/ __pycache__/ arena_state.json bond_scanner.log genome.json 2>/dev/null; echo "done"
+python3 -m py_compile /root/openclaw.py && echo "openclaw OK"
+python3 -m py_compile /root/openclaw.py
+python3 -c "bal=295.66; print('Normal bet: $'+str(round(bal*0.07,2))); print('Peak bet: $'+str(round(bal*0.10,2))); print('ETH bet: $'+str(round(bal*0.09,2))); print('SOL bet: $'+str(round(bal*0.05,2)))"
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); hdrs=k.kalshi_auth.create_auth_headers('GET','https://api.elections.kalshi.com/trade-api/v2/portfolio/positions'); r=requests.get('https://api.elections.kalshi.com/trade-api/v2/portfolio/positions',headers=hdrs,params={'limit':100},timeout=8); pos=r.json().get('market_positions',[]); active=[p for p in pos if float(p.get('market_exposure_dollars',0))>0]; print(str(len(active))+' open positions'); [print(p.get('ticker'),p.get('market_exposure_dollars')) for p in active]"
+python3 -c "import csv,collections; rows=list(csv.DictReader(open('/root/trade_log.csv'))); wins_by_hour=collections.defaultdict(int); loss_by_hour=collections.defaultdict(int); [wins_by_hour[r.get('hour','?')].__class__ or None for r in rows]; hours={}; [hours.update({r.get('hour','?'): hours.get(r.get('hour','?'), {'w':0,'l':0})}) for r in rows]; [hours[r.get('hour','?')].update({'w':hours[r.get('hour','?')]['w']+1}) if r.get('result','')=='win' else hours[r.get('hour','?')].update({'l':hours[r.get('hour','?')]['l']+1}) for r in rows]; [print('H'+str(h).zfill(2)+' '+str(v['w'])+'W/'+str(v['l'])+'L '+str(round(v['w']/(v['w']+v['l'])*100))+'% ('+str(v['w']+v['l'])+'T)') for h,v in sorted(hours.items()) if v['w']+v['l']>0]"
+python3 -c "import csv,collections; hours={}; [hours.update({r.get('hour','?'): hours.get(r.get('hour','?'), {'w':0,'l':0})}) for r in csv.DictReader(open('/root/eth_trade_log.csv'))]; [hours[r.get('hour','?')].update({'w':hours[r.get('hour','?')]['w']+1}) if r.get('result','')=='win' else hours[r.get('hour','?')].update({'l':hours[r.get('hour','?')]['l']+1}) for r in csv.DictReader(open('/root/eth_trade_log.csv'))]; [print('H'+str(h).zfill(2)+' '+str(v['w'])+'W/'+str(v['l'])+'L '+str(round(v['w']/(v['w']+v['l'])*100))+'% ('+str(v['w']+v['l'])+'T)') for h,v in sorted(hours.items()) if v['w']+v['l']>0]"
+head -1 /root/trade_log.csv
+head -3 /root/trade_log.csv 
+grep -v "PLACED" /root/trade_log.csv | head -10
+wc -l /root/trade_log.csv
+head -5 /root/performance_log.json 
+python3 -c "import json; data=json.load(open('/root/performance_log.json')); print(type(data)); print(str(data)[:500])"
+python3 -c "import json; hours={}; [hours.update({r['timestamp'][11:13]: hours.get(r['timestamp'][11:13],{'w':0,'l':0})}) or (hours[r['timestamp'][11:13]].update({'w':hours[r['timestamp'][11:13]]['w']+1}) if r.get('action')=='WIN' else hours[r['timestamp'][11:13]].update({'l':hours[r['timestamp'][11:13]]['l']+1})) for line in open('/root/performance_log.json') for r in [json.loads(line.strip()
+python3 -c "import json; d=[json.loads(l) for l in open('/root/performance_log.json') if l.strip()]; wins=[r for r in d if r.get('action')=='WIN']; losses=[r for r in d if r.get('action')=='LOSS']; print(str(len(wins))+'W '+str(len(losses))+'L total')"
+python3 -c "import json; d=[json.loads(l) for l in open('/root/performance_log.json') if l.strip() and json.loads(l.strip()).get('action') in ('WIN','LOSS')]; h={}; [(h.setdefault(r['timestamp'][11:13],{'w':0,'l':0}), h[r['timestamp'][11:13]].__setitem__('w',h[r['timestamp'][11:13]]['w']+1) if r['action']=='WIN' else h[r['timestamp'][11:13]].__setitem__('l',h[r['timestamp'][11:13]]['l']+1)) for r in d]; print([(k,v) for k,v in sorted(h.items())])"
+grep "5:0.00" /root/openclaw.py 
+pm2 start openclaw-btc openclaw-eth openclaw-sol
+pm2 logs openclaw-btc --lines 15 --nostream | grep -v "DeprecationWarning\|datetime.utcnow\|signal=
+git add -A && git commit -m "System live - bots restarted with clean codebase, balance 295.66" && git push
