@@ -15779,3 +15779,9 @@
 2026-04-10T15:31:46: PM2 log: pid=672204 msg=process killed
 2026-04-10T15:31:46: PM2 log: App [dashboard:14] starting in -fork mode-
 2026-04-10T15:31:46: PM2 log: App [dashboard:14] online
+2026-04-10T15:42:58: PM2 log: Stopping app:dashboard id:14
+2026-04-10T15:42:58: PM2 log: pid=685514 msg=failed to kill - retrying in 100ms
+2026-04-10T15:42:58: PM2 log: App [dashboard:14] exited with code [0] via signal [SIGINT]
+2026-04-10T15:42:58: PM2 log: pid=685514 msg=process killed
+2026-04-10T15:42:58: PM2 log: App [dashboard:14] starting in -fork mode-
+2026-04-10T15:42:58: PM2 log: App [dashboard:14] online
