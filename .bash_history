@@ -1,61 +1,3 @@
- def get_trend_validator():
-     """
-     Fetch Kalshi 1-hour BTC market as trend validator.
-     Returns YES price 0-1 or None.
-     """
-     try:
-         url     = "https://api.elections.kalshi.com/trade-api/v2/markets"
-         headers = kalshi.kalshi_auth.create_auth_headers("GET", url)
-         resp    = requests.get(url, headers=headers,
-                                params={"series_ticker": "KXBTC1H",
-                                        "status": "open", "limit": 5},
-                                timeout=5)
-         if resp.status_code == 200:
-             markets = resp.json().get("markets", [])
-             if markets:
-                 yes_ask = markets[0].get("yes_ask_dollars")
-                 if yes_ask is not None:
-                     print(f"[Trend] 1H BTC: YES={float(yes_ask):.2f}")
-                     return float(yes_ask)
-     except Exception as e:
-         print(f"[Trend] Failed: {e}")
-     return None
- 
- # ─────────────────────────────────────────────────────────────────────────────
- # REGIME DETECTION
- # ─────────────────────────────────────────────────────────────────────────────
- def update_regime(prices):
-     global REGIME, RISK_SCORE
-     if len(prices) < 20:
-         return
-     ma20    = np.mean(prices[-20:])
-     ma60    = np.mean(prices[-60:]) if len(prices) >= 60 else ma20
-     current = prices[-1]
-     if current > ma20 * 1.005 and ma20 > ma60:
-         REGIME, RISK_SCORE = "BULL", 0.5
-     elif current < ma20 * 0.995 and ma20 < ma60:
-         REGIME, RISK_SCORE = "BEAR", 0.3
-     else:
-         REGIME, RISK_SCORE = "CHOP", 0.35
- 
- # ─────────────────────────────────────────────────────────────────────────────
- # TICKER AGENT
- # ─────────────────────────────────────────────────────────────────────────────
- def update_live_ticker():
-     global live_ticker
- 
-     def build_ticker(dt):
-         floored = (dt.minute // 15) * 15
-         hhmm    = f"{dt.hour:02d}{floored:02d}"
-         suffix  = f"{floored:02d}"
-         return (f"{MARKET_SERIES}-"
-                 f"{dt.strftime('%y').upper()}"
-                 f"{dt.strftime('%b').upper()}"
-                 f"{dt.strftime('%d')}"
-                 f"{hhmm}-{suffix}")
- 
-     for status in ("open", "closed"):
-         try:
              url     = "https://api.elections.kalshi.com/trade-api/v2/markets"
              headers = kalshi.kalshi_auth.create_auth_headers("GET", url)
              resp    = requests.get(url, headers=headers,
@@ -1998,3 +1940,61 @@ grep "5:0.00" /root/openclaw.py
 pm2 start openclaw-btc openclaw-eth openclaw-sol
 pm2 logs openclaw-btc --lines 15 --nostream | grep -v "DeprecationWarning\|datetime.utcnow\|signal=
 git add -A && git commit -m "System live - bots restarted with clean codebase, balance 295.66" && git push
+source kalshi_env/bin/activate
+python3 /tmp/status_all.py
+grep -n "768\|mobile\|flex-wrap\|hbtns\|hbtn\|#hdr" /root/arena_dashboard.html | head -20
+sed -i 's/@media(max-width:768px){#lower{grid-template-columns:1fr}#pl,#pr{border:none;border-bottom:1px solid var(--border)}#bfw{height:52vw;min-height:240px}.tb{max-width:90px;font-size:7px}.sc{min-width:160px}}/@media(max-width:768px){#lower{grid-template-columns:1fr}#pl,#pr{border:none;border-bottom:1px solid var(--border)}#bfw{height:70vw;min-height:320px}.tb{max-width:90px;font-size:7px}.sc{min-width:140px}#hdr{height:auto;padding:8px 10px;flex-direction:column;align-items:flex-start;gap:6px}.hc{width:100%;justify-content:space-between}.hbtns{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:4px}.hbtn{text-align:center;font-size:7px;padding:6px 4px}.logo-t{font-size:16px}.logo-s{display:none}}/' /root/arena_dashboard.html
+python3 -m py_compile /root/arena_dashboard.html 2>/dev/null; grep -c "768" /root/arena_dashboard.html 
+grep -n "getTgt\|getTarget\|domination\|0.38\|0.57\|0.78\|0.62" /root/arena_dashboard.html | head -15
+python3 -c "
+ c=open('/root/arena_dashboard.html').read()
+ old='function getTgt(bot){var w=document.getElementById(\'bfw\');if(wc -l /root/trade_log.csv)return {x:200,y:200};var W=w.offsetWidth,H=w.offsetHeight,wr=bot.wr||0,t=bot.trades||0,idx=parseInt(bot.id.replace(\'v\',\'\'))||1;if(t===0){var g=GR[bot.id]||{x:.1+((idx-1)%4)*.25,y:.2+Math.floor((idx-1)/4)*.3};return {x:g.x*W,y:g.y*H};}var x=(0.38+wr*.57)*W,y=(0.78-Math.min(t,300)/300*.62)*H,jit=((idx*7)%11-5)*.038;return {x:x,y:Math.max(.1*H,Math.min(.9*H,y+jit*H)));}'
+ new='function getTgt(bot){var w=document.getElementById(\'bfw\');if(wc -l /root/trade_log.csv)return {x:200,y:200};var W=w.offsetWidth,H=w.offsetHeight,wr=bot.wr||0,t=bot.trades||0,idx=parseInt(bot.id.replace(\'v\',\'\'))||1;var mktOff={btc:0,eth:.28,sol:.56};var mktBase=mktOff[bot.market]||0;if(t===0){var g=GR[bot.id]||{x:.08+(mktBase)+((idx-1)%4)*.18,y:.25+Math.floor((idx-1)/4)*.22};return {x:Math.min(.88*W,g.x*W),y:Math.max(.15*H,Math.min(.82*H,g.y*H))};}var xBase=.12+(mktBase*.9);var xWr=wr*.52;var x=(xBase+xWr)*W;var jitX=((idx*13)%17-8)*.025;var yBase=.75;var yTrades=Math.min(t,500)/500*.52;var y=(yBase-yTrades)*H;var jitY=((idx*7)%11-5)*.04;x=Math.max(.08*W,Math.min(.88*W,x+jitX*W));y=Math.max(.15*H,Math.min(.82*H,y+jitY*H));return {x:x,y:y};}'
+ print('found' if old in c else 'NOT FOUND')
+ "
+python3 -c "c=open('/root/arena_dashboard.html').read(); start=c.find('function getTgt'); end=c.find('}',c.find('return {x:x,y:y',start))+1; print(repr(c[start:end]))"
+python3 -c "c=open('/root/arena_dashboard.html').read(); start=c.find('function getTgt'); print('getTgt at:',start); start2=c.find('0.38+wr'); print('0.38+wr at:',start2); start3=c.find('.57)*W'); print('.57)*W at:',start3)"
+python3 -c "c=open('/root/arena_dashboard.html').read(); start=c.find('function getTgt'); end=c.find(';}',start)+2; print(repr(c[start:end]))"
+python3 -c "
+ c=open('/root/arena_dashboard.html').read()
+ old=\"function getTgt(bot){var w=document.getElementById('bfw');if(wc -l /root/trade_log.csv)return {x:200,y:200};var W=w.offsetWidth,H=w.offsetHeight,wr=bot.wr||0,t=bot.trades||0,idx=parseInt(bot.id.replace('v',''))||1;if(t===0){var g=GR[bot.id]||{x:.1+((idx-1)%4)*.25,y:.2+Math.floor((idx-1)/4)*.3};return {x:g.x*W,y:g.y*H};}\"
+ new=\"function getTgt(bot){var w=document.getElementById('bfw');if(wc -l /root/trade_log.csv)return {x:200,y:200};var W=w.offsetWidth,H=w.offsetHeight,wr=bot.wr||0,t=bot.trades||0,idx=parseInt(bot.id.replace('v',''))||1;var mktOff={btc:0,eth:.28,sol:.56};var mktBase=mktOff[bot.market]||0;if(t===0){var g=GR[bot.id]||{x:.08+mktBase+((idx-1)%4)*.18,y:.25+Math.floor((idx-1)/4)*.22};return {x:Math.min(.88*W,g.x*W),y:Math.max(.15*H,Math.min(.82*H,g.y*H))};};\"
+ print('found' if old in c else 'NOT FOUND')
+ open('/root/arena_dashboard.html','w').write(c.replace(old,new))
+ " && echo "done"
+python3 -c "c=open('/root/arena_dashboard.html').read(); old=\"function getTgt(bot){var w=document.getElementById('bfw');if(wc -l /root/trade_log.csv)return {x:200,y:200};var W=w.offsetWidth,H=w.offsetHeight,wr=bot.wr||0,t=bot.trades||0,idx=parseInt(bot.id.replace('v',''))||1;if(t===0){var g=GR[bot.id]||{x:.1+((idx-1)%4)*.25,y:.2+Math.floor((idx-1)/4)*.3};return {x:g.x*W,y:g.y*H};}\"; new=\"function getTgt(bot){var w=document.getElementById('bfw');if(wc -l /root/trade_log.csv)return {x:200,y:200};var W=w.offsetWidth,H=w.offsetHeight,wr=bot.wr||0,t=bot.trades||0,idx=parseInt(bot.id.replace('v',''))||1;var mo={btc:0,eth:.28,sol:.56};var mb=mo[bot.market]||0;if(t===0){var g=GR[bot.id]||{x:.08+mb+((idx-1)%4)*.18,y:.25+Math.floor((idx-1)/4)*.22};return {x:Math.min(.88*W,g.x*W),y:Math.max(.15*H,Math.min(.82*H,g.y*H))};};\"; print('found' if old in c else 'NOT FOUND'); open('/root/arena_dashboard.html','w').write(c.replace(old,new))"
+set +H 
+python3 -c "c=open('/root/arena_dashboard.html').read(); old=\"var x=(0.38+wr*.57)*W,y=(0.78-Math.min(t,300)/300*.62)*H,jit=((idx*7)%11-5)*.038;return {x:x,y:Math.max(.1*H,Math.min(.9*H,y+jit*H))};\"; new=\"var xBase=.12+(mb*.9);var x=(xBase+wr*.52)*W;var jitX=((idx*13)%17-8)*.025;var yBase=.75;var y=(yBase-Math.min(t,500)/500*.52)*H;var jitY=((idx*7)%11-5)*.04;x=Math.max(.08*W,Math.min(.88*W,x+jitX*W));y=Math.max(.15*H,Math.min(.82*H,y+jitY*H));return {x:x,y:y};\"; print('found' if old in c else 'NOT FOUND'); open('/root/arena_dashboard.html','w').write(c.replace(old,new))"
+pm2 restart dashboard && git add -A && git commit -m "Battlefield: fix bot clustering, spread by market, boundary clamping" && git push
+echo "set +H" >> /root/.bashrc
+pm2 logs dashboard --lines 10 --nostream | grep -v "DeprecationWarning\|datetime"
+grep -n "connecting\|Connecting\|connect" /root/dashboard_v4.py | head -10
+grep -n "connecting\|Connecting\|fetchData\|fetch(" /root/dashboard_v4.py | head -10
+grep -n "connect\|fetch\|websocket\|polling" /root/arena_dashboard.html | head -10
+python3 -c "c=open('/root/arena_dashboard.html').read(); old='.tb{max-width:90px;font-size:7px}.sc{min-width:140px}'; new='.tb{max-width:75px;font-size:6px}.sc{min-width:130px}.bpfp{transform:scale(0.75)}.btag{display:none}'; print('found' if old in c else 'NOT FOUND'); open('/root/arena_dashboard.html','w').write(c.replace(old,new))"
+grep -n "connecting\|Connecting" /root/dashboard_v4.py | head -10
+python3 -c "import http.client; c=http.client.HTTPConnection('167.172.244.100',8080); c.request('GET','/'); r=c.getresponse(); print(r.status,r.reason)"
+sed -n '1,50p' /root/dashboard_v4.py
+h = kalshi.kalshi_auth.create_auth_headers("GET", url) headers=h, params={"limit":10}, timeout=6)
+sed -n '30,36p' /root/dashboard_v4.py
+grep -n "connecting\|Connecting\|fetch\|status" /root/dashboard_v4.py | grep -i "connect\|fetch" | head -15
+wc -l /root/dashboard_v4.py
+sed -n '100,136p' /root/dashboard_v4.py
+wc -l /root/dashboard_v4.html
+sed -n '88,130p' /root/dashboard_v4.html
+sed -n '10,20p' /root/dashboard_v4.html
+python3 -c "import urllib.request; r=urllib.request.urlopen('http://167.172.244.100:8080/api/data',timeout=5); print(r.read()[:200].decode())"
+sed -n '85,98p' /root/dashboard_v4.html
+python3 -c "c=open('/root/dashboard_v4.html').read(); old='.header{padding:10px 12px;}'; new='.header{padding:8px 10px;flex-wrap:wrap;gap:6px;height:auto;}.header-right{gap:6px;flex-wrap:wrap;}.bible-btn{font-size:8px;padding:4px 7px;}.utc-time{font-size:9px;}.logo-text{font-size:12px;}'; print('found' if old in c else 'NOT FOUND'); open('/root/dashboard_v4.html','w').write(c.replace(old,new))"
+sed -n '130,160p' /root/dashboard_v4.html
+python3 -c "c=open('/root/dashboard_v4.html').read(); old='</div>\`;  div>\`;}'; new='</div>\`;}'; print('found' if old in c else 'NOT FOUND'); open('/root/dashboard_v4.html','w').write(c.replace(old,new))"
+python3 -c "c=open('/root/dashboard_v4.html').read(); idx=c.find('div>\`;}'); print(repr(c[idx-20:idx+20]))"
+python3 -c "c=open('/root/dashboard_v4.html').read(); idx=c.find('wr-fill'); print(repr(c[idx:idx+100]))"
+python3 -c "c=open('/root/dashboard_v4.html').read(); idx=c.find('wr-bar'); start=c.rfind('wr-bar',0,c.rfind('wr-bar')); print(repr(c[start:start+200]))"
+python3 -c "c=open('/root/dashboard_v4.html').read(); lines=c.split('\n'); [print(i+1,repr(lines[i])) for i in range(155,165)]"
+python3 -c "c=open('/root/dashboard_v4.html').read(); idx=c.find('ft=d.features'); print(repr(c[idx:idx+200]))"
+python3 -c "c=open('/root/dashboard_v4.html').read(); idx=c.find('const bal='); print(repr(c[idx:idx+300]))"
+python3 -c "c=open('/root/dashboard_v4.html').read(); old='const bal=d.balance,s=d.stats,pr=d.procs,tr=d.trades,wh=d.whales,pos=d.positions,ft=d.features,ins=d.insights,hw=d.hourly;'; new='const bal=d.balance,s=d.stats,pr=d.procs,tr=d.trades,wh=d.whales,pos=d.positions,ft=d.features||{},ins=d.insights||[],hw=d.hourly||{};'; print('found' if old in c​​​​​​​​​​​​​​​​
+python3 -c "c=open('/root/dashboard_v4.html').read(); [print(i+1,repr(l)) for i,l in enumerate(c.split('\n')) if 'ft.' in l or 'ins.' in l or 'hw.' in l or ' ft ' in l or ' ins ' in l]"
+python3 -c "c=open('/root/dashboard_v4.html').read(); c=c.replace('ft=d.features,ins=d.insights,hw=d.hourly','ft=d.features||[],ins=d.insights||[],hw=d.hourly||{}'); open('/root/dashboard_v4.html','w').write(c); print('done')"
+pm2 restart dashboard && git add -A && git commit -m "Fix Safari crash: undefined features/insights/hourly fields, mobile header" && git push
