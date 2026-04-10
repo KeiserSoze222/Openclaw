@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 """OpenClaw BTC Bot v4.0 — Clean Rebuild"""
-import os,time,csv,datetime,requests,tempfile,json,numpy as np
+import os
+import time
+import csv
+import datetime
+import requests
+import tempfile
+import json
+import numpy as np
 from kalshi_python import KalshiClient
 from kalshi_python.configuration import Configuration
 
@@ -304,7 +311,9 @@ def cancel_resting_orders():
 def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=None):
     # CORRELATION GUARD — prevent all 3 bots firing simultaneously
     try:
-        import glob as _gl, time as _t, os as _os
+        import glob as _gl
+        import time as _t
+        import os as _os
         lock_path = f'/tmp/openclaw_firing_{MARKET_SERIES}.lock'
         locks = _gl.glob('/tmp/openclaw_firing_*.lock')
         recent = [f for f in locks if _t.time()-_os.path.getmtime(f) < 90]
