@@ -58,7 +58,7 @@ MIN_BALANCE=100.00
 DAILY_LOSS_LIMIT=0.12
 CYCLE_SLEEP=60
 COOLDOWN_CYCLES=2
-ARB_THRESHOLD=0.97
+ARB_THRESHOLD=0.50
 DIRECTIONAL_HIGH=0.68
 DIRECTIONAL_LOW=0.32
 EXTREME_HIGH=0.80
@@ -67,8 +67,8 @@ STRONG_MIN1_EDGE=0.30
 MIN_EDGE=0.20
 CASHOUT_MINUTES=3
 CASHOUT_ADVERSE=0.35
-INITIAL_BALANCE=200.29
-SESSION_START_BAL=200.29
+INITIAL_BALANCE=295.66
+SESSION_START_BAL=295.66
 CURRENT_BALANCE=INITIAL_BALANCE
 # TOD schedule — adjusted per market liquidity
 if MARKET_SERIES == "KXBTC15M":
@@ -87,7 +87,7 @@ session_wins=0
 session_losses=0
 session_pnl=0.0
 live_ticker=None
-session_start_time=time.time()
+
 _last_summary_hour=-1
 
 def get_max_bet(is_extreme=False):
@@ -323,7 +323,7 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
     is_extreme=(mkt_yes is not None and (mkt_yes<EXTREME_LOW or mkt_yes>EXTREME_HIGH))
     max_bet=get_max_bet(is_extreme=is_extreme)
     if max_bet==0.0:
-        print(f"[TOD] Skipping — bad hour for this bot")
+        print("[TOD] Skipping — bad hour for this bot")
         return False
     bet=min(round(bet,2),max_bet)
     bet=max(2.00,bet)
@@ -577,7 +577,7 @@ def try_directional(yes_price,no_price):
             print(f"[Trend] 1H agrees {current_direction} — bet boosted")
         elif ((current_direction=="UP" and trend_yes<0.40) or (current_direction=="DOWN" and trend_yes>0.60)):
             bet=round(bet*0.85,2)
-            print(f"[Trend] 1H disagrees — bet trimmed")
+            print("[Trend] 1H disagrees — bet trimmed")
     if get_max_bet(is_extreme=is_extreme)>0:
         try:
             btc1=get_coinbase_price("KXBTC15M")
@@ -593,10 +593,10 @@ def try_directional(yes_price,no_price):
                     agree=(sum(1 for m in moves if m) if current_direction=="UP" else sum(1 for m in moves if not m))
                     if agree>=3:
                         bet=min(round(bet*1.20,2),get_max_bet(is_extreme=is_extreme))
-                        print(f"[Correlation] All 3 agree — bet boosted")
+                        print("[Correlation] All 3 agree — bet boosted")
                     elif agree==1:
                         bet=round(bet*0.90,2)
-                        print(f"[Correlation] Markets diverging — bet trimmed")
+                        print("[Correlation] Markets diverging — bet trimmed")
                     else:
                         print(f"[Correlation] 2/3 agree {current_direction}")
         except Exception:
@@ -897,7 +897,7 @@ def simulate_trade():
         COOLDOWN_REMAINING-=1
         check_open_positions()
         return
-    ticker,market_data=update_live_ticker()
+    ticker,_=update_live_ticker()
     if not ticker:
         print("[Ticker] No ticker — skipping")
         return

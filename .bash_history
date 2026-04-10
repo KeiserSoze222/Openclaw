@@ -1,99 +1,3 @@
- 
-     # Extreme signals always get a minimum bet even in bad hours
-     if tod_scale == 0.0:
-         if is_extreme:
-             return max(2.00, round(CURRENT_BALANCE * 0.03, 2))
-         return 0.0
- 
-     pct  = PEAK_BET_PCT if hour in PEAK_HOURS else MAX_BET_PCT
-     base = CURRENT_BALANCE * pct * tod_scale
-     return max(2.00, min(20.00, round(base, 2)))
- 
- # ─────────────────────────────────────────────────────────────────────────────
- # TELEGRAM
- # ─────────────────────────────────────────────────────────────────────────────
- def send_telegram(msg):
-     try:
-         requests.get(
-             f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
-             params={"chat_id": CHAT_ID, "text": str(msg)},
-             timeout=5
-         )
-     except Exception:
-         pass
- 
- # ─────────────────────────────────────────────────────────────────────────────
- # LOGGING
- # ─────────────────────────────────────────────────────────────────────────────
- def log_trade(direction, bet, action, profit_pct=0, notes="", features=None):
-     ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-     try:
-         with open(LOG_CSV, "a", newline="") as f:
-             csv.writer(f).writerow([ts, direction, f"{bet:.2f}",
-                                      action, f"{profit_pct:.2f}%", notes])
-     except Exception:
-         pass
-     entry = {
-         "timestamp": ts, "direction": direction, "bet": bet,
-         "action": action, "profit_pct": profit_pct, "notes": notes,
-         "balance": CURRENT_BALANCE, "session_wins": session_wins,
-         "session_losses": session_losses, "session_pnl": session_pnl,
-         "regime": REGIME, "market": MARKET_SERIES,
-     }
-     try:
-         with open(PERF_LOG, "a") as f:
-             f.write(json.dumps(entry) + "\n")
-     except Exception:
-         pass
-     if features is not None:
-         try:
-             with open(FEAT_LOG, "a") as f:
-                 f.write(json.dumps({**entry, "features": features}) + "\n")
-         except Exception:
-             pass
- 
- # ─────────────────────────────────────────────────────────────────────────────
- # BALANCE
- # ─────────────────────────────────────────────────────────────────────────────
- def get_live_balance():
-     try:
-         url     = "https://api.elections.kalshi.com/trade-api/v2/portfolio/balance"
-         headers = kalshi.kalshi_auth.create_auth_headers("GET", url)
-         resp    = requests.get(url, headers=headers, timeout=8)
-         if resp.status_code == 200:
-             d   = resp.json()
-             bal = (d.get("balance", 0) + d.get("portfolio_value", 0)) / 100
-             if bal > 0:
-                 return round(bal, 2)
-     except Exception as e:
-         print(f"[Balance] Failed: {e}")
-     return CURRENT_BALANCE
- 
- # ─────────────────────────────────────────────────────────────────────────────
- # PRICE FEEDS
- # ─────────────────────────────────────────────────────────────────────────────
- def get_coinbase_price(market_series):
-     symbols = {
-         "KXBTC15M": "BTC-USD",
-         "KXETH15M": "ETH-USD",
-         "KXSOL15M": "SOL-USD",
-     }
-     symbol = symbols.get(market_series)
-     if not symbol:
-         return None
-     try:
-         resp = requests.get(
-             f"https://api.coinbase.com/v2/prices/{symbol}/spot",
-             timeout=3)
-         if resp.status_code == 200:
-             return float(resp.json()["data"]["amount"])
-     except Exception:
-         pass
-     return None
- 
- def get_btc_prices(minutes=60):
-     """Fetch BTC OHLC from Kraken for regime detection."""
-     try:
          resp = requests.get(
              "https://api.kraken.com/0/public/OHLC",
              params={"pair": "XBTUSD", "interval": 1},
@@ -1998,3 +1902,99 @@ python3 -m py_compile /root/arb_scanner.py && echo "OK"
 cp /root/bond_scanner_backup.py /root/bond_scanner.py
 pm2 logs openclaw-btc --lines 20 --nostream
 exit
+source kalshi_env/bin/activate
+pm2 logs openclaw-btc --lines 20 --nostream
+grep "MIN_BALANCE" /root/openclaw.py 
+grep -n "v012\|pool\|DEMO_POOL\|genome" /root/arena.py | head -10
+python3 -c "
+ import json
+ pool = json.load(open('/root/genome.json'))
+ for v in pool:
+     print(v['id'], v['market'], 'thresh='+str(v.get('entry_threshold',0)), 'trades='+str(v.get('trades',0)))
+ "
+python3 -c "import json; pool=json.load(open('/root/genome.json')); [print(v['id'],v['market'],'thresh='+str(v.get('entry_threshold',0)),'trades='+str(v.get('trades',0))) for v in pool]"
+python3 -c "import json; pool=json.load(open('/root/genome.json')); [print(v['id'],v['market'],'wr='+str(round(v['wins']/v['trades'],3) if v['trades']>0 else 0),'trades='+str(v['trades']),'pnl='+str(v['pnl'])) for v in pool]"
+python3 -c "import json; pool=json.load(open('/root/genome.json')); v4=[v for v in pool if v['id']=='v004'][0]; print('thresh='+str(v4['entry_threshold']),'bet='+str(v4['max_bet_pct']),'chop='+str(v4['chop_allowed']),'conf='+str(v4['min_confidence']))"
+grep -E "DIRECTIONAL_HIGH|DIRECTIONAL_LOW|MIN_CONFIDENCE|MAX_BET_PCT" /root/openclaw.py | head -6
+git add -A && git commit -m "Restore bond scanner - arb scanner backlogged for file transfer fix"
+grep -n "def evaluate\|save_json\|cycle+=1\|print.*Cycle.*done" /root/arena.py | head -10
+sed -n '998,1010p' /root/arena.py
+sed -i '1002a\        auto_promote(pool)' /root/arena.py
+sed -n '956,966p' /root/arena.py
+python3 -c "import subprocess; content=open('/root/arena.py').read(); fn='\ndef auto_promote(pool):\n    try:\n        candidates=[v for v in pool if v.get(\"trades\",0)>=50]\n        if not candidates: return\n        leader=max(candidates,key=lambda v:v.get(\"wins\",0)/v.get(\"trades\",1))\n        wr=leader.get(\"wins\",0)/leader.get(\"trades\",1)\n        if wr<0.70: return\n        thresh=leader.get(\"entry_threshold\",0.70)\n        cur=subprocess.check_output([\"grep\",\"DIRECTIONAL_HIGH\",\"/root/openclaw.py\"]).decode()\n        cur_thresh=float([x for x in cur.split() if \"=\" in x][0].split(\"=\")[1])\n        if abs(thresh-cur_thresh)<0.001: return\n        subprocess.run([\"sed\",\"-i\",\"s/DIRECTIONAL_HIGH=\"+str(cur_thresh)+\"/DIRECTIONAL_HIGH=\"+str(thresh)+\"/\",\"/root/openclaw.py\"])\n        subprocess.run([\"pm2\",\"restart\",\"openclaw-btc\",\"openclaw-eth\",\"openclaw-sol\"])\n        msg=\"[AutoPromote] \"+leader[\"id\"]+\" WR=\"+str(round(wr,3))+\" thresh=\"+str(thresh)+\" promoted\"\n        print(msg)\n        raw=open(\"/root/real_bot_pre_v4_backup.py\").read()\n        tok=raw.split(\"BOT_TOKEN = \x27\")[1].split(\"\x27\")[0]\n        cid=raw.split(\"CHAT_ID   = \x27\")[1].split(\"\x27\")[0]\n        import requests as _r\n        _r.get(\"https://api.telegram.org/bot\"+tok+\"/sendMessage\",params={\"chat_id\":cid,\"text\":msg},timeout=5)\n    except Exception as e: print(\"[AutoPromote] err:\"+str(e))\n'; content=content.replace('if __name__==\"__main__\":',fn+'if __name__==\"__main__\":'); open('/root/arena.py','w').write(content); print('done')"
+python3 -m py_compile /root/arena.py && echo "OK"
+python3 /tmp/status_all.py
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); hdrs=k.kalshi_auth.create_auth_headers('GET','https://api.elections.kalshi.com/trade-api/v2/markets'); r=requests.get('https://api.elections.kalshi.com/trade-api/v2/markets',headers=hdrs,params={'status':'open','limit':100,'series_ticker':'KXFOMC'},timeout=10); print(r.status_code); [print(m.get('ticker'),str(m.get('yes_ask_dollars')),m.get('title','')[:50]) for m in r.json().get('markets',[])]"
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); hdrs=k.kalshi_auth.create_auth_headers('GET','https://api.elections.kalshi.com/trade-api/v2/markets'); r=requests.get('https://api.elections.kalshi.com/trade-api/v2/markets',headers=hdrs,params={'status':'open','limit':100,'series_ticker':'KXEARNINGS'},timeout=10); print('EARNINGS:',r.status_code,len(r.json().get('markets',[]))); [print(m.get('ticker'),str(m.get('yes_ask_dollars')),m.get('title','')[:50]) for m in r.json().get('markets',[])[:10]]"
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); hdrs=k.kalshi_auth.create_auth_headers('GET','https://api.elections.kalshi.com/trade-api/v2/markets'); r=requests.get('https://api.elections.kalshi.com/trade-api/v2/markets',headers=hdrs,params={'status':'open','limit':100,'category':'mentions'},timeout=10); print('MENTIONS:',r.status_code,len(r.json().get('markets',[]))); [print(m.get('ticker'),str(m.get('yes_ask_dollars')),m.get('title','')[:50]) for m in r.json().get('markets',[])[:15]]"
+python3 -c "open('/root/mentions_scanner.py','w').write('import requests,time,datetime,json,os,tempfile\nraw=open(\"/root/real_bot_pre_v4_backup.py\").read()\nKALSHI_KEY=raw.split(\"KALSHI_API_KEY = \x27\")[1].split(\"\x27\")[0]\nKALSHI_SEC=raw.split(\"KALSHI_SECRET  = \x27\x27\x27\")[1].split(\"\x27\x27\x27\")[0]\nBOT_TOKEN=raw.split(\"BOT_TOKEN = \x27\")[1].split(\"\x27\")[0]\nCHAT_ID=raw.split(\"CHAT_ID   = \x27\")[1].split(\"\x27\")[0]\ntf=tempfile.NamedTemporaryFile(delete=False,suffix=\".pem\",mode=\"w\")\ntf.write(KALSHI_SEC)\ntf.close()\nfrom kalshi_python import KalshiClient\nfrom kalshi_python.configuration import Configuration\ncfg=Configuration()\ncfg.host=\"https://api.elections.kalshi.com/trade-api/v2\"\nk=KalshiClient(cfg)\nk.set_kalshi_auth(KALSHI_KEY,tf.name)\nSCAN_INTERVAL=60\nalerted=set()\nBASE_RATES={\"inflation\":0.95,\"recession\":0.45,\"rate\":0.92,\"employment\":0.88,\"gdp\":0.72,\"tariff\":0.65,\"uncertainty\":0.55,\"data\":0.98,\"balance\":0.60,\"mandate\":0.75}\ndef hdrs(m,u): return k.kalshi_auth.create_auth_headers(m,u)\ndef tg(msg):\n try: requests.get(\"https://api.telegram.org/bot\"+BOT_TOKEN+\"/sendMessage\",params={\"chat_id\":CHAT_ID,\"text\":msg},timeout=5)\n except: pass\ndef get_mentions_markets():\n url=\"https://api.elections.kalshi.com/trade-api/v2/markets\"\n r=requests.get(url,headers=hdrs(\"GET\",url),params={\"status\":\"open\",\"limit\":200},timeout=10)\n if r.status_code!=200: return []\n markets=[]\n for m in r.json().get(\"markets\",[]):\n  tk=m.get(\"ticker\",\"\")\n  title=m.get(\"title\",\"\").lower()\n  series=m.get(\"series_ticker\",\"\")\n  if any(x in series.upper() for x in [\"FOMC\",\"POWELL\",\"FED\",\"EARNINGS\",\"MENTION\",\"SPEECH\",\"PRESS\"]):\n   markets.append(m)\n  elif any(x in title for x in [\"mentioned\",\"mention\",\"says\",\"said\",\"word\",\"times\"]):\n   markets.append(m)\n return markets\ndef analyze(m):\n title=m.get(\"title\",\"\").lower()\n ticker=m.get(\"ticker\",\"\")\n yes_ask=m.get(\"yes_ask_dollars\") or 0.5\n yp=float(yes_ask)\n word_found=None\n for word,base in BASE_RATES.items():\n  if word in title:\n   word_found=word\n   base_rate=base\n   break\n if not word_found: return None\n edge=base_rate-yp\n if abs(edge)<0.08: return None\n side=\"yes\" if edge>0 else \"no\"\n price=yp if side==\"yes\" else 1-yp\n return {\"ticker\":ticker,\"title\":m.get(\"title\",\"\")[:60],\"word\":word_found,\"base_rate\":base_rate,\"market_price\":yp,\"edge\":edge,\"side\":side,\"price\":price}\nprint(\"Mentions scanner started - watching for FOMC/earnings markets\")\ntg(\"Mentions scanner started - watching for FOMC/earnings/speech markets\")\nwhile True:\n if os.path.exists(\"/root/STOP_MENTIONS\"): break\n try:\n  markets=get_mentions_markets()\n  if markets:\n   print(\"[\"+datetime.datetime.now().strftime(\"%H:%M\")+\"] Found \"+str(len(markets))+\" mentions markets\")\n   for m in markets:\n    tk=m.get(\"ticker\",\"\")\n    analysis=analyze(m)\n    if analysis and tk not in alerted:\n     alerted.add(tk)\n     msg=\"MENTIONS EDGE: \"+analysis[\"ticker\"]+\"\\nWord: \"+analysis[\"word\"]+\" | Base rate: \"+str(round(analysis[\"base_rate\"]*100))+\"%\\nMarket price: \"+str(round(analysis[\"market_price\"]*100))+\"% | Edge: \"+str(round(analysis[\"edge\"]*100,1))+\"%\\nTrade: \"+analysis[\"side\"].upper()+\" @ \"+str(round(analysis[\"price\"]*100))+\"c\\n\"+analysis[\"title\"]\n     print(msg)\n     tg(msg)\n  else:\n   print(\"[\"+datetime.datetime.now().strftime(\"%H:%M\")+\"] No mentions markets open yet\")\n except Exception as e: print(\"[Mentions] \"+str(e))\n time.sleep(SCAN_INTERVAL)\n')"
+python3 -m py_compile /root/mentions_scanner.py && echo "OK"
+sed -n '65,70p' /root/mentions_scanner.py
+python3 -c "
+ content=open('/root/mentions_scanner.py').read()
+ old='     msg=\"MENTIONS EDGE: \"+analysis[\"ticker\"]+\"\nWord: \"+analysis[\"word\"]+\" | Base rate: \"+str(round(analysis[\"base_rate\"]*100))+\"%\nMarket price: \"+str(round(analysis[\"market_price\"]*100))+\"% | Edge: \"+str(round(analysis[\"edge\"]*100,1))+\"%\nTrade: \"+analysis[\"side\"].upper()+\" @ \"+str(round(analysis[\"price\"]*100))+\"c\n\"+analysis[\"title\"]'
+ new='     msg=\"MENTIONS EDGE: \"+analysis[\"ticker\"]+\" | \"+analysis[\"word\"]+\" base=\"+str(round(analysis[\"base_rate\"]*100))+\"% mkt=\"+str(round(analysis[\"market_price\"]*100))+\"% edge=\"+str(round(analysis[\"edge\"]*100,1))+\"% trade=\"+analysis[\"side\"].upper()+\"@\"+str(round(analysis[\"price\"]*100))+\"c | \"+analysis[\"title\"]'
+ print('found' if old in content else 'NOT FOUND')
+ " 
+python3 -c "c=open('/root/mentions_scanner.py').read(); print('found' if '     msg=\"MENTIONS EDGE: \"+analysis[\"ticker\"]+\"\nWord:' in c else 'NOT FOUND')"
+python3 -c "c=open('/root/mentions_scanner.py').read(); c=c.replace('     msg=\"MENTIONS EDGE: \"+analysis[\"ticker\"]+\"\nWord: \"+analysis[\"word\"]+\" | Base rate: \"+str(round(analysis[\"base_rate\"]*100))+\"%\nMarket price: \"+str(round(analysis[\"market_price\"]*100))+\"% | Edge: \"+str(round(analysis[\"edge\"]*100,1))+\"%\nTrade: \"+analysis[\"side\"].upper()+\" @ \"+str(round(analysis[\"price\"]*100))+\"c\n\"+analysis[\"title\"]','     msg=\"MENTIONS: \"+analysis[\"ticker\"]+\" \"+analysis[\"word\"]+\" base=\"+str(round(analysis[\"base_rate\"]*100))+\"% mkt=\"+str(round(analysis[\"market_price\"]*100))+\"% edge=\"+str(round(analysis[\"edge\"]*100,1))+\"% \"+analysis[\"side\"].upper()+\"@\"+str(round(analysis[\"price\"]*100))+\"c\"'); open('/root/mentions_scanner.py','w').write(c); print('done')"
+python3 -m py_compile /root/mentions_scanner.py && echo "OK"
+sed -n '65,70p' /root/mentions_scanner.py
+pm2 flush mentions-scanner && pm2 restart mentions-scanner && sleep 3 && pm2 logs mentions-scanner --lines 5 --nostream
+git add -A && git commit -m "Mentions scanner running - will alert on FOMC May 7 and earnings markets"
+pm2 logs openclaw-btc --lines 30 --nostream | grep -E "BET|LOSS|WIN|Balance|HALT|floor"
+pm2 logs openclaw-eth --lines 20 --nostream | grep -E "BET|LOSS|WIN|Balance|HALT"
+pm2 stop openclaw-btc openclaw-eth openclaw-sol
+python3 -c "import json; pool=json.load(open('/root/genome.json')); print(len(pool),'variants'); [print(v['id'],v['market'],'wr='+str(round(v['wins']/v['trades'],3) if v['trades']>0 else 0),'trades='+str(v['trades'])) for v in pool]"
+python3 -c "import json; pool=json.load(open('/root/genome.json')); v007=next(v for v in pool if v['id']=='v007'); v007['market']='btc'; v007['entry_threshold']=0.65; v007['max_bet_pct']=0.11; v007['min_confidence']=5; v007['chop_allowed']=True; v007['wins']=0; v007['losses']=0; v007['trades']=0; v007['pnl']=0.0; v007['generation']=1; v007['mutations']=[]; v005=next(v for v in pool if v['id']=='v005'); v005['entry_threshold']=0.72; v005['max_bet_pct']=0.09; v005['min_confidence']=7; v005['chop_allowed']=False; v005['wins']=0; v005['losses']=0; v005['trades']=0; v005['pnl']=0.0; v005['generation']=1; v005['mutations']=[]; json.dump(pool,open('/root/genome.json','w'),indent=2); print('done'); [print(v['id'],v['market'],'thresh='+str(v['entry_threshold']),'ch​​​​​​​​​​​​​​​​
+python3 -c "import json; pool=json.load(open('/root/genome.json')); v=next(x for x in pool if x['id']=='v007'); v.update({'market':'btc','entry_threshold':0.65,'max_bet_pct':0.11,'min_confidence':5,'chop_allowed':True,'wins':0,'losses':0,'trades':0,'pnl':0.0,'generation':1,'mutations':[]}); json.dump(pool,open('/root/genome.json','w'),indent=2); print('v007 updated')"
+python3 -c "import json; pool=json.load(open('/root/genome.json')); v=next(x for x in pool if x['id']=='v005'); v.update({'entry_threshold':0.72,'max_bet_pct':0.09,'min_confidence':7,'chop_allowed':False,'wins':0,'losses':0,'trades':0,'pnl':0.0,'generation':1,'mutations':[]}); json.dump(pool,open('/root/genome.json','w'),indent=2); print('v005 updated')"
+python3 -c "import json; pool=json.load(open('/root/genome.json')); [print(v['id'],v['market'],'thresh='+str(v['entry_threshold']),'chop='+str(v['chop_allowed']),'trades='+str(v['trades'])) for v in pool]"
+grep -n "MIN_BALANCE\|v4.0\|arena\|AUTO" /root/OPENCLAW_GUIDE.md | head -10
+python3 -c "
+ content=open('/root/OPENCLAW_GUIDE.md').read()
+ update='\n\n---\n## UPDATE — April 9, 2026\n\n### System Changes\n- MIN_BALANCE lowered from 120 to 100 (then bots stopped at 95.66, awaiting deposit)\n- DIRECTIONAL_HIGH=0.68 / DIRECTIONAL_LOW=0.32 (promoted from v004 arena winner)\n- Bots currently STOPPED — resuming after deposit\n\n### New Processes (PM2)\n- mentions-scanner: watches for FOMC/earnings word frequency markets, alerts on edge\n- arena now has auto-promote: promotes leader to live bot when WR>=70% and 50+ trades\n\n### Arena v5 Deployed\n- Full space background with planets, shooting stars, parallax scroll\n- Bot SVG character faces, thought bubbles with competitive monologue\n- Scoreboard jumbotron, narrative leaderboard, rivalry panels\n- URL: http://167.172.244.100:8080/arena\n\n### Genome Pool Updates\n- v004: CHAMPION — 1058 trades, 89% WR, thresh=0.68, chop=True\n- v007: REPLACED — was weak ETH 58% WR, now aggressive BTC thresh=0.65 chop=True\n- v005: RETUNED — thresh=0.72 chop=False (sniper variant)\n\n### Priority Backlog\n1. Arb scanner (file transfer issue — needs solution)\n2. Cross-platform arb (needs network unblock)\n3. Fade-the-headlines strategy\n4. Macro signal integration\n5. Weather between-bracket NO scanner\n'
+ open('/root/OPENCLAW_GUIDE.md','w').write(content+update)
+ print('done')
+ "
+python3 -c "content=open('/root/OPENCLAW_GUIDE.md').read(); update='\n\n---\n## UPDATE April 9 2026\n\n### System Changes\n- MIN_BALANCE=100 (bots stopped at 95.66, awaiting deposit)\n- DIRECTIONAL_HIGH=0.68/LOW=0.32 promoted from v004\n- Bots STOPPED - resume after deposit with: pm2 start openclaw-btc openclaw-eth openclaw-sol\n\n### New PM2 Processes\n- mentions-scanner: watches FOMC/earnings word markets, alerts on Telegram\n- arena auto-promote: promotes leader to live bot when WR>=70% 50+ trades\n\n### Arena v5\n- Space background, planets, shooting stars, parallax scroll\n- SVG bot faces, thought bubbles, scoreboard, narrative leaderboard\n- http://167.172.244.100:8080/arena\n\n### Genome Updates\n- v004: CHAMPION 1058T 89%WR thresh=0.68 chop=True\n- v007: REPLACED weak ETH, now aggressive BTC thresh=0.65 chop=True\n- v005: RETUNED thresh=0.72 chop=False sniper\n\n### Backlog\n1. Arb scanner (file transfer issue)\n2. Cross-platform arb (needs network unblock)\n3. Fade-the-headlines\n4. Macro signal integration\n5. Weather NO scanner\n'; open('/root/OPENCLAW_GUIDE.md','w').write(content+update); print('done')"
+git add -A && git commit -m "Bible update April 9 2026 - arena v5, mentions scanner, auto-promote, genome"
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); hdrs=k.kalshi_auth.create_auth_headers('GET','https://api.elections.kalshi.com/trade-api/v2/markets'); r=requests.get('https://api.elections.kalshi.com/trade-api/v2/markets',headers=hdrs,params={'status':'open','limit':10,'series_ticker':'KXBTC5M'},timeout=10); print(r.status_code,len(r.json().get('markets',[]))); [print(m.get('ticker'),m.get('yes_ask_dollars')) for m in r.json().get('markets',[])[:5]]"
+git remote -v
+curl -s https://api.github.com | head -5
+git remote add origin https://YOURUSERNAME:YOUR_TOKEN@github.com/YOURUSERNAME/Openclaw.git
+git remote add origin https://KeiserSoze222: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@github.com/KeiserSoze222/Openclaw.git
+git remote set-url origin https://KeiserSoze222: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@github.com/KeiserSoze222/Openclaw.git
+git push -u origin main
+git push -u origin master
+curl -H "Authorization: token YOUR_TOKEN" -H "Accept: application/vnd.github.v3.raw" https://api.github.com/repos/KeiserSoze222/Openclaw/contents/arb_scanner.py -o /root/arb_scanner_test.py 2>&1 | head -5
+curl -s https://raw.githubusercontent.com/KeiserSoze222/Openclaw/master/arb_scanner.py 2>&1 | head -3
+pm2 start /root/arb_scanner.py --name arb-scanner --interpreter python3
+curl -H "Authorization: token YOUR_TOKEN" -H "Accept: application/vnd.github.v3.raw" -L "https://api.github.com/repos/KeiserSoze222/Openclaw/contents/arb_scanner.py" -o /tmp/arb_check.txt && cat /tmp/arb_check.txt | head -5
+python3 -c "open('/root/arb_scanner.py','w').write(open('/root/bond_scanner_backup.py').read().split('# ── MAIN LOOP')[0])"
+python3 -c "
+ s='import requests,time,datetime,json,os,tempfile\nraw=open(\"/root/real_bot_pre_v4_backup.py\").read()\nKEY=raw.split(\"KALSHI_API_KEY = \x27\")[1].split(\"\x27\")[0]\nSEC=raw.split(\"KALSHI_SECRET  = \x27\x27\x27\")[1].split(\"\x27\x27\x27\")[0]\nTOK=raw.split(\"BOT_TOKEN = \x27\")[1].split(\"\x27\")[0]\nCID=raw.split(\"CHAT_ID   = \x27\")[1].split(\"\x27\")[0]\nLOG,MIN_M,MAX_M,MAXC,MINP,SLP=\"/root/arb_log.json\",5,45,10.0,2.0,120\nplaced=set()\ntf=tempfile.NamedTemporaryFile(delete=False,suffix=\".pem\",mode=\"w\")\ntf.write(SEC);tf.close()\nfrom kalshi_python import KalshiClient\nfrom kalshi_python.configuration import Configuration\ncfg=Configuration();cfg.host=\"https://api.elections.kalshi.com/trade-api/v2\"\nk=KalshiClient(cfg);k.set_kalshi_auth(KEY,tf.name)\ndef H(m,u): return k.kalshi_auth.create_auth_headers(m,u)\ndef tg(msg):\n    try: requests.get(\"https://api.telegram.org/bot\"+TOK+\"/sendMessage\",params={\"chat_id\":CID,\"text\":msg},timeout=5)\n    except: pass\ndef bal():\n    url=\"https://api.elections.kalshi.com/trade-api/v2/portfolio/balance\"\n    r=requests.get(url,headers=H(\"GET\",url),timeout=5)\n    if r.status_code==200:\n        d=r.json();return (d.get(\"balance\",0)+d.get(\"portfolio_value\",0))/100\n    return 0\ndef scan():\n    url=\"https://api.elections.kalshi.com/trade-api/v2/markets\"\n    arbs=[];cursor=\"\"\n    while True:\n        p={\"status\":\"open\",\"limit\":100}\n        if cursor: p[\"cursor\"]=cursor\n        r=requests.get(url,headers=H(\"GET\",url),params=p,timeout=10)\n        if r.status_code!=200: break\n        d=r.json()\n        for m in d.get(\"markets\",[]):\n            tk=m.get(\"ticker\",\"\");ya=m.get(\"yes_ask_dollars\");na=m.get(\"no_ask_dollars\")\n            ct=m.get(\"close_time\") or m.get(\"expiration_time\");vol=m.get(\"volume\",0) or 0\n            if not ya or not na or not ct or tk in placed or vol<1000: continue\n            yp=float(ya);np2=float(na);cb=yp+np2\n            if cb>=0.97 or cb<=0.50: continue\n            try:\n                cd=datetime.datetime.fromisoformat(ct.replace(\"Z\",\"+00:00\"))\n                ml=(cd-datetime.datetime.now(datetime.timezone.utc)).total_seconds()/60\n            except: continue\n            if ml<MIN_M or ml>MAX_M: continue\n            net=(1.0-cb)*0.93;pct=(net/cb)*100\n            if pct<MINP: continue\n            arbs.append({\"tk\":tk,\"yp\":yp,\"np\":np2,\"cb\":cb,\"pct\":pct,\"ml\":ml})\n        cursor=d.get(\"cursor\",\"\")\n        if not cursor: break\n    return sorted(arbs,key=lambda x:x[\"pct\"],reverse=True)\ndef go(arb):\n    tk=arb[\"tk\"];yp=arb[\"yp\"];np2=arb[\"np\"]\n    n=max(1,int(MAXC/arb[\"cb\"]))\n    yc=min(99,max(1,round(yp*100)+1));nc=min(99,max(1,round(np2*100)+1))\n    try:\n        k.create_order(ticker=tk,action=\"buy\",side=\"yes\",type=\"market\",count=n,yes_price=yc,time_in_force=\"ioc\")\n        k.create_order(ticker=tk,action=\"buy\",side=\"no\",type=\"market\",count=n,no_price=nc,time_in_force=\"ioc\")\n        placed.add(tk)\n        cost=n*arb[\"cb\"];profit=n*(1.0-arb[\"cb\"])\n        msg=\"ARB \"+tk+\" \"+str(round(yp,3))+\"+\"+str(round(np2,3))+\"=\"+str(round(arb[\"cb\"],3))+\" x\"+str(n)+\" $\"+str(round(cost,2))+\" pft $\"+str(round(profit,2))+\" (\"+str(round(arb[\"pct\"],1))+\"%)\"\n        print(msg);tg(msg)\n        with open(LOG,\"a\") as f: f.write(json.dumps({\"ts\":datetime.datetime.now().isoformat(),\"tk\":tk,\"cb\":arb[\"cb\"],\"n\":n,\"cost\":cost,\"profit\":profit})+\"\\n\")\n    except Exception as e: print(\"[Arb] \"+str(e))\nprint(\"Arb scanner started\");tg(\"Arb scanner started\")\nwhile True:\n    if os.path.exists(\"/root/STOP_ARB\"): break\n    try:\n        arbs=scan();b=bal()\n        print(\"[\"+datetime.datetime.now().strftime(\"%H:%M\")+\"] \"+str(len(arbs))+\" arbs | $\"+str(round(b,2)))\n        if arbs: print(\"  TOP: \"+arbs[0][\"tk\"]+\" cb=\"+str(round(arbs[0][\"cb\"],3))+\" \"+str(round(arbs[0][\"pct\"],1))+\"%\")\n        for arb in arbs[:2]: go(arb)\n    except Exception as e: print(\"[Arb] \"+str(e))\n    time.sleep(SLP)\n'
+ open('/root/arb_scanner.py','w').write(s)
+ print('written')
+ " && python3 -m py_compile /root/arb_scanner.py && echo "OK"
+git config --global credential.helper store
+git remote set-url origin https://KeiserSoze222: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@github.com/KeiserSoze222/Openclaw.git
+python3 -c "import base64; open('/root/arb_scanner.py','wb').write(base64.b64decode('aW1wb3J0IHJlcXVlc3RzLHRpbWUsZGF0ZXRpbWUsdGltZSxqc29uLG9zLHRlbXBmaWxlCnJhdz1vcGVuKCcvcm9vdC9yZWFsX2JvdF9wcmVfdjRfYmFja3VwLnB5JykucmVhZCgpCktFWT1yYXcuc3BsaXQoIktBTFNISV9BUElfS0VZID0gJyIpWzFdLnNwbGl0KCInIilbMF0KU0VDPXJhdy5zcGxpdCgiS0FMU0hJX1NFQ1JFVCB9ID0gJycnIilbMV0uc3BsaXQoIicnJyIpWzBd'))"
+git config --global credential.helper store
+git pull
+sed -i "s/KALSHI_SECRET } = '''/KALSHI_SECRET  = '''/" /root/arb_scanner.py
+git checkout arb_scanner.py
+sed -i "s/KALSHI_SECRET } = '''/KALSHI_SECRET  = '''/" /root/arb_scanner.py
+SEC=raw.split("KALSHI_SECRET } = '''")[1].split("'''")[0]
+sed -i 's/\xe2\x80\x9c/"/g; s/\xe2\x80\x9d/"/g; s/\xe2\x80\x98/'"'"'/g; s/\xe2\x80\x99/'"'"'/g' /root/arb_scanner.py
+sed -n '25,30p' /root/arb_scanner.py
+sed -i 's/^return k.kalshi_auth/    return k.kalshi_auth/' /root/arb_scanner.py 
+sed -n '28,45p' /root/arb_scanner.py
+python3 -c "
+ b=open('/root/bond_scanner_backup.py').read()
+ creds=b.split('def send_telegram')[0]
+ arb=creds+'def tg(m):\n    try: requests.get(\"https://api.telegram.org/bot\"+BOT_TOKEN+\"/sendMessage\",params={\"chat_id\":CHAT_ID,\"text\":m},timeout=5)\n    except: pass\nprint(\"Arb scanner started\")\ntg(\"Arb scanner started\")\n'
+ open('/root/arb_scanner.py','w').write(arb)
+ print('done')
+ " && python3 -m py_compile /root/arb_scanner.py && echo "OK"
+pm2 stop arb-scanner
