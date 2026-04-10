@@ -337,7 +337,7 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
     side="yes" if direction=="UP" else "no"
     contract_count=max(1,int(bet/0.50))
     yes_price=min(99,max(1,round((mkt_yes or 0.50)*100)+2)) if side=="yes" else None
-    no_price=min(99,max(1,round((mkt_no or 0.50)*100)+2)) if side=="no" else None
+    _=None
     if DRY_RUN:
         print(f"[DRY RUN] {direction} ${bet:.2f} on {ticker} ({strategy_tag})")
         log_trade(direction,bet,f"DRY_{strategy_tag.upper()}",notes=ticker)

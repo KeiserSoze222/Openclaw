@@ -1,2 +1,7 @@
+kalshi_env/
+.cache/
 __pycache__/
 *.pyc
+.pm2/logs/
+.pm2/pids/
+*.pid

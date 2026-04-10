@@ -6016,3 +6016,11 @@ Balance: $116.47 | Regime: CHOP | Session: 0W/0L (0%) | PnL: $+0.00
 [Arena] v007 UP WIN WR=0.95 T=611 PnL=10098.95
 [AutoPromote] err:name 'subprocess' is not defined
 [Arena] Cycle 611 done
+[Arena] v004 UP WIN WR=0.91 T=1670 PnL=16093.22
+[Arena] v007 UP WIN WR=0.95 T=612 PnL=10117.68
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 612 done
+[Arena] v004 UP WIN WR=0.91 T=1671 PnL=16105.14
+[Arena] v007 UP WIN WR=0.95 T=613 PnL=10136.41
+[AutoPromote] err:name 'subprocess' is not defined
+[Arena] Cycle 613 done
