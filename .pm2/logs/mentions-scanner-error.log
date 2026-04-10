@@ -1,4 +1,0 @@
-Traceback (most recent call last):
-  File "/root/mentions_scanner.py", line 73, in <module>
-    time.sleep(SCAN_INTERVAL)
-KeyboardInterrupt
