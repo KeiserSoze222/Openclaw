@@ -72,8 +72,8 @@ EXTREME_HIGH=0.80
 EXTREME_LOW=0.20
 STRONG_MIN1_EDGE=0.30
 MIN_EDGE=0.20
-CASHOUT_MINUTES=3
-CASHOUT_ADVERSE=0.35
+CASHOUT_MINUTES=2
+CASHOUT_ADVERSE=0.20
 INITIAL_BALANCE=295.66
 SESSION_START_BAL=295.66
 CURRENT_BALANCE=INITIAL_BALANCE
@@ -740,7 +740,8 @@ def check_open_positions():
                     cur_yes=float(ya) if ya and 0.02<float(ya)<0.98 else entry_yes
                     if status in ("open","active"):
                         adverse=((entry_yes-cur_yes) if direction=="UP" else (cur_yes-(1-entry_yes)))
-                        if adverse>CASHOUT_ADVERSE:
+                        hard_floor=(direction=="UP" and cur_yes<0.10) or (direction=="DOWN" and cur_yes>0.90)
+                        if adverse>CASHOUT_ADVERSE or hard_floor:
                             print(f"[CashOut] {direction} on {ticker} moved {adverse:.2f} against — exiting early")
                             # SELL the position on Kalshi to recover remaining value
                             try:
