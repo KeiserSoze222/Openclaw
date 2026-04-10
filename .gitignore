@@ -5,3 +5,11 @@ __pycache__/
 .pm2/logs/
 .pm2/pids/
 *.pid
+*.log
+arena_state.json
+bond_log.json
+arb_log.json
+feature_log.json
+performance_log.json
+eth_performance_log.json
+sol_performance_log.json
