@@ -89,7 +89,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
   .divider{display:none;}
   .balance-main{font-size:28px;}
   .proc-grid{grid-template-columns:repeat(3,1fr);}
-  .header{padding:10px 12px;}
+  .header{padding:8px 10px;flex-wrap:wrap;gap:6px;height:auto;}.header-right{gap:6px;flex-wrap:wrap;}.bible-btn{font-size:8px;padding:4px 7px;}.utc-time{font-size:9px;}.logo-text{font-size:12px;}
   .logo-text{font-size:13px;letter-spacing:2px;}
   .logo-sub{display:none;}
   .span2{grid-column:1/-1;}
@@ -123,7 +123,7 @@ async function refresh(){
   try{
     const r=await fetch('/api/data');
     const d=await r.json();
-    const bal=d.balance,s=d.stats,pr=d.procs,tr=d.trades,wh=d.whales,pos=d.positions,ft=d.features,ins=d.insights,hw=d.hourly;
+    const bal=d.balance,s=d.stats,pr=d.procs,tr=d.trades,wh=d.whales,pos=d.positions,ft=d.features||[],ins=d.insights||[],hw=d.hourly||{};
     const sinceV=bal-d.version_balance;
     const allW=(s.BTC.w||0)+(s.ETH.w||0)+(s.SOL.w||0);
     const allL=(s.BTC.l||0)+(s.ETH.l||0)+(s.SOL.l||0);
