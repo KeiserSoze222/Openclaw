@@ -13,3 +13,8 @@ feature_log.json
 performance_log.json
 eth_performance_log.json
 sol_performance_log.json
+.pm2/logs/
+__pycache__/
+genome.json
+bond_scanner.log
+arena_state.json
