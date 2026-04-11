@@ -316,8 +316,8 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
         import os as _os
         lock_path = f'/tmp/openclaw_firing_{MARKET_SERIES}.lock'
         locks = _gl.glob('/tmp/openclaw_firing_*.lock')
-        recent = [f for f in locks if _t.time()-_os.path.getmtime(f) < 90]
-        if len(recent) >= 2:
+        recent = [f for f in locks if _t.time()-_os.path.getmtime(f) < 120]
+        if len(recent) >= 1:
             print(f"[CorrGuard] {len(recent)} bots already fired — skipping to avoid correlated loss")
             return False
         open(lock_path, 'w').write(str(_t.time()))
