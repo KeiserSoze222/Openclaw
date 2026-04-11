@@ -344,7 +344,7 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
         print(f"[Order] Already have {direction} on {ticker} — skipping")
         return False
     side="yes" if direction=="UP" else "no"
-    contract_count=max(1,int(bet/0.50))
+    contract_count=max(1,int(bet/(mkt_yes or mkt_no or 0.50)))
     yes_price=min(99,max(1,round((mkt_yes or 0.50)*100)+2)) if side=="yes" else None
     _=None
     if DRY_RUN:
