@@ -895,16 +895,8 @@ def load_existing_positions():
                 continue
             if MARKET_SERIES not in ticker:
                 continue
-            direction="UNKNOWN"
-            try:
-                murl=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
-                mhdr=kalshi.kalshi_auth.create_auth_headers("GET",murl)
-                mr=requests.get(murl,headers=mhdr,timeout=5)
-                if mr.status_code==200:
-                    last=float(mr.json().get("market",{}).get("last_price_dollars",0.5))
-                    direction="UP" if last>=0.5 else "DOWN"
-            except Exception:
-                pass
+            pos_count=p.get("position",0)
+            direction="UP" if pos_count>0 else "DOWN" if pos_count<0 else "UNKNOWN"
             OPEN_POSITIONS.append({"direction":direction,"bet":exposure,"ticker":ticker,
                 "strategy":"restored","time":time.time()-300,"placed_at":0,
                 "entry_yes":0.5,"min_yes":0.5,"max_yes":0.5,
