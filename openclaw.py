@@ -103,7 +103,9 @@ def get_max_bet(is_extreme=False):
     if tod_scale==0.0:
         return max(2.00,round(CURRENT_BALANCE*0.03,2)) if is_extreme else 0.0
     pct=PEAK_BET_PCT if hour in PEAK_HOURS else MAX_BET_PCT
-    return max(2.00,round(CURRENT_BALANCE*pct*tod_scale,2))
+    reserved=sum(p.get("bet",0) for p in OPEN_POSITIONS)
+    avail=max(0,CURRENT_BALANCE-reserved)
+    return max(2.00,min(22.00,round(avail*pct*tod_scale,2)))
 
 def send_telegram(msg):
     try:
