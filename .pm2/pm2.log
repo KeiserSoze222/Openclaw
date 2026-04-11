@@ -16334,3 +16334,9 @@
 2026-04-11T19:47:04: PM2 log: App [openclaw-eth:11] online
 2026-04-11T19:47:04: PM2 log: App [openclaw-sol:12] starting in -fork mode-
 2026-04-11T19:47:04: PM2 log: App [openclaw-sol:12] online
+2026-04-11T21:01:02: PM2 log: Stopping app:arena id:13
+2026-04-11T21:01:02: PM2 log: pid=697143 msg=failed to kill - retrying in 100ms
+2026-04-11T21:01:02: PM2 log: pid=697143 msg=failed to kill - retrying in 100ms
+2026-04-11T21:01:02: PM2 log: pid=697143 msg=failed to kill - retrying in 100ms
+2026-04-11T21:01:02: PM2 log: App [arena:13] exited with code [0] via signal [SIGINT]
+2026-04-11T21:01:02: PM2 log: pid=697143 msg=process killed

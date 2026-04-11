@@ -598,7 +598,7 @@
     "PYTHONUNBUFFERED": "1",
     "PM2_HOME": "/root/.pm2",
     "unique_id": "1cd8220a-77df-487e-8c7a-9322224a6c07",
-    "status": "online",
+    "status": "stopped",
     "pm_uptime": 1775919294225,
     "axm_actions": [],
     "axm_monitor": {},
