@@ -851,7 +851,8 @@ def check_open_positions():
             total=session_wins+session_losses
             wr=session_wins/total*100 if total else 0
             print(f"[Settled] {outcome}: {direction} ${bet:.2f} on {ticker} | pnl=${realized:+.2f} | {session_wins}W/{session_losses}L ({wr:.0f}%)")
-            send_telegram(f"{"✅" if won else "❌"} {BOT_NAME.split()[1]} {outcome}: {direction} ${bet:.2f} | pnl=${realized:+.2f}\n{session_wins}W/{session_losses}L ({wr:.0f}%) | Bal=${CURRENT_BALANCE:.2f}")
+            icon="✅" if won else "❌"
+            send_telegram(icon+" "+BOT_NAME.split()[1]+" "+outcome+": "+direction+" $"+str(round(bet,2))+" | pnl=$"+str(round(realized,2))+"\n"+str(session_wins)+"W/"+str(session_losses)+"L ("+str(round(wr,0))+"%) | Bal=$"+str(round(CURRENT_BALANCE,2)))
             features={"signal_type":pos.get("signal_type","STANDARD"),"entry_minute":pos.get("entry_minute",0),
                 "market":MARKET_SERIES,"entry_yes":pos.get("entry_yes",0.5),
                 "min_yes":pos.get("min_yes",0.5),"max_yes":pos.get("max_yes",0.5),
