@@ -969,6 +969,11 @@ if __name__=="__main__":
         print(f"[Startup] Using initial balance: ${CURRENT_BALANCE:.2f}")
     print(f"Balance: ${CURRENT_BALANCE:.2f} | MaxBet: ${get_max_bet():.2f} | Threshold: <{DIRECTIONAL_LOW:.2f} or >{DIRECTIONAL_HIGH:.2f}")
     print(f"{'='*50}\n")
+    # Staggered startup: ETH waits 45s, SOL waits 90s to prevent simultaneous firing
+    _startup_delay={"btc":0,"eth":45,"sol":90}.get(_args.market,0)
+    if _startup_delay>0:
+        print(f"[Startup] Staggered delay {_startup_delay}s for {_args.market.upper()}")
+        import time as _st; _st.sleep(_startup_delay)
     load_existing_positions()
     cancel_resting_orders()
     print("[Startup] Resting orders cleared")
