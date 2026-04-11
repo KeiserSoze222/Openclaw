@@ -971,6 +971,7 @@ def risk_score(v):
     confidence=math.log(t+1)/math.log(100)
     return round(wr*confidence,4)
 
+import subprocess
 def auto_promote(pool):
     try:
         candidates=[v for v in pool if v.get("trades",0)>=50]
