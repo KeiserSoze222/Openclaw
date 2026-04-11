@@ -352,6 +352,7 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
         log_trade(direction,bet,f"DRY_{strategy_tag.upper()}",notes=ticker)
         return True
     try:
+        log_trade(direction,bet,"ATTEMPTING",notes=f"{strategy_tag}|{ticker}")
         print(f"[Order] {ticker} | {side} | count={contract_count} | ${bet:.2f}")
         yes_p=min(99,max(1,round((mkt_yes or 0.5)*100))) if side=="yes" else None
         no_p=min(99,max(1,round((mkt_no or 0.5)*100))) if side=="no" else None
