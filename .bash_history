@@ -1,64 +1,3 @@
-     now_utc     = datetime.datetime.now(datetime.timezone.utc)
-     t1          = build_ticker(now_utc)
-     live_ticker = t1
-     return live_ticker, None
- 
- # ─────────────────────────────────────────────────────────────────────────────
- # SAFETY
- # ─────────────────────────────────────────────────────────────────────────────
- def safety_check():
-     global CURRENT_BALANCE
-     CURRENT_BALANCE = get_live_balance()
- 
-     if CURRENT_BALANCE < MIN_BALANCE:
-         return False, f"Balance ${CURRENT_BALANCE:.2f} below floor ${MIN_BALANCE:.2f}"
- 
-     if SESSION_START_BAL > 0:
-         loss_pct = (SESSION_START_BAL - CURRENT_BALANCE) / SESSION_START_BAL
-         if loss_pct >= DAILY_LOSS_LIMIT:
-             return False, f"Daily loss {loss_pct*100:.1f}% exceeds limit {DAILY_LOSS_LIMIT*100:.0f}%"
- 
-     total = session_wins + session_losses
-     if total >= 10:
-         wr = session_wins / total
-         if wr < 0.45:
-             return False, f"Circuit breaker: {wr*100:.0f}% WR over {total} trades"
- 
-     return True, "OK"
- 
- # ─────────────────────────────────────────────────────────────────────────────
- # ORDER MANAGEMENT
- # ─────────────────────────────────────────────────────────────────────────────
- def cancel_resting_orders():
-     try:
-         url     = "https://api.elections.kalshi.com/trade-api/v2/portfolio/orders"
-         headers = kalshi.kalshi_auth.create_auth_headers("GET", url)
-         resp    = requests.get(url, headers=headers,
-                                params={"status": "resting", "limit": 50},
-                                timeout=8)
-         if resp.status_code == 200:
-             orders = resp.json().get("orders", [])
-             for order in orders:
-                 oid = order.get("order_id") or order.get("id")
-                 if not oid:
-                     continue
-                 del_url = (f"https://api.elections.kalshi.com"
-                            f"/trade-api/v2/portfolio/orders/{oid}")
-                 del_hdr = kalshi.kalshi_auth.create_auth_headers("DELETE", del_url)
-                 requests.delete(del_url, headers=del_hdr, timeout=5)
-     except Exception as e:
-         print(f"[Orders] Cancel failed: {e}")
- 
- def place_order(direction, bet, strategy_tag="directional",
-                 mkt_yes=None, mkt_no=None):
-     global COOLDOWN_REMAINING
- 
-     ok, reason = safety_check()
-     if not ok:
-         print(f"[Safety] {reason}")
-         send_telegram(f"🛑 HALTED: {reason}")
-         raise SystemExit(reason)
- 
      is_extreme = (mkt_yes is not None and
                    (mkt_yes < EXTREME_LOW or mkt_yes > EXTREME_HIGH))
      max_bet    = get_max_bet(is_extreme=is_extreme)
@@ -1998,3 +1937,64 @@ sed -i 's/CASHOUT_MINUTES=3/CASHOUT_MINUTES=2/' /root/openclaw.py
 sed -n '740,745p' /root/openclaw.py
 python3 -c "c=open('/root/openclaw.py').read(); old='                    if status in (\"open\",\"active\"):\n                        adverse=((entry_yes-cur_yes) if direction==\"UP\" else (cur_yes-(1-entry_yes)))\n                        if adverse>CASHOUT_ADVERSE:'; new='                    if status in (\"open\",\"active\"):\n                        adverse=((entry_yes-cur_yes) if direction==\"UP\" else (cur_yes-(1-entry_yes)))\n                        hard_floor=(direction==\"UP\" and cur_yes<0.10) or (direction==\"DOWN\" and cur_yes>0.90)\n                        if adverse>CASHOUT_ADVERSE or hard_floor:'; print('found' if old in c else 'NOT FOUND'); open('/root/openclaw.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/openclaw.py && echo "OK"
 pm2 restart openclaw-btc openclaw-eth openclaw-sol && pm2 save
+source kalshi_env/bin/activate
+python3 /tmp/status_all.py
+pm2 logs openclaw-btc --lines 50 --nostream | grep -E "CashOut|ProfitLock|BreakEven|WIN|LOSS|Positions"
+pm2 logs openclaw-btc --lines 30 --nostream | grep -v "DeprecationWarning\|datetime\|signal=" 
+grep -n "between\|No signal\|DIRECTIONAL" /root/openclaw.py | head -10
+sed -n '920,930p' /root/openclaw.py
+sed -n '418,442p' /root/openclaw.py
+sed -n '490,530p' /root/openclaw.py 
+sed -n '530,570p' /root/openclaw.py
+sed -i 's/if window_minute==0 or window_minute>4 or window_minute>=13:/if window_minute==0 or window_minute>=13:/' /root/openclaw.py
+sed -n '558,566p' /root/openclaw.py
+python3 -m py_compile /root/openclaw.py && echo "OK"
+sed -n '520,526p' /root/openclaw.py
+pm2 restart openclaw-btc openclaw-eth openclaw-sol && pm2 save
+pm2 logs openclaw-btc --lines 15 --nostream | grep -v "DeprecationWarning\|datetime\|signal="
+grep -n "\. " /root/openclaw.py | grep -v "#\|print\|url\|http\|fmt\|pct\|str\|int\|float\|round\|json\|csv\|os\." | head -20 
+grep -n "except.*pass\|except:$" /root/openclaw.py | head -20
+grep -n "if.*and.*and.*and" /root/openclaw.py | head -10
+grep -n "consecutive_signal\|last_signal_direction\|COOLDOWN" /root/openclaw.py | head -15
+sed -n '458,492p' /root/openclaw.py
+sed -n '385,415p' /root/openclaw.py
+sed -n '530,545p' /root/openclaw.py
+grep -n "RISK_SCORE" /root/openclaw.py | head -10
+sed -n '542,555p' /root/openclaw.py
+grep "Regime:" /root/.pm2/logs/openclaw-btc-out.log | tail -20 | awk -F'Regime: ' '{print $2}' | awk '{print $1}' | sort | uniq -c
+sed -n '216,230p' /root/openclaw.py
+sed -n '228,240p' /root/openclaw.py
+sed -i 's/REGIME,RISK_SCORE="CHOP",0.35/REGIME,RISK_SCORE="CHOP",0.60/' /root/openclaw.py
+pm2 restart openclaw-btc openclaw-eth openclaw-sol && pm2 save
+python3 -c "bal=301.94; max_bet=bal*0.07; scale=0.57; risk=0.60; bet=max_bet*scale*risk; print('Typical bet: $'+str(round(bet,2))); print('Peak bet: $'+str(round(max_bet,2))); print('Min after floor: $2.00')"
+sed -n '271,310p' /root/openclaw.py
+grep -n "double_down\|DOUBLE\|dd_bet" /root/openclaw.py | head -10
+grep -n "SESSION_START_BAL" /root/openclaw.py | head -10
+sed -n '940,962p' /root/openclaw.py
+grep -n "DAILY_LOSS_LIMIT" /root/openclaw.py
+sed -n '780,845p' /root/openclaw.py
+python3 -c "
+ c=open('/root/openclaw.py').read()
+ old='            contracts=max(1,int(bet/0.50))\n            realized=round(contracts*1.0-bet,2) if won else -bet'
+ new='            entry_p=pos.get(\"entry_yes\",0.5) if direction==\"UP\" else (1-pos.get(\"entry_yes\",0.5))\n            contracts=max(1,int(bet/entry_p))\n            realized=round(contracts*1.0-bet,2) if won else -bet'
+ print('found' if old in c else 'NOT FOUND')
+ open('/root/openclaw.py','w').write(c.replace(old,new))
+ " && python3 -m py_compile /root/openclaw.py && echo "OK"
+python3 -c "c=open('/root/openclaw.py').read(); old='            contracts=max(1,int(bet/0.50))\n            realized=round(contracts*1.0-bet,2) if won else -bet'; new='            entry_p=pos.get(\"entry_yes\",0.5) if direction==\"UP\" else (1-pos.get(\"entry_yes\",0.5))\n            contracts=max(1,int(bet/entry_p))\n            realized=round(contracts*1.0-bet,2) if won else -bet'; print('found' if old in c else 'NOT FOUND'); open('/root/openclaw.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/openclaw.py && echo "OK"
+pm2 restart openclaw-btc openclaw-eth openclaw-sol && pm2 save
+sed -n '108,132p' /root/openclaw.py
+sed -n '93,108p' /root/openclaw
+sed -i 's/return max(2.00,min(20.00,round(CURRENT_BALANCE\*pct\*tod_scale,2)))/return max(2.00,round(CURRENT_BALANCE*pct*tod_scale,2))/' /root/openclaw.py
+grep "PEAK_BET_PCT\|MAX_BET_PCT" /root/openclaw.py | head -5
+grep "_CONFIGS" /root/openclaw.py | head -5
+grep -A 5 "_CONFIGS = {" /root/openclaw.py
+pm2 restart openclaw-btc openclaw-eth openclaw-sol && pm2 save 
+sed -n '605,625p' /root/openclaw.py
+sed -n '635,675p' /root/openclaw.py
+python3 -c "c=open('/root/openclaw.py').read(); old='                            contracts = pos.get(\"contracts\", max(1,int(pos.get(\"bet\",2)/0.50)))\n                            sell_p = min(99,max(1,round((1-cur_yes)*100))) if direction==\"UP\" else min(99,max(1,round(cur_yes*100)))\n                            sell_order = kalshi.create_order(\n                                ticker=ticker, action=\"sell\", side=sell_side,\n                                type=\"limit\", count=contracts,\n                                yes_price=max(1,sell_p-5) if sell_side==\"yes\" else None,\n                                no_price=max(1,sell_p-5) if sell_side==\"no\" else None,\n                                time_in_force=\"ioc\"\n                            )\n                            if sell_order and hasattr(sell_order,\"order\") and sell_order.order:\n                                o=sell_order.order\n                                print(f\"[ProfitLock] Sell order: {o.status}\")'; new='                            entry_p2=pos.get(\"entry_yes\",0.5) if direction==\"UP\" else (1-pos.get(\"entry_yes\",0.5))\n                            contracts = pos.get(\"contracts\", max(1,int(pos.get(\"bet\",2)/entry_p2)))\n                            sell_p = min(99,max(1,round((1-cur_yes)*100))) if direction==\"UP\" else min(99,max(1,round(cur_yes*100)))\n                            sell_order = kalshi.create_order(\n                                ticker=ticker, action=\"sell\", side=sell_side,\n                                type=\"limit\", count=contracts,\n                                yes_price=max(1,sell_p-5) if sell_side==\"yes\" else None,\n                                no_price=max(1,sell_p-5) if sell_side==\"no\" else None,\n                                time_in_force=\"ioc\"\n                            )\n                            if sell_order and hasattr(sell_order,\"order\") and sell_order.order:\n                                o=sell_order.order\n                                print(f\"[ProfitLock] Sell order: {o.status}\")'; print('PL found' if old in c else 'PL NOT FOUND'); c2=c.replace(old,new); open('/root/openclaw.py','w').write(c2)" && python3 -m py_compile /root/openclaw.py && echo "OK"
+sed -n '670,675p' /root/openclaw.py
+sed -i 's/                            contracts = pos.get("contracts", max(1,int(pos.get("bet",2)\/0.50)))/                            entry_p2=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))\n                            contracts = pos.get("contracts", max(1,int(pos.get("bet",2)\/entry_p2)))/' /root/openclaw.py
+sed -i '752s/                            contracts/                                contracts/' /root/openclaw.py
+pm2 restart openclaw-btc openclaw-eth openclaw-sol && pm2 save
+grep -n "entry_p2\|contracts = pos" /root/openclaw.py
+cat /root/.bashrc | grep "set +H"

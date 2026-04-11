@@ -729,6 +729,26 @@ def check_open_positions():
                         continue
             except Exception as pe:
                 print(f"[ProfitLock] Error: {pe}")
+        try:
+            _iurl=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
+            _ihr=kalshi.kalshi_auth.create_auth_headers("GET",_iurl)
+            _imr=requests.get(_iurl,headers=_ihr,timeout=4)
+            if _imr.status_code==200:
+                _iya=_imr.json().get("market",{}).get("yes_ask_dollars")
+                if _iya is not None:
+                    _icy=float(_iya)
+                    _ifloor=(direction=="UP" and _icy<0.06) or (direction=="DOWN" and _icy>0.94)
+                    if _ifloor and age_placed>=0.5:
+                        print(f"[HardFloor] {direction} on {ticker} YES={_icy:.2f}")
+                        try:
+                            _ss="no" if direction=="UP" else "yes"
+                            _ep=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))
+                            _nc=pos.get("contracts",max(1,int(pos.get("bet",2)/_ep)))
+                            _so=kalshi.create_order(ticker=ticker,action="sell",side=_ss,type="market",count=_nc,time_in_force="ioc")
+                            send_telegram(f"HardFloor: {direction} {ticker} YES={_icy:.2f}")
+                            to_remove.append(pos);continue
+                        except Exception as _he: print(f"[HardFloor] fail: {str(_he)}")
+        except Exception: pass
         if age_placed>=CASHOUT_MINUTES:
             try:
                 murl=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
