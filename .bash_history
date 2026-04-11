@@ -1,26 +1,3 @@
-             url     = "https://api.elections.kalshi.com/trade-api/v2/markets"
-             headers = kalshi.kalshi_auth.create_auth_headers("GET", url)
-             resp    = requests.get(url, headers=headers,
-                                    params={"status": status,
-                                            "series_ticker": MARKET_SERIES,
-                                            "limit": 5},
-                                    timeout=8)
-             if resp.status_code == 200:
-                 markets  = resp.json().get("markets", [])
-                 hits     = [m for m in markets
-                             if (m.get("ticker") or "").upper()
-                             .startswith(MARKET_SERIES)]
-                 if hits:
-                     open_hits   = [m for m in hits
-                                    if (m.get("status") or "").lower()
-                                    in ("open", "active")]
-                     pick        = (open_hits or hits)[0]["ticker"]
-                     live_ticker = pick
-                     return live_ticker, (open_hits or hits)[0]
-         except Exception as e:
-             print(f"[Ticker] {status} error: {e}")
- 
-     # Fallback: build from current UTC time
      now_utc     = datetime.datetime.now(datetime.timezone.utc)
      t1          = build_ticker(now_utc)
      live_ticker = t1
@@ -1998,3 +1975,26 @@ python3 -c "c=open('/root/dashboard_v4.html').read(); old='const bal=d.balance,s
 python3 -c "c=open('/root/dashboard_v4.html').read(); [print(i+1,repr(l)) for i,l in enumerate(c.split('\n')) if 'ft.' in l or 'ins.' in l or 'hw.' in l or ' ft ' in l or ' ins ' in l]"
 python3 -c "c=open('/root/dashboard_v4.html').read(); c=c.replace('ft=d.features,ins=d.insights,hw=d.hourly','ft=d.features||[],ins=d.insights||[],hw=d.hourly||{}'); open('/root/dashboard_v4.html','w').write(c); print('done')"
 pm2 restart dashboard && git add -A && git commit -m "Fix Safari crash: undefined features/insights/hourly fields, mobile header" && git push
+source kalshi_env/bin/activate
+grep -i "sol\|cash\|CASH\|profit_lock\|breakeven" /root/performance_log.json | tail -30
+tail -50 /root/sol_trade_log.csv
+pm2 logs openclaw-sol --lines 50 --nostream | grep -v "DeprecationWarning\|datetime\|signal="
+sed -n '620,844p' /root/openclaw.py | grep -n "cash\|CASH\|Cash\|profit_lock\|ProfitLock\|breakeven\|sell\|place_order\|adverse" | head -30
+grep -n "CASHOUT\|cashout\|cash_out\|CashOut" /root/openclaw.py | head -20
+sed -n '725,775p' /root/openclaw.py
+sell_side = "no" if direction=="UP" else "yes". contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/0.50)))
+sed -i 's/sell_side = "no" if direction=="UP" else "yes". contracts/sell_side = "no" if direction=="UP" else "yes"\n                                contracts/' /root/openclaw.py
+sed -n '746,752p' /root/openclaw.py
+pm2 restart openclaw-btc openclaw-eth openclaw-sol
+pm2 logs openclaw-btc --lines 20 --nostream | grep -v "DeprecationWarning\|datetime\|signal="
+sed -n '650,730p' /root/openclaw.py | grep -n "\. " | head -10
+grep -n "sell_side.*\. " /root/openclaw.py
+grep -n "contracts" /root/openclaw.py | head -20
+sed -n '670,678p' /root/openclaw.py
+sed -n '701,709p' /root/openclaw.py
+grep -n "entry_yes" /root/openclaw.py | head -15
+grep -n "CASHOUT_MINUTES\|CASHOUT_ADVERSE\|CASHOUT" /root/openclaw.py | head -5
+sed -i 's/CASHOUT_MINUTES=3/CASHOUT_MINUTES=2/' /root/openclaw.py
+sed -n '740,745p' /root/openclaw.py
+python3 -c "c=open('/root/openclaw.py').read(); old='                    if status in (\"open\",\"active\"):\n                        adverse=((entry_yes-cur_yes) if direction==\"UP\" else (cur_yes-(1-entry_yes)))\n                        if adverse>CASHOUT_ADVERSE:'; new='                    if status in (\"open\",\"active\"):\n                        adverse=((entry_yes-cur_yes) if direction==\"UP\" else (cur_yes-(1-entry_yes)))\n                        hard_floor=(direction==\"UP\" and cur_yes<0.10) or (direction==\"DOWN\" and cur_yes>0.90)\n                        if adverse>CASHOUT_ADVERSE or hard_floor:'; print('found' if old in c else 'NOT FOUND'); open('/root/openclaw.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/openclaw.py && echo "OK"
+pm2 restart openclaw-btc openclaw-eth openclaw-sol && pm2 save

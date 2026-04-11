@@ -528,7 +528,7 @@ def try_directional(yes_price,no_price):
                 print(f"[Signal] {current_direction} candidate | yes={yes_price:.2f} | waiting (1/2)")
                 return False
     else:
-        if window_minute==0 or window_minute>4 or window_minute>=13:
+        if window_minute==0 or window_minute>=13:
             print(f"[Timing] Window {window_minute} min old — skipping")
             return False
         if current_direction==last_signal_direction:
