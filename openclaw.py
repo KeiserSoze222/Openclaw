@@ -552,7 +552,7 @@ def try_directional(yes_price,no_price):
     elif confidence>=7:
         bet=min(round(bet*1.25,2),get_max_bet(is_extreme=is_extreme)*1.25)
         print(f"[Conf] Score {confidence} — bet boosted 25% to ${bet:.2f}")
-    bet=max(2.00,round(bet,2))
+    bet=max(2.00,min(40.00,round(bet,2)))
     spot_price=get_coinbase_price(MARKET_SERIES)
     cb_confirmed=False
     if spot_price is not None:
