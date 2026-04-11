@@ -346,6 +346,13 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
     bet=min(round(bet,2),max_bet)
     bet=max(2.00,bet)
     ticker=live_ticker
+    try:
+        import os as _oi,time as _ti
+        _ff="/tmp/openclaw_order_failed"
+        if _oi.path.exists(_ff) and _ti.time()-float(open(_ff).read())<60:
+            print("[Order] Global cooldown after failed order — skipping")
+            return False
+    except Exception: pass
     if not ticker:
         print("[Order] No ticker — skipping")
         return False
@@ -386,6 +393,7 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
             filled = False
         if not filled:
             print(f"[Order] Not filled: {order}")
+            open("/tmp/openclaw_order_failed","w").write(str(__import__("time").time()))
             # Cancel the resting order immediately to free funds
             try:
                 if hasattr(order,"order") and order.order and order.order.order_id:

@@ -1,21 +1,3 @@
-                   f"YES={yes_price:.2f}+NO={no_price:.2f}={price_sum:.2f}")
-     leg_bet = min(get_max_bet() / 2, CURRENT_BALANCE * 0.15)
-     placed  = 0
-     placed += place_order("UP",   leg_bet, "arb_yes", mkt_yes=yes_price, mkt_no=no_price)
-     placed += place_order("DOWN", leg_bet, "arb_no",  mkt_yes=yes_price, mkt_no=no_price)
-     return placed > 0
- 
- # ─────────────────────────────────────────────────────────────────────────────
- # DIRECTIONAL STRATEGY
- # ─────────────────────────────────────────────────────────────────────────────
- def try_directional(yes_price, no_price):
-     global last_signal_direction, consecutive_signal_count
- 
-     now_utc       = datetime.datetime.now(datetime.timezone.utc)
-     window_minute = now_utc.minute % 15
- 
-     # Determine direction and edge
-     if yes_price > DIRECTIONAL_HIGH:
          current_direction = "UP"
          edge = yes_price - 0.5
      elif yes_price < DIRECTIONAL_LOW:
@@ -1998,3 +1980,21 @@ python3 -c "import json,math; pool=json.load(open('/root/genome.json')); [print(
 pm2 restart arena
 python3 -c "c=open('/root/arena.py').read(); old='def auto_promote(pool):'; new='import subprocess\ndef auto_promote(pool):'; print('found' if old in c else 'NOT FOUND'); open('/root/arena.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/arena.py && echo "OK"
 pm2 logs arena --lines 8 --nostream
+source kalshi_env/bin/activate
+pm2 logs openclaw-btc --lines 3 --nostream | grep "Positions\|Session\|Balance"
+python3 /tmp/status_all.py
+pm2 stop openclaw-btc openclaw-eth openclaw-sol && pm2 save
+tail -30 /root/performance_log.json | python3 -c "import sys,json; [print(json.loads(l)['timestamp'],json.loads(l)['action'],json.loads(l).get('bet',0),json.loads(l).get('balance',0)) for l in sys.stdin if l.strip()]"
+tail -30 /root/eth_performance_log.json | python3 -c "import sys,json; [print(json.loads(l)['timestamp'],json.loads(l)['action'],json.loads(l).get('bet',0),json.loads(l).get('balance',0)) for l in sys.stdin if l.strip()]"
+tail -30 /root/sol_performance_log.json | python3 -c "import sys,json; [print(json.loads(l)['timestamp'],json.loads(l)['action'],json.loads(l).get('bet',0),json.loads(l).get('balance',0)) for l in sys.stdin if l.strip()]"
+git log --oneline | head -10
+git log --oneline | head -20
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); hdrs=k.kalshi_auth.create_auth_headers('GET','https://api.elections.kalshi.com/trade-api/v2/portfolio/positions'); r=requests.get('https://api.elections.kalshi.com/trade-api/v2/portfolio/positions',headers=hdrs,params={'limit':100},timeout=8); pos=[p for p in r.json().get('market_positions',[]) if float(p.get('market_exposure_dollars',0))>0]; print(str(len(pos))+' open positions'); [print(p.get('ticker'),p.get('market_exposure_dollars'),p.get('position')) for p in pos]"
+git show 66820b3:openclaw.py > /root/openclaw_stable.py
+diff /root/openclaw_stable.py /root/openclaw.py | head -80
+grep "18:0[5-9]\|18:1[0-9]" /root/performance_log.json | python3 -c "import sys,json; [print(json.loads(l)['timestamp'],json.loads(l)['action'],json.loads(l).get('bet',0),json.loads(l).get('balance',0),json.loads(l).get('notes','')) for l in sys.stdin if l.strip()]"
+grep "18:0[5-9]\|18:1[0-9]" /root/eth_performance_log.json | python3 -c "import sys,json; [print(json.loads(l)['timestamp'],json.loads(l)['action'],json.loads(l).get('bet',0),json.loads(l).get('balance',0),json.loads(l).get('notes','')) for l in sys.stdin if l.strip()]"
+grep "18:0[5-9]\|18:1[0-9]" /root/sol_performance_log.json | python3 -c "import sys,json; [print(json.loads(l)['timestamp'],json.loads(l)['action'],json.loads(l).get('bet',0),json.loads(l).get('balance',0),json.loads(l).get('notes','')) for l in sys.stdin if l.strip()]"
+sed -i 's/bet=max(2.00,min(40.00,round(bet,2)))/bet=max(2.00,min(25.00,round(bet,2)))/' /root/openclaw.py
+python3 -c "c=open('/root/openclaw.py').read(); old='    # CORRELATION GUARD — prevent all 3 bots firing simultaneously\n    try:\n        import glob as _gl\n        import time as _t\n        import os as _os\n        lock_path = f\'/tmp/openclaw_firing_{MARKET_SERIES}.lock\'\n        locks = _gl.glob(\'/tmp/openclaw_firing_*.lock\')\n        recent = [f for f in locks if _t.time()-_os.path.getmtime(f) < 120]\n        if len(recent) >= 1:\n            print(f\"[CorrGuard] {len(recent)} bots already fired — skipping to avoid correlated loss\")\n            return False\n        open(lock_path, \'w\').write(str(_t.time()))\n    except Exception as _e:\n        print(f\"[CorrGuard] {_e}\")'; new='    # CORRELATION GUARD — atomic file lock prevents simultaneous firing\n    try:\n        import glob as _gl\n        import time as _t\n        import os as _os\n        lock_path = f\'/tmp/openclaw_firing_{MARKET_SERIES}.lock\'\n        master_lock = \'/tmp/openclaw_master.lock\'\n        # Atomic check-and-set using exclusive file creation\n        try:\n            fd = _os.open(master_lock, _os.O_CREAT|_os.O_EXCL|_os.O_WRONLY)\n            _os.write(fd, str(_t.time()).encode())\n            _os.close(fd)\n        except FileExistsError:\n            age = _t.time()-_os.path.getmtime(master_lock)\n            if age < 120:\n                print(f\"[CorrGuard] Master lock held ({age:.0f}s) — skipping\")\n                return False\n            _os.remove(master_lock)\n        open(lock_path, \'w\').write(str(_t.time()))\n    except Exception as _e:\n        print(f\"[CorrGuard] {_e}\")'; print('found' if old in c else 'NOT FOUND'); open('/root/openclaw.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/openclaw.py && echo "OK"
+rm -f /tmp/openclaw_*.lock /tmp/openclaw_master.lock
