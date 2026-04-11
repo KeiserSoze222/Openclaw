@@ -671,7 +671,6 @@ def check_open_positions():
                             sell_side = "no" if direction=="UP" else "yes"
                             entry_p2=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))
                             contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/entry_p2)))
-                            sell_p = min(99,max(1,round((1-cur_yes)*100))) if direction=="UP" else min(99,max(1,round(cur_yes*100)))
                             sell_order = kalshi.create_order(
                                 ticker=ticker, action="sell", side=sell_side,
                                 type="market", count=contracts,
@@ -701,7 +700,6 @@ def check_open_positions():
                             sell_side = "no" if direction=="UP" else "yes"
                             entry_p2=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))
                             contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/entry_p2)))
-                            sell_p = min(99,max(1,round((1-cur_yes)*100))) if direction=="UP" else min(99,max(1,round(cur_yes*100)))
                             sell_order = kalshi.create_order(
                                 ticker=ticker, action="sell", side=sell_side,
                                 type="market", count=contracts,
@@ -766,7 +764,6 @@ def check_open_positions():
                                 sell_side = "no" if direction=="UP" else "yes"
                                 entry_p2=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))
                                 contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/entry_p2)))
-                                sell_p = min(99,max(1,round((1-cur_yes)*100))) if direction=="UP" else min(99,max(1,round(cur_yes*100)))
                                 sell_order = kalshi.create_order(
                                     ticker=ticker, action="sell", side=sell_side,
                                     type="market", count=contracts,
