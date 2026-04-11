@@ -669,7 +669,8 @@ def check_open_positions():
                         print(f"[ProfitLock] {direction} on {ticker} win={win_prob:.2f} reversing — locking profit")
                         try:
                             sell_side = "no" if direction=="UP" else "yes"
-                            contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/0.50)))
+                            entry_p2=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))
+                            contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/entry_p2)))
                             sell_p = min(99,max(1,round((1-cur_yes)*100))) if direction=="UP" else min(99,max(1,round(cur_yes*100)))
                             sell_order = kalshi.create_order(
                                 ticker=ticker, action="sell", side=sell_side,
@@ -700,7 +701,8 @@ def check_open_positions():
                         print(f"[BreakEven] {direction} on {ticker} crossed 50% — exiting")
                         try:
                             sell_side = "no" if direction=="UP" else "yes"
-                            contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/0.50)))
+                            entry_p2=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))
+                            contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/entry_p2)))
                             sell_p = min(99,max(1,round((1-cur_yes)*100))) if direction=="UP" else min(99,max(1,round(cur_yes*100)))
                             sell_order = kalshi.create_order(
                                 ticker=ticker, action="sell", side=sell_side,
@@ -746,7 +748,8 @@ def check_open_positions():
                             # SELL the position on Kalshi to recover remaining value
                             try:
                                 sell_side = "no" if direction=="UP" else "yes"
-                                contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/0.50)))
+                                entry_p2=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))
+                                contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/entry_p2)))
                                 sell_p = min(99,max(1,round((1-cur_yes)*100))) if direction=="UP" else min(99,max(1,round(cur_yes*100)))
                                 sell_order = kalshi.create_order(
                                     ticker=ticker, action="sell", side=sell_side,
