@@ -824,7 +824,8 @@ def check_open_positions():
                     to_remove.append(pos)
                 continue
             won=((result=="yes" and direction=="UP") or (result=="no" and direction=="DOWN"))
-            contracts=max(1,int(bet/0.50))
+            entry_p=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))
+            contracts=max(1,int(bet/entry_p))
             realized=round(contracts*1.0-bet,2) if won else -bet
             outcome="WIN" if won else "LOSS"
             session_pnl+=realized
