@@ -1,1 +1,1 @@
-{"yes_prob": 1.0, "regime": "CHOP", "confidence": 5, "window_age": 0, "ticker": "KXBTC15M-26APR102315-15", "news_score": 0, "bond_score": 0, "whale_score": 0, "ts": "2026-04-11T03:15:10.948090"}
+{"yes_prob": 0.001, "regime": "CHOP", "confidence": 7, "window_age": 14, "ticker": "KXBTC15M-26APR110000-00", "news_score": 0, "bond_score": 0, "whale_score": 0, "ts": "2026-04-11T03:59:47.686188"}

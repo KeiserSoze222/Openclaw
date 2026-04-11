@@ -87,7 +87,7 @@ PEAK_HOURS={3,6,7,8,9,10,11,14,15,16,19,21}
 OPEN_POSITIONS=[]
 COOLDOWN_REMAINING=0
 REGIME="CHOP"
-RISK_SCORE=0.4
+RISK_SCORE=0.60
 last_signal_direction=None
 consecutive_signal_count=0
 session_wins=0
@@ -228,11 +228,11 @@ def update_regime(prices):
     ma60=np.mean(prices[-60:]) if len(prices)>=60 else ma20
     current=prices[-1]
     if current>ma20*1.005 and ma20>ma60:
-        REGIME,RISK_SCORE="BULL",0.5
+        REGIME,RISK_SCORE="BULL",0.75
     elif current<ma20*0.995 and ma20<ma60:
-        REGIME,RISK_SCORE="BEAR",0.3
+        REGIME,RISK_SCORE="BEAR",0.45
     else:
-        REGIME,RISK_SCORE="CHOP",0.35
+        REGIME,RISK_SCORE="CHOP",0.60
 
 def update_live_ticker():
     global live_ticker
