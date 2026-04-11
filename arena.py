@@ -963,11 +963,19 @@ def evaluate(v):
         return v,True
     return v,False
 
+def risk_score(v):
+    t=v.get("trades",0)
+    if t==0: return 0
+    wr=v.get("wins",0)/t
+    import math
+    confidence=math.log(t+1)/math.log(100)
+    return round(wr*confidence,4)
+
 def auto_promote(pool):
     try:
         candidates=[v for v in pool if v.get("trades",0)>=50]
         if not candidates: return
-        leader=max(candidates,key=lambda v:v.get("wins",0)/v.get("trades",1))
+        leader=max(candidates,key=lambda v:risk_score(v))
         wr=leader.get("wins",0)/leader.get("trades",1)
         if wr<0.70: return
         thresh=leader.get("entry_threshold",0.70)
@@ -1023,7 +1031,7 @@ if __name__=="__main__":
             if mutated: print("[Arena] Mutated "+v["id"])
         save_json(GENOME_FILE,pool)
         auto_promote(pool)
-        state={"cycle":cycle,"ts":str(datetime.datetime.utcnow()),"leaderboard":[{"id":v["id"],"market":v["market"],"wr":v["wins"]/v["trades"] if v["trades"]>0 else 0,"trades":v["trades"],"pnl":v["pnl"],"gen":v["generation"]} for v in pool]}
+        state={"cycle":cycle,"ts":str(datetime.datetime.utcnow()),"leaderboard":[{"id":v["id"],"market":v["market"],"wr":v["wins"]/v["trades"] if v["trades"]>0 else 0,"trades":v["trades"],"pnl":v["pnl"],"gen":v["generation"],"risk_score":risk_score(v),"wins":v["wins"],"losses":v["losses"],"entry_threshold":v["entry_threshold"],"max_bet_pct":v["max_bet_pct"],"chop_allowed":v.get("chop_allowed",False)} for v in pool]}
         save_json(ARENA_STATE_FILE,state)
         print("[Arena] Cycle "+str(cycle)+" done")
         time.sleep(CYCLE_SLEEP)
