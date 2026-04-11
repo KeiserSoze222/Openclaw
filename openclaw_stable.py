@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 """OpenClaw BTC Bot v4.0 — Clean Rebuild"""
-import os,time,csv,datetime,requests,tempfile,json,numpy as np
+import os
+import time
+import csv
+import datetime
+import requests
+import tempfile
+import json
+import numpy as np
 from kalshi_python import KalshiClient
 from kalshi_python.configuration import Configuration
 
@@ -54,21 +61,21 @@ assert MARKET_SERIES in ("KXBTC15M","KXETH15M","KXSOL15M"),f"Invalid market: {MA
 FEAT_LOG="/root/feature_log.json"
 DRY_RUN=False
 PEAK_BET_PCT=0.10
-MIN_BALANCE=120.00
+MIN_BALANCE=100.00
 DAILY_LOSS_LIMIT=0.12
 CYCLE_SLEEP=60
 COOLDOWN_CYCLES=2
-ARB_THRESHOLD=0.97
-DIRECTIONAL_HIGH=0.70
-DIRECTIONAL_LOW=0.30
+ARB_THRESHOLD=0.50
+DIRECTIONAL_HIGH=0.68
+DIRECTIONAL_LOW=0.32
 EXTREME_HIGH=0.80
 EXTREME_LOW=0.20
 STRONG_MIN1_EDGE=0.30
 MIN_EDGE=0.20
-CASHOUT_MINUTES=3
-CASHOUT_ADVERSE=0.35
-INITIAL_BALANCE=200.29
-SESSION_START_BAL=200.29
+CASHOUT_MINUTES=2
+CASHOUT_ADVERSE=0.20
+INITIAL_BALANCE=295.66
+SESSION_START_BAL=295.66
 CURRENT_BALANCE=INITIAL_BALANCE
 # TOD schedule — adjusted per market liquidity
 if MARKET_SERIES == "KXBTC15M":
@@ -80,14 +87,14 @@ PEAK_HOURS={3,6,7,8,9,10,11,14,15,16,19,21}
 OPEN_POSITIONS=[]
 COOLDOWN_REMAINING=0
 REGIME="CHOP"
-RISK_SCORE=0.4
+RISK_SCORE=0.60
 last_signal_direction=None
 consecutive_signal_count=0
 session_wins=0
 session_losses=0
 session_pnl=0.0
 live_ticker=None
-session_start_time=time.time()
+
 _last_summary_hour=-1
 
 def get_max_bet(is_extreme=False):
@@ -96,7 +103,7 @@ def get_max_bet(is_extreme=False):
     if tod_scale==0.0:
         return max(2.00,round(CURRENT_BALANCE*0.03,2)) if is_extreme else 0.0
     pct=PEAK_BET_PCT if hour in PEAK_HOURS else MAX_BET_PCT
-    return max(2.00,min(20.00,round(CURRENT_BALANCE*pct*tod_scale,2)))
+    return max(2.00,round(CURRENT_BALANCE*pct*tod_scale,2))
 
 def send_telegram(msg):
     try:
@@ -221,11 +228,11 @@ def update_regime(prices):
     ma60=np.mean(prices[-60:]) if len(prices)>=60 else ma20
     current=prices[-1]
     if current>ma20*1.005 and ma20>ma60:
-        REGIME,RISK_SCORE="BULL",0.5
+        REGIME,RISK_SCORE="BULL",0.75
     elif current<ma20*0.995 and ma20<ma60:
-        REGIME,RISK_SCORE="BEAR",0.3
+        REGIME,RISK_SCORE="BEAR",0.45
     else:
-        REGIME,RISK_SCORE="CHOP",0.35
+        REGIME,RISK_SCORE="CHOP",0.60
 
 def update_live_ticker():
     global live_ticker
@@ -259,6 +266,14 @@ def update_live_ticker():
     live_ticker=t1
     return live_ticker,None
 
+
+def write_arena_signal(market, yes_prob, regime, confidence, window_age, ticker, news_score=0, bond_score=0, whale_score=0):
+    signal={"yes_prob":yes_prob,"regime":regime,"confidence":confidence,"window_age":window_age,"ticker":ticker,"news_score":news_score,"bond_score":bond_score,"whale_score":whale_score,"ts":datetime.datetime.utcnow().isoformat()}
+    path=f"/root/arena_signal_{market}.json"
+    try:
+        open(path,"w").write(__import__("json").dumps(signal))
+    except Exception as e:
+        print(f"[ArenaSignal] write error: {e}")
 
 def safety_check():
     global CURRENT_BALANCE
@@ -296,7 +311,9 @@ def cancel_resting_orders():
 def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=None):
     # CORRELATION GUARD — prevent all 3 bots firing simultaneously
     try:
-        import glob as _gl, time as _t, os as _os
+        import glob as _gl
+        import time as _t
+        import os as _os
         lock_path = f'/tmp/openclaw_firing_{MARKET_SERIES}.lock'
         locks = _gl.glob('/tmp/openclaw_firing_*.lock')
         recent = [f for f in locks if _t.time()-_os.path.getmtime(f) < 90]
@@ -315,7 +332,7 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
     is_extreme=(mkt_yes is not None and (mkt_yes<EXTREME_LOW or mkt_yes>EXTREME_HIGH))
     max_bet=get_max_bet(is_extreme=is_extreme)
     if max_bet==0.0:
-        print(f"[TOD] Skipping — bad hour for this bot")
+        print("[TOD] Skipping — bad hour for this bot")
         return False
     bet=min(round(bet,2),max_bet)
     bet=max(2.00,bet)
@@ -327,9 +344,9 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
         print(f"[Order] Already have {direction} on {ticker} — skipping")
         return False
     side="yes" if direction=="UP" else "no"
-    contract_count=max(1,int(bet/0.50))
+    contract_count=max(1,int(bet/(mkt_yes or mkt_no or 0.50)))
     yes_price=min(99,max(1,round((mkt_yes or 0.50)*100)+2)) if side=="yes" else None
-    no_price=min(99,max(1,round((mkt_no or 0.50)*100)+2)) if side=="no" else None
+    _=None
     if DRY_RUN:
         print(f"[DRY RUN] {direction} ${bet:.2f} on {ticker} ({strategy_tag})")
         log_trade(direction,bet,f"DRY_{strategy_tag.upper()}",notes=ticker)
@@ -474,6 +491,7 @@ def try_directional(yes_price,no_price):
 
     confidence, conf_reasons = score_confidence()
     print(f"[Confidence] Score={confidence}/10 | {','.join(conf_reasons)}")
+    write_arena_signal(market=_args.market,yes_prob=yes_price,regime=REGIME,confidence=confidence,window_age=window_minute,ticker=live_ticker)
 
     # HIGH CONFIDENCE: score 8+ in minute 0-1 = fire immediately with larger bet
     if confidence >= 8 and window_minute <= 1:
@@ -510,7 +528,7 @@ def try_directional(yes_price,no_price):
                 print(f"[Signal] {current_direction} candidate | yes={yes_price:.2f} | waiting (1/2)")
                 return False
     else:
-        if window_minute==0 or window_minute>4 or window_minute>=13:
+        if window_minute==0 or window_minute>=13:
             print(f"[Timing] Window {window_minute} min old — skipping")
             return False
         if current_direction==last_signal_direction:
@@ -568,7 +586,7 @@ def try_directional(yes_price,no_price):
             print(f"[Trend] 1H agrees {current_direction} — bet boosted")
         elif ((current_direction=="UP" and trend_yes<0.40) or (current_direction=="DOWN" and trend_yes>0.60)):
             bet=round(bet*0.85,2)
-            print(f"[Trend] 1H disagrees — bet trimmed")
+            print("[Trend] 1H disagrees — bet trimmed")
     if get_max_bet(is_extreme=is_extreme)>0:
         try:
             btc1=get_coinbase_price("KXBTC15M")
@@ -584,10 +602,10 @@ def try_directional(yes_price,no_price):
                     agree=(sum(1 for m in moves if m) if current_direction=="UP" else sum(1 for m in moves if not m))
                     if agree>=3:
                         bet=min(round(bet*1.20,2),get_max_bet(is_extreme=is_extreme))
-                        print(f"[Correlation] All 3 agree — bet boosted")
+                        print("[Correlation] All 3 agree — bet boosted")
                     elif agree==1:
                         bet=round(bet*0.90,2)
-                        print(f"[Correlation] Markets diverging — bet trimmed")
+                        print("[Correlation] Markets diverging — bet trimmed")
                     else:
                         print(f"[Correlation] 2/3 agree {current_direction}")
         except Exception:
@@ -651,11 +669,12 @@ def check_open_positions():
                         print(f"[ProfitLock] {direction} on {ticker} win={win_prob:.2f} reversing — locking profit")
                         try:
                             sell_side = "no" if direction=="UP" else "yes"
-                            contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/0.50)))
+                            entry_p2=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))
+                            contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/entry_p2)))
                             sell_p = min(99,max(1,round((1-cur_yes)*100))) if direction=="UP" else min(99,max(1,round(cur_yes*100)))
                             sell_order = kalshi.create_order(
                                 ticker=ticker, action="sell", side=sell_side,
-                                type="limit", count=contracts,
+                                type="market", count=contracts,
                                 yes_price=max(1,sell_p-5) if sell_side=="yes" else None,
                                 no_price=max(1,sell_p-5) if sell_side=="no" else None,
                                 time_in_force="ioc"
@@ -682,11 +701,12 @@ def check_open_positions():
                         print(f"[BreakEven] {direction} on {ticker} crossed 50% — exiting")
                         try:
                             sell_side = "no" if direction=="UP" else "yes"
-                            contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/0.50)))
+                            entry_p2=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))
+                            contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/entry_p2)))
                             sell_p = min(99,max(1,round((1-cur_yes)*100))) if direction=="UP" else min(99,max(1,round(cur_yes*100)))
                             sell_order = kalshi.create_order(
                                 ticker=ticker, action="sell", side=sell_side,
-                                type="limit", count=contracts,
+                                type="market", count=contracts,
                                 yes_price=max(1,sell_p-5) if sell_side=="yes" else None,
                                 no_price=max(1,sell_p-5) if sell_side=="no" else None,
                                 time_in_force="ioc"
@@ -709,6 +729,26 @@ def check_open_positions():
                         continue
             except Exception as pe:
                 print(f"[ProfitLock] Error: {pe}")
+        try:
+            _iurl=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
+            _ihr=kalshi.kalshi_auth.create_auth_headers("GET",_iurl)
+            _imr=requests.get(_iurl,headers=_ihr,timeout=4)
+            if _imr.status_code==200:
+                _iya=_imr.json().get("market",{}).get("yes_ask_dollars")
+                if _iya is not None:
+                    _icy=float(_iya)
+                    _ifloor=(direction=="UP" and _icy<0.06) or (direction=="DOWN" and _icy>0.94)
+                    if _ifloor and age_placed>=0.5:
+                        print(f"[HardFloor] {direction} on {ticker} YES={_icy:.2f}")
+                        try:
+                            _ss="no" if direction=="UP" else "yes"
+                            _ep=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))
+                            _nc=pos.get("contracts",max(1,int(pos.get("bet",2)/_ep)))
+                            _so=kalshi.create_order(ticker=ticker,action="sell",side=_ss,type="market",count=_nc,time_in_force="ioc")
+                            send_telegram(f"HardFloor: {direction} {ticker} YES={_icy:.2f}")
+                            to_remove.append(pos);continue
+                        except Exception as _he: print(f"[HardFloor] fail: {str(_he)}")
+        except Exception: pass
         if age_placed>=CASHOUT_MINUTES:
             try:
                 murl=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
@@ -722,16 +762,18 @@ def check_open_positions():
                     cur_yes=float(ya) if ya and 0.02<float(ya)<0.98 else entry_yes
                     if status in ("open","active"):
                         adverse=((entry_yes-cur_yes) if direction=="UP" else (cur_yes-(1-entry_yes)))
-                        if adverse>CASHOUT_ADVERSE:
+                        hard_floor=(direction=="UP" and cur_yes<0.10) or (direction=="DOWN" and cur_yes>0.90)
+                        if adverse>CASHOUT_ADVERSE or hard_floor:
                             print(f"[CashOut] {direction} on {ticker} moved {adverse:.2f} against — exiting early")
                             # SELL the position on Kalshi to recover remaining value
                             try:
                                 sell_side = "no" if direction=="UP" else "yes"
-                                contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/0.50)))
+                                entry_p2=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))
+                                contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/entry_p2)))
                                 sell_p = min(99,max(1,round((1-cur_yes)*100))) if direction=="UP" else min(99,max(1,round(cur_yes*100)))
                                 sell_order = kalshi.create_order(
                                     ticker=ticker, action="sell", side=sell_side,
-                                    type="limit", count=contracts,
+                                    type="market", count=contracts,
                                     yes_price=max(1,sell_p-5) if sell_side=="yes" else None,
                                     no_price=max(1,sell_p-5) if sell_side=="no" else None,
                                     time_in_force="ioc"
@@ -805,7 +847,8 @@ def check_open_positions():
                     to_remove.append(pos)
                 continue
             won=((result=="yes" and direction=="UP") or (result=="no" and direction=="DOWN"))
-            contracts=max(1,int(bet/0.50))
+            entry_p=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))
+            contracts=max(1,int(bet/entry_p))
             realized=round(contracts*1.0-bet,2) if won else -bet
             outcome="WIN" if won else "LOSS"
             session_pnl+=realized
@@ -888,7 +931,7 @@ def simulate_trade():
         COOLDOWN_REMAINING-=1
         check_open_positions()
         return
-    ticker,market_data=update_live_ticker()
+    ticker,_=update_live_ticker()
     if not ticker:
         print("[Ticker] No ticker — skipping")
         return

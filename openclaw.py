@@ -309,17 +309,24 @@ def cancel_resting_orders():
         print(f"[Orders] Cancel failed: {e}")
 
 def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=None):
-    # CORRELATION GUARD — prevent all 3 bots firing simultaneously
+    # CORRELATION GUARD — atomic file lock prevents simultaneous firing
     try:
         import glob as _gl
         import time as _t
         import os as _os
         lock_path = f'/tmp/openclaw_firing_{MARKET_SERIES}.lock'
-        locks = _gl.glob('/tmp/openclaw_firing_*.lock')
-        recent = [f for f in locks if _t.time()-_os.path.getmtime(f) < 120]
-        if len(recent) >= 1:
-            print(f"[CorrGuard] {len(recent)} bots already fired — skipping to avoid correlated loss")
-            return False
+        master_lock = '/tmp/openclaw_master.lock'
+        # Atomic check-and-set using exclusive file creation
+        try:
+            fd = _os.open(master_lock, _os.O_CREAT|_os.O_EXCL|_os.O_WRONLY)
+            _os.write(fd, str(_t.time()).encode())
+            _os.close(fd)
+        except FileExistsError:
+            age = _t.time()-_os.path.getmtime(master_lock)
+            if age < 120:
+                print(f"[CorrGuard] Master lock held ({age:.0f}s) — skipping")
+                return False
+            _os.remove(master_lock)
         open(lock_path, 'w').write(str(_t.time()))
     except Exception as _e:
         print(f"[CorrGuard] {_e}")
@@ -553,7 +560,7 @@ def try_directional(yes_price,no_price):
     elif confidence>=7:
         bet=min(round(bet*1.25,2),get_max_bet(is_extreme=is_extreme)*1.25)
         print(f"[Conf] Score {confidence} — bet boosted 25% to ${bet:.2f}")
-    bet=max(2.00,min(40.00,round(bet,2)))
+    bet=max(2.00,min(25.00,round(bet,2)))
     spot_price=get_coinbase_price(MARKET_SERIES)
     cb_confirmed=False
     if spot_price is not None:

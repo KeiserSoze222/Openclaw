@@ -1,92 +1,3 @@
-     is_extreme = (mkt_yes is not None and
-                   (mkt_yes < EXTREME_LOW or mkt_yes > EXTREME_HIGH))
-     max_bet    = get_max_bet(is_extreme=is_extreme)
- 
-     if max_bet == 0.0:
-         print(f"[TOD] Skipping — bad hour for this bot")
-         return False
- 
-     bet    = min(round(bet, 2), max_bet)
-     bet    = max(2.00, bet)
-     ticker = live_ticker
- 
-     if not ticker:
-         print("[Order] No ticker — skipping")
-         return False
- 
-     # Prevent duplicate positions on same ticker+direction
-     if any(p.get("ticker") == ticker and p.get("direction") == direction
-            for p in OPEN_POSITIONS):
-         print(f"[Order] Already have {direction} on {ticker} — skipping")
-         return False
- 
-     side           = "yes" if direction == "UP" else "no"
-     contract_count = max(1, int(bet / 0.50))
-     yes_price      = (min(99, max(1, round((mkt_yes or 0.50) * 100) + 2))
-                       if side == "yes" else None)
-     no_price       = (min(99, max(1, round((mkt_no  or 0.50) * 100) + 2))
-                       if side == "no"  else None)
- 
-     if DRY_RUN:
-         print(f"[DRY RUN] {direction} ${bet:.2f} on {ticker} ({strategy_tag})")
-         log_trade(direction, bet, f"DRY_{strategy_tag.upper()}", notes=ticker)
-         return True
- 
-     try:
-         print(f"[Order] {ticker} | {side} | count={contract_count} | ${bet:.2f}")
-         order  = kalshi.create_order(
-             ticker=ticker, action="buy", side=side, type="market",
-             count=contract_count, yes_price=yes_price, no_price=no_price,
-             time_in_force="ioc",
-         )
-         filled = ((order or {}).get("order", {}).get("status", "")
-                   in ("filled", "executed"))
-         if not filled:
-             print(f"[Order] Not filled: {order}")
-             COOLDOWN_REMAINING = COOLDOWN_CYCLES
-             return False
- 
-         msg = f"✅ BTC {strategy_tag.upper()}: {direction} ${bet:.2f} on {ticker}"
-         print(msg)
-         send_telegram(msg)
- 
-         entry_yes = mkt_yes if mkt_yes is not None else 0.5
-         now_utc   = datetime.datetime.now(datetime.timezone.utc)
-         OPEN_POSITIONS.append({
-             "direction":    direction,
-             "bet":          bet,
-             "ticker":       ticker,
-             "strategy":     strategy_tag,
-             "time":         time.time(),
-             "placed_at":    time.time(),
-             "entry_time":   now_utc.isoformat(),
-             "entry_yes":    entry_yes,
-             "min_yes":      entry_yes,
-             "max_yes":      entry_yes,
-             "signal_type":  "EXTREME" if is_extreme else "STANDARD",
-             "entry_minute": now_utc.minute % 15,
-         })
-         log_trade(direction, bet, "PLACED", notes=f"{strategy_tag}|{ticker}")
-         COOLDOWN_REMAINING = 0
-         return True
- 
-     except Exception as e:
-         err = str(e)
-         print(f"[Order] Failed: {err}")
-         send_telegram(f"⚠️ Order failed: {direction} ${bet:.2f} — {err}")
-         COOLDOWN_REMAINING = COOLDOWN_CYCLES
-         return False
- 
- # ─────────────────────────────────────────────────────────────────────────────
- # ARB STRATEGY
- # ─────────────────────────────────────────────────────────────────────────────
- def try_arb(yes_price, no_price, ticker):
-     price_sum = yes_price + no_price
-     if price_sum >= ARB_THRESHOLD:
-         return False
-     spread = 1.0 - price_sum
-     print(f"[ARB] YES={yes_price:.2f}+NO={no_price:.2f}={price_sum:.2f} spread={spread:.3f}")
-     send_telegram(f"🎯 ARB: {ticker}\n"
                    f"YES={yes_price:.2f}+NO={no_price:.2f}={price_sum:.2f}")
      leg_bet = min(get_max_bet() / 2, CURRENT_BALANCE * 0.15)
      placed  = 0
@@ -1998,3 +1909,92 @@ sed -i '752s/                            contracts/                             
 pm2 restart openclaw-btc openclaw-eth openclaw-sol && pm2 save
 grep -n "entry_p2\|contracts = pos" /root/openclaw.py
 cat /root/.bashrc | grep "set +H"
+source kalshi_env/bin/activate
+python3 /tmp/status_all.py
+sed -n '312,330p' /root/openclaw.py
+sed -n '281,300p' /root/openclaw.py
+sed -i 's/if len(recent) >= 2:/if len(recent) >= 1:/' /root/openclaw.py
+sed -i 's/_t.time()-_os.path.getmtime(f) < 90/_t.time()-_os.path.getmtime(f) < 120/' /root/openclaw.py
+pm2 logs openclaw-btc --lines 3 --nostream | grep "Positions\|Session"
+git add -A && git commit -m "Tighten correlation guard: only 1 bot fires per 120sec window - fix insufficient balance errors" && git push
+pm2 logs openclaw-btc --lines 50 --nostream | grep -v "DeprecationWarning\|datetime\|signal=" | grep -E "BET|LOSS|WIN|CashOut|HardFloor|ProfitLock|Settled|81|82|106"
+grep "12:0[0-9]\|LOSS\|WIN\|cashout\|CashOut" /root/performance_log.json | grep "2026-04-11" | tail -20
+pm2 logs openclaw-sol --lines 3 --nostream | grep "Positions\|Session"
+grep "81\|82\|83" /root/performance_log.json | grep "2026-04-11" | grep "PLACED\|WIN\|LOSS"
+grep "2026-04-11 12" /root/trade_log.csv
+grep "81\|82" /root/trade_log.csv | tail -10
+sed -i 's/bet=max(2.00,round(bet,2))/bet=max(2.00,min(40.00,round(bet,2)))/' /root/openclaw.py
+pm2 restart openclaw-btc openclaw-eth openclaw-sol && pm2 save
+grep -n "log_trade.*PLACED\|PLACED.*log_trade" /root/openclaw.py | head -5
+sed -n '395,410p' /root/openclaw.py
+sed -n '353,365p' /root/openclaw.py
+python3 -c "c=open('/root/openclaw.py').read(); old='        print(f\"[Order] {ticker} | {side} | count={contract_count} | \${bet:.2f}\")\n        yes_p=min(99,max(1,round((mkt_yes or 0.5)*100))) if side==\"yes\" else None'; new='        log_trade(direction,bet,\"ATTEMPTING\",notes=f\"{strategy_tag}|{ticker}\")\n        print(f\"[Order] {ticker} | {side} | count={contract_count} | \${bet:.2f}\")\n        yes_p=min(99,max(1,round((mkt_yes or 0.5)*100))) if side==\"yes\" else None'; print('found' if old in c else 'NOT FOUND'); open('/root/openclaw.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/openclaw.py && echo "OK"
+pm2 logs openclaw-btc --lines 3 --nostream | grep "Positions\|Session"
+date -u
+pm2 logs openclaw-eth --lines 5 --nostream | grep "Positions\|Session\|Settled\|WIN\|LOSS"
+pm2 restart openclaw-btc openclaw-eth openclaw-sol && pm2 save
+source kalshi_env/bin/activate
+python3 /tmp/status_all.py
+sed -n '628,645p' /root/openclaw.py
+grep -n "placed_at\|age_placed\|age_min" /root/openclaw.py | head -15
+grep -n "hard_floor\|cur_yes<0.10\|cur_yes>0.90" /root/openclaw.py
+sed -n '730,748p' /root/openclaw.py
+python3 -c "c=open('/root/openclaw.py').read(); old='        if age_placed>=CASHOUT_MINUTES:'; new='        try:\n            _iurl=f\"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}\"\n            _ihr=kalshi.kalshi_auth.create_auth_headers(\"GET\",_iurl)\n            _imr=requests.get(_iurl,headers=_ihr,timeout=4)\n            if _imr.status_code==200:\n                _iya=_imr.json().get(\"market\",{}).get(\"yes_ask_dollars\")\n                if _iya is not None:\n                    _icy=float(_iya)\n                    _ifloor=(direction==\"UP\" and _icy<0.06) or (direction==\"DOWN\" and _icy>0.94)\n                    if _ifloor and age_placed>=0.5:\n                        print(f\"[HardFloor] {direction} on {ticker} YES={_icy:.2f}\")\n                        try:\n                            _ss=\"no\" if direction==\"UP\" else \"yes\"\n                            _ep=pos.get(\"entry_yes\",0.5) if direction==\"UP\" else (1-pos.get(\"entry_yes\",0.5))\n                            _nc=pos.get(\"contracts\",max(1,int(pos.get(\"bet\",2)/_ep)))\n                            _so=kalshi.create_order(ticker=ticker,action=\"sell\",side=_ss,type=\"market\",count=_nc,time_in_force=\"ioc\")\n                            send_telegram(f\"HardFloor: {direction} {ticker} YES={_icy:.2f}\")\n                            to_remove.append(pos);continue\n                        except Exception as _he: print(f\"[HardFloor] fail: {str(_he)}\")\n        except Exception: pass\n        if age_placed>=CASHOUT_MINUTES:'; print('found' if old in c else 'NOT FOUND'); open('/root/openclaw.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/openclaw.py && echo "OK"
+pm2 restart openclaw-btc openclaw-eth openclaw-sol && pm2 save
+grep -n "remaining_count\|filled\|resting\|status.*executed\|executed" /root/openclaw.py | head -20
+sed -n '340,395p' /root/openclaw.py
+sed -i 's/return False\.  if any/return False\n    if any/' /root/openclaw.py
+sed -i 's/contract_count=max(1,int(bet\/0.50))/contract_count=max(1,int(bet\/(mkt_yes or mkt_no or 0.50)))/' /root/openclaw.py
+pm2 restart openclaw-btc openclaw-eth openclaw-sol && pm2 save
+sed -n '395,415p' /root/openclaw.py
+grep -n "False\.\|True\.\|None\." /root/openclaw.py | grep -v "#\|print\|url\|http\|\.2f\|\.0f\|\.1f\|\.2%\|split\|replace\|format\|join\|strip\|lower\|upper\|get\|append\|extend\|update\|write\|read\|close\|open\|json\|csv\|os\." | head -20
+grep -n "0\.50\|0\.5)" /root/openclaw.py | grep -v "#\|print\|yes_price\|no_price\|0\.50\*\|entry\|cur_yes\|win_prob\|trend\|gap\|scale\|RISK\|TOD\|EXTREME\|CASHOUT\|ADVERSE" | head -15
+grep -n "action.*sell\|sell.*action" /root/openclaw.py | head -10
+sed -n '674,680p' /root/openclaw.py
+sed -i '677s/                                type="limit", count=contracts,/                                type="market", count=contracts,/' /root/openclaw.py
+pm2 restart openclaw-btc openclaw-eth openclaw-sol && pm2 save
+sed -n '675,685p' /root/openclaw.py
+python3 -c "c=open('/root/openclaw.py').read(); old='                                type=\"market\", count=contracts,\n                                yes_price=max(1,sell_p-5) if sell_side==\"yes\" else None,\n                                no_price=max(1,sell_p-5) if sell_side==\"no\" else None,\n                                time_in_force=\"ioc\"'; new='                                type=\"market\", count=contracts,\n                                time_in_force=\"ioc\"'; print(str(c.count(old))+' found'); open('/root/openclaw.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/openclaw.py && echo "OK"
+sed -n '773,782p' /root/openclaw.py
+sed -n '769,776p' /root/openclaw.py
+sed -i '772,774d' /root/openclaw.py
+sed -i '771a\                                    type="market", count=contracts,' /root/openclaw.py
+pm2 restart openclaw-btc openclaw-eth openclaw-sol && pm2 save
+pm2 logs openclaw-btc --lines 15 --nostream | grep -v "DeprecationWarning\|datetime\|signal="
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); hdrs=k.kalshi_auth.create_auth_headers('GET','https://api.elections.kalshi.com/trade-api/v2/portfolio/positions'); r=requests.get('https://api.elections.kalshi.com/trade-api/v2/portfolio/positions',headers=hdrs,params={'limit':100},timeout=8); pos=[p for p in r.json().get('market_positions',[]) if float(p.get('market_exposure_dollars',0))>0]; print(str(len(pos))+' open positions'); [print(p.get('ticker'),p.get('market_exposure_dollars'),p.get('position')) for p in pos]"
+sed -n '885,915p' /root/openclaw.py
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); hdrs=k.kalshi_auth.create_auth_headers('GET','https​​​​​​​​​​​​​​​​
+python3 -c "c=open('/root/openclaw.py').read(); old='            direction=\"UNKNOWN\"\n            try:\n                murl=f\"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}\"\n                mhdr=kalshi.kalshi_auth.create_auth_headers(\"GET\",murl)\n                mr=requests.get(murl,headers=mhdr,timeout=5)\n                if mr.status_code==200:\n                    last=float(mr.json().get(\"market\",{}).get(\"last_price_dollars\",0.5))\n                    direction=\"UP\" if last>=0.5 else \"DOWN\"\n            except Exception:\n                pass'; new='            pos_count=p.get(\"position\",0)\n            direction=\"UP\" if pos_count>0 else \"DOWN\" if pos_count<0 else \"UNKNOWN\"'; print('found' if old in c else 'NOT FOUND'); open('/root/openclaw.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/openclaw.py && echo "OK"
+pm2 restart openclaw-btc openclaw-eth openclaw-sol && pm2 save
+grep -n "DAILY_LOSS_LIMIT\|Circuit breaker\|Daily loss" /root/openclaw.py
+grep -n "to_remove\|OPEN_POSITIONS" /root/openclaw.py | head -20
+ruff check /root/openclaw.py --select E,F --ignore E501,E401,E402,E701,E702 2>/dev/null | head -20
+sed -i '769d' /root/openclaw.py
+sed -i '704d' /root/openclaw.py
+sed -i '674d' /root/openclaw.py
+pm2 restart openclaw-btc openclaw-eth openclaw-sol && pm2 save
+grep -n "send_telegram.*LOSS\|send_telegram.*loss\|send_telegram.*CashOut\|send_telegram.*cashout" /root/openclaw.py | head -10
+f"{"✅" if won else "❌"}..."
+sed -n '852,856p' /root/openclaw.py
+python3 -c "c=open('/root/openclaw.py').read(); old='send_telegram(f\"{\"✅\" if won else \"❌\"} {BOT_NAME.split()[1]} {outcome}: {direction} \${bet:.2f} | pnl=\${realized:+.2f}\\\\n{session_wins}W/{session_losses}L ({wr:.0f}%) | Bal=\${CURRENT_BALANCE:.2f}\")'; print('found' if old in c else 'NOT FOUND')"
+grep -n "✅.*if won" /root/openclaw.py
+sed -i '854s/.*/            icon="✅" if won else "❌"\n            send_telegram(icon+" "+BOT_NAME.split()[1]+" "+outcome+": "+direction+" $"+str(round(bet,2))+" | pnl=$"+str(round(realized,2))+"\\n"+str(session_wins)+"W\/"+str(session_losses)+"L ("+str(round(wr,0))+"%) | Bal=$"+str(round(CURRENT_BALANCE,2)))/' /root/openclaw.py
+grep -n "HardFloor.*send_telegram\|send_telegram.*HardFloor" /root/openclaw.py
+pm2 logs openclaw-btc --lines 5 --nostream | grep -v "DeprecationWarning\|datetime\|signal="
+date -u
+pm2 logs openclaw-btc --lines 3 --nostream | grep "Positions\|Session"
+date -u && pm2 logs openclaw-btc --lines 3 --nostream | grep "Positions\|Session" && pm2 logs openclaw-eth --lines 3 --nostream | grep "Positions\|Session"
+date -u && pm2 logs openclaw-btc --lines 5 --nostream | grep "Positions\|Session\|WIN\|LOSS\|Settled" && pm2 logs openclaw-eth --lines 5 --nostream | grep "Positions\|Session\|WIN\|LOSS\|Settled"
+pm2 logs openclaw-btc --lines 5 --nostream | grep "Positions\|Session\|WIN\|LOSS\|Settled"
+pm2 restart openclaw-btc openclaw-eth openclaw-sol && pm2 save
+grep -n "def evaluate\|wr\|score\|promote\|leaderboard" /root/arena.py | head -20
+grep -n "def evaluate\|def auto_promote\|leaderboard\|wr\|score\|wins\|losses\|trades" /root/arena.py | head -25
+wc -l /root/arena.py
+sed -n '956,990p' /root/arena.py
+python3 -c "c=open('/root/arena.py').read(); old='def auto_promote(pool):'; new='def risk_score(v):\n    t=v.get(\"trades\",0)\n    if t==0: return 0\n    wr=v.get(\"wins\",0)/t\n    import math\n    confidence=math.log(t+1)/math.log(100)\n    return round(wr*confidence,4)\n\ndef auto_promote(pool):'; print('found' if old in c else 'NOT FOUND'); open('/root/arena.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/arena.py && echo "OK"
+python3 -c "c=open('/root/arena.py').read(); old='leader=max(candidates,key=lambda v:v.get(\"wins\",0)/v.get(\"trades\",1))'; new='leader=max(candidates,key=lambda v:risk_score(v))'; print('found' if old in c else 'NOT FOUND'); open('/root/arena.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/arena.py && echo "OK"
+python3 -c "c=open('/root/arena.py').read(); old='\"leaderboard\":[{\"id\":v[\"id\"],\"market\":v[\"market\"],\"wr\":v[\"wins\"]/v[\"trades\"] if v[\"trades\"]>0 else 0,\"trades\":v[\"trades\"],\"pnl\":v[\"pnl\"],\"gen\":v[\"generation\"]} for v in pool]'; new='\"leaderboard\":[{\"id\":v[\"id\"],\"market\":v[\"market\"],\"wr\":v[\"wins\"]/v[\"trades\"] if v[\"trades\"]>0 else 0,\"trades\":v[\"trades\"],\"pnl\":v[\"pnl\"],\"gen\":v[\"generation\"],\"risk_score\":risk_score(v),\"wins\":v[\"wins\"],\"losses\":v[\"losses\"],\"entry_threshold\":v[\"entry_threshold\"],\"max_bet_pct\":v[\"max_bet_pct\"],\"chop_allowed\":v.get(\"chop_allowed\",False)} for v in pool]'; print('found' if old in c else 'NOT FOUND'); open('/root/arena.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/arena.py && echo "OK"
+python3 -c "import json,math; pool=json.load(open('/root/genome.json')); [print(v['id'],v['market'],'trades='+str(v['trades']),'wr='+str(round(v['wins']/v['trades'],3) if v['trades']>0 else 0),'risk='+str(round((v['wins']/v['trades'] if v['trades']>0 else 0)*math.log(v['trades']+1)/math.log(100),4))) for v in sorted(pool,key=lambda x:-(x['wins']/x['trades'] if x['trades']>0 else 0)*math.log(x['trades']+1)/math.log(100))]"
+pm2 restart arena
+python3 -c "c=open('/root/arena.py').read(); old='def auto_promote(pool):'; new='import subprocess\ndef auto_promote(pool):'; print('found' if old in c else 'NOT FOUND'); open('/root/arena.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/arena.py && echo "OK"
+pm2 logs arena --lines 8 --nostream
