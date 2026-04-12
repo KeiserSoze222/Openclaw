@@ -380,7 +380,8 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
                 status = str(o.status) if o.status else ""
                 remaining = o.remaining_count if o.remaining_count is not None else -1
                 filled = status in ("filled","executed") or (remaining == 0 and o.order_id is not None)
-                print(f"[Order] status={status} remaining={remaining} filled={filled}")
+                filled_count=getattr(o,"filled_count",None) or getattr(o,"yes_count",None) or getattr(o,"no_count",None)
+                print(f"[Order] status={status} remaining={remaining} filled={filled} filled_count={filled_count}")
             elif isinstance(order, dict):
                 status = (order or {}).get("order",{}).get("status","")
                 filled = status in ("filled","executed")
