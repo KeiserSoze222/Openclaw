@@ -409,18 +409,19 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
                 print(f"[Order] Cancel failed: {ce}")
             COOLDOWN_REMAINING=COOLDOWN_CYCLES
             return False
-        msg=f"✅ {BOT_NAME.split()[1]} {strategy_tag.upper()}: {direction} ${bet:.2f} on {ticker}"
+        actual_cost=round(contract_count*(mkt_yes if direction=="UP" else (1-(mkt_yes or 0.5))),2) if mkt_yes else bet
+        msg=f"✅ {BOT_NAME.split()[1]} {strategy_tag.upper()}: {direction} {contract_count}c @ ${(mkt_yes if direction=="UP" else (1-(mkt_yes or 0.5))):.2f} = ${actual_cost:.2f} on {ticker}"
         print(msg)
         send_telegram(msg)
         entry_yes=mkt_yes if mkt_yes is not None else (yes_price if yes_price else 0.5)
         now_utc=datetime.datetime.now(datetime.timezone.utc)
-        OPEN_POSITIONS.append({"direction":direction,"bet":bet,"ticker":ticker,
+        OPEN_POSITIONS.append({"direction":direction,"bet":actual_cost,"ticker":ticker,
             "strategy":strategy_tag,"time":time.time(),"placed_at":time.time(),
             "entry_time":now_utc.isoformat(),"entry_yes":entry_yes,
             "min_yes":entry_yes,"max_yes":entry_yes,
             "signal_type":"EXTREME" if is_extreme else "STANDARD",
             "entry_minute":now_utc.minute%15,"contracts":contract_count})
-        log_trade(direction,bet,"PLACED",notes=f"{strategy_tag}|{ticker}")
+        log_trade(direction,actual_cost,"PLACED",notes=f"{strategy_tag}|{ticker}")
         COOLDOWN_REMAINING=0
         return True
     except Exception as e:
@@ -962,6 +963,7 @@ def simulate_trade():
             print(f"[Cycle] No signal — YES={yes_price:.2f} is between {DIRECTIONAL_LOW:.2f} and {DIRECTIONAL_HIGH:.2f}, sum={price_sum:.2f} >= {ARB_THRESHOLD:.2f}")
     check_open_positions()
     send_hourly_summary()
+
     if OPEN_POSITIONS:
         print(f"[Positions] {len(OPEN_POSITIONS)} still open")
 
@@ -1000,7 +1002,14 @@ if __name__=="__main__":
                 print(f"[Cycle] Unexpected error: {e}")
                 send_telegram(f"⚠️ {BOT_NAME.split()[1]} cycle error: {e}")
             elapsed=time.time()-cycle_start
-            time.sleep(max(0,CYCLE_SLEEP-elapsed))
+            remaining=max(0,CYCLE_SLEEP-elapsed)
+            # Fast cashout check every 15sec while waiting for next cycle
+            slept=0
+            while slept<remaining:
+                chunk=min(15,remaining-slept)
+                time.sleep(chunk)
+                slept+=chunk
+                if OPEN_POSITIONS: check_open_positions()
     except SystemExit as e:
         msg=f"🛑 {BOT_NAME} halted: {e}"
         print(msg)
