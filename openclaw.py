@@ -360,7 +360,7 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
         print(f"[Order] Already have {direction} on {ticker} — skipping")
         return False
     side="yes" if direction=="UP" else "no"
-    contract_count=max(1,int(bet/(mkt_yes or mkt_no or 0.50)))
+    contract_count=max(1,min(30,int(bet/(mkt_yes or mkt_no or 0.50))))
     yes_price=min(99,max(1,round((mkt_yes or 0.50)*100)+2)) if side=="yes" else None
     _=None
     if DRY_RUN:
@@ -750,7 +750,7 @@ def check_open_positions():
                 _iya=_imr.json().get("market",{}).get("yes_ask_dollars")
                 if _iya is not None:
                     _icy=float(_iya)
-                    _ifloor=(direction=="UP" and _icy<0.06) or (direction=="DOWN" and _icy>0.94)
+                    _ifloor=((direction=="UP" and _icy<0.06) or (direction=="DOWN" and _icy>0.94)) and direction in ("UP","DOWN")
                     if _ifloor and age_placed>=0.5:
                         print(f"[HardFloor] {direction} on {ticker} YES={_icy:.2f}")
                         try:
@@ -773,7 +773,7 @@ def check_open_positions():
                     ya=mkt.get("yes_ask_dollars") or mkt.get("yes_bid_dollars")
                     entry_yes=pos.get("entry_yes",0.5)
                     cur_yes=float(ya) if ya and 0.02<float(ya)<0.98 else entry_yes
-                    if status in ("open","active"):
+                    if status in ("open","active") and direction in ("UP","DOWN"):
                         adverse=((entry_yes-cur_yes) if direction=="UP" else (cur_yes-(1-entry_yes)))
                         hard_floor=(direction=="UP" and cur_yes<0.10) or (direction=="DOWN" and cur_yes>0.90)
                         if adverse>CASHOUT_ADVERSE or hard_floor:

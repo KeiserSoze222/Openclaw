@@ -16508,3 +16508,36 @@
 2026-04-12T02:04:46: PM2 log: pid=706085 msg=process killed
 2026-04-12T02:04:46: PM2 log: App [openclaw-sol:12] starting in -fork mode-
 2026-04-12T02:04:46: PM2 log: App [openclaw-sol:12] online
+2026-04-12T02:08:03: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-12T02:08:03: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-12T02:08:03: PM2 log: App [openclaw-btc:10] online
+2026-04-12T02:08:45: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-12T02:08:45: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-12T02:08:45: PM2 log: App [openclaw-eth:11] online
+2026-04-12T02:12:33: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-12T02:12:33: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-12T02:12:33: PM2 log: App [openclaw-sol:12] online
+2026-04-12T02:14:44: PM2 log: Stopping app:openclaw-btc id:10
+2026-04-12T02:14:44: PM2 log: pid=706497 msg=failed to kill - retrying in 100ms
+2026-04-12T02:14:45: PM2 log: pid=706497 msg=failed to kill - retrying in 100ms
+2026-04-12T02:14:45: PM2 log: pid=706497 msg=failed to kill - retrying in 100ms
+2026-04-12T02:14:45: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-12T02:14:45: PM2 log: pid=706497 msg=process killed
+2026-04-12T02:14:45: PM2 log: Stopping app:openclaw-eth id:11
+2026-04-12T02:14:45: PM2 log: pid=706506 msg=failed to kill - retrying in 100ms
+2026-04-12T02:14:45: PM2 log: pid=706506 msg=failed to kill - retrying in 100ms
+2026-04-12T02:14:45: PM2 log: pid=706506 msg=failed to kill - retrying in 100ms
+2026-04-12T02:14:45: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-12T02:14:45: PM2 log: pid=706506 msg=process killed
+2026-04-12T02:14:45: PM2 log: Stopping app:openclaw-sol id:12
+2026-04-12T02:14:45: PM2 log: pid=706529 msg=failed to kill - retrying in 100ms
+2026-04-12T02:14:45: PM2 log: pid=706529 msg=failed to kill - retrying in 100ms
+2026-04-12T02:14:46: PM2 log: pid=706529 msg=failed to kill - retrying in 100ms
+2026-04-12T02:14:46: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-12T02:14:46: PM2 log: pid=706529 msg=process killed
+2026-04-12T02:31:41: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-12T02:31:41: PM2 log: App [openclaw-btc:10] online
+2026-04-12T02:31:42: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-12T02:31:42: PM2 log: App [openclaw-eth:11] online
+2026-04-12T02:31:42: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-12T02:31:42: PM2 log: App [openclaw-sol:12] online

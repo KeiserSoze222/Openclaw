@@ -1,21 +1,3 @@
-         if current_direction == last_signal_direction:
-             consecutive_signal_count += 1
-         else:
-             last_signal_direction    = current_direction
-             consecutive_signal_count = 1
-         if consecutive_signal_count < 2:
-             print(f"[Signal] {current_direction} candidate | yes={yes_price:.2f} | "
-                   f"waiting (1/2)")
-             return False
- 
-     # ── BET SIZING ────────────────────────────────────────────────────────────
-     scale = min(1.0, edge / 0.35)
-     bet   = round(get_max_bet(is_extreme=is_extreme) * scale * RISK_SCORE, 2)
-     bet   = max(2.00, min(bet, get_max_bet(is_extreme=is_extreme)))
- 
-     # ── COINBASE SPOT CONFIRMATION ────────────────────────────────────────────
-     spot_price = get_coinbase_price(MARKET_SERIES)
-     cb_confirmed = False
      if spot_price is not None:
          try:
              _, _, strike = get_market_prices(live_ticker)
@@ -1997,4 +1979,22 @@ placed+=place_order("UP",leg_bet,"arb_yes",...)
 grep -n "ARB_THRESHOLD\|try_arb" /root/openclaw.py | head -10
 sed -n '927,965p' /root/openclaw.py
 grep -n "CYCLE_SLEEP\|MIN_EDGE\|EXTREME" /root/openclaw.py | head -10
+exit
+source kalshi_env/bin/activate
+grep -n "CYCLE_SLEEP\|MIN_EDGE\|EXTREME" /root/openclaw.py | head -10
+grep -n "def get_btc_prices\|def get_coinbase" /root/openclaw.py
+sed -n '140,155p' /root/openclaw.py
+python3 -c "c=open('/root/openclaw.py').read(); old='            bal=(d.get(\"balance\",0)+d.get(\"portfolio_value\",0))/100'; new='            bal=d.get(\"balance\",0)/100  # Cash only, not portfolio_value'; print('found' if old in c else 'NOT FOUND'); open('/root/openclaw.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/openclaw.py && echo "OK"
+cat /tmp/status_all.
+sed -i 's/bal = (d.get("balance",0) + d.get("portfolio_value",0)) \/ 100/bal = d.get("balance",0) \/ 100/' /tmp/status_all.py
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); hdrs=k.kalshi_auth.create_auth_headers('GET','https://api.elections.kalshi.com/trade-api/v2/portfolio/positions'); r=requests.get('https://api.elections.kalshi.com/trade-api/v2/portfolio/positions',headers=hdrs,params={'limit':100},timeout=8); pos=[p for p in r.json().get('market_positions',[]) if float(p.get('market_exposure_dollars',0))>0]; print(str(len(pos))+' open positions'); [print(p.get('ticker'),p.get('market_exposure_dollars')) for p in pos]"
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); url='https://api.elections.kalshi.com/trade-api/v2/markets/KXBTC15M-26APR112200-00'; hdrs=k.kalshi_auth.create_auth_headers('GET',url); r=requests.get(url,headers=hdrs,timeout=8); m=r.json().get('market',{}); print('status:',m.get('status')); print('close:',m.get('close_time')); print('result:',m.get('result')); print('open:',m.get('open_time'))"
+python3 /tmp/status_all.py
+date -u
+rm -f /tmp/openclaw_order_failed /tmp/openclaw_master.lock /tmp/openclaw_*.lock
+tail -5 /root/performance_log.json | python3 -c "import sys,json; [print(json.loads(l)['timestamp'],json.loads(l)['action'],json.loads(l).get('bet',0),json.loads(l).get('balance',0),json.loads(l).get('notes','')) for l in sys.stdin if l.strip()]" 
+pm2 logs openclaw-btc --lines 20 --nostream | grep -v "DeprecationWarning\|datetime\|signal=" | tail -15
+pm2 stop openclaw-btc openclaw-eth openclaw-sol && pm2 save
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); url='https://api.elections.kalshi.com/trade-api/v2/portfolio/orders'; hdrs=k.kalshi_auth.create_auth_headers('GET',url); r=requests.get(url,headers=hdrs,params={'limit':10,'status':'all'},timeout=8); orders=r.json().get('orders',[]); [print(o.get('created_time','')[:16],o.get('ticker',''),o.get('side',''),o.get('action',''),o.get('filled_cost',''),o.get('status','')) for o in orders]"
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); url='https://api.elections.kalshi.com/trade-api/v2/portfolio/fills'; hdrs=k.kalshi_auth.create_auth_headers('GET',url); r=requests.get(url,headers=hdrs,params={'limit':20},timeout=8); print(r.status_code); fills=r.json().get('fills',[]); [print(f.get('created_time','')[:16],f.get('ticker',''),f.get('side',''),f.get('action',''),f.get('count',''),f.get('yes_price','')) for f in fills[:10]]"
 exit
