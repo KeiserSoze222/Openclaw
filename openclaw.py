@@ -144,7 +144,7 @@ def get_live_balance():
         resp=requests.get(url,headers=headers,timeout=8)
         if resp.status_code==200:
             d=resp.json()
-            bal=(d.get("balance",0)+d.get("portfolio_value",0))/100
+            bal=d.get("balance",0)/100  # Cash only, not portfolio_value
             if bal>0:
                 return round(bal,2)
     except Exception as e:

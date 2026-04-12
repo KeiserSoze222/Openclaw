@@ -1,65 +1,3 @@
-         current_direction = "UP"
-         edge = yes_price - 0.5
-     elif yes_price < DIRECTIONAL_LOW:
-         current_direction = "DOWN"
-         edge = 0.5 - yes_price
-     else:
-         last_signal_direction    = None
-         consecutive_signal_count = 0
-         return False
- 
-     # Skip weak signals — not worth the risk at thin payout ratios
-     if edge < MIN_EDGE:
-         print(f"[Signal] Edge {edge:.2f} below minimum {MIN_EDGE} — skipping")
-         return False
- 
-     is_extreme = yes_price > EXTREME_HIGH or yes_price < EXTREME_LOW
- 
-     # ── SIGNAL TYPE CLASSIFICATION ────────────────────────────────────────────
- 
-     if is_extreme and window_minute == 1:
-         # EXTREME: fire immediately, no confirmation
-         print(f"[Signal] EXTREME {current_direction} | yes={yes_price:.2f} | "
-               f"edge={edge:.2f} | firing immediately")
-         consecutive_signal_count = 2
- 
-     elif window_minute == 1 and edge >= STRONG_MIN1_EDGE:
-         # STRONG_MIN1: fire in minute 1 if Coinbase confirms
-         spot = get_coinbase_price(MARKET_SERIES)
-         confirmed = False
-         if spot is not None:
-             try:
-                 _, _, strike = get_market_prices(live_ticker)
-                 if strike > 0:
-                     spot_gap  = spot - strike
-                     confirmed = ((current_direction == "UP" and spot_gap > 0) or
-                                  (current_direction == "DOWN" and spot_gap < 0))
-             except Exception:
-                 pass
-         if confirmed:
-             print(f"[Signal] STRONG_MIN1 {current_direction} | yes={yes_price:.2f} | "
-                   f"edge={edge:.2f} | Coinbase confirms | firing early")
-             consecutive_signal_count = 2
-         else:
-             # Fall through to STANDARD
-             if window_minute == 0 or window_minute > 4:
-                 print(f"[Timing] Window {window_minute} — skipping")
-                 return False
-             if current_direction == last_signal_direction:
-                 consecutive_signal_count += 1
-             else:
-                 last_signal_direction    = current_direction
-                 consecutive_signal_count = 1
-             if consecutive_signal_count < 2:
-                 print(f"[Signal] {current_direction} candidate | yes={yes_price:.2f} | "
-                       f"waiting (1/2)")
-                 return False
- 
-     else:
-         # STANDARD: require 2 confirmations in minutes 1-4
-         if window_minute == 0 or window_minute > 4 or window_minute >= 13:
-             print(f"[Timing] Window {window_minute} min old — skipping")
-             return False
          if current_direction == last_signal_direction:
              consecutive_signal_count += 1
          else:
@@ -1998,3 +1936,65 @@ grep "18:0[5-9]\|18:1[0-9]" /root/sol_performance_log.json | python3 -c "import 
 sed -i 's/bet=max(2.00,min(40.00,round(bet,2)))/bet=max(2.00,min(25.00,round(bet,2)))/' /root/openclaw.py
 python3 -c "c=open('/root/openclaw.py').read(); old='    # CORRELATION GUARD — prevent all 3 bots firing simultaneously\n    try:\n        import glob as _gl\n        import time as _t\n        import os as _os\n        lock_path = f\'/tmp/openclaw_firing_{MARKET_SERIES}.lock\'\n        locks = _gl.glob(\'/tmp/openclaw_firing_*.lock\')\n        recent = [f for f in locks if _t.time()-_os.path.getmtime(f) < 120]\n        if len(recent) >= 1:\n            print(f\"[CorrGuard] {len(recent)} bots already fired — skipping to avoid correlated loss\")\n            return False\n        open(lock_path, \'w\').write(str(_t.time()))\n    except Exception as _e:\n        print(f\"[CorrGuard] {_e}\")'; new='    # CORRELATION GUARD — atomic file lock prevents simultaneous firing\n    try:\n        import glob as _gl\n        import time as _t\n        import os as _os\n        lock_path = f\'/tmp/openclaw_firing_{MARKET_SERIES}.lock\'\n        master_lock = \'/tmp/openclaw_master.lock\'\n        # Atomic check-and-set using exclusive file creation\n        try:\n            fd = _os.open(master_lock, _os.O_CREAT|_os.O_EXCL|_os.O_WRONLY)\n            _os.write(fd, str(_t.time()).encode())\n            _os.close(fd)\n        except FileExistsError:\n            age = _t.time()-_os.path.getmtime(master_lock)\n            if age < 120:\n                print(f\"[CorrGuard] Master lock held ({age:.0f}s) — skipping\")\n                return False\n            _os.remove(master_lock)\n        open(lock_path, \'w\').write(str(_t.time()))\n    except Exception as _e:\n        print(f\"[CorrGuard] {_e}\")'; print('found' if old in c else 'NOT FOUND'); open('/root/openclaw.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/openclaw.py && echo "OK"
 rm -f /tmp/openclaw_*.lock /tmp/openclaw_master.lock
+source kalshi_env/bin/activate
+grep -n "bet" /root/arena.py | grep -v "#\|print\|pnl\|profit\|max_bet\|min_bet" | head -20
+grep -n "DRY_RUN" /root/arena.py | head -5
+pm2 stop arena && pm2 save
+sed -i 's/DRY_RUN=False/DRY_RUN=True/' /root/arena.py
+git add -A && git commit -m "CRITICAL: Set arena DRY_RUN=True - was placing real orders with 12 uncapped variants" && git push
+python3 /tmp/status_all.py
+ls -la /tmp/openclaw_master.lock 2>/dev/null || echo "no lock file"
+pm2 stop openclaw-btc openclaw-eth openclaw-sol && pm2 save
+sed -n '955,975p' /root/openclaw.py
+python3 -c "c=open('/root/openclaw.py').read(); old='    load_existing_positions()\n    cancel_resting_orders()\n    print(\"[Startup] Resting orders cleared\")'; new='    # Staggered startup: ETH waits 45s, SOL waits 90s to prevent simultaneous firing\n    _startup_delay={\"btc\":0,\"eth\":45,\"sol\":90}.get(_args.market,0)\n    if _startup_delay>0:\n        print(f\"[Startup] Staggered delay {_startup_delay}s for {_args.market.upper()}\")\n        import time as _st; _st.sleep(_startup_delay)\n    load_existing_positions()\n    cancel_resting_orders()\n    print(\"[Startup] Resting orders cleared\")'; print('found' if old in c else 'NOT FOUND'); open('/root/openclaw.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/openclaw.py && echo "OK"
+pm2 restart openclaw-btc openclaw-eth openclaw-sol && pm2 save
+pm2 logs openclaw-btc --lines 5 --nostream | grep "CorrGuard\|Balance\|fired"
+python3 /tmp/status_all.py
+grep "min(25" /root/openclaw.py
+sed -n '615,625p' /root/openclaw.py
+sed -n '100,110p' /root/openclaw.py
+sed -i 's/return max(2.00,round(CURRENT_BALANCE\*pct\*tod_scale,2))/return max(2.00,min(22.00,round(CURRENT_BALANCE*pct*tod_scale,2)))/' /root/openclaw.py
+sed -i 's/return max(2.00,min(22.00,round(CURRENT_BALANCE\*pct\*tod_scale,2)))/reserved=sum(p.get("bet",0) for p in OPEN_POSITIONS)\n    avail=max(0,CURRENT_BALANCE-reserved)\n    return max(2.00,min(22.00,round(avail*pct*tod_scale,2)))/' /root/openclaw.py
+pm2 logs openclaw-btc --lines 3 --nostream | grep "Positions\|Session"
+pm2 restart openclaw-btc openclaw-eth openclaw-sol && pm2 save
+date -u
+pm2 stop openclaw-btc openclaw-eth openclaw-sol && pm2 save
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); url='https://api.elections.kalshi.com/trade-api/v2/portfolio/balance'; hdrs=k.kalshi_auth.create_auth_headers('GET',url); r=requests.get(url,headers=hdrs,timeout=8); d=r.json(); print('Cash:',d.get('balance',0)/100); print('Portfolio:',d.get('portfolio_value',0)/100); print('Total:',(d.get('balance',0)+d.get('portfolio_value',0))/100)"
+pm2 logs openclaw-btc --lines 30 --nostream | grep -v "DeprecationWarning\|datetime\|signal=" | tail -20
+grep "22:37\|22:39\|22:40\|22:42" /root/performance_log.json | tail -10
+grep "111845" /root/performance_log.json | tail -10
+grep -n "retry\|while.*order\|attempt" /root/openclaw.py | head -10
+python3 -c "c=open('/root/openclaw.py').read(); old='        if not filled:\n            print(f\"[Order] Not filled: {order}\")\n            # Cancel the resting order immediately to free funds'; new='        if not filled:\n            print(f\"[Order] Not filled: {order}\")\n            open(\"/tmp/openclaw_order_failed\",\"w\").write(str(__import__(\"time\").time()))\n            # Cancel the resting order immediately to free funds'; print('found' if old in c else 'NOT FOUND'); open('/root/openclaw.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/openclaw.py && echo "OK"
+python3 -c "c=open('/root/openclaw.py').read(); old='    if not ticker:\n        print(\"[Order] No ticker — skipping\")\n        return False'; new='    try:\n        import os as _oi,time as _ti\n        _ff=\"/tmp/openclaw_order_failed\"\n        if _oi.path.exists(_ff) and _ti.time()-float(open(_ff).read())<60:\n            print(\"[Order] Global cooldown after failed order — skipping\")\n            return False\n    except Exception: pass\n    if not ticker:\n        print(\"[Order] No ticker — skipping\")\n        return False'; print('found' if old in c else 'NOT FOUND'); open('/root/openclaw.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/openclaw.py && echo "OK"
+rm -f /tmp/openclaw_order_failed /tmp/openclaw_master.lock /tmp/openclaw_*.lock
+pm2 logs openclaw-btc --lines 10 --nostream | grep "cooldown\|Global\|failed\|ATTEMPTING\|Balance"
+ls -la /tmp/openclaw_order_failed 2>/dev/null && cat /tmp/openclaw_order_failed || echo "no file"
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); url='https://api.elections.kalshi.com/trade-api/v2/portfolio/balance'; hdrs=k.kalshi_auth.create_auth_headers('GET',url); r=requests.get(url,headers=hdrs,timeout=8); d=r.json(); print('Cash:',d.get('balance',0)/100); print('Portfolio:',d.get('portfolio_value',0)/100); print('Total:',(d.get('balance',0)+d.get('portfolio_value',0))/100)"
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); hdrs=k.kalshi_auth.create_auth_headers('GET','https://api.elections.kalshi.com/trade-api/v2/portfolio/positions'); r=requests.get('https://api.elections.kalshi.com/trade-api/v2/portfolio/positions',headers=hdrs,params={'limit':100},timeout=8); pos=[p for p in r.json().get('market_positions',[]) if float(p.get('market_exposure_dollars',0))>0]; print(str(len(pos))+' open'); [print(p.get('ticker'),p.get('market_exposure_dollars')) for p in pos]"
+pm2 stop openclaw-btc openclaw-eth openclaw-sol && pm2 save
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); url='https://api.elections.kalshi.com/trade-api/v2/markets/KXBTC15M-26APR111915-15'; hdrs=k.kalshi_auth.create_auth_headers('GET',url); r=requests.get(url,headers=hdrs,timeout=8); m=r.json().get('market',{}); print('status:',m.get('status')); print('close:',m.get('close_time')); print('result:',m.get('result'))"
+date -u 
+python3 /tmp/status_all.py
+rm -f /tmp/openclaw_order_failed /tmp/openclaw_master.lock /tmp/openclaw_*.lock
+grep -n "o.status\|o.filled\|filled_count\|filled_yes\|filled_no\|amount_filled" /root/openclaw.py | head -15 
+sed -n '375,395p' /root/openclaw.py
+python3 -c "c=open('/root/openclaw.py').read(); old='                print(f\"[Order] status={status} remaining={remaining} filled={filled}\")'; new='                filled_count=getattr(o,\"filled_count\",None) or getattr(o,\"yes_count\",None) or getattr(o,\"no_count\",None)\n                print(f\"[Order] status={status} remaining={remaining} filled={filled} filled_count={filled_count}\")'; print('found' if old in c else 'NOT FOUND'); open('/root/openclaw.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/openclaw.py && echo "OK" 
+pm2 logs openclaw-btc --lines 3 --nostream | grep "Positions\|Session"
+date -u
+rm -f /tmp/openclaw_order_failed /tmp/openclaw_master.lock /tmp/openclaw_*.lock
+pm2 stop openclaw-btc openclaw-eth openclaw-sol && pm2 save
+pm2 logs openclaw-btc --lines 3 --nostream | grep "Positions\|Session"
+python3 -c "c=open('/root/openclaw.py').read(); old='    if any(p.get(\"ticker\")==ticker and p.get(\"direction\")==direction for p in OPEN_POSITIONS):'; new='    if any(p.get(\"ticker\")==ticker for p in OPEN_POSITIONS):'; print('found' if old in c else 'NOT FOUND'); open('/root/openclaw.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/openclaw.py && echo "OK"
+rm -f /tmp/openclaw_order_failed /tmp/openclaw_master.lock /tmp/openclaw_*.lock
+grep -n "double_down\|DoubleDown" /root/openclaw.py | head -8
+grep -n "create_order" /root/openclaw.py | head -15
+grep -n "TOD_SCHEDULE\|PEAK_HOURS" /root/openclaw.py | head -10
+sed -n '78,90p' /root/openclaw.py
+sed -n '965,995p' /root/openclaw.py
+sed -n '995,1010p' /root/openclaw.py 
+grep -n "def simulate_trade" /root/openclaw.py
+placed+=place_order("UP",leg_bet,"arb_yes",...)
+grep -n "ARB_THRESHOLD\|try_arb" /root/openclaw.py | head -10
+sed -n '927,965p' /root/openclaw.py
+grep -n "CYCLE_SLEEP\|MIN_EDGE\|EXTREME" /root/openclaw.py | head -10
+exit
