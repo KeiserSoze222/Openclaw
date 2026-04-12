@@ -16541,3 +16541,5 @@
 2026-04-12T02:31:42: PM2 log: App [openclaw-eth:11] online
 2026-04-12T02:31:42: PM2 log: App [openclaw-sol:12] starting in -fork mode-
 2026-04-12T02:31:42: PM2 log: App [openclaw-sol:12] online
+2026-04-12T03:20:46: PM2 log: App [price-historian:17] starting in -fork mode-
+2026-04-12T03:20:46: PM2 log: App [price-historian:17] online
