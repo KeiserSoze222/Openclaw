@@ -356,7 +356,7 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
     if not ticker:
         print("[Order] No ticker — skipping")
         return False
-    if any(p.get("ticker")==ticker and p.get("direction")==direction for p in OPEN_POSITIONS):
+    if any(p.get("ticker")==ticker for p in OPEN_POSITIONS):
         print(f"[Order] Already have {direction} on {ticker} — skipping")
         return False
     side="yes" if direction=="UP" else "no"
