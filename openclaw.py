@@ -325,10 +325,13 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
             _os.close(fd)
         except FileExistsError:
             age = _t.time()-_os.path.getmtime(master_lock)
-            if age < 120:
+            if age < 180:
                 print(f"[CorrGuard] Master lock held ({age:.0f}s) — skipping")
                 return False
             _os.remove(master_lock)
+            fd=_os.open(master_lock,_os.O_CREAT|_os.O_EXCL|_os.O_WRONLY)
+            _os.write(fd,str(_t.time()).encode())
+            _os.close(fd)
         open(lock_path, 'w').write(str(_t.time()))
     except Exception as _e:
         print(f"[CorrGuard] {_e}")
@@ -360,7 +363,8 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
         print(f"[Order] Already have {direction} on {ticker} — skipping")
         return False
     side="yes" if direction=="UP" else "no"
-    contract_count=max(1,min(30,int(bet/(mkt_yes or mkt_no or 0.50))))
+    entry_price=(mkt_yes if side=="yes" else (mkt_no if mkt_no else (1-(mkt_yes or 0.5))))
+    contract_count=max(1,min(25,int(bet/max(0.01,entry_price))))
     yes_price=min(99,max(1,round((mkt_yes or 0.50)*100)+2)) if side=="yes" else None
     _=None
     if DRY_RUN:
