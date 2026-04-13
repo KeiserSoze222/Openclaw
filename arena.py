@@ -984,7 +984,7 @@ def auto_promote(pool):
         cur_thresh=float([x for x in cur.split() if "=" in x][0].split("=")[1])
         if abs(thresh-cur_thresh)<0.001: return
         subprocess.run(["sed","-i","s/DIRECTIONAL_HIGH="+str(cur_thresh)+"/DIRECTIONAL_HIGH="+str(thresh)+"/","/root/openclaw.py"])
-        subprocess.run(["pm2","restart","openclaw-btc","openclaw-eth","openclaw-sol"])
+        #subprocess.run(["pm2","restart","openclaw-btc","openclaw-eth","openclaw-sol"]) # DISABLED - manual promotion only
         msg="[AutoPromote] "+leader["id"]+" WR="+str(round(wr,3))+" thresh="+str(thresh)+" promoted"
         print(msg)
         raw=open("/root/real_bot_pre_v4_backup.py").read()
