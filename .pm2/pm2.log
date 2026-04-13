@@ -17201,3 +17201,5 @@
 2026-04-13T15:18:13: PM2 log: pid=735348 msg=process killed
 2026-04-13T15:18:13: PM2 log: App [dashboard:14] starting in -fork mode-
 2026-04-13T15:18:13: PM2 log: App [dashboard:14] online
+2026-04-13T15:19:15: PM2 log: App [whale-scanner:20] starting in -fork mode-
+2026-04-13T15:19:15: PM2 log: App [whale-scanner:20] online
