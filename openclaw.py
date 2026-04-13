@@ -50,6 +50,7 @@ kalshi.set_kalshi_auth(KALSHI_API_KEY,_tf.name)
 import argparse as _ap
 _parser = _ap.ArgumentParser()
 _parser.add_argument("--market", choices=["btc","eth","sol"], default="btc")
+_parser.add_argument("--dry-run", action="store_true", default=False)
 _args = _parser.parse_args()
 _CONFIGS = {
     "btc": ("KXBTC15M","OpenClaw BTC Bot v4.0","/root/trade_log.csv","/root/STOP",0.07,"/root/performance_log.json"),
@@ -59,7 +60,7 @@ _CONFIGS = {
 MARKET_SERIES,BOT_NAME,LOG_CSV,STOP_FILE,MAX_BET_PCT,PERF_LOG = _CONFIGS[_args.market]
 assert MARKET_SERIES in ("KXBTC15M","KXETH15M","KXSOL15M"),f"Invalid market: {MARKET_SERIES}"
 FEAT_LOG="/root/feature_log.json"
-DRY_RUN=False
+DRY_RUN=_args.dry_run
 PEAK_BET_PCT=0.10
 MIN_BALANCE=100.00
 DAILY_LOSS_LIMIT=0.12
@@ -339,7 +340,7 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
             if _os.path.exists(window_lock):
                 age = _t.time()-_os.path.getmtime(window_lock)
                 if age < 840:
-                    print(f"[CorrGuard] Window {live_ticker} already traded ({age:.0f}s ago) -- skipping")
+                    print(f"[CorrGuard] Window {live_ticker.split("-",1)[-1]} already traded ({age:.0f}s ago) -- skipping")
                     return False
             fd = _os.open(window_lock, _os.O_CREAT|_os.O_EXCL|_os.O_WRONLY)
             _os.write(fd, str(_t.time()).encode())
