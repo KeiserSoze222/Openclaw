@@ -1,1 +1,1 @@
-{"yes_prob": 0.9, "regime": "CHOP", "confidence": 5, "window_age": 14, "ticker": "KXETH15M-26APR131130-30", "news_score": 0, "bond_score": 0, "whale_score": 0, "ts": "2026-04-13T15:29:31.149211+00:00"}
+{"yes_prob": 0.3, "regime": "CHOP", "confidence": 4, "window_age": 6, "ticker": "KXETH15M-26APR131200-00", "news_score": 0, "bond_score": 0, "whale_score": 0, "ts": "2026-04-13T15:51:23.564794+00:00"}

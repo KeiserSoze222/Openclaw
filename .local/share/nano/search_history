@@ -66,6 +66,8 @@ confidence score
 [confidence] score=
 write_arena_signal
 write_arena_signal(market=_args
+if not filled
+if not filled:
 
 
 

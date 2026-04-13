@@ -416,22 +416,35 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
             print(f"[Order] Fill check error: {ex}")
             filled = False
         if not filled:
-            print(f"[Order] Not filled: {order}")
-            open("/tmp/openclaw_order_failed","w").write(str(__import__("time").time()))
-            # Cancel the resting order immediately to free funds
+            print(f"[Order] Checking fills for possibly partial order...")
             try:
-                if hasattr(order,"order") and order.order and order.order.order_id:
-                    oid = order.order.order_id
-                    curl = f"https://api.elections.kalshi.com/trade-api/v2/portfolio/orders/{oid}"
-                    ch = kalshi.kalshi_auth.create_auth_headers("DELETE", curl)
-                    requests.delete(curl, headers=ch, timeout=5)
-                    print(f"[Order] Cancelled resting order {oid}")
-                else:
-                    cancel_resting_orders()
-            except Exception as ce:
-                print(f"[Order] Cancel failed: {ce}")
-            COOLDOWN_REMAINING=COOLDOWN_CYCLES
-            return False
+                _oid2=order.order.order_id if hasattr(order,"order") and order.order else None
+                if _oid2:
+                    _fu2=f"https://api.elections.kalshi.com/trade-api/v2/portfolio/fills"
+                    _fh2=kalshi.kalshi_auth.create_auth_headers("GET",_fu2)
+                    _fr2=requests.get(_fu2,headers=_fh2,params={"order_id":_oid2,"limit":5},timeout=4)
+                    _fills2=_fr2.json().get("fills",[]) if _fr2.status_code==200 else []
+                    if _fills2:
+                        print(f"[Order] Partial fill detected! {len(_fills2)} fills found — treating as filled")
+                        filled=True
+            except Exception as _fe2: print(f"[Order] Fill check2: {_fe2}")
+            if not filled:
+                open("/tmp/openclaw_order_failed","w").write(str(__import__("time").time()))
+                # Cancel the resting order immediately to free funds
+                try:
+                    if hasattr(order,"order") and order.order and order.order.order_id:
+                        oid = order.order.order_id
+                        curl = f"https://api.elections.kalshi.com/trade-api/v2/portfolio/orders/{oid}"
+                        ch = kalshi.kalshi_auth.create_auth_headers("DELETE", curl)
+                        requests.delete(curl, headers=ch, timeout=5)
+                        print(f"[Order] Cancelled resting order {oid}")
+                    else:
+                        cancel_resting_orders()
+                except Exception as ce:
+                    print(f"[Order] Cancel failed: {ce}")
+                open(f"/tmp/openclaw_window_{ticker.split(chr(45),1)[-1]}.lock","w").write(str(__import__("time").time()))
+                COOLDOWN_REMAINING=COOLDOWN_CYCLES
+                return False
         actual_cost=round(contract_count*(mkt_yes if direction=="UP" else (1-(mkt_yes or 0.5))),2) if mkt_yes else bet
         msg=f"✅ {BOT_NAME.split()[1]} {strategy_tag.upper()}: {direction} {contract_count}c @ ${(mkt_yes if direction=="UP" else (1-(mkt_yes or 0.5))):.2f} = ${actual_cost:.2f} on {ticker}"
         print(msg)
