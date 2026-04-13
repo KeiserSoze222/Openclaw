@@ -381,8 +381,6 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
     if not liquid:
         print(f"[Order] Insufficient liquidity for {contract_count} {side} contracts on {ticker} — skipping")
         return False
-    yes_price=min(99,max(1,round((mkt_yes or 0.50)*100)+2)) if side=="yes" else None
-    _=None
     if DRY_RUN:
         print(f"[DRY RUN] {direction} ${bet:.2f} on {ticker} ({strategy_tag})")
         log_trade(direction,bet,f"DRY_{strategy_tag.upper()}",notes=ticker)
@@ -934,7 +932,16 @@ def load_existing_positions():
             if MARKET_SERIES not in ticker:
                 continue
             pos_count=p.get("position",0)
-            direction="UP" if pos_count>0 else "DOWN" if pos_count<0 else "UNKNOWN"
+            yes_c=float(p.get("yes_count",0) or 0)
+            no_c=float(p.get("no_count",0) or 0)
+            if pos_count and pos_count!=0:
+                direction="UP" if pos_count>0 else "DOWN"
+            elif yes_c>0:
+                direction="UP"
+            elif no_c>0:
+                direction="DOWN"
+            else:
+                direction="UNKNOWN"
             OPEN_POSITIONS.append({"direction":direction,"bet":exposure,"ticker":ticker,
                 "strategy":"restored","time":time.time()-300,"placed_at":0,
                 "entry_yes":0.5,"min_yes":0.5,"max_yes":0.5,
