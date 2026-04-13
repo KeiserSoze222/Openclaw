@@ -86,12 +86,26 @@ def get_processes():
         procs[name] = r.returncode == 0
     return procs
 
+
+def get_hourly():
+    hw={}
+    for path in ["/root/trade_log.csv","/root/eth_trade_log.csv","/root/sol_trade_log.csv"]:
+        for row in parse_csv(path):
+            if len(row)>=4 and ("WIN" in row[3] or "LOSS" in row[3]):
+                try:
+                    h=int(row[0].split(" ")[1].split(":")[0])
+                    if h not in hw: hw[h]={"w":0,"l":0}
+                    if "WIN" in row[3]: hw[h]["w"]+=1
+                    else: hw[h]["l"]+=1
+                except: pass
+    return {str(h):{"w":v["w"],"l":v["l"],"wr":round(v["w"]/(v["w"]+v["l"])*100,1) if (v["w"]+v["l"])>0 else 0} for h,v in hw.items()}
+
 class Handler(http.server.BaseHTTPRequestHandler):
     def log_message(self, *a): pass
     def do_GET(self):
         if self.path.split("?")[0] == "/api/data":
             try:
-                data = {"balance":get_balance(),"version_balance":VERSION_BALANCE,"stats":get_stats(),"procs":get_processes(),"trades":get_recent_trades(8),"whales":get_whales(6),"positions":get_positions()}
+                data = {"balance":get_balance(),"version_balance":VERSION_BALANCE,"stats":get_stats(),"procs":get_processes(),"trades":get_recent_trades(8),"whales":get_whales(6),"positions":get_positions(),"hourly":get_hourly(),"features":[],"insights":[]}
                 self.send_response(200)
                 self.send_header('Content-Type','application/json')
                 self.send_header('Access-Control-Allow-Origin','*')
