@@ -205,6 +205,26 @@ def get_market_prices(ticker):
         print(f"[Prices] {e}")
     return None,None,None
 
+def get_orderbook_liquidity(ticker,side,contracts_needed):
+    try:
+        url=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}/orderbook"
+        headers=kalshi.kalshi_auth.create_auth_headers("GET",url)
+        r=requests.get(url,headers=headers,timeout=4)
+        if r.status_code!=200: return True,0
+        ob=r.json().get("orderbook_fp",{})
+        book=ob.get(f"{side}_dollars",[])
+        if not book: return True,0
+        best_price=float(book[0][0])
+        best_qty=float(book[0][1])
+        total_qty=sum(float(x[1]) for x in book[:3])
+        if total_qty<contracts_needed:
+            print(f"[Liquidity] Thin {side} book: only {total_qty:.0f} contracts available, need {contracts_needed}")
+            return False,best_price
+        return True,best_price
+    except Exception as e:
+        print(f"[Liquidity] {e}")
+        return True,0
+
 def get_trend_validator():
     try:
         url="https://api.elections.kalshi.com/trade-api/v2/markets"
@@ -358,6 +378,10 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
     side="yes" if direction=="UP" else "no"
     entry_price=(mkt_yes if side=="yes" else (mkt_no if mkt_no else (1-(mkt_yes or 0.5))))
     contract_count=max(1,min(25,int(bet/max(0.01,entry_price))))
+    liquid,ob_price=get_orderbook_liquidity(ticker,side,contract_count)
+    if not liquid:
+        print(f"[Order] Insufficient liquidity for {contract_count} {side} contracts on {ticker} — skipping")
+        return False
     yes_price=min(99,max(1,round((mkt_yes or 0.50)*100)+2)) if side=="yes" else None
     _=None
     if DRY_RUN:
