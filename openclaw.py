@@ -250,7 +250,7 @@ def update_regime(prices):
     ma20=np.mean(prices[-20:])
     ma60=np.mean(prices[-60:]) if len(prices)>=60 else ma20
     current=prices[-1]
-    if current>ma20*1.005 and ma20>ma60:
+    if current>ma20*1.002 and ma20>ma60:
         REGIME,RISK_SCORE="BULL",0.75
     elif current<ma20*0.995 and ma20<ma60:
         REGIME,RISK_SCORE="BEAR",0.45
@@ -497,6 +497,12 @@ def try_directional(yes_price,no_price):
         return False
     if edge<MIN_EDGE:
         print(f"[Signal] Edge {edge:.2f} below minimum {MIN_EDGE} — skipping")
+        return False
+    if REGIME=="BULL" and current_direction=="DOWN":
+        print(f"[Signal] Blocking DOWN in BULL regime — trend filter")
+        return False
+    if REGIME=="BEAR" and current_direction=="UP":
+        print(f"[Signal] Blocking UP in BEAR regime — trend filter")
         return False
     # CONFIDENCE SCORER (1-10) — high score = larger bet, earlier entry
     def score_confidence():
