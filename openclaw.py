@@ -448,6 +448,7 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
         err=str(e)
         print(f"[Order] Failed: {err}")
         send_telegram(f"⚠️ Order failed: {direction} ${bet:.2f} — {err}")
+        open(f"/tmp/openclaw_window_{ticker.split(chr(45),1)[-1]}.lock","w").write(str(__import__("time").time()))
         COOLDOWN_REMAINING=COOLDOWN_CYCLES
         return False
 
@@ -1025,6 +1026,7 @@ def load_existing_positions():
 
 def simulate_trade():
     global COOLDOWN_REMAINING,CURRENT_BALANCE
+    [os.remove(f"/tmp/{f}") for f in os.listdir("/tmp") if f.startswith("openclaw_window_") and (__import__("time").time()-os.path.getmtime(f"/tmp/{f}"))>900]
     if os.path.exists(STOP_FILE):
         print(f"[Stop] {STOP_FILE} detected — halting")
         raise SystemExit("Stop file detected")

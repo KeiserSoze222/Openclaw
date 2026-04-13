@@ -13,3 +13,17 @@
 {"timestamp": "2026-04-07T05:06:51.656110", "ticker": "KXBNB15M-26APR070115-15", "side": "no", "price": 0.98, "count": 3, "cost": 2.94, "mins_left": 8.369908383333334}
 {"timestamp": "2026-04-09T05:24:38.028596", "ticker": "KXBTC15M-26APR090130-30", "side": "yes", "price": 0.965, "count": 3, "cost": 2.895, "mins_left": 5.426577}
 {"timestamp": "2026-04-13T04:45:59.979946", "ticker": "KXBTCD-26APR1301-T71199.99", "side": "no", "price": 0.98, "count": 3, "cost": 2.94, "mins_left": 14.06892805}
+{"timestamp": "2026-04-13T05:44:19.616590", "ticker": "KXBTCD-26APR1302-T70599.99", "side": "yes", "price": 0.96, "count": 3, "cost": 2.88, "mins_left": 16.020632183333333}
+{"timestamp": "2026-04-13T05:44:20.082291", "ticker": "KXBTCD-26APR1302-T70999.99", "side": "no", "price": 0.98, "count": 3, "cost": 2.94, "mins_left": 16.0206327}
+{"timestamp": "2026-04-13T05:44:20.579354", "ticker": "KXETHD-26APR1302-T2199.99", "side": "no", "price": 0.98, "count": 3, "cost": 2.94, "mins_left": 16.016562466666667}
+{"timestamp": "2026-04-13T07:34:44.329120", "ticker": "KXBTCD-26APR1304-T70499.99", "side": "yes", "price": 0.96, "count": 3, "cost": 2.88, "mins_left": 25.4686911}
+{"timestamp": "2026-04-13T07:34:44.985602", "ticker": "KXBTCD-26APR1304-T70999.99", "side": "no", "price": 0.97, "count": 3, "cost": 2.91, "mins_left": 25.468691733333333}
+{"timestamp": "2026-04-13T09:36:07.412836", "ticker": "KXBTCD-26APR1306-T71099.99", "side": "no", "price": 0.98, "count": 3, "cost": 2.94, "mins_left": 23.895057633333334}
+{"timestamp": "2026-04-13T09:36:07.910239", "ticker": "KXBTCD-26APR1306-T70599.99", "side": "yes", "price": 0.98, "count": 3, "cost": 2.94, "mins_left": 23.89505705}
+{"timestamp": "2026-04-13T09:36:08.390074", "ticker": "KXBTCD-26APR1306-T70499.99", "side": "yes", "price": 0.98, "count": 3, "cost": 2.94, "mins_left": 23.895056916666665}
+{"timestamp": "2026-04-13T11:09:52.392438", "ticker": "KXXRP15M-26APR130715-15", "side": "yes", "price": 0.96, "count": 3, "cost": 2.88, "mins_left": 5.78664075}
+{"timestamp": "2026-04-13T11:09:53.279482", "ticker": "KXETH15M-26APR130715-15", "side": "yes", "price": 0.978, "count": 3, "cost": 2.934, "mins_left": 5.786640483333333}
+{"timestamp": "2026-04-13T11:09:53.911857", "ticker": "KXBTC15M-26APR130715-15", "side": "yes", "price": 0.98, "count": 3, "cost": 2.94, "mins_left": 5.786640283333333}
+{"timestamp": "2026-04-13T12:18:38.874546", "ticker": "KXBTC-26APR1309-B71450", "side": "no", "price": 0.98, "count": 3, "cost": 2.94, "mins_left": 42.052183516666666}
+{"timestamp": "2026-04-13T12:18:39.428466", "ticker": "KXBTCD-26APR1309-T71399.99", "side": "no", "price": 0.98, "count": 3, "cost": 2.94, "mins_left": 42.04912341666667}
+{"timestamp": "2026-04-13T12:18:39.990779", "ticker": "KXBTCD-26APR1309-T70599.99", "side": "yes", "price": 0.98, "count": 3, "cost": 2.94, "mins_left": 42.049122616666665}

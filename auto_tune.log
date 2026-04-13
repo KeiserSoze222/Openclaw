@@ -47,3 +47,8 @@ Traceback (most recent call last):
     BOT_TOKEN = raw.split("BOT_TOKEN = '")[1].split("'")[0]
                 ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
 IndexError: list index out of range
+Traceback (most recent call last):
+  File "/root/auto_tune_tod.py", line 12, in <module>
+    BOT_TOKEN = raw.split("BOT_TOKEN = '")[1].split("'")[0]
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+IndexError: list index out of range
