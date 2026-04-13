@@ -18,3 +18,4 @@ __pycache__/
 genome.json
 bond_scanner.log
 arena_state.json
+price_history.jsonl
