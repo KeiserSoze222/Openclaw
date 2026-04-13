@@ -1,1 +1,1 @@
-{"yes_prob": 0.02, "regime": "CHOP", "confidence": 6, "window_age": 10, "ticker": "KXSOL15M-26APR120900-00", "news_score": 0, "bond_score": 0, "whale_score": 0, "ts": "2026-04-12T12:55:19.960300"}
+{"yes_prob": 0.76, "regime": "CHOP", "confidence": 2, "window_age": 4, "ticker": "KXSOL15M-26APR122100-00", "news_score": 0, "bond_score": 0, "whale_score": 0, "ts": "2026-04-13T00:49:36.692909"}

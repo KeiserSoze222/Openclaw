@@ -1,14 +1,3 @@
- 
-     # ── CROSS-MARKET CORRELATION ──────────────────────────────────────────────
-     if get_max_bet(is_extreme=is_extreme) > 0:
-         try:
-             btc1 = get_coinbase_price("KXBTC15M")
-             eth1 = get_coinbase_price("KXETH15M")
-             sol1 = get_coinbase_price("KXSOL15M")
-             if btc1 and eth1 and sol1:
-                 time.sleep(1)
-                 btc2 = get_coinbase_price("KXBTC15M")
-                 eth2 = get_coinbase_price("KXETH15M")
                  sol2 = get_coinbase_price("KXSOL15M")
                  if btc2 and eth2 and sol2:
                      moves = [btc2 > btc1, eth2 > eth1, sol2 > sol1]
@@ -1998,3 +1987,14 @@ python3 /tmp/status_all.py
 pm2 logs openclaw-btc --lines 5 --nostream | grep -v "DeprecationWarning\|datetime\|signal="
 python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); hdrs=k.kalshi_auth.create_auth_headers('GET','https://api.elections.kalshi.com/trade-api/v2/portfolio/positions'); r=requests.get('https://api.elections.kalshi.com/trade-api/v2/portfolio/positions',headers=hdrs,params={'limit':100},timeout=8); pos=[p for p in r.json().get('market_positions',[]) if float(p.get('market_exposure_dollars',0))>0]; print(str(len(pos))+' open positions'); [print(p.get('ticker'),p.get('market_exposure_dollars')) for p in pos]"
 ls -la /tmp/openclaw_master.lock 2>/dev/null || echo "no master lock"
+source kalshi_env/bin/activate
+python3 /tmp/status_all.py
+source kalshi_env/bin/activate
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); url='https://api.elections.kalshi.com/trade-api/v2/portfolio/balance'; hdrs=k.kalshi_auth.create_auth_headers('GET',url); r=requests.get(url,headers=hdrs,timeout=8); d=r.json(); print('Cash:',d.get('balance',0)/100); print('Portfolio:',d.get('portfolio_value',0)/100)"
+tail -20 /root/performance_log.json | python3 -c "import sys,json; [print(json.loads(l)['timestamp'],json.loads(l)['action'],json.loads(l).get('bet',0),json.loads(l).get('balance',0)) for l in sys.stdin if l.strip()]"
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); url='https://api.elections.kalshi.com/trade-api/v2/portfolio/balance'; hdrs=k.kalshi_auth.create_auth_headers('GET',url); r=requests.get(url,headers=hdrs,timeout=8); d=r.json(); print('Cash:',d.get('balance',0)/100); print('Portfolio:',d.get('portfolio_value',0)/100)"
+source kalshi_env/bin/activate
+grep "09:00\|08:5[0-9]" /root/eth_performance_log.json | grep "2026-04-12" | tail -5
+exit
+source kalshi_env/bin/activate
+grep "09:00\|08:5[0-9]" /root/eth_performance_log.json | grep "2026-04-12" | tail -5

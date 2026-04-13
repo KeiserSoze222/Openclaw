@@ -16618,3 +16618,29 @@
 2026-04-12T12:56:16: PM2 log: pid=710805 msg=process killed
 2026-04-12T12:56:16: PM2 log: App [openclaw-sol:12] starting in -fork mode-
 2026-04-12T12:56:16: PM2 log: App [openclaw-sol:12] online
+2026-04-13T00:50:27: PM2 log: Stopping app:openclaw-btc id:10
+2026-04-13T00:50:27: PM2 log: pid=714006 msg=failed to kill - retrying in 100ms
+2026-04-13T00:50:27: PM2 log: pid=714006 msg=failed to kill - retrying in 100ms
+2026-04-13T00:50:27: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-13T00:50:27: PM2 log: pid=714006 msg=process killed
+2026-04-13T00:50:27: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-13T00:50:27: PM2 log: App [openclaw-btc:10] online
+2026-04-13T00:50:27: PM2 log: Stopping app:openclaw-eth id:11
+2026-04-13T00:50:27: PM2 log: pid=714008 msg=failed to kill - retrying in 100ms
+2026-04-13T00:50:27: PM2 log: pid=714008 msg=failed to kill - retrying in 100ms
+2026-04-13T00:50:28: PM2 log: pid=714008 msg=failed to kill - retrying in 100ms
+2026-04-13T00:50:28: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-13T00:50:28: PM2 log: pid=714008 msg=process killed
+2026-04-13T00:50:28: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-13T00:50:28: PM2 log: App [openclaw-eth:11] online
+2026-04-13T00:50:28: PM2 log: Stopping app:openclaw-sol id:12
+2026-04-13T00:50:28: PM2 log: pid=714010 msg=failed to kill - retrying in 100ms
+2026-04-13T00:50:28: PM2 log: pid=714010 msg=failed to kill - retrying in 100ms
+2026-04-13T00:50:28: PM2 log: pid=714010 msg=failed to kill - retrying in 100ms
+2026-04-13T00:50:28: PM2 log: pid=714010 msg=failed to kill - retrying in 100ms
+2026-04-13T00:50:28: PM2 log: pid=714010 msg=failed to kill - retrying in 100ms
+2026-04-13T00:50:28: PM2 log: pid=714010 msg=failed to kill - retrying in 100ms
+2026-04-13T00:50:28: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-13T00:50:28: PM2 log: pid=714010 msg=process killed
+2026-04-13T00:50:28: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-13T00:50:28: PM2 log: App [openclaw-sol:12] online

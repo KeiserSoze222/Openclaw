@@ -313,26 +313,19 @@ def cancel_resting_orders():
 def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=None):
     # CORRELATION GUARD — atomic file lock prevents simultaneous firing
     try:
-        import glob as _gl
         import time as _t
         import os as _os
-        lock_path = f'/tmp/openclaw_firing_{MARKET_SERIES}.lock'
-        master_lock = '/tmp/openclaw_master.lock'
-        # Atomic check-and-set using exclusive file creation
+        window_lock = f'/tmp/openclaw_window_{live_ticker}.lock'
         try:
-            fd = _os.open(master_lock, _os.O_CREAT|_os.O_EXCL|_os.O_WRONLY)
+            if _os.path.exists(window_lock):
+                age = _t.time()-_os.path.getmtime(window_lock)
+                if age < 840:
+                    print(f"[CorrGuard] Window {live_ticker} already traded ({age:.0f}s ago) -- skipping")
+                    return False
+            fd = _os.open(window_lock, _os.O_CREAT|_os.O_EXCL|_os.O_WRONLY)
             _os.write(fd, str(_t.time()).encode())
             _os.close(fd)
-        except FileExistsError:
-            age = _t.time()-_os.path.getmtime(master_lock)
-            if age < 180:
-                print(f"[CorrGuard] Master lock held ({age:.0f}s) — skipping")
-                return False
-            _os.remove(master_lock)
-            fd=_os.open(master_lock,_os.O_CREAT|_os.O_EXCL|_os.O_WRONLY)
-            _os.write(fd,str(_t.time()).encode())
-            _os.close(fd)
-        open(lock_path, 'w').write(str(_t.time()))
+        except Exception as _e2: print(f"[CorrGuard] lock error: {str(_e2)}")
     except Exception as _e:
         print(f"[CorrGuard] {_e}")
     global COOLDOWN_REMAINING
