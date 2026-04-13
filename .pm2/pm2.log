@@ -17082,3 +17082,11 @@
 2026-04-13T13:18:12: PM2 log: pid=728925 msg=process killed
 2026-04-13T13:18:12: PM2 log: App [openclaw-sol:12] starting in -fork mode-
 2026-04-13T13:18:12: PM2 log: App [openclaw-sol:12] online
+2026-04-13T13:21:18: PM2 log: Stopping app:bond-scanner id:3
+2026-04-13T13:21:18: PM2 log: pid=673073 msg=failed to kill - retrying in 100ms
+2026-04-13T13:21:18: PM2 log: pid=673073 msg=failed to kill - retrying in 100ms
+2026-04-13T13:21:18: PM2 log: pid=673073 msg=failed to kill - retrying in 100ms
+2026-04-13T13:21:18: PM2 log: App [bond-scanner:3] exited with code [0] via signal [SIGINT]
+2026-04-13T13:21:18: PM2 log: pid=673073 msg=process killed
+2026-04-13T13:21:18: PM2 log: App [bond-scanner:3] starting in -fork mode-
+2026-04-13T13:21:18: PM2 log: App [bond-scanner:3] online

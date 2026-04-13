@@ -21,7 +21,7 @@ KALSHI_SEC  = raw.split("KALSHI_SECRET  = '''")[1].split("'''")[0]
 BOT_TOKEN   = raw.split("BOT_TOKEN = '")[1].split("'")[0]
 CHAT_ID     = raw.split("CHAT_ID   = '")[1].split("'")[0]
 
-BET_SIZE        = 3.00   # dollars per bond trade
+BET_SIZE        = 10.00   # dollars per bond trade
 YES_HIGH        = 0.96   # bet YES when above this
 YES_LOW         = 0.04   # bet NO when below this
 MIN_MINUTES     = 5      # minimum minutes remaining to place bet
@@ -125,7 +125,7 @@ def scan_markets():
             # Check for near-certain outcome
             if yes_price >= YES_HIGH and yes_price < 0.99:
                 profit = (1 - yes_price) / yes_price * 100
-                if profit >= 0.5:  # minimum 0.5% profit
+                if profit >= 3.0:  # minimum 3% profit threshold
                     opportunities.append({
                         "ticker":    ticker,
                         "side":      "yes",
@@ -135,7 +135,7 @@ def scan_markets():
                     })
             elif yes_price <= YES_LOW and no_price < 0.99:
                 profit = (1 - no_price) / no_price * 100
-                if profit >= 0.5:
+                if profit >= 3.0:
                     opportunities.append({
                         "ticker":    ticker,
                         "side":      "no",
