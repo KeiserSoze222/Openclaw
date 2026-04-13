@@ -334,7 +334,7 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
     try:
         import time as _t
         import os as _os
-        window_lock = f'/tmp/openclaw_window_{live_ticker}.lock'
+        window_lock = f'/tmp/openclaw_window_{live_ticker.split("-",1)[-1]}.lock'
         try:
             if _os.path.exists(window_lock):
                 age = _t.time()-_os.path.getmtime(window_lock)
