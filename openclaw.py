@@ -378,6 +378,9 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
         return False
     side="yes" if direction=="UP" else "no"
     entry_price=(mkt_yes if side=="yes" else (mkt_no if mkt_no else (1-(mkt_yes or 0.5))))
+    if entry_price>0.92:
+        print(f"[Order] Entry {entry_price:.2f} too high risk/reward — skipping")
+        return False
     contract_count=max(1,min(25,int(bet/max(0.01,entry_price))))
     liquid,ob_price=get_orderbook_liquidity(ticker,side,contract_count)
     if not liquid:
