@@ -61,7 +61,7 @@ MARKET_SERIES,BOT_NAME,LOG_CSV,STOP_FILE,MAX_BET_PCT,PERF_LOG = _CONFIGS[_args.m
 assert MARKET_SERIES in ("KXBTC15M","KXETH15M","KXSOL15M"),f"Invalid market: {MARKET_SERIES}"
 FEAT_LOG="/root/feature_log.json"
 DRY_RUN=_args.dry_run
-USE_ERV=False  # Set True to use unified ERV cashout (test first with --dry-run)
+USE_ERV=(MARKET_SERIES=="KXETH15M")  # ERV enabled for ETH only, testing phase
 PEAK_BET_PCT=0.12
 MIN_BALANCE=100.00
 DAILY_LOSS_LIMIT=0.12
