@@ -11,7 +11,7 @@ cfg=Configuration()
 cfg.host="https://api.elections.kalshi.com/trade-api/v2"
 k=KalshiClient(cfg)
 k.set_kalshi_auth(key,tf.name)
-today=datetime.datetime.utcnow().strftime('%Y-%m-%d')
+today=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d')
 url="https://api.elections.kalshi.com/trade-api/v2/portfolio/fills"
 all_fills=[]
 cursor=None

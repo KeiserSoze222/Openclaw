@@ -35,8 +35,8 @@ def fetch_trades(min_ts):
 def log_entry(entry):
     with open(LOG_FILE,"a") as f: f.write(json.dumps(entry)+"\n")
 def scan(min_ts):
-    now=datetime.datetime.utcnow().isoformat()
-    wm=datetime.datetime.utcnow().minute%15
+    now=datetime.datetime.now(datetime.timezone.utc).isoformat()
+    wm=datetime.datetime.now(datetime.timezone.utc).minute%15
     for ticker in get_active_tickers():
         if not any(m in ticker for m in OUR_MARKETS): continue
         p=get_market_price(ticker)

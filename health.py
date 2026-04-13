@@ -27,7 +27,7 @@ pos=requests.get(url2,headers=hdrs2,params={"limit":100},timeout=8).json().get('
 open_pos=[p for p in pos if float(p.get('market_exposure_dollars',0))>0]
 
 # Trade stats
-today=datetime.datetime.utcnow().strftime('%Y-%m-%d')
+today=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d')
 w=defaultdict(int); l=defaultdict(int); pnl=defaultdict(float)
 for f,m in [('/root/trade_log.csv','BTC'),('/root/eth_trade_log.csv','ETH'),('/root/sol_trade_log.csv','SOL')]:
     for r in csv.reader(open(f)):
@@ -45,7 +45,7 @@ procs=json.loads(pm2)
 running={p['name']:p['pm2_env']['status'] for p in procs}
 
 print(f"\n{'='*50}")
-print(f"OpenClaw Health Check — {datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')}")
+print(f"OpenClaw Health Check — {datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}")
 print(f"{'='*50}")
 print(f"💰 Cash: ${cash:.2f} | Portfolio: ${portfolio:.2f} | Total: ${cash+portfolio:.2f}")
 print(f"📊 ALL: {w['ALL']}W/{l['ALL']}L ({w['ALL']/(w['ALL']+l['ALL'])*100:.0f}%)" if (w['ALL']+l['ALL'])>0 else "No trades")

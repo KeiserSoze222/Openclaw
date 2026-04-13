@@ -291,7 +291,7 @@ def update_live_ticker():
 
 
 def write_arena_signal(market, yes_prob, regime, confidence, window_age, ticker, news_score=0, bond_score=0, whale_score=0):
-    signal={"yes_prob":yes_prob,"regime":regime,"confidence":confidence,"window_age":window_age,"ticker":ticker,"news_score":news_score,"bond_score":bond_score,"whale_score":whale_score,"ts":datetime.datetime.utcnow().isoformat()}
+    signal={"yes_prob":yes_prob,"regime":regime,"confidence":confidence,"window_age":window_age,"ticker":ticker,"news_score":news_score,"bond_score":bond_score,"whale_score":whale_score,"ts":datetime.datetime.now(datetime.timezone.utc).isoformat()}
     path=f"/root/arena_signal_{market}.json"
     try:
         open(path,"w").write(__import__("json").dumps(signal))
