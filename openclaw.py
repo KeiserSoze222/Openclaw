@@ -54,14 +54,14 @@ _parser.add_argument("--dry-run", action="store_true", default=False)
 _args = _parser.parse_args()
 _CONFIGS = {
     "btc": ("KXBTC15M","OpenClaw BTC Bot v4.0","/root/trade_log.csv","/root/STOP",0.07,"/root/performance_log.json"),
-    "eth": ("KXETH15M","OpenClaw ETH Bot v4.0","/root/eth_trade_log.csv","/root/STOP_ETH",0.09,"/root/eth_performance_log.json"),
+    "eth": ("KXETH15M","OpenClaw ETH Bot v4.0","/root/eth_trade_log.csv","/root/STOP_ETH",0.11,"/root/eth_performance_log.json"),
     "sol": ("KXSOL15M","OpenClaw SOL Bot v4.0","/root/sol_trade_log.csv","/root/STOP_SOL",0.05,"/root/sol_performance_log.json"),
 }
 MARKET_SERIES,BOT_NAME,LOG_CSV,STOP_FILE,MAX_BET_PCT,PERF_LOG = _CONFIGS[_args.market]
 assert MARKET_SERIES in ("KXBTC15M","KXETH15M","KXSOL15M"),f"Invalid market: {MARKET_SERIES}"
 FEAT_LOG="/root/feature_log.json"
 DRY_RUN=_args.dry_run
-PEAK_BET_PCT=0.10
+PEAK_BET_PCT=0.12
 MIN_BALANCE=100.00
 DAILY_LOSS_LIMIT=0.12
 CYCLE_SLEEP=60
@@ -83,7 +83,7 @@ if MARKET_SERIES == "KXBTC15M":
     TOD_SCHEDULE={0:0.50,1:0.30,2:0.75,3:1.25,4:0.20,5:0.00,6:1.25,7:1.25,8:1.00,9:1.25,10:1.00,11:1.25,12:0.75,13:0.40,14:1.25,15:1.50,16:1.00,17:0.85,18:0.85,19:1.25,20:0.80,21:1.25,22:0.40,23:0.50}
 else:
     # ETH/SOL: reduce hours 1-5 UTC (thin liquidity causes resting orders)
-    TOD_SCHEDULE={0:0.00,1:0.00,2:0.00,3:0.00,4:0.00,5:0.00,6:1.25,7:1.25,8:1.00,9:1.25,10:1.00,11:1.25,12:0.75,13:0.40,14:1.25,15:1.50,16:1.00,17:0.85,18:0.85,19:1.25,20:0.80,21:1.25,22:0.00,23:0.00}
+    TOD_SCHEDULE={0:0.00,1:0.00,2:0.00,3:0.00,4:0.00,5:0.00,6:1.25,7:1.25,8:1.00,9:1.25,10:1.00,11:1.25,12:0.75,13:0.40,14:1.25,15:1.50,16:1.00,17:0.85,18:0.00,19:1.25,20:0.80,21:1.25,22:0.00,23:0.00}
 PEAK_HOURS={3,6,7,8,9,11,14,15,16,19,21}
 OPEN_POSITIONS=[]
 COOLDOWN_REMAINING=0
