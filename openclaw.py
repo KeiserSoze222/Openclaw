@@ -1072,8 +1072,17 @@ if __name__=="__main__":
     live_start=get_live_balance()
     if live_start>0:
         CURRENT_BALANCE=live_start
-        SESSION_START_BAL=live_start
-        print(f"[Startup] Live balance synced: ${CURRENT_BALANCE:.2f}")
+        import json as _j,datetime as _dt
+        _dsf="/tmp/openclaw_day_start.json"
+        today=_dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%d")
+        try:
+            _ds=_j.load(open(_dsf))
+            if _ds.get("date")==today: SESSION_START_BAL=_ds.get("bal",live_start)
+            else: raise ValueError("new day")
+        except:
+            SESSION_START_BAL=live_start
+            _j.dump({"date":today,"bal":live_start},open(_dsf,"w"))
+        print(f"[Startup] Live balance: ${CURRENT_BALANCE:.2f} | Day start: ${SESSION_START_BAL:.2f}")
     else:
         CURRENT_BALANCE=INITIAL_BALANCE
         SESSION_START_BAL=INITIAL_BALANCE
