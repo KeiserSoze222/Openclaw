@@ -955,12 +955,23 @@ def get_genome_pool():
     return pool
 def evaluate(v):
     t=v.get("trades",0)
-    if t<8: return v,False
+    if t<50: return v,False
     wr=v.get("wins",0)/t
+    import random
     if wr<0.35:
         v["entry_threshold"]=min(0.85,v["entry_threshold"]+0.03)
         v["mutations"].append("tightened threshold wr="+str(round(wr,2)))
         return v,True
+    if wr>0.92 and t%100==0:
+        mutation=random.choice(["lower_threshold","higher_bet"])
+        if mutation=="lower_threshold" and v["entry_threshold"]>0.60:
+            v["entry_threshold"]=round(v["entry_threshold"]-0.02,2)
+            v["mutations"].append("lowered threshold wr="+str(round(wr,2)))
+            return v,True
+        elif mutation=="higher_bet" and v["max_bet_pct"]<0.15:
+            v["max_bet_pct"]=round(v["max_bet_pct"]+0.01,2)
+            v["mutations"].append("raised bet wr="+str(round(wr,2)))
+            return v,True
     return v,False
 
 def risk_score(v):
