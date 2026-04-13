@@ -557,12 +557,12 @@ def try_directional(yes_price,no_price):
     write_arena_signal(market=_args.market,yes_prob=yes_price,regime=REGIME,confidence=confidence,window_age=window_minute,ticker=live_ticker)
 
     # HIGH CONFIDENCE: score 8+ in minute 0-1 = fire immediately with larger bet
-    if confidence >= 8 and window_minute <= 1:
+    if confidence >= 7 and window_minute <= 2:
         print(f"[HighConf] Score {confidence}/10 — firing early with boosted bet")
         consecutive_signal_count = 2  # bypass confirmation requirement
 
     is_extreme=yes_price>EXTREME_HIGH or yes_price<EXTREME_LOW
-    if is_extreme and window_minute==1:
+    if is_extreme and window_minute<=2:
         print(f"[Signal] EXTREME {current_direction} | yes={yes_price:.2f} | edge={edge:.2f} | firing immediately")
         consecutive_signal_count=2
     elif window_minute==1 and edge>=STRONG_MIN1_EDGE:
@@ -580,7 +580,7 @@ def try_directional(yes_price,no_price):
             print(f"[Signal] STRONG_MIN1 {current_direction} | yes={yes_price:.2f} | edge={edge:.2f} | confirmed | firing early")
             consecutive_signal_count=2
         else:
-            if window_minute==0 or window_minute>4:
+            if window_minute>4:
                 return False
             if current_direction==last_signal_direction:
                 consecutive_signal_count+=1

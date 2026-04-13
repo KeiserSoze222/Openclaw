@@ -1,164 +1,3 @@
-                 "time":      time.time() - 300,
-                 "placed_at": 0,  # zero = cash out monitor ignores it
-                 "entry_yes": 0.5,
-                 "min_yes":   0.5,
-                 "max_yes":   0.5,
-                 "signal_type":  "RESTORED",
-                 "entry_minute": 0,
-             })
-             print(f"[Startup] Restored: {ticker} ${exposure:.2f} {direction}")
-         if OPEN_POSITIONS:
-             print(f"[Startup] Loaded {len(OPEN_POSITIONS)} BTC position(s)")
-     except Exception as e:
-         print(f"[Startup] Could not load positions: {e}")
- 
- # ─────────────────────────────────────────────────────────────────────────────
- # MAIN CYCLE
- # ─────────────────────────────────────────────────────────────────────────────
- def simulate_trade():
-     global COOLDOWN_REMAINING, CURRENT_BALANCE
- 
-     if os.path.exists(STOP_FILE):
-         print(f"[Stop] {STOP_FILE} detected — halting")
-         raise SystemExit("Stop file detected")
- 
-     if COOLDOWN_REMAINING > 0:
-         print(f"[Cooldown] {COOLDOWN_REMAINING} cycles remaining")
-         COOLDOWN_REMAINING -= 1
-         check_open_positions()
-         return
- 
-     ticker, market_data = update_live_ticker()
-     if not ticker:
-         print("[Ticker] No ticker — skipping")
-         return
- 
-     yes_price, no_price, _ = get_market_prices(ticker)
-     if yes_price is None or no_price is None:
-         print("[Market] Could not fetch prices")
-         check_open_positions()
-         return
- 
-     price_sum = yes_price + no_price
-     print(f"[Ticker] {ticker}")
-     print(f"[Market] YES={yes_price:.2f} | NO={no_price:.2f} | Sum={price_sum:.2f}")
- 
-     CURRENT_BALANCE = get_live_balance()
-     prices          = get_btc_prices(60)
-     update_regime(prices)
- 
-     total = session_wins + session_losses
-     wr    = session_wins / total * 100 if total else 0
-     print(f"{'='*50}")
-     print(f"Balance: ${CURRENT_BALANCE:.2f} | Regime: {REGIME} | "
-           f"Session: {session_wins}W/{session_losses}L ({wr:.0f}%) | "
-           f"PnL: ${session_pnl:+.2f}")
- 
-     # ARB first, then directional
-     if price_sum < ARB_THRESHOLD:
-         print(f"[ARB] Opportunity: sum={price_sum:.2f}")
-         try_arb(yes_price, no_price, ticker)
-     else:
-         print(f"[Cycle] No arb — sum={price_sum:.2f}")
-         signal_fired = try_directional(yes_price, no_price)
-         if not signal_fired:
-             print(f"[Cycle] No signal — YES={yes_price:.2f}")
- 
-     check_open_positions()
-     send_hourly_summary()
- 
-     if OPEN_POSITIONS:
-         print(f"[Positions] {len(OPEN_POSITIONS)} still open")
- 
- # ─────────────────────────────────────────────────────────────────────────────
- # ENTRY POINT
- # ─────────────────────────────────────────────────────────────────────────────
- if __name__ == "__main__":
-     global SESSION_START_BAL, CURRENT_BALANCE
- 
-     mode = "DRY RUN" if DRY_RUN else "LIVE"
-     print(f"\n{'='*50}")
-     print(f"{BOT_NAME} — {mode}")
- 
-     # CRITICAL: sync live balance on every startup
-     # Prevents crash loop where restarted bot sees stale SESSION_START_BAL
-     live_start = get_live_balance()
-     if live_start > 0:
-         CURRENT_BALANCE   = live_start
-         SESSION_START_BAL = live_start
-         print(f"[Startup] Live balance synced: ${CURRENT_BALANCE:.2f}")
-     else:
-         CURRENT_BALANCE   = INITIAL_BALANCE
-         SESSION_START_BAL = INITIAL_BALANCE
-         print(f"[Startup] Using initial balance: ${CURRENT_BALANCE:.2f}")
- 
-     print(f"MaxBet: ${get_max_bet():.2f} | "
-           f"Threshold: <{DIRECTIONAL_LOW:.2f} or >{DIRECTIONAL_HIGH:.2f}")
-     print(f"{'='*50}\n")
- 
-     # Load existing BTC positions only
-     load_existing_positions()
- 
-     # Cancel any resting orders from previous session
-     cancel_resting_orders()
-     print("[Startup] Resting orders cleared")
- 
-     send_telegram(
-         f"🤖 {BOT_NAME} {mode} started\n"
-         f"Balance=${CURRENT_BALANCE:.2f} | MaxBet=${get_max_bet():.2f}\n"
-         f"Threshold: <{DIRECTIONAL_LOW:.2f} or >{DIRECTIONAL_HIGH:.2f}"
-     )
- 
-     try:
-         while True:
-             cycle_start = time.time()
-             try:
-                 simulate_trade()
-             except SystemExit:
-                 raise
-             except Exception as e:
-                 print(f"[Cycle] Unexpected error: {e}")
-                 send_telegram(f"⚠️ BTC cycle error: {e}")
-             elapsed = time.time() - cycle_start
-             sleep_t = max(0, CYCLE_SLEEP - elapsed)
-             time.sleep(sleep_t)
-     except SystemExit as e:
-         msg = f"🛑 {BOT_NAME} halted: {e}"
-         print(msg)
-         send_telegram(msg)
- ENDOFFILE
-
-python3 -m py_compile /root/openclaw_btc_v4.py && echo "CLEAN COMPILE OK"
-python3 /tmp/write_bot_p1.py
-nano /tmp/p1.py
-python3 /tmp/p1.py
-nano /tmp/p2.py
-python3 /tmp/p2.py
-nano /tmp/p3.py
-source kalshi_env/bin/activate
-nano /tmp/fix_status.py
-python3 /tmp/fix_status.py
-nano /tmp/fix_status2.py
-python3 /tmp/fix_status2.py
-nano /tmp/write_status.py
-python3 /tmp/write_status.py
-nano /tmp/write_status2.py
-python3 /tmp/write_status2.py
-grep -E "Settled|WIN|LOSS" /root/bot.log /root/eth_bot.log /root/sol_bot.log 2>/dev/null | tail -10
-sed -i 's/True P\\&amp;L:/True P\&amp;L:/g' /root/dashboard.py
-nano /tmp/fix_dashboard_creds.py
-python3 /tmp/fix_dashboard_creds.py
-grep "Settled\|PLACED" /root/bot.log | tail -5
-nano /tmp/fix_dash2.py
-python3 /tmp/fix_dash2.py
-grep -n "raw\.split\|KALSHI_KEY\|BOT_TOKEN\|CHAT_ID\|KALSHI_SECRET\|KALSHI_API" /root/dashboard.py | head -15
-nano /tmp/fix_dash3.py
-python3 /tmp/fix_dash3.py
-cp /root/dashboard.py /root/dashboard_v3_stable.py
-python3 /tmp/status_all.py
-grep -n "TOD\|is_extreme\|get_max_bet" /root/sol_bot.py | head -10
-sed -n '376,400p' /root/sol_bot.py
-grep "EXTREME\|bet=\$0.00" /root/sol_bot.log | head -10
 grep -B1 "bet=\$0.00" /root/sol_bot.log | grep "Cycle\|2026" | head -5
 source kalshi_env/bin/activate
 nano /tmp/fix_order_response.py
@@ -1998,3 +1837,164 @@ sed -n '373,380p' /root/openclaw.py
 sed -n '448,460p' /root/openclaw.py
 sed -n '395,445p' /root/openclaw.py
 exit
+source kalshi_env/bin/activate
+sed -n '395,445p' /root/openclaw.py
+grep -n "COOLDOWN_REMAINING=0" /root/openclaw.py | tail -3
+grep -n "COOLDOWN_REMAINING=COOLDOWN_CYCLES" /root/openclaw.py
+sed -i '451i\            open(f"/tmp/openclaw_window_{ticker.split(chr(45),1)[-1]}.lock","w").write(str(__import__("time").time()))' /root/openclaw.py
+sed -i '451d' /root/openclaw.py
+sed -i '451i\        open(f"/tmp/openclaw_window_{ticker.split(chr(45),1)[-1]}.lock","w").write(str(__import__("time").time()))' /root/openclaw.py
+grep -n "def simulate_trade" /root/openclaw.py
+sed -n '1027,1032p' /root/openclaw.py
+sed -i '1028a\    [os.remove(f"/tmp/{f}") for f in os.listdir("/tmp") if f.startswith("openclaw_window_") and (__import__("time").time()-os.path.getmtime(f"/tmp/{f}"))>900]' /root/openclaw.py
+pm2 logs openclaw-btc --lines 3 --nostream | grep "Positions\|Session"
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); hdrs=k.kalshi_auth.create_auth_headers('GET','https://api.elections.kalshi.com/trade-api/v2/portfolio/positions'); r=requests.get('https://api.elections.kalshi.com/trade-api/v2/portfolio/positions',headers=hdrs,params={'limit':100},timeout=8); pos=[p for p in r.json().get('market_positions',[]) if float(p.get('market_exposure_dollars',0))>0]; print(str(len(pos))+' open'); [print(p.get('ticker'),p.get('market_exposure_dollars')) for p in pos]"
+rm -f /tmp/openclaw_window_*.lock
+grep -n "MIN_PROFIT\|min_profit\|profit.*threshold" /root/bond_scanner.py | head -5
+sed -n '155,180p' /root/bond_scanner.py
+grep -n "profit_pct\|MIN_PROFIT\|opp\[" /root/bond_scanner.py | head -15
+sed -n '125,155p' /root/bond_scanner.py
+grep -n "BET_SIZE\|YES_HIGH\|YES_LOW" /root/bond_scanner.py | head -5
+sed -i 's/BET_SIZE        = 3.00/BET_SIZE        = 10.00/' /root/bond_scanner.py
+sed -i 's/if profit >= 3.0:  # minimum 0.5% profit/if profit >= 3.0:  # minimum 3% profit threshold/' /root/bond_scanner.py
+grep -n "DIRECTIONAL_HIGH\|DIRECTIONAL_LOW\|MIN_CONFIDENCE\|min_confidence" /root/openclaw.py | head -5
+python3 -c "import json; g=json.load(open('/root/genome.json')); v7=[v for v in g if v.get('id')=='v007'][0]; print(v7)"
+sed -n '71,73p' /root/openclaw.py
+sed -i 's/DIRECTIONAL_HIGH=0.68/DIRECTIONAL_HIGH=0.65 if MARKET_SERIES=="KXBTC15M" else 0.68/' /root/openclaw.py
+grep -n "MIN_CONFIDENCE\|min_confidence\|Score.*6\|score.*>=.*6" /root/openclaw.py | head -8
+grep -n "confidence.*>=\|score.*>=\|Score.*/" /root/openclaw.py | head -8
+grep -n "confidence.*<\|confidence.*return\|not.*confident\|too.*low" /root/openclaw.py | head 
+pm2 logs openclaw-btc --lines 3 --nostream | grep "Positions\|Session"
+date -u
+python3 /root/health.py 2>/dev/null
+rm -f /tmp/openclaw_window_*.lock
+sed -n '999,1040p' /root/arena.py
+sig=load_json(f"/root/arena_signal_{mkt}.json",{})
+python3 -c "import json; g=json.load(open('/root/genome.json')); [print(v['id'],v['market'],v['trades']) for v in g]"
+ls -la /root/arena_signal_*.json 2>/dev/null
+python3 -c "import json; g=json.load(open('/root/genome.json')); [print(v['id'],v['market'],v['entry_threshold'],v['trades'],v.get('chop_allowed')) for v in g if v['trades']<100]"
+python3 -c "import json; g=json.load(open('/root/genome.json')); [v.update({'chop_allowed':True}) for v in g]; json.dump(g,open('/root/genome.json','w')); print('Updated all variants to chop_allowed=True')"
+pm2 restart arena && pm2 save
+git add -A && git commit -m "Enable chop_allowed for all arena variants - all 12 now actively paper trading" && git push
+sleep 60 && python3 -c "import json; g=json.load(open('/root/genome.json')); [print(f\"{v['id']} {v['market']} T={v['trades']} WR={v['wins']/v['trades']:.0%}\") for v in sorted(g,key=lambda x:-x['trades'])]"
+pm2 logs openclaw-btc --lines 20 --nostream | grep -v "DeprecationWarning\|signal=" | grep -E "CorrGuard|PLACED|WIN|LOSS|Order|Liquidity" | head -10
+date -u
+grep -n "DIRECTIONAL_HIGH\|DIRECTIONAL_LOW" /root/openclaw.py | head -4
+sed -i 's/DIRECTIONAL_HIGH=0.68 if MARKET_SERIES=="KXBTC15M" else 0.68/DIRECTIONAL_HIGH=0.65 if MARKET_SERIES=="KXBTC15M" else 0.68/' /root/openclaw.py
+python3 /root/health.py 2>/dev/null
+rm -f /tmp/openclaw_window_*.lock
+python3 /tmp/status_all.py
+grep -n "^def \|^class " /root/openclaw.py | head -30
+nano /root/openclaw_master.py
+python3 -m py_compile /root/openclaw_master.py && echo "OK"
+python3 /root/health.py 2>/dev/null
+rm /root/openclaw_master.py
+python3 -c "import json; g=json.load(open('/root/genome.json')); [print(f\"{v['id']} {v['market']} T={v['trades']} WR={v['wins']/v['trades']:.0%}\") for v in sorted(g,key=lambda x:-x['trades'])]"
+python3 /root/health.py 2>/dev/null
+sed -n '956,980p' /root/arena.py
+nano /tmp/fix_evaluate.py
+python3 /tmp/fix_evaluate.py && python3 -m py_compile /root/arena.py && echo "OK"
+pm2 restart arena && pm2 save
+python3 /root/health.py 2>/dev/null
+wc -l /root/price_history.jsonl
+nano /tmp/backtest_cashout.py
+python3 /tmp/backtest_cashout.py
+python3 -c "c=open('/root/openclaw.py').read(); old='USE_ERV=(MARKET_SERIES==\"KXETH15M\")  # ERV enabled for ETH only, testing phase'; new='USE_ERV=False  # ERV disabled pending better parameter tuning'; print('found' if old in c else 'NOT FOUND'); open('/root/openclaw.py','w').write(c.replace(old,new))" && python3 -m py_compile /root/openclaw.py && echo "OK"
+nano /tmp/backtest_v2.py
+python3 /tmp/backtest_v2.py
+grep -n "CASHOUT_ADVERSE\|CASHOUT_MINUTES" /root/openclaw.py | head -5
+python3 /root/health.py 2>/dev/null
+rm -f /tmp/openclaw_window_*.lock
+python3 -c "import json; g=json.load(open('/root/genome.json')); [print(f\"{v['id']} {v['market']} T={v['trades']} WR={v['wins']/v['trades']:.0%} thresh={v['entry_threshold']} bet={v['max_bet_pct']}\") for v in sorted(g,key=lambda x:-x['trades'])]"
+python3 /tmp/reconcile_daily.py 2>/dev/null
+python3 /root/reconcile_daily.py 2>/dev/null
+pm2 logs openclaw-btc --lines 15 --nostream | grep -v "DeprecationWarning\|signal=" | grep -E "CorrGuard|resting|failed|LOSS|Error" | head -10
+pm2 logs openclaw-btc --lines 10 --nostream | grep -v "DeprecationWarning\|signal=" | tail -8
+curl -s http://167.172.244.100:8080 | head -20
+curl -s http://167.172.244.100:8080/state | python3 -c "import sys,json; d=json.load(sys.stdin); print(list(d.keys()))"
+grep -n "def.*route\|@app.route\|add_route\|path=" /root/dashboard_v4.py | head -15
+grep -n "route\|endpoint\|GET\|POST\|/state\|/api" /root/dashboard_v4.py | head -15
+curl -s http://167.172.244.100:8080/api/data | python3 -c "import sys,json; d=json.load(sys.stdin); print(list(d.keys()))"
+curl -s http://167.172.244.100:8080/api/data | python3 -c "import sys,json; d=json.load(sys.stdin); print('balance:',d['balance']); print('stats:',d['stats']); print('positions:',d['positions'][:2] if d['positions'] else 'none'); print('trades count:',len(d['trades']))"
+curl -s http://167.172.244.100:8080/bible | head -5
+grep -n "hourly\|whale\|chart\|WR" /root/dashboard_v4.html | head -10
+curl -s http://167.172.244.100:8080/api/data | python3 -c "import sys,json; d=json.load(sys.stdin); print('hourly' in d, 'whales' in d, 'features' in d, 'insights' in d)"
+grep -n "hourly\|features\|insights" /root/dashboard_v4.py | head -10
+grep -n "def.*data\|trades\|whales\|procs\|balance" /root/dashboard_v4.py | head -15
+sed -n '60,100p' /root/dashboard_v4.py
+grep -n "VERSION_BALANCE\|def get_stats" /root/dashboard_v4.py | head -5
+grep -n "^class Handler" /root/dashboard_v4.py
+nano /tmp/fix_dashboard.py
+python3 /tmp/fix_dashboard.py && python3 -m py_compile /root/dashboard_v4.py && echo "OK"
+pm2 restart dashboard && pm2 save
+git add -A && git commit -m "Add hourly WR data to dashboard API, fix missing features/insights fields" && git push
+grep -n "hourly\|hw\[" /root/dashboard_v4.html | head -10
+grep -n "VERSION_BALANCE" /root/dashboard_v4.py
+sed -i 's/VERSION_BALANCE = 159.02/VERSION_BALANCE = 262.18/' /root/dashboard_v4.py
+tail -5 /root/whale_log.csv
+pm2 logs mentions-scanner --lines 5 --nostream | grep -v "DeprecationWarning" | tail -5
+ls -la /root/whale_scanner.py
+sleep 20 && pm2 logs whale-scanner --lines 5 --nostream | grep -v "DeprecationWarning" | tail -5
+git add -A && git commit -m "Start whale scanner - was missing from PM2, dashboard whale feed now active" && git push
+grep -n "whale\|WHALE" /root/dashboard_v4.py | head -5
+sed -i "s/'price-historian'/'price-historian','whale-scanner'/" /root/health.py
+pm2 logs openclaw-eth --lines 5 --nostream | grep -v "DeprecationWarning\|signal=" | grep -E "CashOut|ProfitLock|BreakEven|Positions|Market" | tail -5
+pm2 logs openclaw-eth --lines 20 --nostream | grep -v "DeprecationWarning\|signal=" | grep -E "PLACED|CashOut|entry|direction|Positions" | tail -8
+pm2 logs openclaw-eth --lines 15 --nostream | grep -v "DeprecationWarning\|signal=" | tail -10
+pm2 logs openclaw-eth --lines 30 --nostream | grep -v "DeprecationWarning\|signal=" | grep -E "Startup|Restored|Positions|loaded" | head -8
+python3 /root/health.py 2>/dev/null
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); url='https://api.elections.kalshi.com/trade-api/v2/markets/KXETH15M-26APR131130-30'; hdrs=k.kalshi_auth.create_auth_headers('GET',url); r=requests.get(url,headers=hdrs,timeout=8); m=r.json().get('market',{}); print('status:',m.get('status')); print('close:',m.get('close_time')); print('yes_ask:',m.get('yes_ask_dollars'))"
+pm2 logs openclaw-eth --lines 50 --nostream | grep -v "DeprecationWarning\|signal=" | grep -E "Restored|Startup|loaded|position" | head -10
+date -u
+grep "131130" /root/eth_performance_log.json | python3 -c "import sys,json; [print(json.loads(l)['timestamp'],json.loads(l)['action'],json.loads(l).get('bet',0),json.loads(l).get('balance',0)) for l in sys.stdin if l.strip()]"
+python3 /root/health.py 2>/dev/null
+grep -n "profit >= 3\|BET_SIZE\|YES_HIGH\|YES_LOW" /root/bond_scanner.py | head -8
+grep -n "EXTREME_HIGH\|extreme.*high\|0\.80\|0\.90" /root/openclaw.py | head -8
+python3 -c "c=open('/root/openclaw.py').read(); old='    side=\"yes\" if direction==\"UP\" else \"no\"\n    entry_price=(mkt_yes if side==\"yes\" else (mkt_no if mkt_no else (1-(mkt_yes or 0.5))))'; new='    side=\"yes\" if direction==\"UP\" else \"no\"\n    entry_price=(mkt_yes if side==\"yes\" else (mkt_no if mkt_no else (1-(mkt_yes or 0.5))))\n    if entry_price>0.92:\n        print(f\"[​​​​​​​​​​​​​​​​
+grep -n "entry_price=(mkt_yes if side" /root/openclaw.py
+sed -i '380a\    if entry_price>0.92:\n        print(f"[Order] Entry {entry_price:.2f} too high risk/reward — skipping")\n        return False' /root/openclaw.py
+python3 /root/health.py 2>/dev/null | grep "Open positions\|Cash"
+sed -n '396,415p' /root/openclaw.py
+grep -n "Not filled\|order_failed" /root/openclaw.py | head -5
+sed -n '416,418p' /root/openclaw.py
+grep -n "Not filled: {order}" /root/openclaw.py
+sed -i '419s/.*/            print(f"[Order] Checking fills for possibly partial order...")\n            try:\n                _oid2=order.order.order_id if hasattr(order,"order") and order.order else None\n                if _oid2:\n                    _fu2=f"https:\/\/api.elections.kalshi.com\/trade-api\/v2\/portfolio\/fills"\n                    _fh2=kalshi.kalshi_auth.create_auth_headers("GET",_fu2)\n                    _fr2=requests.get(_fu2,headers=_fh2,params={"order_id":_oid2,"limit":5},timeout=4)\n                    _fills2=_fr2.json().get("fills",[]) if _fr2.status_code==200 else []\n                    if _fills2:\n                        print(f"[Order] Partial fill detected! {len(_fills2)} fills found — treating as filled")\n                        filled=True\n            except Exception as _fe2: print(f"[Order] Fill check2: {_fe2}")/' /root/openclaw.py
+sed -n '419,435p' /root/openclaw.py
+grep -n "openclaw_order_failed\|Cancel the resting" /root/openclaw.py | head -5
+sed -i '431s/.*/            if not filled:/' /root/openclaw.py
+nano /root/openclaw.py
+python3 -m py_compile /root/openclaw.py 2>&1 | head -5
+sed -n '429,450p' /root/openclaw.py
+python3 /root/health.py 2>/dev/null | grep "Open positions\|Cash"
+rm -f /tmp/openclaw_window_*.lock
+python3 /root/health.py 2>/dev/null
+python3 /root/reconcile_daily.py 2>/dev/null
+tail -15 /root/performance_log.json | python3 -c "import sys,json; [print(json.loads(l)['timestamp'],json.loads(l)['action'],json.loads(l).get('bet',0),json.loads(l).get('balance',0)) for l in sys.stdin if l.strip() if json.loads(l).get('action') in ('WIN','LOSS','PLACED','ATTEMPTING')]"
+tail -10 /root/eth_performance_log.json | python3 -c "import sys,json; [print(json.loads(l)['timestamp'],json.loads(l)['action'],json.loads(l).get('bet',0),json.loads(l).get('balance',0)) for l in sys.stdin if l.strip() if json.loads(l).get('action') in ('WIN','LOSS','PLACED')]"
+python3 /root/health.py 2>/dev/null
+pm2 logs openclaw-btc --lines 20 --nostream | grep -v "DeprecationWarning\|signal=" | grep "Regime\|BULL\|BEAR\|CHOP" | head -8
+grep -n "def update_regime\|BULL\|BEAR\|CHOP\|regime" /root/openclaw.py | grep -v "#\|print\|send\|log\|reason\|signal\|Regime" | head -15
+sed -n '246,262p' /root/openclaw.py
+grep -n "BULL\|direction.*regime\|regime.*direction" /root/openclaw.py | grep -v "print\|#\|log\|send\|RISK\|REGIME" | head -10
+grep -n "def try_directional" /root/openclaw.py
+sed -n '484,498p' /root/openclaw.py
+sed -n '498,500p' /root/openclaw.py
+sed -i '500a\    if REGIME=="BULL" and current_direction=="DOWN":\n        print(f"[Signal] Blocking DOWN in BULL regime — trend filter")\n        return False\n    if REGIME=="BEAR" and current_direction=="UP":\n        print(f"[Signal] Blocking UP in BEAR regime — trend filter")\n        return False' /root/openclaw.py
+nano /tmp/check_regime.py
+python3 /tmp/check_regime.py
+python3 /root/health.py 2>/dev/null | grep "Open positions\|Cash"
+python3 /root/health.py 2>/dev/null | grep "KXETH\|KXBTC\|KXSOL"
+python3 -c "import requests,tempfile; raw=open('/root/real_bot_pre_v4_backup.py').read(); key=raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]; sec=raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]; tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w'); tf.write(sec); tf.close(); from kalshi_python import KalshiClient; from kalshi_python.configuration import Configuration; cfg=Configuration(); cfg.host='https://api.elections.kalshi.com/trade-api/v2'; k=KalshiClient(cfg); k.set_kalshi_auth(key,tf.name); url='https://api.elections.kalshi.com/trade-api/v2/markets/KXETH15M-26APR131245-45'; hdrs=k.kalshi_auth.create_auth_headers('GET',url); r=requests.get(url,headers=hdrs,timeout=8); m=r.json().get('market',{}); print('status:',m.get('status')); print('close:',m.get('close_time'))"
+sed -i 's/if current>ma20\*1.005 and ma20>ma60:/if current>ma20*1.002 and ma20>ma60:/' /root/openclaw.py
+python3 /tmp/check_regime.py
+sed -i 's/if current>ma20\*1.002 and ma20>ma60:/if current>ma20*1.001 and ma20>ma60:/' /root/openclaw.py
+sed -i 's/if current>ma20\*1.001 and ma20>ma60:/if current>ma20*1.002 and ma20>ma60:/' /root/openclaw.py
+date -u
+rm -f /tmp/openclaw_window_*.lock
+pm2 logs openclaw-btc --lines 8 --nostream | grep -v "DeprecationWarning\|signal=" | tail -6
+python3 -c "import json; g=json.load(open('/root/genome.json')); [print(f\"{v['id']} {v['market']} T={v['trades']} WR={v['wins']/v['trades']:.0%} thresh={v['entry_threshold']} bet={v['max_bet_pct']}\") for v in sorted(g,key=lambda x:-x['wins']/max(x['trades'],1))[:6]]"
+python3 /root/health.py 2>/dev/null
+sed -i 's/DIRECTIONAL_HIGH=0.65 if MARKET_SERIES=="KXBTC15M" else 0.68/DIRECTIONAL_HIGH=0.68/' /root/openclaw.py
+sed -i 's/DIRECTIONAL_HIGH=0.68 if MARKET_SERIES=="KXBTC15M" else 0.68/DIRECTIONAL_HIGH=0.68/' /root/openclaw.py
+python3 /root/health.py 2>/dev/null | grep "Open positions\|Cash"
+rm -f /tmp/openclaw_window_*.lock
