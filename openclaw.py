@@ -61,6 +61,7 @@ MARKET_SERIES,BOT_NAME,LOG_CSV,STOP_FILE,MAX_BET_PCT,PERF_LOG = _CONFIGS[_args.m
 assert MARKET_SERIES in ("KXBTC15M","KXETH15M","KXSOL15M"),f"Invalid market: {MARKET_SERIES}"
 FEAT_LOG="/root/feature_log.json"
 DRY_RUN=_args.dry_run
+USE_ERV=False  # Set True to use unified ERV cashout (test first with --dry-run)
 PEAK_BET_PCT=0.12
 MIN_BALANCE=100.00
 DAILY_LOSS_LIMIT=0.12
@@ -664,12 +665,81 @@ def try_directional(yes_price,no_price):
     if result:
         consecutive_signal_count=0
     return result
+def evaluate_exit(pos,kalshi,send_telegram,to_remove):
+    import time,requests
+    ticker=pos.get("ticker")
+    direction=pos.get("direction")
+    bet=pos.get("bet",0)
+    entry_yes=pos.get("entry_yes",0.5)
+    placed_at=pos.get("placed_at",0)
+    age_placed=(time.time()-placed_at)/60 if placed_at>0 else 999
+    if direction not in ("UP","DOWN"):
+        return
+    # ONE API call for all decisions
+    try:
+        murl=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
+        mh=kalshi.kalshi_auth.create_auth_headers("GET",murl)
+        mr=requests.get(murl,headers=mh,timeout=4)
+        if mr.status_code!=200: return
+        mkt=mr.json().get("market",{})
+        status=mkt.get("status","")
+        ya=mkt.get("yes_ask_dollars") or mkt.get("yes_bid_dollars") or entry_yes
+        cur_yes=float(ya) if ya and 0.02<float(ya)<0.98 else entry_yes
+        pos["min_yes"]=min(pos.get("min_yes",cur_yes),cur_yes)
+        pos["max_yes"]=max(pos.get("max_yes",cur_yes),cur_yes)
+    except: return
+    if status not in ("open","active"): return
+    # Calculate metrics once
+    win_prob=(1-cur_yes) if direction=="DOWN" else cur_yes
+    sell_price=(1-cur_yes) if direction=="UP" else cur_yes
+    contracts=pos.get("contracts",max(1,int(bet/max(0.01,entry_yes if direction=="UP" else (1-entry_yes)))))
+    sell_value=round(contracts*sell_price,2)
+    erv_hold=round(contracts*win_prob,2)
+    time_remaining=max(0,(15-(age_placed)))/15
+    threshold=0.75+(0.15*time_remaining)
+    erv_ratio=sell_value/erv_hold if erv_hold>0 else 0
+    adverse=((entry_yes-cur_yes) if direction=="UP" else (cur_yes-(1-entry_yes)))
+    hard_floor=(direction=="UP" and cur_yes<0.06) or (direction=="DOWN" and cur_yes>0.94)
+    reversal=((cur_yes-entry_yes)>0.08) if direction=="DOWN" else ((entry_yes-cur_yes)>0.08)
+    # Decision logic
+    reason=None
+    if hard_floor and age_placed>=0.5:
+        reason=f"HardFloor YES={cur_yes:.2f}"
+    elif win_prob>0.70 and reversal and age_placed>=1.5:
+        reason=f"ProfitLock win={win_prob:.2f}"
+    elif win_prob<0.45 and age_placed>=2.5 and (entry_yes>0.60 if direction=="UP" else (1-entry_yes)>0.60):
+        reason=f"BreakEven {win_prob:.0%}"
+    elif erv_ratio>=threshold and age_placed>=CASHOUT_MINUTES:
+        reason=f"ERV ratio={erv_ratio:.2f} threshold={threshold:.2f}"
+    elif adverse>CASHOUT_ADVERSE and age_placed>=CASHOUT_MINUTES:
+        reason=f"Adverse={adverse:.2f}"
+    if reason:
+        print(f"[Exit] {direction} {ticker} — {reason} | sell=${sell_value:.2f}")
+        try:
+            sell_side="no" if direction=="UP" else "yes"
+            so=kalshi.create_order(ticker=ticker,action="sell",side=sell_side,type="market",count=contracts,time_in_force="ioc")
+            if so and hasattr(so,"order") and so.order:
+                if so.order.status=="resting" and so.order.order_id:
+                    du=f"https://api.elections.kalshi.com/trade-api/v2/portfolio/orders/{so.order.order_id}"
+                    dh=kalshi.kalshi_auth.create_auth_headers("DELETE",du)
+                    requests.delete(du,headers=dh,timeout=5)
+            send_telegram(f"💸 Exit: {direction} {ticker}\n{reason} | sell=${sell_value:.2f}")
+        except Exception as se:
+            print(f"[Exit] Sell failed: {se}")
+        to_remove.append(pos)
+
 
 def check_open_positions():
     global CURRENT_BALANCE,session_wins,session_losses,session_pnl
     if not OPEN_POSITIONS:
         return
     to_remove=[]
+    if USE_ERV:
+        for pos in list(OPEN_POSITIONS):
+            evaluate_exit(pos,kalshi,send_telegram,to_remove)
+        for pos in to_remove:
+            if pos in OPEN_POSITIONS: OPEN_POSITIONS.remove(pos)
+        return
     for pos in list(OPEN_POSITIONS):
         ticker=pos.get("ticker")
         direction=pos.get("direction")
