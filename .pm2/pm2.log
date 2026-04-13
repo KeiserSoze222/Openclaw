@@ -16980,3 +16980,10 @@
 2026-04-13T05:01:05: PM2 log: pid=727433 msg=process killed
 2026-04-13T05:01:05: PM2 log: App [telegram-commander:19] starting in -fork mode-
 2026-04-13T05:01:05: PM2 log: App [telegram-commander:19] online
+2026-04-13T05:17:10: PM2 log: Stopping app:telegram-commander id:19
+2026-04-13T05:17:10: PM2 log: pid=727731 msg=failed to kill - retrying in 100ms
+2026-04-13T05:17:11: PM2 log: pid=727731 msg=failed to kill - retrying in 100ms
+2026-04-13T05:17:11: PM2 log: App [telegram-commander:19] exited with code [0] via signal [SIGINT]
+2026-04-13T05:17:11: PM2 log: pid=727731 msg=process killed
+2026-04-13T05:17:11: PM2 log: App [telegram-commander:19] starting in -fork mode-
+2026-04-13T05:17:11: PM2 log: App [telegram-commander:19] online

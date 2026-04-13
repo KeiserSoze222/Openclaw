@@ -77,7 +77,21 @@ def cmd_balance():
     send(f"💰 Cash: ${cash:.2f}\n📈 Portfolio: ${port:.2f}\n💎 Total: ${cash+port:.2f}")
 
 def cmd_help():
-    send("🤖 OpenClaw Commands:\n/status — full system status\n/balance — quick balance check\n/pause — pause all bots\n/resume — resume all bots\n/help — this message")
+    send("🤖 OpenClaw Commands:\n/status — full system status\n/balance — quick balance check\n/pause — pause all bots\n/resume — resume all bots\n/restart — restart all bots\n/locks — show active window locks\n/help — this message")
+
+def cmd_restart():
+    import subprocess
+    subprocess.Popen(['pm2','restart','openclaw-btc','openclaw-eth','openclaw-sol'])
+    send('🔄 Restarting all bots...')
+
+def cmd_locks():
+    import os
+    locks=[f for f in os.listdir('/tmp') if f.startswith('openclaw_window_')]
+    if locks:
+        msg='🔒 Active locks:\n'+'\n'.join(l.replace('openclaw_window_','').replace('.lock','') for l in locks)
+    else:
+        msg='✅ No active window locks'
+    send(msg)
 
 def handle(text):
     t=text.strip().lower()
@@ -85,6 +99,8 @@ def handle(text):
     elif t=='/balance': cmd_balance()
     elif t=='/pause': cmd_pause()
     elif t=='/resume': cmd_resume()
+    elif t=='/restart': cmd_restart()
+    elif t=='/locks': cmd_locks()
     elif t=='/help': cmd_help()
     else: send(f"Unknown command: {text}\nTry /help")
 
