@@ -17090,3 +17090,30 @@
 2026-04-13T13:21:18: PM2 log: pid=673073 msg=process killed
 2026-04-13T13:21:18: PM2 log: App [bond-scanner:3] starting in -fork mode-
 2026-04-13T13:21:18: PM2 log: App [bond-scanner:3] online
+2026-04-13T13:30:47: PM2 log: Stopping app:openclaw-btc id:10
+2026-04-13T13:30:48: PM2 log: pid=733835 msg=failed to kill - retrying in 100ms
+2026-04-13T13:30:48: PM2 log: pid=733835 msg=failed to kill - retrying in 100ms
+2026-04-13T13:30:48: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-13T13:30:48: PM2 log: pid=733835 msg=process killed
+2026-04-13T13:30:48: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-13T13:30:48: PM2 log: App [openclaw-btc:10] online
+2026-04-13T13:30:48: PM2 log: Stopping app:openclaw-eth id:11
+2026-04-13T13:30:48: PM2 log: pid=733837 msg=failed to kill - retrying in 100ms
+2026-04-13T13:30:48: PM2 log: pid=733837 msg=failed to kill - retrying in 100ms
+2026-04-13T13:30:48: PM2 log: pid=733837 msg=failed to kill - retrying in 100ms
+2026-04-13T13:30:48: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-13T13:30:48: PM2 log: pid=733837 msg=process killed
+2026-04-13T13:30:48: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-13T13:30:48: PM2 log: App [openclaw-eth:11] online
+2026-04-13T13:30:48: PM2 log: Stopping app:openclaw-sol id:12
+2026-04-13T13:30:48: PM2 log: pid=733839 msg=failed to kill - retrying in 100ms
+2026-04-13T13:30:49: PM2 log: pid=733839 msg=failed to kill - retrying in 100ms
+2026-04-13T13:30:49: PM2 log: pid=733839 msg=failed to kill - retrying in 100ms
+2026-04-13T13:30:49: PM2 log: pid=733839 msg=failed to kill - retrying in 100ms
+2026-04-13T13:30:49: PM2 log: pid=733839 msg=failed to kill - retrying in 100ms
+2026-04-13T13:30:49: PM2 log: pid=733839 msg=failed to kill - retrying in 100ms
+2026-04-13T13:30:49: PM2 log: pid=733839 msg=failed to kill - retrying in 100ms
+2026-04-13T13:30:49: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-13T13:30:49: PM2 log: pid=733839 msg=process killed
+2026-04-13T13:30:49: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-13T13:30:49: PM2 log: App [openclaw-sol:12] online
