@@ -215,7 +215,6 @@ def get_orderbook_liquidity(ticker,side,contracts_needed):
         book=ob.get(f"{side}_dollars",[])
         if not book: return True,0
         best_price=float(book[0][0])
-        best_qty=float(book[0][1])
         total_qty=sum(float(x[1]) for x in book[:3])
         if total_qty<contracts_needed:
             print(f"[Liquidity] Thin {side} book: only {total_qty:.0f} contracts available, need {contracts_needed}")
@@ -391,10 +390,8 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
     try:
         log_trade(direction,bet,"ATTEMPTING",notes=f"{strategy_tag}|{ticker}")
         print(f"[Order] {ticker} | {side} | count={contract_count} | ${bet:.2f}")
-        yes_p=min(99,max(1,round((mkt_yes or 0.5)*100))) if side=="yes" else None
-        no_p=min(99,max(1,round((mkt_no or 0.5)*100))) if side=="no" else None
         order=kalshi.create_order(ticker=ticker,action="buy",side=side,type="market",
-            count=contract_count,yes_price=yes_p,no_price=no_p,time_in_force="ioc")
+            count=contract_count,time_in_force="ioc")
         try:
             if hasattr(order, "order") and order.order is not None:
                 o = order.order
