@@ -390,8 +390,10 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
     try:
         log_trade(direction,bet,"ATTEMPTING",notes=f"{strategy_tag}|{ticker}")
         print(f"[Order] {ticker} | {side} | count={contract_count} | ${bet:.2f}")
+        yes_p=min(99,max(1,round((mkt_yes or 0.5)*100)+5)) if side=="yes" else None
+        no_p=min(99,max(1,round((mkt_no or 0.5)*100)+5)) if side=="no" else None
         order=kalshi.create_order(ticker=ticker,action="buy",side=side,type="market",
-            count=contract_count,time_in_force="ioc")
+            count=contract_count,yes_price=yes_p,no_price=no_p,time_in_force="ioc")
         try:
             if hasattr(order, "order") and order.order is not None:
                 o = order.order
