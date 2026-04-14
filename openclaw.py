@@ -54,7 +54,7 @@ _parser.add_argument("--dry-run", action="store_true", default=False)
 _args = _parser.parse_args()
 _CONFIGS = {
     "btc": ("KXBTC15M","OpenClaw BTC Bot v4.0","/root/trade_log.csv","/root/STOP",0.07,"/root/performance_log.json"),
-    "eth": ("KXETH15M","OpenClaw ETH Bot v4.0","/root/eth_trade_log.csv","/root/STOP_ETH",0.11,"/root/eth_performance_log.json"),
+    "eth": ("KXETH15M","OpenClaw ETH Bot v4.0","/root/eth_trade_log.csv","/root/STOP_ETH",0.12,"/root/eth_performance_log.json"),
     "sol": ("KXSOL15M","OpenClaw SOL Bot v4.0","/root/sol_trade_log.csv","/root/STOP_SOL",0.05,"/root/sol_performance_log.json"),
 }
 MARKET_SERIES,BOT_NAME,LOG_CSV,STOP_FILE,MAX_BET_PCT,PERF_LOG = _CONFIGS[_args.market]
@@ -68,8 +68,8 @@ DAILY_LOSS_LIMIT=0.12
 CYCLE_SLEEP=60
 COOLDOWN_CYCLES=2
 ARB_THRESHOLD=0.50
-DIRECTIONAL_HIGH=0.68
-DIRECTIONAL_LOW=0.32
+DIRECTIONAL_HIGH=0.680
+DIRECTIONAL_LOW=0.30
 EXTREME_HIGH=0.80
 EXTREME_LOW=0.20
 STRONG_MIN1_EDGE=0.30

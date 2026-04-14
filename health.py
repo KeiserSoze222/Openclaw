@@ -40,7 +40,7 @@ locks=[f for f in os.listdir('/tmp') if f.startswith('openclaw_window_')]
 
 # PM2 status
 import subprocess
-pm2=subprocess.check_output(['pm2','jlist'],timeout=5).decode()
+pm2=subprocess.check_output(['pm2','jlist'],timeout=15).decode()
 procs=json.loads(pm2)
 running={p['name']:p['pm2_env']['status'] for p in procs}
 
