@@ -55,7 +55,7 @@ for p in open_pos: print(f"   {p.get('ticker','')} ${float(p.get('market_exposur
 print(f"🔒 Active window locks: {len(locks)}")
 for lk in locks[:3]: print(f"   {lk.replace('openclaw_window_','').replace('.lock','')}")
 print(f"⚙️  Processes:")
-for name in ['openclaw-btc','openclaw-eth','openclaw-sol','arena','price-historian','whale-scanner']:
+for name in ['openclaw-btc','openclaw-eth','openclaw-sol','arena','price-historian','whale-scanner','whale-follow']:
     status=running.get(name,'unknown')
     icon='✅' if status=='online' else '❌'
     print(f"   {icon} {name}: {status}")
