@@ -187,29 +187,38 @@ async function refresh(){
     const insRows=ins.length?ins.map(i=>`<div class="insight-item">${i}</div>`).join('')
       :'<div class="no-data">Analyzing patterns...</div>';
 
-    // Hourly win rate bars
+    // Hourly win rate table
     let hourBars='';let hourLabels='';
     if(hw && Object.keys(hw).length){
-      const maxH=Math.max(...Object.values(hw).map(h=>(h.w||0)+(h.l||0)),1);
+      const PEAK=[3,6,7,8,9,11,14,15,16,19,21];
+      hourBars='<table style="width:100%;border-collapse:collapse;font-size:10px;font-family:monospace">';
+      hourBars+='<tr style="color:#4a5568"><th style="text-align:left;padding:2px 4px">HOUR</th><th>W</th><th>L</th><th>WR</th><th>N</th><th style="width:60px">BAR</th></tr>';
       for(let i=0;i<24;i++){
         const h=hw[i]||{w:0,l:0};
         const total=(h.w||0)+(h.l||0);
+        if(total===0) continue;
         const wr=total>0?(h.w/total*100):0;
-        const height=total>0?Math.max(4,(total/maxH*100)):2;
-        const col=wr>=80?'var(--green)':wr>=60?'var(--yellow)':'var(--red)';
-        hourBars+=`<div class="hour-bar" style="height:${height}%;background:${col};position:relative" title="${i}:00 UTC | ${h.w}W/${h.l}L | ${wr.toFixed(0)}% WR | ${total} trades"><span style="position:absolute;bottom:2px;left:50%;transform:translateX(-50%);font-size:7px;color:#fff;opacity:0.8">${total>0?wr.toFixed(0):""}</span></div>`;
+        const col=wr>=85?'var(--green)':wr>=70?'var(--yellow)':'var(--red)';
+        const isPeak=PEAK.includes(i);
+        const bg=isPeak?'background:rgba(0,212,255,0.05)':'';
+        hourBars+=`<tr style="${bg};border-bottom:1px solid #0d1526">
+          <td style="padding:2px 4px;color:${isPeak?'var(--accent)':'#8899aa'}">${String(i).padStart(2,'0')}:00${isPeak?' ⭐':''}</td>
+          <td style="color:var(--green);text-align:center">${h.w}</td>
+          <td style="color:var(--red);text-align:center">${h.l}</td>
+          <td style="color:${col};font-weight:bold;text-align:center">${wr.toFixed(0)}%</td>
+          <td style="color:#8899aa;text-align:center">${total}</td>
+          <td><div style="background:#0d1526;border-radius:3px;height:8px"><div style="width:${wr.toFixed(0)}%;background:${col};height:100%;border-radius:3px"></div></div></td>
+        </tr>`;
       }
-      hourLabels='';
-      for(let i=0;i<24;i+=3){hourLabels+=`<span style="font-size:9px">${String(i).padStart(2,'0')}</span>`;}
+      hourBars+='</table>';
     }
-
     document.getElementById('main-grid').innerHTML=`
       <div class="card span3">
         <div class="card-title">Portfolio Overview</div>
         <div class="balance-card">
           <div><div class="balance-label">TOTAL BALANCE</div><div class="balance-main">${fmt(bal)}</div></div>
           <div class="divider"></div>
-          <div><div class="balance-label">CLEAN START</div><div class="balance-sub ${pc(sinceV)}">${ps(sinceV)}${fmt(sinceV)}</div></div>
+          <div><div class="balance-label">APR 14 START</div><div class="balance-sub ${pc(sinceV)}">${ps(sinceV)}${fmt(sinceV)}</div></div>
           <div><div class="balance-label">SIGNALS PNL</div><div class="balance-sub ${pc(allPNL)}">${ps(allPNL)}${fmt(allPNL)}</div></div>
           <div><div class="balance-label">WIN RATE</div><div class="balance-sub" style="color:var(--accent)">${pct(allWR)} (${allW}W/${allL}L)</div></div>
           <div><div class="balance-label">TOTAL TRADES</div><div class="balance-sub" style="color:var(--yellow)">${allW+allL}</div></div>

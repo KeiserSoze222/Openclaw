@@ -1043,9 +1043,9 @@ def load_existing_positions():
             else:
                 direction="UNKNOWN"
             OPEN_POSITIONS.append({"direction":direction,"bet":exposure,"ticker":ticker,
-                "strategy":"restored","time":time.time()-300,"placed_at":0,
-                "entry_yes":0.5,"min_yes":0.5,"max_yes":0.5,
-                "signal_type":"RESTORED","entry_minute":0})
+                "strategy":"restored","time":time.time()-300,
+                "entry_yes":(0.70 if direction=="UP" else 0.30),"min_yes":(0.70 if direction=="UP" else 0.30),"max_yes":(0.70 if direction=="UP" else 0.30),
+                "signal_type":"RESTORED","entry_minute":0,"placed_at":time.time()-180})
             print(f"[Startup] Restored: {ticker} ${exposure:.2f} {direction}")
         if OPEN_POSITIONS:
             print(f"[Startup] Loaded {len(OPEN_POSITIONS)} BTC position(s)")

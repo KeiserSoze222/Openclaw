@@ -17568,3 +17568,65 @@
 2026-04-14T16:01:12: PM2 log: pid=758599 msg=process killed
 2026-04-14T16:01:12: PM2 log: App [dashboard:14] starting in -fork mode-
 2026-04-14T16:01:12: PM2 log: App [dashboard:14] online
+2026-04-14T16:34:39: PM2 log: Stopping app:dashboard id:14
+2026-04-14T16:34:39: PM2 log: pid=758675 msg=failed to kill - retrying in 100ms
+2026-04-14T16:34:39: PM2 log: pid=758675 msg=failed to kill - retrying in 100ms
+2026-04-14T16:34:39: PM2 log: App [dashboard:14] exited with code [0] via signal [SIGINT]
+2026-04-14T16:34:39: PM2 log: pid=758675 msg=process killed
+2026-04-14T16:34:39: PM2 log: App [dashboard:14] starting in -fork mode-
+2026-04-14T16:34:39: PM2 log: App [dashboard:14] online
+2026-04-14T16:35:10: PM2 log: Stopping app:openclaw-btc id:10
+2026-04-14T16:35:11: PM2 log: pid=758230 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:11: PM2 log: pid=758230 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:11: PM2 log: pid=758230 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:11: PM2 log: pid=758230 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:11: PM2 log: pid=758230 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:11: PM2 log: pid=758230 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:11: PM2 log: pid=758230 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:11: PM2 log: pid=758230 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:11: PM2 log: pid=758230 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:11: PM2 log: pid=758230 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:12: PM2 log: pid=758230 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:12: PM2 log: pid=758230 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:12: PM2 log: pid=758230 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:12: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-14T16:35:12: PM2 log: pid=758230 msg=process killed
+2026-04-14T16:35:12: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-14T16:35:12: PM2 log: App [openclaw-btc:10] online
+2026-04-14T16:35:12: PM2 log: Stopping app:openclaw-eth id:11
+2026-04-14T16:35:12: PM2 log: pid=758232 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:12: PM2 log: pid=758232 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:12: PM2 log: pid=758232 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:12: PM2 log: pid=758232 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:13: PM2 log: pid=758232 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:13: PM2 log: pid=758232 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:13: PM2 log: pid=758232 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:13: PM2 log: pid=758232 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:13: PM2 log: pid=758232 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:13: PM2 log: pid=758232 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:13: PM2 log: pid=758232 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:13: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-14T16:35:13: PM2 log: pid=758232 msg=process killed
+2026-04-14T16:35:13: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-14T16:35:13: PM2 log: App [openclaw-eth:11] online
+2026-04-14T16:35:13: PM2 log: Stopping app:openclaw-sol id:12
+2026-04-14T16:35:14: PM2 log: pid=758234 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:14: PM2 log: pid=758234 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:14: PM2 log: pid=758234 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:14: PM2 log: pid=758234 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:14: PM2 log: pid=758234 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:14: PM2 log: pid=758234 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:14: PM2 log: pid=758234 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:14: PM2 log: pid=758234 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:14: PM2 log: pid=758234 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:15: PM2 log: pid=758234 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:15: PM2 log: pid=758234 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:15: PM2 log: pid=758234 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:15: PM2 log: pid=758234 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:15: PM2 log: pid=758234 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:15: PM2 log: pid=758234 msg=failed to kill - retrying in 100ms
+2026-04-14T16:35:15: PM2 log: Process with pid 758234 still alive after 1600ms, sending it SIGKILL now...
+2026-04-14T16:35:15: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGKILL]
+2026-04-14T16:35:15: PM2 log: pid=758234 msg=process killed
+2026-04-14T16:35:15: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-14T16:35:15: PM2 log: App [openclaw-sol:12] online
