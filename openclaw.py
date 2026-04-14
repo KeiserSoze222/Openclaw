@@ -62,7 +62,7 @@ assert MARKET_SERIES in ("KXBTC15M","KXETH15M","KXSOL15M"),f"Invalid market: {MA
 FEAT_LOG="/root/feature_log.json"
 DRY_RUN=_args.dry_run
 USE_ERV=False  # ERV disabled pending better parameter tuning
-PEAK_BET_PCT=0.12
+PEAK_BET_PCT=0.14
 MIN_BALANCE=100.00
 DAILY_LOSS_LIMIT=0.12
 CYCLE_SLEEP=60
@@ -615,7 +615,12 @@ def try_directional(yes_price,no_price):
     elif confidence>=7:
         bet=min(round(bet*1.25,2),get_max_bet(is_extreme=is_extreme)*1.25)
         print(f"[Conf] Score {confidence} — bet boosted 25% to ${bet:.2f}")
-    bet=max(2.00,min(25.00,round(bet,2)))
+    bet=max(2.00,min(30.00,round(bet,2)))
+    entry_p=(yes_price if current_direction=="UP" else (1-yes_price))
+    expected_profit=round(bet*(1.0/max(0.01,entry_p)-1),2) if entry_p>0 else 0
+    if expected_profit<2.00:
+        print(f"[MinProfit] Expected profit ${expected_profit:.2f} too low — skipping")
+        return False
     spot_price=get_coinbase_price(MARKET_SERIES)
     cb_confirmed=False
     if spot_price is not None:
@@ -635,7 +640,7 @@ def try_directional(yes_price,no_price):
                     print(f"[Coinbase] Disagrees | ${spot_price:.0f} — bet reduced to ${bet:.2f}")
         except Exception as e:
             print(f"[Coinbase] Strike fetch failed: {e}")
-    kraken_price=get_kraken_btc()
+    kraken_price=get_kraken_btc() if MARKET_SERIES=="KXBTC15M" else None
     if kraken_price and spot_price:
         diff_pct=abs(kraken_price-spot_price)/spot_price*100
         if diff_pct>0.5:
@@ -726,6 +731,7 @@ def evaluate_exit(pos,kalshi,send_telegram,to_remove):
     reversal=((cur_yes-entry_yes)>0.08) if direction=="DOWN" else ((entry_yes-cur_yes)>0.08)
     # Decision logic
     reason=None
+    cashout_thresh=0.05 if age_placed>=12 else CASHOUT_ADVERSE
     if hard_floor and age_placed>=0.5:
         reason=f"HardFloor YES={cur_yes:.2f}"
     elif win_prob>0.70 and reversal and age_placed>=1.5:
@@ -734,7 +740,7 @@ def evaluate_exit(pos,kalshi,send_telegram,to_remove):
         reason=f"BreakEven {win_prob:.0%}"
     elif erv_ratio>=threshold and age_placed>=CASHOUT_MINUTES:
         reason=f"ERV ratio={erv_ratio:.2f} threshold={threshold:.2f}"
-    elif adverse>CASHOUT_ADVERSE and age_placed>=CASHOUT_MINUTES:
+    elif adverse>cashout_thresh and age_placed>=CASHOUT_MINUTES:
         reason=f"Adverse={adverse:.2f}"
     if reason:
         print(f"[Exit] {direction} {ticker} — {reason} | sell=${sell_value:.2f}")

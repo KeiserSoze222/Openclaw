@@ -27,3 +27,4 @@
 {"timestamp": "2026-04-13T12:18:38.874546", "ticker": "KXBTC-26APR1309-B71450", "side": "no", "price": 0.98, "count": 3, "cost": 2.94, "mins_left": 42.052183516666666}
 {"timestamp": "2026-04-13T12:18:39.428466", "ticker": "KXBTCD-26APR1309-T71399.99", "side": "no", "price": 0.98, "count": 3, "cost": 2.94, "mins_left": 42.04912341666667}
 {"timestamp": "2026-04-13T12:18:39.990779", "ticker": "KXBTCD-26APR1309-T70599.99", "side": "yes", "price": 0.98, "count": 3, "cost": 2.94, "mins_left": 42.049122616666665}
+{"timestamp": "2026-04-14T08:16:11.423470", "ticker": "KXTEMPNYCH-26APR1405-T67.99", "side": "no", "price": 0.98, "count": 3, "cost": 2.94, "mins_left": 44.2100939}

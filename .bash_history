@@ -1,37 +1,3 @@
-grep -B1 "bet=\$0.00" /root/sol_bot.log | grep "Cycle\|2026" | head -5
-source kalshi_env/bin/activate
-nano /tmp/fix_order_response.py
-python3 /tmp/fix_order_response.py
-pkill -f watchdog.py
-python3 /tmp/check_positions.py
-sed -i 's|open("/root/real_bot.py")|open("/root/real_bot_pre_v4_backup.py")|g' /tmp/check_positions.py /tmp/check_balance.py
-cp /root/real_bot.py /root/real_bot_v4_stable.py
-nano /tmp/check_positions.py
-python3 -c "
- import requests, tempfile
- from kalshi_python import KalshiClient
- from kalshi_python.configuration import Configuration
- raw = open('/root/real_bot_pre_v4_backup.py').read()
- key = raw.split(\"KALSHI_API_KEY = '\")[1].split(\"'\")[0]
- sec = raw.split(\"KALSHI_SECRET  = '''\")[1].split(\"'''\")[0]
- tf = tempfile.NamedTemporaryFile(delete=False, suffix='.pem', mode='w')
- tf.write(sec); tf.close()
- config = Configuration()
- config.host = 'https://api.elections.kalshi.com/trade-api/v2'
- kalshi = KalshiClient(config)
- kalshi.set_kalshi_auth(key, tf.name)
- url = 'https://api.elections.kalshi.com/trade-api/v2/portfolio/positions'
- headers = kalshi.kalshi_auth.create_auth_headers('GET', url)
- resp = requests.get(url, headers=headers, params={'limit':20}, timeout=8)
- for p in resp.json().get('market_positions', []):
-     print(p.get('ticker'), p.get('market_exposure_dollars'))
- " 2>/dev/null
-grep -E "Settled|WIN|LOSS|PLACED|Order failed" /root/bot.log /root/eth_bot.log /root/sol_bot.log | tail -10
-source kalshi_env/bin/activate
-source kalshi_env/bin/activate
-wc -l /root/openclaw_btc_v4.py
-python3 /tmp/p4.py && python3 -m py_compile /root/openclaw_btc_v4.py && echo "OK"
-nano /tmp/p5.py
 python3 /tmp/p5.py && python3 -m py_compile /root/openclaw_btc_v4.py && echo "OK"
 nano /tmp/p6.py
 python3 /tmp/p6.py && python3 -m py_compile /root/openclaw_btc_v4.py && echo "OK"
@@ -1998,3 +1964,37 @@ sed -i 's/DIRECTIONAL_HIGH=0.65 if MARKET_SERIES=="KXBTC15M" else 0.68/DIRECTION
 sed -i 's/DIRECTIONAL_HIGH=0.68 if MARKET_SERIES=="KXBTC15M" else 0.68/DIRECTIONAL_HIGH=0.68/' /root/openclaw.py
 python3 /root/health.py 2>/dev/null | grep "Open positions\|Cash"
 rm -f /tmp/openclaw_window_*.lock
+source kalshi_env/bin/activate
+pm2 logs openclaw-sol --lines 10 --nostream | grep -v "DeprecationWarning\|signal=" | grep "PLACED\|CorrGuard\|Order\|26APR131700" | tail -5
+date -u
+source kalshi_env/bin/activate
+python3 /root/health.py 2>/dev/null
+tail -10 /root/performance_log.json | python3 -c "import sys,json; [print(json.loads(l)['timestamp'],json.loads(l)['action'],json.loads(l).get('bet',0),json.loads(l).get('balance',0)) for l in sys.stdin if l.strip() if json.loads(l).get('action') in ('WIN','LOSS','PLACED')]"
+date -u
+grep "ma20\*1\." /root/openclaw.py
+pm2 logs openclaw-btc --lines 5 --nostream | grep -v "DeprecationWarning\|signal=" | grep "Regime\|Balance" | tail -3
+pm2 logs openclaw-btc --lines 8 --nostream | grep -v "DeprecationWarning\|signal=" | tail -6
+python3 /root/health.py 2>/dev/null
+nano /tmp/avg_analysis.py
+python3 /tmp/avg_analysis.py
+python3 /root/reconcile_daily.py 2>/dev/null
+for f in /root/eth_performance_log.json /root/sol_performance_log.json; do  echo "=== $f ==="; grep "2026-04-13" $f | python3 -c "import sys,json; attempts={}; [attempts.update({json.loads(l).get('notes','').split('|')[-1]: json.loads(l)['action']}) for l in sys.stdin if l.strip() and json.loads(l).get('action') in ('ATTEMPTING','PLACED')]; unplaced=[t for t,a in attempts.items() if a=='ATTEMPTING']; print(f'Unplaced: {len(unplaced)}'); [print(t) for t in unplaced[:5]]";  done
+pm2 logs openclaw-eth --lines 100 --nostream | grep "Partial fill\|Fill check2\|Checking fills" | head -10
+pm2 logs openclaw-btc --lines 20 --nostream | grep -v "DeprecationWarning\|signal=" | grep "Order\|PLACED\|ATTEMPTING\|fill" | tail -10
+nano /tmp/entry_analysis.py
+python3 /tmp/entry_analysis.py
+grep -n "EXTREME\|extreme.*fire\|consecutive.*1\|waiting.*1" /root/openclaw.py | grep -v "print\|#\|log\|EXTREME_HIGH\|EXTREME_LOW\|is_extreme" | head -10
+sed -n '555,610p' /root/openclaw.py
+sed -i 's/if confidence >= 8 and window_minute <= 1:/if confidence >= 7 and window_minute <= 2:/' /root/openclaw.py
+sed -n '575,582p' /root/openclaw.py
+sed -n '582,592p' /root/openclaw.py
+sed -i 's/            if window_minute==0 or window_minute>4:/            if window_minute>4:/' /root/openclaw.py
+python3 /root/health.py 2>/dev/null | grep "Open positions\|Cash"
+python3 /root/health.py 2>/dev/null
+python3 /root/health.py
+rm -f /tmp/openclaw_window_*.lock
+wc -l /root/price_history.jsonl
+nano /tmp/rotate_history.py
+python3 /tmp/rotate_history.py
+cp /tmp/rotate_history.py /root/rotate_history.py
+git add -A && git commit -m "Add rotate_history.py weekly cron, all systems running" && git push
