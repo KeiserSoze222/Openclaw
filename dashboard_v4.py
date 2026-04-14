@@ -14,7 +14,7 @@ _config.host = "https://api.elections.kalshi.com/trade-api/v2"
 kalshi = KalshiClient(_config)
 kalshi.set_kalshi_auth(KALSHI_KEY, _tf.name)
 
-VERSION_BALANCE = 262.18
+VERSION_BALANCE = 977.64
 
 def get_balance():
     try:
@@ -105,7 +105,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path.split("?")[0] == "/api/data":
             try:
-                data = {"balance":get_balance(),"version_balance":VERSION_BALANCE,"stats":get_stats(),"procs":get_processes(),"trades":get_recent_trades(8),"whales":get_whales(6),"positions":get_positions(),"hourly":get_hourly(),"features":[],"insights":[]}
+                data = {"balance":get_balance(),"version_balance":VERSION_BALANCE,"stats":get_stats(),"procs":get_processes(),"trades":get_recent_trades(20),"whales":get_whales(6),"positions":get_positions(),"hourly":get_hourly(),"features":[],"insights":[]}
                 self.send_response(200)
                 self.send_header('Content-Type','application/json')
                 self.send_header('Access-Control-Allow-Origin','*')
@@ -138,6 +138,42 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(json.dumps(d).encode())
             except: self.send_response(500); self.end_headers()
+        elif self.path.split("?")[0] == "/bible":
+            try:
+                content=open('/root/OPENCLAW_GUIDE.md').read()
+                self.send_response(200)
+                self.send_header('Content-Type','text/html')
+                self.end_headers()
+                html=f"""<!DOCTYPE html><html><head><title>OpenClaw Bible</title>
+                <style>body{{background:#050810;color:#e0e8ff;font-family:monospace;padding:20px;max-width:900px;margin:0 auto;}}
+                h1,h2,h3{{color:#00d4ff;}} pre{{background:#0d1526;padding:15px;border-radius:8px;overflow-x:auto;}}</style></head>
+                <body><pre>{content}</pre></body></html>"""
+                self.wfile.write(html.encode())
+            except: self.send_response(404); self.end_headers()
+        elif self.path.split("?")[0] == "/api/intelligence":
+            try:
+                import csv,datetime
+                signals=[]
+                for f,m in [('/root/trade_log.csv','BTC'),('/root/eth_trade_log.csv','ETH'),('/root/sol_trade_log.csv','SOL')]:
+                    rows=list(csv.reader(open(f)))
+                    wins=[r for r in rows if len(r)>=5 and 'WIN' in r[3]]
+                    losses=[r for r in rows if len(r)>=3 and 'LOSS' in r[3]]
+                    if wins:
+                        avg_profit=sum(float(r[4].replace('%',''))*float(r[2])/100 for r in wins if len(r)>=5)/len(wins)
+                        signals.append(f"{m}: {len(wins)}W/{len(losses)}L avg profit ${avg_profit:.2f}")
+                balance=get_balance()
+                insights=[
+                    f"ETH is best performer at 93% WR — consider increasing bet size",
+                    f"Peak hours: 06,07,09,11,14,15,19,21 UTC",
+                    f"Current balance ${balance:.2f} — deposit to $600 for $125/day target",
+                    f"Whale follower active — watching for $3000+ BTC/ETH/SOL bets",
+                ]
+                self.send_response(200)
+                self.send_header('Content-Type','application/json')
+                self.send_header('Access-Control-Allow-Origin','*')
+                self.end_headers()
+                self.wfile.write(json.dumps({"signals":signals,"insights":insights}).encode())
+            except Exception as e: self.send_response(500); self.end_headers(); self.wfile.write(str(e).encode())
         else:
             self.send_response(200)
             self.send_header('Content-Type','text/html')

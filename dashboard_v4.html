@@ -148,7 +148,7 @@ async function refresh(){
           <div class="stat-box"><div class="stat-label">Losses</div><div class="stat-value" style="color:var(--red)">${b.l}</div></div>
         </div>
         <div class="icons-row">
-          <span title="Extreme signals">⚡${b.extreme||0}</span>
+          <span title="Extreme signals">⚡${b.extreme||"-"}</span>
           <span title="Confirmed signals">✅${b.confirmed||0}</span>
           <span title="Cash outs">💸${b.cashouts||0}</span>
           <span title="Streak">${b.streak_icon||'—'}${b.streak||0}</span>
@@ -197,9 +197,10 @@ async function refresh(){
         const wr=total>0?(h.w/total*100):0;
         const height=total>0?Math.max(4,(total/maxH*100)):2;
         const col=wr>=80?'var(--green)':wr>=60?'var(--yellow)':'var(--red)';
-        hourBars+=`<div class="hour-bar" style="height:${height}%;background:${col}" title="${i}:00 UTC — ${h.w}W/${h.l}L (${wr.toFixed(0)}%)"></div>`;
+        hourBars+=`<div class="hour-bar" style="height:${height}%;background:${col};position:relative" title="${i}:00 UTC | ${h.w}W/${h.l}L | ${wr.toFixed(0)}% WR | ${total} trades"><span style="position:absolute;bottom:2px;left:50%;transform:translateX(-50%);font-size:7px;color:#fff;opacity:0.8">${total>0?wr.toFixed(0):""}</span></div>`;
       }
-      hourLabels='<span>0</span><span>6</span><span>12</span><span>18</span><span>23</span>';
+      hourLabels='';
+      for(let i=0;i<24;i+=3){hourLabels+=`<span style="font-size:9px">${String(i).padStart(2,'0')}</span>`;}
     }
 
     document.getElementById('main-grid').innerHTML=`
@@ -212,7 +213,7 @@ async function refresh(){
           <div><div class="balance-label">SIGNALS PNL</div><div class="balance-sub ${pc(allPNL)}">${ps(allPNL)}${fmt(allPNL)}</div></div>
           <div><div class="balance-label">WIN RATE</div><div class="balance-sub" style="color:var(--accent)">${pct(allWR)} (${allW}W/${allL}L)</div></div>
           <div><div class="balance-label">TOTAL TRADES</div><div class="balance-sub" style="color:var(--yellow)">${allW+allL}</div></div>
-          <div style="font-size:10px;color:#2a3550;align-self:flex-end">all-time: -$${(644-allPNL).toFixed(2)}</div>
+          <div style="font-size:10px;color:#2a3550;align-self:flex-end">all-time: -$${Math.max(0,(977.64-allPNL-bal+262.18)).toFixed(2)}</div>
         </div>
       </div>
 

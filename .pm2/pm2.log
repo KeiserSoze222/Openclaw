@@ -17553,3 +17553,18 @@
 2026-04-14T15:38:28: PM2 log: pid=758133 msg=process killed
 2026-04-14T15:38:28: PM2 log: App [openclaw-sol:12] starting in -fork mode-
 2026-04-14T15:38:28: PM2 log: App [openclaw-sol:12] online
+2026-04-14T15:54:27: PM2 log: Stopping app:dashboard id:14
+2026-04-14T15:54:27: PM2 log: pid=735706 msg=failed to kill - retrying in 100ms
+2026-04-14T15:54:27: PM2 log: pid=735706 msg=failed to kill - retrying in 100ms
+2026-04-14T15:54:27: PM2 log: pid=735706 msg=failed to kill - retrying in 100ms
+2026-04-14T15:54:27: PM2 log: App [dashboard:14] exited with code [0] via signal [SIGINT]
+2026-04-14T15:54:27: PM2 log: pid=735706 msg=process killed
+2026-04-14T15:54:27: PM2 log: App [dashboard:14] starting in -fork mode-
+2026-04-14T15:54:27: PM2 log: App [dashboard:14] online
+2026-04-14T16:01:12: PM2 log: Stopping app:dashboard id:14
+2026-04-14T16:01:12: PM2 log: pid=758599 msg=failed to kill - retrying in 100ms
+2026-04-14T16:01:12: PM2 log: pid=758599 msg=failed to kill - retrying in 100ms
+2026-04-14T16:01:12: PM2 log: App [dashboard:14] exited with code [0] via signal [SIGINT]
+2026-04-14T16:01:12: PM2 log: pid=758599 msg=process killed
+2026-04-14T16:01:12: PM2 log: App [dashboard:14] starting in -fork mode-
+2026-04-14T16:01:12: PM2 log: App [dashboard:14] online
