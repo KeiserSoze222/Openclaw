@@ -77,7 +77,7 @@ def cmd_balance():
     send(f"💰 Cash: ${cash:.2f}\n📈 Portfolio: ${port:.2f}\n💎 Total: ${cash+port:.2f}")
 
 def cmd_help():
-    send("🤖 OpenClaw Commands:\n/status — full system status\n/balance — quick balance check\n/pause — pause all bots\n/resume — resume all bots\n/restart — restart all bots\n/locks — show active window locks\n/help — this message")
+    send("🤖 OpenClaw Commands:\n/status — full system status\n/balance — quick balance check\n/pause — pause all bots\n/resume — resume all bots\n/restart — restart all bots\n/locks — show active window locks\n/clearlocks — clear all window locks\n/help — this message")
 
 def cmd_restart():
     import subprocess
@@ -93,6 +93,11 @@ def cmd_locks():
         msg='✅ No active window locks'
     send(msg)
 
+def cmd_clearlocks():
+    import os,glob
+    locks=glob.glob("/tmp/openclaw_window_*.lock")
+    for l in locks: os.remove(l)
+    send(f"🔓 Cleared {len(locks)} window locks")
 def handle(text):
     t=text.strip().lower()
     if t=='/status': cmd_status()
@@ -101,6 +106,7 @@ def handle(text):
     elif t=='/resume': cmd_resume()
     elif t=='/restart': cmd_restart()
     elif t=='/locks': cmd_locks()
+    elif t=="/clearlocks": cmd_clearlocks()
     elif t=='/help': cmd_help()
     else: send(f"Unknown command: {text}\nTry /help")
 
