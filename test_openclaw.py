@@ -34,7 +34,7 @@ try:
     check("Kraken BTC-only","get_kraken_btc() if MARKET_SERIES" in src,"Kraken not limited to BTC")
     check("Trend filter BULL","REGIME==\"BULL\" and current_direction==\"DOWN\"" in src,"BULL trend filter missing")
     check("Trend filter BEAR","REGIME==\"BEAR\" and current_direction==\"UP\"" in src,"BEAR trend filter missing")
-    check("Late cashout thresh","cashout_thresh" in src,"Late window cashout missing")
+    check("Cashout params","CASHOUT_ADVERSE=0.28" in src and "CASHOUT_MINUTES=3" in src,"Cashout params wrong")
     check("Window lock on fail","openclaw_window_" in src,"Window lock missing")
     check("Max bet 30","min(30.00" in src,"Max bet not set to 30")
     check("PEAK_BET_PCT 0.14","PEAK_BET_PCT=0.14" in src,"PEAK_BET_PCT not 0.14")

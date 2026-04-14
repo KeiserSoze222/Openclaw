@@ -17526,3 +17526,30 @@
 2026-04-14T15:35:38: PM2 log: pid=728429 msg=process killed
 2026-04-14T15:35:38: PM2 log: App [telegram-commander:19] starting in -fork mode-
 2026-04-14T15:35:38: PM2 log: App [telegram-commander:19] online
+2026-04-14T15:38:27: PM2 log: Stopping app:openclaw-btc id:10
+2026-04-14T15:38:27: PM2 log: pid=758129 msg=failed to kill - retrying in 100ms
+2026-04-14T15:38:27: PM2 log: pid=758129 msg=failed to kill - retrying in 100ms
+2026-04-14T15:38:27: PM2 log: App [openclaw-btc:10] exited with code [0] via signal [SIGINT]
+2026-04-14T15:38:27: PM2 log: pid=758129 msg=process killed
+2026-04-14T15:38:27: PM2 log: App [openclaw-btc:10] starting in -fork mode-
+2026-04-14T15:38:27: PM2 log: App [openclaw-btc:10] online
+2026-04-14T15:38:27: PM2 log: Stopping app:openclaw-eth id:11
+2026-04-14T15:38:27: PM2 log: pid=758131 msg=failed to kill - retrying in 100ms
+2026-04-14T15:38:27: PM2 log: pid=758131 msg=failed to kill - retrying in 100ms
+2026-04-14T15:38:27: PM2 log: pid=758131 msg=failed to kill - retrying in 100ms
+2026-04-14T15:38:27: PM2 log: pid=758131 msg=failed to kill - retrying in 100ms
+2026-04-14T15:38:27: PM2 log: App [openclaw-eth:11] exited with code [0] via signal [SIGINT]
+2026-04-14T15:38:28: PM2 log: pid=758131 msg=process killed
+2026-04-14T15:38:28: PM2 log: App [openclaw-eth:11] starting in -fork mode-
+2026-04-14T15:38:28: PM2 log: App [openclaw-eth:11] online
+2026-04-14T15:38:28: PM2 log: Stopping app:openclaw-sol id:12
+2026-04-14T15:38:28: PM2 log: pid=758133 msg=failed to kill - retrying in 100ms
+2026-04-14T15:38:28: PM2 log: pid=758133 msg=failed to kill - retrying in 100ms
+2026-04-14T15:38:28: PM2 log: pid=758133 msg=failed to kill - retrying in 100ms
+2026-04-14T15:38:28: PM2 log: pid=758133 msg=failed to kill - retrying in 100ms
+2026-04-14T15:38:28: PM2 log: pid=758133 msg=failed to kill - retrying in 100ms
+2026-04-14T15:38:28: PM2 log: pid=758133 msg=failed to kill - retrying in 100ms
+2026-04-14T15:38:28: PM2 log: App [openclaw-sol:12] exited with code [0] via signal [SIGINT]
+2026-04-14T15:38:28: PM2 log: pid=758133 msg=process killed
+2026-04-14T15:38:28: PM2 log: App [openclaw-sol:12] starting in -fork mode-
+2026-04-14T15:38:28: PM2 log: App [openclaw-sol:12] online
