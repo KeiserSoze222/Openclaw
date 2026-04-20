@@ -39,7 +39,8 @@ def compute_sell_value(contracts, direction, cur_yes):
 
 def compute_exit_reason(direction, cur_yes, entry_yes, age_placed, status,
                         cashout_adverse=CASHOUT_ADVERSE,
-                        cashout_minutes=CASHOUT_MINUTES):
+                        cashout_minutes=CASHOUT_MINUTES,
+                        peak_yes=None):
     """
     Determine whether to exit a position and the reason.
 
@@ -61,7 +62,12 @@ def compute_exit_reason(direction, cur_yes, entry_yes, age_placed, status,
     entry_win = entry_yes if direction == "UP" else (1 - entry_yes)
     adverse = compute_adverse(direction, cur_yes, entry_yes)
     hard_floor = (direction == "UP" and cur_yes < 0.06) or (direction == "DOWN" and cur_yes > 0.94)
-    reversal = (entry_yes - cur_yes) > 0.08 if direction == "UP" else (cur_yes - entry_yes) > 0.08
+    if direction == "UP":
+        peak = peak_yes if peak_yes is not None else entry_yes
+        reversal = (peak - cur_yes) > 0.08
+    else:
+        peak = peak_yes if peak_yes is not None else entry_yes
+        reversal = (cur_yes - peak) > 0.08
 
     # Tighten threshold in the final 3 minutes of the window
     late_thresh = 0.05 if age_placed >= 12 else cashout_adverse

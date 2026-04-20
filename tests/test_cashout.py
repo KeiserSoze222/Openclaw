@@ -375,3 +375,57 @@ class TestExitPriority:
         _, etype = compute_exit_reason("UP", cur_yes=0.73, entry_yes=0.82,
                                        age_placed=2.0, status="open")
         assert etype == "profit_lock"
+
+
+# ── peak_yes parameter (ProfitLock reversal detection) ───────────────────────
+
+class TestPeakYes:
+    """
+    ProfitLock uses best price seen (peak_yes) as reversal anchor, not entry_yes.
+    Critical for deeply in-the-money positions that reverse before expiry.
+    """
+
+    def test_up_profit_lock_fires_with_peak_yes(self):
+        # UP: entry 0.60, peak rose to 0.90, now back to 0.78
+        # reversal = 0.90-0.78=0.12 > 0.08, win_prob=0.78>0.70
+        _, etype = compute_exit_reason("UP", cur_yes=0.78, entry_yes=0.60,
+                                       age_placed=2.0, status="open",
+                                       peak_yes=0.90)
+        assert etype == "profit_lock"
+
+    def test_up_profit_lock_misses_without_peak_yes(self):
+        # Same scenario but no peak_yes → reversal = 0.60-0.78 = -0.18 → False
+        _, etype = compute_exit_reason("UP", cur_yes=0.78, entry_yes=0.60,
+                                       age_placed=2.0, status="open")
+        assert etype is None
+
+    def test_down_profit_lock_fires_with_peak_yes(self):
+        # DOWN: entry_yes=0.81, YES dropped to 0.04 (big win), now bounced to 0.15
+        # reversal = 0.15-0.04=0.11 > 0.08, win_prob=1-0.15=0.85>0.70
+        _, etype = compute_exit_reason("DOWN", cur_yes=0.15, entry_yes=0.81,
+                                       age_placed=2.0, status="open",
+                                       peak_yes=0.04)
+        assert etype == "profit_lock"
+
+    def test_down_profit_lock_misses_without_peak_yes(self):
+        # Same scenario, no peak_yes → anchor = entry_yes=0.81
+        # reversal = 0.15-0.81 = -0.66 → False, ProfitLock never fires
+        _, etype = compute_exit_reason("DOWN", cur_yes=0.15, entry_yes=0.81,
+                                       age_placed=2.0, status="open")
+        assert etype is None
+
+    def test_peak_yes_none_falls_back_to_entry(self):
+        # Explicit peak_yes=None behaves same as omitting it
+        _, etype1 = compute_exit_reason("UP", cur_yes=0.78, entry_yes=0.60,
+                                        age_placed=2.0, status="open",
+                                        peak_yes=None)
+        _, etype2 = compute_exit_reason("UP", cur_yes=0.78, entry_yes=0.60,
+                                        age_placed=2.0, status="open")
+        assert etype1 == etype2
+
+    def test_peak_same_as_entry_no_spurious_trigger(self):
+        # peak_yes == entry_yes: no extra reversal sensitivity introduced
+        _, etype = compute_exit_reason("UP", cur_yes=0.72, entry_yes=0.68,
+                                       age_placed=2.0, status="open",
+                                       peak_yes=0.68)
+        assert etype is None

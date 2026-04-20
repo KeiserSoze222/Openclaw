@@ -108,7 +108,7 @@ def get_max_bet(is_extreme=False):
     pct=PEAK_BET_PCT if hour in PEAK_HOURS else MAX_BET_PCT
     reserved=sum(p.get("bet",0) for p in OPEN_POSITIONS)
     avail=max(0,CURRENT_BALANCE-reserved)
-    return max(2.00,min(22.00,round(avail*pct*tod_scale,2)))
+    return max(2.00,min(35.00,round(avail*pct*tod_scale,2)))
 
 def send_telegram(msg):
     try:
@@ -332,7 +332,7 @@ def cancel_resting_orders():
     except Exception as e:
         print(f"[Orders] Cancel failed: {e}")
 
-def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=None):
+def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=None,override_max=False):
     # CORRELATION GUARD — atomic file lock prevents simultaneous firing
     try:
         import time as _t
@@ -361,7 +361,10 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
     if max_bet==0.0:
         print("[TOD] Skipping — bad hour for this bot")
         return False
-    bet=min(round(bet,2),max_bet)
+    if override_max:
+        bet=min(round(bet,2),CURRENT_BALANCE*0.20)
+    else:
+        bet=min(round(bet,2),max_bet)
     bet=max(2.00,bet)
     ticker=live_ticker
     try:
@@ -617,7 +620,8 @@ def try_directional(yes_price,no_price):
     elif confidence>=7:
         bet=min(round(bet*1.25,2),get_max_bet(is_extreme=is_extreme)*1.25)
         print(f"[Conf] Score {confidence} — bet boosted 25% to ${bet:.2f}")
-    bet=max(2.00,min(30.00,round(bet,2)))
+    high_conf=(confidence>=8)
+    bet=max(2.00,min(40.00,round(bet,2)))
     entry_p=(yes_price if current_direction=="UP" else (1-yes_price))
     expected_profit=round(bet*(1.0/max(0.01,entry_p)-1),2) if entry_p>0 else 0
     if expected_profit<2.00:
@@ -691,7 +695,7 @@ def try_directional(yes_price,no_price):
         if result:
             consecutive_signal_count=0
         return result
-    result=place_order(current_direction,bet,"directional",mkt_yes=yes_price,mkt_no=no_price)
+    result=place_order(current_direction,bet,"directional",mkt_yes=yes_price,mkt_no=no_price,override_max=high_conf)
     if result:
         consecutive_signal_count=0
     return result
@@ -748,7 +752,9 @@ def evaluate_exit(pos,kalshi,send_telegram,to_remove):
         print(f"[Exit] {direction} {ticker} — {reason} | sell=${sell_value:.2f}")
         try:
             sell_side=sell_side_for_direction(direction)
-            so=kalshi.create_order(ticker=ticker,action="sell",side=sell_side,type="market",count=contracts,time_in_force="ioc")
+            _eyp=min(99,max(1,round(cur_yes*100)-5)) if sell_side=="yes" else None
+            _enp=min(99,max(1,round((1-cur_yes)*100)-5)) if sell_side=="no" else None
+            so=kalshi.create_order(ticker=ticker,action="sell",side=sell_side,type="market",count=contracts,yes_price=_eyp,no_price=_enp,time_in_force="ioc")
             if so and hasattr(so,"order") and so.order:
                 if so.order.status=="resting" and so.order.order_id:
                     du=f"https://api.elections.kalshi.com/trade-api/v2/portfolio/orders/{so.order.order_id}"
@@ -804,7 +810,8 @@ def check_open_positions():
         # Evaluate all exit conditions from the single market snapshot
         if cur_yes is not None and age_placed>=0.5 and direction in ("UP","DOWN"):
             entry_yes=pos.get("entry_yes",0.5)
-            reason,exit_type=compute_exit_reason(direction,cur_yes,entry_yes,age_placed,mkt_status)
+            peak_yes=pos.get("max_yes") if direction=="UP" else pos.get("min_yes")
+            reason,exit_type=compute_exit_reason(direction,cur_yes,entry_yes,age_placed,mkt_status,peak_yes=peak_yes)
             if reason:
                 entry_p=entry_yes if direction=="UP" else (1-entry_yes)
                 contracts=pos.get("contracts",max(1,int(bet/max(0.01,entry_p))))
@@ -813,9 +820,13 @@ def check_open_positions():
                 print(f"[{exit_type.title()}] {direction} {ticker} — {reason} | sell=${sell_value:.2f}")
                 sell_ok=False
                 try:
+                    # Price params required by Kalshi to avoid 400 — subtract 5 cents to guarantee fill
+                    _syp=min(99,max(1,round(cur_yes*100)-5)) if side=="yes" else None
+                    _snp=min(99,max(1,round((1-cur_yes)*100)-5)) if side=="no" else None
                     sell_order=kalshi.create_order(
                         ticker=ticker,action="sell",side=side,
-                        type="market",count=contracts,time_in_force="ioc"
+                        type="market",count=contracts,
+                        yes_price=_syp,no_price=_snp,time_in_force="ioc"
                     )
                     if sell_order and hasattr(sell_order,"order") and sell_order.order:
                         o=sell_order.order
@@ -950,13 +961,30 @@ def load_existing_positions():
                 direction="DOWN"
             else:
                 direction="UNKNOWN"
+            # Actual contract count from API (prevents wrong sell quantities)
+            contracts=max(1,int(yes_c if direction=="UP" else no_c))
+            # Fetch current market price as entry_yes proxy — far better than hardcoding 0.70/0.30
+            # which causes cashout adverse calculations to fire or suppress incorrectly
+            cur_yes_proxy=0.70 if direction=="UP" else 0.30
+            try:
+                murl=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
+                mh=kalshi.kalshi_auth.create_auth_headers("GET",murl)
+                mr=requests.get(murl,headers=mh,timeout=4)
+                if mr.status_code==200:
+                    mkt=mr.json().get("market",{})
+                    ya=mkt.get("yes_ask_dollars") or mkt.get("yes_bid_dollars")
+                    if ya and 0.01<float(ya)<0.99:
+                        cur_yes_proxy=float(ya)
+            except Exception as fe:
+                print(f"[Startup] Market fetch failed for {ticker}: {fe}")
             OPEN_POSITIONS.append({"direction":direction,"bet":exposure,"ticker":ticker,
                 "strategy":"restored","time":time.time()-300,
-                "entry_yes":(0.70 if direction=="UP" else 0.30),"min_yes":(0.70 if direction=="UP" else 0.30),"max_yes":(0.70 if direction=="UP" else 0.30),
-                "signal_type":"RESTORED","entry_minute":0,"placed_at":time.time()-180})
-            print(f"[Startup] Restored: {ticker} ${exposure:.2f} {direction}")
+                "entry_yes":cur_yes_proxy,"min_yes":cur_yes_proxy,"max_yes":cur_yes_proxy,
+                "signal_type":"RESTORED","entry_minute":0,"placed_at":time.time()-180,
+                "contracts":contracts})
+            print(f"[Startup] Restored: {ticker} ${exposure:.2f} {direction} entry_yes={cur_yes_proxy:.2f} {contracts}c")
         if OPEN_POSITIONS:
-            print(f"[Startup] Loaded {len(OPEN_POSITIONS)} BTC position(s)")
+            print(f"[Startup] Loaded {len(OPEN_POSITIONS)} position(s)")
     except Exception as e:
         print(f"[Startup] Could not load positions: {e}")
 
@@ -1032,6 +1060,8 @@ if __name__=="__main__":
     if _startup_delay>0:
         print(f"[Startup] Staggered delay {_startup_delay}s for {_args.market.upper()}")
         import time as _st; _st.sleep(_startup_delay)
+    import os as _os
+    _os.path.exists("/tmp/openclaw_order_failed") and _os.remove("/tmp/openclaw_order_failed")
     load_existing_positions()
     cancel_resting_orders()
     print("[Startup] Resting orders cleared")
