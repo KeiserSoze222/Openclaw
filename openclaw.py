@@ -10,6 +10,7 @@ import json
 import numpy as np
 from kalshi_python import KalshiClient
 from kalshi_python.configuration import Configuration
+from exit_logic import compute_exit_reason, sell_side_for_direction, compute_sell_value, CASHOUT_ADVERSE as _CASHOUT_ADVERSE
 
 KALSHI_API_KEY='2d0a8c45-b76a-4459-a0e1-9a5e4d63fd8b'
 KALSHI_SECRET='''-----BEGIN RSA PRIVATE KEY-----
@@ -75,7 +76,7 @@ EXTREME_LOW=0.20
 STRONG_MIN1_EDGE=0.30
 MIN_EDGE=0.20
 CASHOUT_MINUTES=2
-CASHOUT_ADVERSE=0.20
+CASHOUT_ADVERSE=_CASHOUT_ADVERSE  # 0.12 — exit before position is nearly worthless
 INITIAL_BALANCE=295.66
 SESSION_START_BAL=295.66
 CURRENT_BALANCE=INITIAL_BALANCE
@@ -341,7 +342,7 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
             if _os.path.exists(window_lock):
                 age = _t.time()-_os.path.getmtime(window_lock)
                 if age < 840:
-                    print(f"[CorrGuard] Window {live_ticker.split("-",1)[-1]} already traded ({age:.0f}s ago) -- skipping")
+                    print(f"[CorrGuard] Window {live_ticker.split('-',1)[-1]} already traded ({age:.0f}s ago) -- skipping")
                     return False
             fd = _os.open(window_lock, _os.O_CREAT|_os.O_EXCL|_os.O_WRONLY)
             _os.write(fd, str(_t.time()).encode())
@@ -381,7 +382,7 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
     if entry_price>0.92:
         print(f"[Order] Entry {entry_price:.2f} too high risk/reward — skipping")
         return False
-    contract_count=max(1,min(25,int(bet/max(0.01,entry_price))))
+    contract_count=max(1,min(50,int(bet/max(0.01,entry_price))))
     liquid,ob_price=get_orderbook_liquidity(ticker,side,contract_count)
     if not liquid:
         print(f"[Order] Insufficient liquidity for {contract_count} {side} contracts on {ticker} — skipping")
@@ -446,7 +447,8 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
                 COOLDOWN_REMAINING=COOLDOWN_CYCLES
                 return False
         actual_cost=round(contract_count*(mkt_yes if direction=="UP" else (1-(mkt_yes or 0.5))),2) if mkt_yes else bet
-        msg=f"✅ {BOT_NAME.split()[1]} {strategy_tag.upper()}: {direction} {contract_count}c @ ${(mkt_yes if direction=="UP" else (1-(mkt_yes or 0.5))):.2f} = ${actual_cost:.2f} on {ticker}"
+        _entry_disp=mkt_yes if direction=="UP" else (1-(mkt_yes or 0.5))
+        msg=f"✅ {BOT_NAME.split()[1]} {strategy_tag.upper()}: {direction} {contract_count}c @ ${_entry_disp:.2f} = ${actual_cost:.2f} on {ticker}"
         print(msg)
         send_telegram(msg)
         entry_yes=mkt_yes if mkt_yes is not None else (yes_price if yes_price else 0.5)
@@ -719,7 +721,7 @@ def evaluate_exit(pos,kalshi,send_telegram,to_remove):
     if status not in ("open","active"): return
     # Calculate metrics once
     win_prob=(1-cur_yes) if direction=="DOWN" else cur_yes
-    sell_price=(1-cur_yes) if direction=="UP" else cur_yes
+    sell_price=cur_yes if direction=="UP" else (1-cur_yes)
     contracts=pos.get("contracts",max(1,int(bet/max(0.01,entry_yes if direction=="UP" else (1-entry_yes)))))
     sell_value=round(contracts*sell_price,2)
     erv_hold=round(contracts*win_prob,2)
@@ -745,7 +747,7 @@ def evaluate_exit(pos,kalshi,send_telegram,to_remove):
     if reason:
         print(f"[Exit] {direction} {ticker} — {reason} | sell=${sell_value:.2f}")
         try:
-            sell_side="no" if direction=="UP" else "yes"
+            sell_side=sell_side_for_direction(direction)
             so=kalshi.create_order(ticker=ticker,action="sell",side=sell_side,type="market",count=contracts,time_in_force="ioc")
             if so and hasattr(so,"order") and so.order:
                 if so.order.status=="resting" and so.order.order_id:
@@ -776,183 +778,98 @@ def check_open_positions():
         strategy=pos.get("strategy","unknown")
         placed_at=pos.get("placed_at",0)
         age_min=(time.time()-pos.get("time",time.time()))/60
+        age_placed=(time.time()-placed_at)/60 if placed_at>0 else 999
         if not ticker:
             to_remove.append(pos)
             continue
+        # Single API call per position per cycle — all decisions use same snapshot
+        cur_yes=None
+        mkt_status="unknown"
+        mkt_result=""
         try:
             murl=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
             mheader=kalshi.kalshi_auth.create_auth_headers("GET",murl)
             mr=requests.get(murl,headers=mheader,timeout=4)
             if mr.status_code==200:
-                cur_yes=float(mr.json().get("market",{}).get("yes_ask_dollars",0.5))
-                pos["min_yes"]=min(pos.get("min_yes",cur_yes),cur_yes)
-                pos["max_yes"]=max(pos.get("max_yes",cur_yes),cur_yes)
-        except Exception:
-            pass
-        age_placed=(time.time()-placed_at)/60 if placed_at>0 else 999
-        # PROFIT LOCK — exit if winning and reversal detected
-        if age_placed>=1.5:
-            try:
-                murl=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
-                mheader=kalshi.kalshi_auth.create_auth_headers("GET",murl)
-                mr=requests.get(murl,headers=mheader,timeout=4)
-                if mr.status_code==200:
-                    mkt=mr.json().get("market",{})
-                    ya=mkt.get("yes_ask_dollars") or mkt.get("yes_bid_dollars")
-                    entry_yes=pos.get("entry_yes",0.5)
-                    cur_yes=float(ya) if ya and 0.001<float(ya)<0.999 else entry_yes
-                    win_prob=(1-cur_yes) if direction=="DOWN" else cur_yes
-                    reversal=((cur_yes-entry_yes)>0.08) if direction=="DOWN" else ((entry_yes-cur_yes)>0.08)
-                    if win_prob>0.70 and reversal:
-                        print(f"[ProfitLock] {direction} on {ticker} win={win_prob:.2f} reversing — locking profit")
-                        try:
-                            sell_side = "no" if direction=="UP" else "yes"
-                            entry_p2=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))
-                            contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/entry_p2)))
-                            sell_order = kalshi.create_order(
-                                ticker=ticker, action="sell", side=sell_side,
-                                type="market", count=contracts,
-                                time_in_force="ioc"
-                            )
-                            if sell_order and hasattr(sell_order,"order") and sell_order.order:
-                                o = sell_order.order
-                                label = "ProfitLock"
-                                print(f"[ProfitLock] Sell order: {o.status}")
-                                if o.status == "resting" and o.order_id:
-                                    try:
-                                        del_url = f"https://api.elections.kalshi.com/trade-api/v2/portfolio/orders/{o.order_id}"
-                                        del_h = kalshi.kalshi_auth.create_auth_headers("DELETE", del_url)
-                                        requests.delete(del_url, headers=del_h, timeout=5)
-                                        print(f"[{label}] Cancelled resting sell {o.order_id}")
-                                    except Exception as de:
-                                        print(f"[{label}] Cancel failed: {de}")
-                        except Exception as se:
-                            print(f"[ProfitLock] Sell failed: {se}")
-                        send_telegram(f"🔒 ProfitLock: {direction} {ticker}\nwin={win_prob:.2f} | securing profit")
-                        to_remove.append(pos)
-                        continue
-                    entry_win_prob=(1-entry_yes) if direction=="DOWN" else entry_yes
-                    if win_prob<0.45 and age_placed>=2.5 and entry_win_prob>0.60:
-                        print(f"[BreakEven] {direction} on {ticker} crossed 50% — exiting")
-                        try:
-                            sell_side = "no" if direction=="UP" else "yes"
-                            entry_p2=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))
-                            contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/entry_p2)))
-                            sell_order = kalshi.create_order(
-                                ticker=ticker, action="sell", side=sell_side,
-                                type="market", count=contracts,
-                                time_in_force="ioc"
-                            )
-                            if sell_order and hasattr(sell_order,"order") and sell_order.order:
-                                o = sell_order.order
-                                print(f"[BreakEven] Sell order: {o.status}")
-                                if o.status == "resting" and o.order_id:
-                                    try:
-                                        del_url = f"https://api.elections.kalshi.com/trade-api/v2/portfolio/orders/{o.order_id}"
-                                        del_h = kalshi.kalshi_auth.create_auth_headers("DELETE", del_url)
-                                        requests.delete(del_url, headers=del_h, timeout=5)
-                                        print(f"[BreakEven] Cancelled resting sell {o.order_id}")
-                                    except Exception as de:
-                                        print(f"[BreakEven] Cancel failed: {de}")
-                        except Exception as se:
-                            print(f"[BreakEven] Sell failed: {se}")
-                        send_telegram(f"⚖️ BreakEven: {direction} {ticker}\n{entry_win_prob:.0%}→{win_prob:.0%}")
-                        to_remove.append(pos)
-                        continue
-            except Exception as pe:
-                print(f"[ProfitLock] Error: {pe}")
-        try:
-            _iurl=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
-            _ihr=kalshi.kalshi_auth.create_auth_headers("GET",_iurl)
-            _imr=requests.get(_iurl,headers=_ihr,timeout=4)
-            if _imr.status_code==200:
-                _iya=_imr.json().get("market",{}).get("yes_ask_dollars")
-                if _iya is not None:
-                    _icy=float(_iya)
-                    _ifloor=((direction=="UP" and _icy<0.06) or (direction=="DOWN" and _icy>0.94)) and direction in ("UP","DOWN")
-                    if _ifloor and age_placed>=0.5:
-                        print(f"[HardFloor] {direction} on {ticker} YES={_icy:.2f}")
-                        try:
-                            _ss="no" if direction=="UP" else "yes"
-                            _ep=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))
-                            _nc=pos.get("contracts",max(1,int(pos.get("bet",2)/_ep)))
-                            _so=kalshi.create_order(ticker=ticker,action="sell",side=_ss,type="market",count=_nc,time_in_force="ioc")
-                            send_telegram(f"HardFloor: {direction} {ticker} YES={_icy:.2f}")
-                            to_remove.append(pos);continue
-                        except Exception as _he: print(f"[HardFloor] fail: {str(_he)}")
-        except Exception: pass
-        if age_placed>=CASHOUT_MINUTES:
-            try:
-                murl=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
-                mheader=kalshi.kalshi_auth.create_auth_headers("GET",murl)
-                mr=requests.get(murl,headers=mheader,timeout=4)
-                if mr.status_code==200:
-                    mkt=mr.json().get("market",{})
-                    status=mkt.get("status","")
-                    ya=mkt.get("yes_ask_dollars") or mkt.get("yes_bid_dollars")
-                    entry_yes=pos.get("entry_yes",0.5)
-                    cur_yes=float(ya) if ya and 0.001<float(ya)<0.999 else entry_yes
-                    if status in ("open","active") and direction in ("UP","DOWN"):
-                        adverse=((entry_yes-cur_yes) if direction=="UP" else (cur_yes-(1-entry_yes)))
-                        hard_floor=(direction=="UP" and cur_yes<0.10) or (direction=="DOWN" and cur_yes>0.90)
-                        if adverse>CASHOUT_ADVERSE or hard_floor:
-                            print(f"[CashOut] {direction} on {ticker} moved {adverse:.2f} against — exiting early")
-                            # SELL the position on Kalshi to recover remaining value
-                            try:
-                                sell_side = "no" if direction=="UP" else "yes"
-                                entry_p2=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))
-                                contracts = pos.get("contracts", max(1,int(pos.get("bet",2)/entry_p2)))
-                                sell_order = kalshi.create_order(
-                                    ticker=ticker, action="sell", side=sell_side,
-                                    type="market", count=contracts,
-                                    time_in_force="ioc"
-                                )
-                                if sell_order and hasattr(sell_order,"order") and sell_order.order:
-                                    o=sell_order.order
-                                    print(f"[CashOut] Sell order: {o.status}")
-                                    if o.status=="resting" and o.order_id:
-                                        try:
-                                            du=f"https://api.elections.kalshi.com/trade-api/v2/portfolio/orders/{o.order_id}"
-                                            dh=kalshi.kalshi_auth.create_auth_headers("DELETE",du)
-                                            requests.delete(du,headers=dh,timeout=5)
-                                            print(f"[CashOut] Cancelled resting sell {o.order_id}")
-                                        except Exception as de:
-                                            print(f"[CashOut] Cancel failed: {de}")
-                            except Exception as se:
-                                print(f"[CashOut] Sell failed: {se}")
-                            send_telegram(f"💸 CashOut: {direction} {ticker}\nadverse={adverse:.2f} | saving capital")
-                            to_remove.append(pos)
-                            continue
-            except Exception as ce:
-                print(f"[CashOut] Error: {ce}")
+                mkt_data=mr.json().get("market",{})
+                mkt_status=mkt_data.get("status","")
+                mkt_result=mkt_data.get("result","")
+                ya=mkt_data.get("yes_ask_dollars") or mkt_data.get("yes_bid_dollars")
+                if ya is not None and 0.001<float(ya)<0.999:
+                    cur_yes=float(ya)
+                    pos["min_yes"]=min(pos.get("min_yes",cur_yes),cur_yes)
+                    pos["max_yes"]=max(pos.get("max_yes",cur_yes),cur_yes)
+        except Exception as e:
+            print(f"[Positions] Fetch failed for {ticker}: {e}")
+        # Evaluate all exit conditions from the single market snapshot
+        if cur_yes is not None and age_placed>=0.5 and direction in ("UP","DOWN"):
+            entry_yes=pos.get("entry_yes",0.5)
+            reason,exit_type=compute_exit_reason(direction,cur_yes,entry_yes,age_placed,mkt_status)
+            if reason:
+                entry_p=entry_yes if direction=="UP" else (1-entry_yes)
+                contracts=pos.get("contracts",max(1,int(bet/max(0.01,entry_p))))
+                sell_value=compute_sell_value(contracts,direction,cur_yes)
+                side=sell_side_for_direction(direction)
+                print(f"[{exit_type.title()}] {direction} {ticker} — {reason} | sell=${sell_value:.2f}")
+                sell_ok=False
+                try:
+                    sell_order=kalshi.create_order(
+                        ticker=ticker,action="sell",side=side,
+                        type="market",count=contracts,time_in_force="ioc"
+                    )
+                    if sell_order and hasattr(sell_order,"order") and sell_order.order:
+                        o=sell_order.order
+                        sell_ok=str(o.status) in ("filled","executed") or (
+                            o.remaining_count==0 and o.order_id is not None
+                        )
+                        if o.status=="resting" and o.order_id:
+                            du=f"https://api.elections.kalshi.com/trade-api/v2/portfolio/orders/{o.order_id}"
+                            dh=kalshi.kalshi_auth.create_auth_headers("DELETE",du)
+                            requests.delete(du,headers=dh,timeout=5)
+                            sell_ok=True
+                            print(f"[{exit_type.title()}] Cancelled resting sell {o.order_id}")
+                        print(f"[{exit_type.title()}] Sell order: {o.status}")
+                except Exception as se:
+                    print(f"[{exit_type.title()}] Sell failed: {se}")
+                if sell_ok:
+                    realized=round(sell_value-bet,2)
+                    session_pnl+=realized
+                    CURRENT_BALANCE=round(CURRENT_BALANCE+realized,2)
+                    if exit_type=="profit_lock" and realized>0:
+                        session_wins+=1
+                    else:
+                        session_losses+=1
+                    log_trade(direction,bet,"CASHOUT",
+                              profit_pct=realized/bet*100 if bet else 0,
+                              notes=f"{exit_type}|{ticker}")
+                icon="🔒" if exit_type=="profit_lock" else "💸"
+                fill_note="" if sell_ok else " | SELL FAILED — check position"
+                send_telegram(f"{icon} {exit_type.title()}: {direction} {ticker}\n{reason} | sell=${sell_value:.2f}{fill_note}")
+                to_remove.append(pos)
+                continue
+        # Restored positions: settle after 16 min
         if strategy=="restored" and age_min>16:
-            # Try to determine WIN/LOSS for restored position before removing
             try:
-                murl=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
-                mheader=kalshi.kalshi_auth.create_auth_headers("GET",murl)
-                mr=requests.get(murl,headers=mheader,timeout=5)
-                if mr.status_code==200:
-                    mkt=mr.json().get("market",{})
-                    result=mkt.get("result","")
-                    if result:
-                        bet=pos.get("bet",0)
-                        won=(direction=="UP" and result=="yes") or (direction=="DOWN" and result=="no")
-                        if won:
-                            payout=round(bet/(pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))),2)
-                            realized=round(payout-bet,2)
-                            log_trade(direction,bet,"WIN",notes=f"restored|{ticker}",profit_pct=round(realized/bet*100,1))
-                            send_telegram(f"✅ {BOT_NAME.split()[1]} WIN (restored): {direction} ${bet:.2f} | pnl=${realized:+.2f}")
-                            print(f"[Restored] WIN: {direction} ${bet:.2f} on {ticker}")
-                        else:
-                            log_trade(direction,bet,"LOSS",notes=f"restored|{ticker}")
-                            send_telegram(f"❌ {BOT_NAME.split()[1]} LOSS (restored): {direction} ${bet:.2f}")
-                            print(f"[Restored] LOSS: {direction} ${bet:.2f} on {ticker}")
-            except Exception as re:
-                print(f"[Restored] Settlement check failed: {re}")
+                if mkt_result:
+                    won=(direction=="UP" and mkt_result=="yes") or (direction=="DOWN" and mkt_result=="no")
+                    if won:
+                        entry_p=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))
+                        payout=round(bet/max(0.01,entry_p),2)
+                        realized=round(payout-bet,2)
+                        log_trade(direction,bet,"WIN",notes=f"restored|{ticker}",profit_pct=round(realized/bet*100,1))
+                        send_telegram(f"✅ {BOT_NAME.split()[1]} WIN (restored): {direction} ${bet:.2f} | pnl=${realized:+.2f}")
+                        print(f"[Restored] WIN: {direction} ${bet:.2f} on {ticker}")
+                    else:
+                        log_trade(direction,bet,"LOSS",notes=f"restored|{ticker}")
+                        send_telegram(f"❌ {BOT_NAME.split()[1]} LOSS (restored): {direction} ${bet:.2f}")
+                        print(f"[Restored] LOSS: {direction} ${bet:.2f} on {ticker}")
+            except Exception as re_e:
+                print(f"[Restored] Settlement check failed: {re_e}")
             to_remove.append(pos)
             continue
         if age_min<=16:
             continue
+        # Settlement check for expired positions
         try:
             url="https://api.elections.kalshi.com/trade-api/v2/portfolio/positions"
             headers=kalshi.kalshi_auth.create_auth_headers("GET",url)
@@ -962,23 +879,14 @@ def check_open_positions():
             open_tickers={p.get("ticker") for p in resp.json().get("market_positions",[])}
             if ticker in open_tickers:
                 continue
-            murl=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
-            mheader=kalshi.kalshi_auth.create_auth_headers("GET",murl)
-            mr=requests.get(murl,headers=mheader,timeout=5)
-            if mr.status_code!=200:
+            if not mkt_result:
                 if age_min>20:
                     to_remove.append(pos)
                 continue
-            mkt=mr.json().get("market",{})
-            result=mkt.get("result","")
-            if not result:
-                if age_min>20:
-                    to_remove.append(pos)
-                continue
-            won=((result=="yes" and direction=="UP") or (result=="no" and direction=="DOWN"))
+            won=((mkt_result=="yes" and direction=="UP") or (mkt_result=="no" and direction=="DOWN"))
             entry_p=pos.get("entry_yes",0.5) if direction=="UP" else (1-pos.get("entry_yes",0.5))
-            contracts=max(1,int(bet/entry_p))
-            realized=round(contracts*1.0-bet,2) if won else -bet
+            contracts_settled=max(1,int(bet/max(0.01,entry_p)))
+            realized=round(contracts_settled*1.0-bet,2) if won else -bet
             outcome="WIN" if won else "LOSS"
             session_pnl+=realized
             CURRENT_BALANCE=round(CURRENT_BALANCE+realized,2)
