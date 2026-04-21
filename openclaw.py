@@ -335,7 +335,7 @@ def cancel_resting_orders():
     except Exception as e:
         print(f"[Orders] Cancel failed: {e}")
 
-def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=None,override_max=False):
+def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=None,override_max=False,conf_reasons=None):
     # CORRELATION GUARD — OPEN_POSITIONS first (most reliable), then file lock for cross-bot
     try:
         import time as _t
@@ -470,7 +470,8 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
             "entry_time":now_utc.isoformat(),"entry_yes":entry_yes,
             "min_yes":entry_yes,"max_yes":entry_yes,
             "signal_type":"EXTREME" if is_extreme else "STANDARD",
-            "entry_minute":now_utc.minute%15,"contracts":contract_count})
+            "entry_minute":now_utc.minute%15,"contracts":contract_count,
+            "conf_reasons":conf_reasons or []})
         log_trade(direction,actual_cost,"PLACED",notes=f"{strategy_tag}|{ticker}")
         COOLDOWN_REMAINING=0
         return True
@@ -700,11 +701,27 @@ def try_directional(yes_price,no_price):
         dd_bet=round(min(existing[0].get("bet",0)*0.50,get_max_bet(is_extreme=is_extreme)*0.50),2)
         dd_bet=max(2.00,dd_bet)
         print(f"[DoubleDown] edge={edge:.2f} — adding ${dd_bet:.2f}")
-        result=place_order(current_direction,dd_bet,"double_down",mkt_yes=yes_price,mkt_no=no_price)
+        result=place_order(current_direction,dd_bet,"double_down",mkt_yes=yes_price,mkt_no=no_price,conf_reasons=conf_reasons)
         if result:
             consecutive_signal_count=0
         return result
-    result=place_order(current_direction,bet,"directional",mkt_yes=yes_price,mkt_no=no_price,override_max=high_conf)
+    # Shadow bet sizing for ETH confidence≥8 test (Task 4 — logging only, no trading change)
+    if MARKET_SERIES == "KXETH15M" and confidence >= 8:
+        shadow_max = max(2.00, min(35.00, round(
+            max(0, CURRENT_BALANCE - sum(p.get("bet",0) for p in OPEN_POSITIONS)) * 0.14, 2)))
+        shadow_bet = round(shadow_max * scale * RISK_SCORE, 2)
+        shadow_bet = max(2.00, min(shadow_bet, shadow_max))
+        print(f"[ShadowBet] ETH conf={confidence} | actual_max_pct=0.12 bet=${bet:.2f} | shadow_max_pct=0.14 bet=${shadow_bet:.2f} | diff=${shadow_bet-bet:.2f}")
+        try:
+            with open("/root/eth_shadow_bets.json", "a") as _sf:
+                import json as _j
+                _sf.write(_j.dumps({"ts": datetime.datetime.now().isoformat(),
+                    "confidence": confidence, "conf_reasons": conf_reasons,
+                    "actual_bet": bet, "shadow_bet": shadow_bet,
+                    "ticker": live_ticker, "direction": current_direction,
+                    "yes_price": yes_price, "edge": round(edge,4)}) + "\n")
+        except Exception: pass
+    result=place_order(current_direction,bet,"directional",mkt_yes=yes_price,mkt_no=no_price,override_max=high_conf,conf_reasons=conf_reasons)
     if result:
         consecutive_signal_count=0
     return result
@@ -934,7 +951,8 @@ def check_open_positions():
             features={"signal_type":pos.get("signal_type","STANDARD"),"entry_minute":pos.get("entry_minute",0),
                 "market":MARKET_SERIES,"entry_yes":pos.get("entry_yes",0.5),
                 "min_yes":pos.get("min_yes",0.5),"max_yes":pos.get("max_yes",0.5),
-                "adverse_move":abs(pos.get("min_yes",0.5)-pos.get("entry_yes",0.5))}
+                "adverse_move":abs(pos.get("min_yes",0.5)-pos.get("entry_yes",0.5)),
+                "conf_reasons":pos.get("conf_reasons",[])}
             log_trade(direction,bet,outcome,profit_pct=realized/bet*100 if bet else 0,
                 notes=f"{strategy}|{ticker}",features=features)
             to_remove.append(pos)

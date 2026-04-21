@@ -26,16 +26,13 @@ CHECK_INTERVAL_MINUTES  = 30  # check feeds every 30 minutes
 
 # ── SOURCES ───────────────────────────────────────────────────────────────────
 FEEDS = [
-    # Reddit
-    {"url": "https://www.reddit.com/r/algotrading/.rss",      "source": "r/algotrading"},
-    {"url": "https://www.reddit.com/r/kalshi/.rss",           "source": "r/kalshi"},
-    {"url": "https://www.reddit.com/r/polymarket/.rss",       "source": "r/polymarket"},
-    {"url": "https://www.reddit.com/r/cryptotrading/.rss",    "source": "r/cryptotrading"},
-    {"url": "https://www.reddit.com/r/algotrading/new/.rss",  "source": "r/algotrading-new"},
-    # Crypto news
+    # Crypto news — keep fast/breaking sources only.
+    # Reddit feeds (r/kalshi, r/polymarket, r/algotrading, etc.) were removed:
+    # NEWS_AGENT_VALUE.md analysis showed 72% of corpus was community discussion
+    # with no actionable signal for 15-minute crypto contracts.
+    {"url": "https://www.theblock.co/rss.xml",                "source": "TheBlock"},
     {"url": "https://cointelegraph.com/rss",                  "source": "CoinTelegraph"},
     {"url": "https://decrypt.co/feed",                        "source": "Decrypt"},
-    {"url": "https://www.theblock.co/rss.xml",                "source": "TheBlock"},
 ]
 
 # ── SCORING ───────────────────────────────────────────────────────────────────
@@ -194,7 +191,7 @@ def send_daily_digest():
 # ── MAIN LOOP ─────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     print(f"OpenClaw News Agent starting — checking every {CHECK_INTERVAL_MINUTES}min")
-    send_telegram("📡 News Agent started — monitoring Reddit, CoinTelegraph, Decrypt, TheBlock")
+    send_telegram("📡 News Agent started — monitoring TheBlock, CoinTelegraph, Decrypt")
 
     last_digest_day = None
 
