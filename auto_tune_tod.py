@@ -7,10 +7,9 @@ Cron: 0 6 */2 * * python3 /root/auto_tune_tod.py >> /root/auto_tune.log 2>&1
 import csv, json, datetime, requests
 from collections import defaultdict
 
-# Load telegram config
-raw       = open('/root/real_bot.py').read()
-BOT_TOKEN = raw.split("BOT_TOKEN = '")[1].split("'")[0]
-CHAT_ID   = raw.split("CHAT_ID   = '")[1].split("'")[0]
+# Telegram config — same values as openclaw.py
+BOT_TOKEN = '8716034840:AAHBhhlM0nFOQCIAhVOzYW8iXamumTAZypU'
+CHAT_ID   = '8257178399'
 
 def send_telegram(msg):
     try:

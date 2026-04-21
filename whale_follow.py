@@ -104,6 +104,13 @@ def scan():
         time.sleep(15)
 
 if __name__=="__main__":
+    _pid_file="/tmp/openclaw_whale_follow.pid"
+    if os.path.exists(_pid_file):
+        _old_pid=int(open(_pid_file).read().strip())
+        if os.path.exists(f"/proc/{_old_pid}"):
+            print(f"[WhaleFollow] Already running (pid {_old_pid}) — exiting")
+            raise SystemExit(0)
+    open(_pid_file,"w").write(str(os.getpid()))
     print("🐋 Whale Follower v1 starting...")
     print(f"Min whale: ${MIN_WHALE_SIZE:,} | Follow bet: ${FOLLOW_BET}-${MAX_FOLLOW_BET}")
     scan()

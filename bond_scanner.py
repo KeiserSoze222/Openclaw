@@ -224,6 +224,13 @@ def check_settled():
 
 # ── MAIN LOOP ─────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
+    _pid_file="/tmp/openclaw_bond_scanner.pid"
+    if os.path.exists(_pid_file):
+        _old_pid=int(open(_pid_file).read().strip())
+        if os.path.exists(f"/proc/{_old_pid}"):
+            print(f"[Bond] Already running (pid {_old_pid}) — exiting")
+            raise SystemExit(0)
+    open(_pid_file,"w").write(str(os.getpid()))
     print("OpenClaw Bond Scanner starting...")
     send_telegram("🔒 Bond Scanner started — hunting near-certain outcomes")
 

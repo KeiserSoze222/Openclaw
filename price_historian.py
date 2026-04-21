@@ -54,6 +54,13 @@ def scan(min_ts):
         log_entry({"ts":now,"trade_ts":str(ts_val),"ticker":ticker,"type":"trade","side":t.get("taker_side",""),"count":t.get("count_fp"),"yes_price":t.get("yes_price_dollars"),"no_price":t.get("no_price_dollars"),"trade_id":tid})
     return new_ts
 if __name__=="__main__":
+    _pid_file="/tmp/openclaw_price_historian.pid"
+    if os.path.exists(_pid_file):
+        _old_pid=int(open(_pid_file).read().strip())
+        if os.path.exists(f"/proc/{_old_pid}"):
+            print(f"[PriceHistorian] Already running (pid {_old_pid}) — exiting")
+            raise SystemExit(0)
+    open(_pid_file,"w").write(str(os.getpid()))
     print("[PriceHistorian] Starting")
     min_ts=int(time.time())-300
     cycle=0

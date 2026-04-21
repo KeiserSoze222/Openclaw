@@ -75,8 +75,8 @@ EXTREME_HIGH=0.80
 EXTREME_LOW=0.20
 STRONG_MIN1_EDGE=0.30
 MIN_EDGE=0.20
-CASHOUT_MINUTES=3
-CASHOUT_ADVERSE=0.35
+CASHOUT_MINUTES=2
+CASHOUT_ADVERSE=0.12
 INITIAL_BALANCE=200.29
 SESSION_START_BAL=200.29
 CURRENT_BALANCE=INITIAL_BALANCE
@@ -836,7 +836,8 @@ def check_open_positions():
             total=session_wins+session_losses
             wr=session_wins/total*100 if total else 0
             print(f"[Settled] {outcome}: {direction} ${bet:.2f} on {ticker} | pnl=${realized:+.2f} | {session_wins}W/{session_losses}L ({wr:.0f}%)")
-            send_telegram(f"{"✅" if won else "❌"} {BOT_NAME.split()[1]} {outcome}: {direction} ${bet:.2f} | pnl=${realized:+.2f}\n{session_wins}W/{session_losses}L ({wr:.0f}%) | Bal=${CURRENT_BALANCE:.2f}")
+            icon="✅" if won else "❌"
+            send_telegram(f"{icon} {BOT_NAME.split()[1]} {outcome}: {direction} ${bet:.2f} | pnl=${realized:+.2f}\n{session_wins}W/{session_losses}L ({wr:.0f}%) | Bal=${CURRENT_BALANCE:.2f}")
             features={"signal_type":pos.get("signal_type","STANDARD"),"entry_minute":pos.get("entry_minute",0),
                 "market":MARKET_SERIES,"entry_yes":pos.get("entry_yes",0.5),
                 "min_yes":pos.get("min_yes",0.5),"max_yes":pos.get("max_yes",0.5),
@@ -982,7 +983,8 @@ def risk_score(v):
     confidence=math.log(t+1)/math.log(100)
     return round(wr*confidence,4)
 
-import subprocess
+OPENCLAW_FILE="/home/user/Openclaw/openclaw.py"
+
 def auto_promote(pool):
     try:
         candidates=[v for v in pool if v.get("trades",0)>=50]
@@ -990,19 +992,29 @@ def auto_promote(pool):
         leader=max(candidates,key=lambda v:risk_score(v))
         wr=leader.get("wins",0)/leader.get("trades",1)
         if wr<0.70: return
-        thresh=leader.get("entry_threshold",0.70)
-        cur=subprocess.check_output(["grep","DIRECTIONAL_HIGH","/root/openclaw.py"]).decode()
-        cur_thresh=float([x for x in cur.split() if "=" in x][0].split("=")[1])
-        if abs(thresh-cur_thresh)<0.001: return
-        subprocess.run(["sed","-i","s/DIRECTIONAL_HIGH="+str(cur_thresh)+"/DIRECTIONAL_HIGH="+str(thresh)+"/","/root/openclaw.py"])
-        #subprocess.run(["pm2","restart","openclaw-btc","openclaw-eth","openclaw-sol"]) # DISABLED - manual promotion only
-        msg="[AutoPromote] "+leader["id"]+" WR="+str(round(wr,3))+" thresh="+str(thresh)+" promoted"
+        # Read current openclaw.py and apply full genome promotion
+        with open(OPENCLAW_FILE,"r") as _f:
+            src=_f.read()
+        changes=[]
+        def _replace_const(text,name,new_val):
+            import re
+            pat=rf"^({name}\s*=\s*)[\d.]+(.*)$"
+            new_line=rf"\g<1>{new_val}\g<2>"
+            new_text,n=re.subn(pat,new_line,text,flags=re.MULTILINE)
+            if n: changes.append(f"{name}={new_val}")
+            return new_text
+        src=_replace_const(src,"DIRECTIONAL_HIGH",round(leader.get("entry_threshold",0.70),3))
+        src=_replace_const(src,"MAX_BET_PCT",round(leader.get("max_bet_pct",0.07),3))
+        if leader.get("cashout_adverse"):
+            src=_replace_const(src,"CASHOUT_ADVERSE",round(leader["cashout_adverse"],3))
+        if leader.get("min_edge"):
+            src=_replace_const(src,"MIN_EDGE",round(leader["min_edge"],3))
+        if not changes: return
+        with open(OPENCLAW_FILE,"w") as _f:
+            _f.write(src)
+        msg="[AutoPromote] "+leader["id"]+" WR="+str(round(wr,3))+" promoted: "+", ".join(changes)
         print(msg)
-        raw=open("/root/real_bot_pre_v4_backup.py").read()
-        tok=raw.split("BOT_TOKEN = '")[1].split("'")[0]
-        cid=raw.split("CHAT_ID   = '")[1].split("'")[0]
-        import requests as _r
-        _r.get("https://api.telegram.org/bot"+tok+"/sendMessage",params={"chat_id":cid,"text":msg},timeout=5)
+        send_telegram(msg)
     except Exception as e: print("[AutoPromote] err:"+str(e))
 if __name__=="__main__":
     import json,random

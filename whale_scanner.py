@@ -76,6 +76,13 @@ def scan_once(min_ts):
             send_telegram(f"🐋 BIG Whale\n{side} ${size:,.0f} on {ticker}")
 
 if __name__ == "__main__":
+    _pid_file="/tmp/openclaw_whale_scanner.pid"
+    if os.path.exists(_pid_file):
+        _old_pid=int(open(_pid_file).read().strip())
+        if os.path.exists(f"/proc/{_old_pid}"):
+            print(f"[Whale] Already running (pid {_old_pid}) — exiting")
+            raise SystemExit(0)
+    open(_pid_file,"w").write(str(os.getpid()))
     print("🐋 OpenClaw Whale Scanner v3 starting...")
     print(f"Alert >= ${MIN_ALERT_SIZE:,} | Scan every {SCAN_INTERVAL}s")
     min_ts = int(time.time()) - 60

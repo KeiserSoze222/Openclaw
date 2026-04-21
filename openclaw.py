@@ -77,9 +77,9 @@ STRONG_MIN1_EDGE=0.30
 MIN_EDGE=0.20
 CASHOUT_MINUTES=2
 CASHOUT_ADVERSE=_CASHOUT_ADVERSE  # 0.12 — exit before position is nearly worthless
-INITIAL_BALANCE=295.66
-SESSION_START_BAL=295.66
-CURRENT_BALANCE=INITIAL_BALANCE
+INITIAL_BALANCE=0.0   # overridden at startup from live balance API — never used as fallback
+SESSION_START_BAL=0.0  # overridden at startup from /tmp/openclaw_day_start.json
+CURRENT_BALANCE=0.0    # set by startup before first cycle
 # TOD schedule — adjusted per market liquidity
 if MARKET_SERIES == "KXBTC15M":
     TOD_SCHEDULE={0:0.50,1:0.30,2:0.75,3:1.25,4:0.20,5:0.00,6:1.25,7:1.25,8:1.00,9:1.25,10:1.00,11:1.25,12:0.75,13:0.40,14:1.25,15:1.50,16:1.00,17:0.85,18:0.85,19:1.25,20:0.80,21:1.25,22:0.40,23:0.50}
@@ -361,11 +361,14 @@ def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=Non
     if max_bet==0.0:
         print("[TOD] Skipping — bad hour for this bot")
         return False
+    if max_bet<5.00 and not override_max:
+        print(f"[MinBet] max_bet=${max_bet:.2f} < $5.00 — skipping low-EV signal")
+        return False
     if override_max:
         bet=min(round(bet,2),CURRENT_BALANCE*0.20)
     else:
         bet=min(round(bet,2),max_bet)
-    bet=max(2.00,bet)
+    bet=max(5.00,bet)
     ticker=live_ticker
     try:
         import os as _oi,time as _ti
@@ -621,7 +624,7 @@ def try_directional(yes_price,no_price):
         bet=min(round(bet*1.25,2),get_max_bet(is_extreme=is_extreme)*1.25)
         print(f"[Conf] Score {confidence} — bet boosted 25% to ${bet:.2f}")
     high_conf=(confidence>=8)
-    bet=max(2.00,min(40.00,round(bet,2)))
+    bet=round(bet,2)
     entry_p=(yes_price if current_direction=="UP" else (1-yes_price))
     expected_profit=round(bet*(1.0/max(0.01,entry_p)-1),2) if entry_p>0 else 0
     if expected_profit<2.00:
@@ -935,24 +938,114 @@ def send_hourly_summary():
     wr=session_wins/total*100 if total else 0
     send_telegram(f"📊 {BOT_NAME.split()[1]} Hourly ({hour:02d}:00 UTC)\n{session_wins}W/{session_losses}L ({wr:.0f}%) | PnL: ${session_pnl:+.2f} | Bal: ${CURRENT_BALANCE:.2f}")
 
+def _fetch_fill_for_ticker(ticker):
+    """Return (entry_yes, placed_at_epoch) from the most recent fill for this ticker, or (None, None)."""
+    try:
+        url="https://api.elections.kalshi.com/trade-api/v2/portfolio/fills"
+        headers=kalshi.kalshi_auth.create_auth_headers("GET",url)
+        resp=requests.get(url,headers=headers,params={"ticker":ticker,"limit":20},timeout=6)
+        if resp.status_code!=200:
+            return None,None
+        fills=resp.json().get("fills",[])
+        if not fills:
+            return None,None
+        # Most recent fill first; take the buy fill (action=buy)
+        for fill in fills:
+            if fill.get("action","")!="buy":
+                continue
+            side=fill.get("side","")
+            price=fill.get("yes_price_dollars") if side=="yes" else fill.get("no_price_dollars")
+            if price is None:
+                price=fill.get("yes_price_dollars") or fill.get("no_price_dollars")
+            # Convert from NO price to YES equivalent for DOWN trades
+            entry_yes=float(price) if side=="yes" else (1-float(price))
+            # Fill timestamp
+            ts=fill.get("ts") or fill.get("created_time") or fill.get("updated_time")
+            placed_at=float(ts) if isinstance(ts,(int,float)) else time.time()-300
+            if 0.01<entry_yes<0.99:
+                return entry_yes,placed_at
+    except Exception as fe:
+        print(f"[Startup] Fills fetch failed for {ticker}: {fe}")
+    return None,None
+
+
+def _reconcile_positions():
+    """
+    Per-cycle check: query /portfolio/positions and add any MARKET_SERIES positions
+    not already in OPEN_POSITIONS. Prevents positions placed just before a restart
+    from being invisible to cashout monitoring.
+    """
+    try:
+        url="https://api.elections.kalshi.com/trade-api/v2/portfolio/positions"
+        headers=kalshi.kalshi_auth.create_auth_headers("GET",url)
+        resp=requests.get(url,headers=headers,params={"limit":100},timeout=6)
+        if resp.status_code!=200:
+            return
+        positions=resp.json().get("market_positions",[])
+        known_tickers={p.get("ticker") for p in OPEN_POSITIONS}
+        added=0
+        for p in positions:
+            ticker=p.get("ticker","")
+            if not ticker or MARKET_SERIES not in ticker:
+                continue
+            yes_c=float(p.get("yes_count",0) or 0)
+            no_c=float(p.get("no_count",0) or 0)
+            if yes_c<=0 and no_c<=0:
+                continue
+            if ticker in known_tickers:
+                continue
+            # Position on Kalshi that we have no record of — add it
+            direction="UP" if yes_c>0 else "DOWN"
+            contracts=max(1,int(yes_c if direction=="UP" else no_c))
+            exposure=float(p.get("market_exposure_dollars") or 0)
+            # Try fills API for real entry_yes and placed_at
+            entry_yes,placed_at=_fetch_fill_for_ticker(ticker)
+            if entry_yes is None:
+                # Fallback: fetch current market price as rough proxy
+                try:
+                    murl=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
+                    mh=kalshi.kalshi_auth.create_auth_headers("GET",murl)
+                    mr=requests.get(murl,headers=mh,timeout=4)
+                    if mr.status_code==200:
+                        mkt=mr.json().get("market",{})
+                        ya=mkt.get("yes_ask_dollars") or mkt.get("yes_bid_dollars")
+                        entry_yes=float(ya) if ya and 0.01<float(ya)<0.99 else (0.70 if direction=="UP" else 0.30)
+                except Exception:
+                    entry_yes=0.70 if direction=="UP" else 0.30
+                placed_at=time.time()-300
+            bet=exposure if exposure>0 else round(contracts*(entry_yes if direction=="UP" else (1-entry_yes)),2)
+            OPEN_POSITIONS.append({"direction":direction,"bet":bet,"ticker":ticker,
+                "strategy":"reconciled","time":placed_at,"placed_at":placed_at,
+                "entry_yes":entry_yes,"min_yes":entry_yes,"max_yes":entry_yes,
+                "signal_type":"RECONCILED","entry_minute":0,"contracts":contracts})
+            known_tickers.add(ticker)
+            added+=1
+            print(f"[Reconcile] Added missed position: {ticker} {direction} entry_yes={entry_yes:.2f} {contracts}c")
+        if added:
+            send_telegram(f"[Reconcile] Picked up {added} position(s) not in tracking — monitoring now")
+    except Exception as e:
+        print(f"[Reconcile] Failed: {e}")
+
+
 def load_existing_positions():
     try:
         url="https://api.elections.kalshi.com/trade-api/v2/portfolio/positions"
         headers=kalshi.kalshi_auth.create_auth_headers("GET",url)
         resp=requests.get(url,headers=headers,params={"limit":100},timeout=8)
         if resp.status_code!=200:
+            print(f"[Startup] Positions API returned {resp.status_code} — skipping restore")
             return
         positions=resp.json().get("market_positions",[])
         for p in positions:
             ticker=p.get("ticker","")
-            exposure=float(p.get("market_exposure_dollars",0))
-            if not ticker or exposure<=0:
+            if not ticker or MARKET_SERIES not in ticker:
                 continue
-            if MARKET_SERIES not in ticker:
-                continue
-            pos_count=p.get("position",0)
             yes_c=float(p.get("yes_count",0) or 0)
             no_c=float(p.get("no_count",0) or 0)
+            # Use contract counts — not exposure — as the existence check
+            if yes_c<=0 and no_c<=0:
+                continue
+            pos_count=p.get("position",0)
             if pos_count and pos_count!=0:
                 direction="UP" if pos_count>0 else "DOWN"
             elif yes_c>0:
@@ -960,31 +1053,36 @@ def load_existing_positions():
             elif no_c>0:
                 direction="DOWN"
             else:
-                direction="UNKNOWN"
-            # Actual contract count from API (prevents wrong sell quantities)
+                print(f"[Startup] Skipping {ticker}: can't determine direction")
+                continue
             contracts=max(1,int(yes_c if direction=="UP" else no_c))
-            # Fetch current market price as entry_yes proxy — far better than hardcoding 0.70/0.30
-            # which causes cashout adverse calculations to fire or suppress incorrectly
-            cur_yes_proxy=0.70 if direction=="UP" else 0.30
-            try:
-                murl=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
-                mh=kalshi.kalshi_auth.create_auth_headers("GET",murl)
-                mr=requests.get(murl,headers=mh,timeout=4)
-                if mr.status_code==200:
-                    mkt=mr.json().get("market",{})
-                    ya=mkt.get("yes_ask_dollars") or mkt.get("yes_bid_dollars")
-                    if ya and 0.01<float(ya)<0.99:
-                        cur_yes_proxy=float(ya)
-            except Exception as fe:
-                print(f"[Startup] Market fetch failed for {ticker}: {fe}")
-            OPEN_POSITIONS.append({"direction":direction,"bet":exposure,"ticker":ticker,
-                "strategy":"restored","time":time.time()-300,
-                "entry_yes":cur_yes_proxy,"min_yes":cur_yes_proxy,"max_yes":cur_yes_proxy,
-                "signal_type":"RESTORED","entry_minute":0,"placed_at":time.time()-180,
-                "contracts":contracts})
-            print(f"[Startup] Restored: {ticker} ${exposure:.2f} {direction} entry_yes={cur_yes_proxy:.2f} {contracts}c")
+            exposure=float(p.get("market_exposure_dollars") or 0)
+            # Fetch actual entry price and timestamp from fills API
+            entry_yes,placed_at=_fetch_fill_for_ticker(ticker)
+            if entry_yes is None:
+                # Fallback: current market price is still better than 0.70/0.30
+                try:
+                    murl=f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
+                    mh=kalshi.kalshi_auth.create_auth_headers("GET",murl)
+                    mr=requests.get(murl,headers=mh,timeout=4)
+                    if mr.status_code==200:
+                        mkt=mr.json().get("market",{})
+                        ya=mkt.get("yes_ask_dollars") or mkt.get("yes_bid_dollars")
+                        entry_yes=float(ya) if ya and 0.01<float(ya)<0.99 else (0.70 if direction=="UP" else 0.30)
+                except Exception as fe:
+                    print(f"[Startup] Market fetch failed for {ticker}: {fe}")
+                    entry_yes=0.70 if direction=="UP" else 0.30
+                placed_at=time.time()-300
+            bet=exposure if exposure>0 else round(contracts*(entry_yes if direction=="UP" else (1-entry_yes)),2)
+            OPEN_POSITIONS.append({"direction":direction,"bet":bet,"ticker":ticker,
+                "strategy":"restored","time":placed_at,"placed_at":placed_at,
+                "entry_yes":entry_yes,"min_yes":entry_yes,"max_yes":entry_yes,
+                "signal_type":"RESTORED","entry_minute":0,"contracts":contracts})
+            print(f"[Startup] Restored: {ticker} ${bet:.2f} {direction} entry_yes={entry_yes:.2f} {contracts}c placed_at={datetime.datetime.fromtimestamp(placed_at).strftime('%H:%M:%S')}")
         if OPEN_POSITIONS:
             print(f"[Startup] Loaded {len(OPEN_POSITIONS)} position(s)")
+        else:
+            print("[Startup] No open positions found")
     except Exception as e:
         print(f"[Startup] Could not load positions: {e}")
 
@@ -994,6 +1092,7 @@ def simulate_trade():
     if os.path.exists(STOP_FILE):
         print(f"[Stop] {STOP_FILE} detected — halting")
         raise SystemExit("Stop file detected")
+    _reconcile_positions()
     if COOLDOWN_REMAINING>0:
         print(f"[Cooldown] {COOLDOWN_REMAINING} cycles remaining")
         COOLDOWN_REMAINING-=1
@@ -1050,9 +1149,10 @@ if __name__=="__main__":
             _j.dump({"date":today,"bal":live_start},open(_dsf,"w"))
         print(f"[Startup] Live balance: ${CURRENT_BALANCE:.2f} | Day start: ${SESSION_START_BAL:.2f}")
     else:
-        CURRENT_BALANCE=INITIAL_BALANCE
-        SESSION_START_BAL=INITIAL_BALANCE
-        print(f"[Startup] Using initial balance: ${CURRENT_BALANCE:.2f}")
+        msg="[Startup] FATAL: Could not fetch live balance from Kalshi API — aborting to avoid stale balance in circuit breaker"
+        print(msg)
+        send_telegram(f"🛑 {BOT_NAME} startup aborted: balance API unavailable")
+        raise SystemExit(msg)
     print(f"Balance: ${CURRENT_BALANCE:.2f} | MaxBet: ${get_max_bet():.2f} | Threshold: <{DIRECTIONAL_LOW:.2f} or >{DIRECTIONAL_HIGH:.2f}")
     print(f"{'='*50}\n")
     # Staggered startup: ETH waits 45s, SOL waits 90s to prevent simultaneous firing
