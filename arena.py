@@ -983,7 +983,7 @@ def risk_score(v):
     confidence=math.log(t+1)/math.log(100)
     return round(wr*confidence,4)
 
-OPENCLAW_FILE="/home/user/Openclaw/openclaw.py"
+OPENCLAW_FILE="/root/openclaw.py"
 
 def auto_promote(pool):
     try:
