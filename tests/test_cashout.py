@@ -25,6 +25,7 @@ from exit_logic import (
     compute_sell_value,
     compute_profitlock_win_floor,
     compute_reversal_threshold,
+    compute_cashout_win_floor,
     CASHOUT_ADVERSE,
     CASHOUT_MINUTES,
     PROFITLOCK_MIN_AGE,
@@ -224,11 +225,12 @@ class TestBreakEven:
 # ── CashOut (adverse move) ───────────────────────────────────────────────────
 
 class TestCashOut:
-    def test_triggers_on_adverse_move(self):
-        # UP: entered 0.68, now 0.55 — adverse = 0.13 > 0.12
+    def test_adverse_alone_no_longer_triggers_cashout(self):
+        # UP: entered 0.68, now 0.55 — adverse=0.13>0.12 but win_prob=0.55>floor(0.50)
+        # Win-probability floor blocks CashOut when position is still above break-even.
         _, etype = compute_exit_reason("UP", cur_yes=0.55, entry_yes=0.68,
                                        age_placed=3.0, status="open")
-        assert etype == "cashout"
+        assert etype != "cashout"
 
     def test_no_trigger_below_threshold(self):
         # adverse = 0.68-0.58 = 0.10 < 0.12
@@ -237,24 +239,33 @@ class TestCashOut:
         assert etype is None
 
     def test_no_trigger_before_cashout_minutes(self):
-        # Big adverse but too new
-        _, etype = compute_exit_reason("UP", cur_yes=0.50, entry_yes=0.68,
+        # Big adverse and win_prob<=floor but position too new
+        _, etype = compute_exit_reason("UP", cur_yes=0.48, entry_yes=0.68,
                                        age_placed=1.0, status="open",
                                        cashout_minutes=2)
         assert etype is None
 
     def test_triggers_at_exactly_cashout_minutes(self):
-        _, etype = compute_exit_reason("UP", cur_yes=0.55, entry_yes=0.68,
+        # win_prob=0.48 <= floor(0.50), adverse=0.20>0.12, age=2.0 at exact threshold
+        _, etype = compute_exit_reason("UP", cur_yes=0.48, entry_yes=0.68,
                                        age_placed=2.0, status="open",
                                        cashout_minutes=2)
         assert etype == "cashout"
 
     def test_late_window_tighter_threshold(self):
         # Age >= 12: threshold drops to 0.05
-        # adverse = 0.68-0.62 = 0.06 > 0.05 late threshold
-        _, etype = compute_exit_reason("UP", cur_yes=0.62, entry_yes=0.68,
+        # UP: entry=0.55 (entry_win=0.55<0.60 → floor=0.0), cur=0.49
+        # adverse=0.06 > 0.05 late threshold, reversal=0.06 < rev_thresh=0.08 → ProfitLock blocked
+        # BreakEven blocked (entry_win=0.55 not >0.60); CashOut fires (floor=0.0, adverse-only)
+        _, etype = compute_exit_reason("UP", cur_yes=0.49, entry_yes=0.55,
                                        age_placed=12.5, status="open")
         assert etype == "cashout"
+
+    def test_late_window_blocked_by_win_floor(self):
+        # Age >= 12, adverse=0.06>0.05 (late threshold passes), but win_prob=0.62>floor → hold
+        _, etype = compute_exit_reason("UP", cur_yes=0.62, entry_yes=0.68,
+                                       age_placed=12.5, status="open")
+        assert etype is None
 
     def test_late_window_below_late_threshold(self):
         # adverse = 0.68-0.65 = 0.03 < 0.05 late threshold
@@ -313,8 +324,12 @@ class TestNoExit:
 
 class TestCashOutThresholdRegression:
     """
-    Verifies the threshold was tightened from 0.20 to 0.12.
-    The old 0.20 value let positions lose 29% of value before exiting.
+    Verifies the threshold was tightened from 0.20 to 0.12, and the win-probability
+    floor (0.50 for entry_win>=0.60) prevents CashOut from firing on winning positions.
+
+    Historical simulation (390 trades Mar-Apr 2026) proved that T=0.12 without a floor
+    produced a 97% false-positive rate — 97 winning positions exited vs 3 losses caught.
+    The floor is now the primary gate; the threshold matters within the floor zone.
     """
 
     def test_cashout_adverse_is_tight(self):
@@ -323,48 +338,66 @@ class TestCashOutThresholdRegression:
         )
 
     def test_new_threshold_catches_what_old_missed(self):
-        """Position adverse by 0.13 — new threshold catches it, old 0.20 would miss it."""
+        """
+        Win-probability floor (0.50) blocks CashOut when position is still winning.
+        At win_prob=0.55 (above floor), CashOut is blocked regardless of threshold.
+        In the floor zone (win_prob=0.48), T=0.12 catches at adverse=0.20; T=0.25 misses.
+        age=2.0 keeps ProfitLock (requires age>=3.0) from firing first.
+        """
+        # Above floor: both thresholds blocked (floor is primary gate)
         _, new_etype = compute_exit_reason(
-            "UP", cur_yes=0.55, entry_yes=0.68, age_placed=3.0, status="open",
+            "UP", cur_yes=0.55, entry_yes=0.68, age_placed=2.0, status="open",
             cashout_adverse=0.12
         )
         _, old_etype = compute_exit_reason(
-            "UP", cur_yes=0.55, entry_yes=0.68, age_placed=3.0, status="open",
+            "UP", cur_yes=0.55, entry_yes=0.68, age_placed=2.0, status="open",
             cashout_adverse=0.20
         )
-        assert new_etype == "cashout"    # new threshold: saved ~$5.50 of $10 bet
-        assert old_etype is None         # old threshold: position runs to expiry → $0
+        assert new_etype != "cashout"   # floor blocks — position still 55% likely to win
+        assert old_etype != "cashout"   # same — threshold irrelevant above floor
+
+        # In floor zone (win_prob=0.48): threshold now matters
+        _, tight_etype = compute_exit_reason(
+            "UP", cur_yes=0.48, entry_yes=0.68, age_placed=2.0, status="open",
+            cashout_adverse=0.12
+        )
+        _, loose_etype = compute_exit_reason(
+            "UP", cur_yes=0.48, entry_yes=0.68, age_placed=2.0, status="open",
+            cashout_adverse=0.25
+        )
+        assert tight_etype == "cashout"   # T=0.12 exits at 29% loss (adverse=0.20)
+        assert loose_etype is None         # T=0.25 still waiting — adverse=0.20 < 0.25
 
     def test_full_loss_scenario_with_old_threshold(self):
-        """Shows exactly how a $10 UP bet at 0.68 would hit $0 with the old threshold."""
+        """
+        Position declining from entry=0.68. The floor holds it above 0.50 (still winning);
+        once it crosses below 0.50, CashOut fires and salvages remaining value.
+        age=2.0 isolates CashOut (ProfitLock requires age>=3.0).
+        """
         entry_yes = 0.68
         contracts = 14  # approx int(10 / 0.68)
         initial_value = contracts * entry_yes  # ~$9.52
 
-        # Position drops steadily...
-        for cur_yes in [0.60, 0.55, 0.50, 0.48]:
-            _, old_etype = compute_exit_reason(
+        # Above floor: hold throughout (position still >50% chance of winning)
+        for cur_yes in [0.65, 0.60, 0.55, 0.51]:
+            _, etype = compute_exit_reason(
                 "UP", cur_yes=cur_yes, entry_yes=entry_yes,
-                age_placed=3.0, status="open", cashout_adverse=0.20
+                age_placed=2.0, status="open"
             )
-            # At 0.48, adverse = 0.68-0.48 = 0.20 — JUST at old threshold
-            if cur_yes == 0.48:
-                assert old_etype is not None, f"Expected exit at adverse=0.20, got None"
-                salvage = compute_sell_value(contracts, "UP", cur_yes)
-                loss_pct = (initial_value - salvage) / initial_value * 100
-                assert loss_pct > 25, f"Old threshold lets {loss_pct:.1f}% of position erode"
+            assert etype != "cashout", (
+                f"Should hold at win_prob={cur_yes:.2f} > floor=0.50"
+            )
 
-        # With new threshold, exits at 0.55 (adverse=0.13)
-        _, new_etype = compute_exit_reason(
-            "UP", cur_yes=0.55, entry_yes=entry_yes,
-            age_placed=3.0, status="open", cashout_adverse=0.12
+        # Crosses below floor (win_prob=0.48): CashOut exits to salvage value
+        _, floor_etype = compute_exit_reason(
+            "UP", cur_yes=0.48, entry_yes=entry_yes,
+            age_placed=2.0, status="open"
         )
-        assert new_etype == "cashout"
-        salvage_new = compute_sell_value(contracts, "UP", 0.55)
-        loss_pct_new = (initial_value - salvage_new) / initial_value * 100
-        # 12-cent adverse on a 68-cent entry is ~19% value loss — still far better than
-        # letting it run to $0 or waiting for 20-cent adverse (29% loss at old threshold).
-        assert loss_pct_new < 22, f"New threshold should exit with < 22% loss, got {loss_pct_new:.1f}%"
+        assert floor_etype == "cashout"
+        salvage = compute_sell_value(contracts, "UP", 0.48)
+        loss_pct = (initial_value - salvage) / initial_value * 100
+        # Exiting at 48¢ vs 68¢ entry: ~30% value loss but $6.72 salvaged vs $0 at expiry
+        assert loss_pct < 35, f"Floor exit with {loss_pct:.1f}% loss — better than $0"
 
 
 # ── Priority ordering ────────────────────────────────────────────────────────
@@ -548,3 +581,131 @@ class TestDynamicThresholds:
 
     def test_profitlock_min_age_constant(self):
         assert PROFITLOCK_MIN_AGE == pytest.approx(3.0)
+
+
+# ── CashOut win-probability floor (Task 3 — April 2026) ─────────────────────
+
+class TestCashoutWinFloor:
+    """
+    CashOut is now gated by a win-probability floor.
+
+    Historical simulation (390 trades Mar-Apr 2026) at T=0.12:
+      BTC  44/46 FP (96%)  ETH  29/30 FP (97%)  SOL  24/24 FP (100%)
+      TOTAL 97 false positives vs 3 true positives — 97% FP rate.
+
+    All directional entries have entry_win >= 0.68 (DIRECTIONAL_HIGH=0.68).
+    Losses are rapid collapses, not gradual drift CashOut can intercept.
+    Floor=0.50 confines CashOut to positions that have genuinely crossed
+    to losing territory; BreakEven (win_prob<0.45) provides the primary net.
+    """
+
+    # ── compute_cashout_win_floor unit tests ─────────────────────────────────
+
+    def test_floor_high_confidence_entry(self):
+        assert compute_cashout_win_floor(0.85) == pytest.approx(0.50)
+
+    def test_floor_mid_confidence_entry(self):
+        assert compute_cashout_win_floor(0.70) == pytest.approx(0.50)
+
+    def test_floor_at_directional_high_boundary(self):
+        # DIRECTIONAL_HIGH=0.68 is the minimum real entry_win — floor=0.50
+        assert compute_cashout_win_floor(0.68) == pytest.approx(0.50)
+
+    def test_floor_at_threshold_exactly(self):
+        # entry_win = 0.60 → boundary → floor=0.50
+        assert compute_cashout_win_floor(0.60) == pytest.approx(0.50)
+
+    def test_floor_just_below_threshold(self):
+        # entry_win = 0.59 < 0.60 → floor=0.0 (adverse-only)
+        assert compute_cashout_win_floor(0.59) == pytest.approx(0.0)
+
+    def test_floor_very_low_confidence(self):
+        assert compute_cashout_win_floor(0.40) == pytest.approx(0.0)
+
+    # ── CashOut BLOCKED while still winning (win_prob > floor) ───────────────
+
+    def test_no_cashout_above_floor_large_adverse(self):
+        # UP: entry=0.78, cur=0.65 — adverse=0.13>0.12 but win_prob=0.65>0.50 → hold
+        _, etype = compute_exit_reason("UP", cur_yes=0.65, entry_yes=0.78,
+                                       age_placed=3.0, status="open")
+        assert etype != "cashout"
+
+    def test_no_cashout_at_floor_plus_one(self):
+        # win_prob = 0.51, one tick above floor — blocked
+        _, etype = compute_exit_reason("UP", cur_yes=0.51, entry_yes=0.68,
+                                       age_placed=2.0, status="open")
+        assert etype != "cashout"
+
+    # ── April 21 live false-positive regressions ─────────────────────────────
+
+    def test_eth_up_0639_false_positive_blocked(self):
+        """
+        ETH UP 06:39 AM April 21: entry≈0.69, cur≈0.51, win_prob=0.51 > floor.
+        Old logic fired CashOut, costing $3.91 exit + $5.23 missed payout = $9.14.
+        New floor blocks this exit — position correctly held.
+        """
+        _, etype = compute_exit_reason("UP", cur_yes=0.51, entry_yes=0.69,
+                                       age_placed=3.0, status="open")
+        assert etype != "cashout"
+
+    def test_btc_up_0618_false_positive_blocked(self):
+        """
+        BTC UP 06:18 AM April 21: entry≈0.78, cur≈0.58, win_prob=0.58 > floor.
+        Old logic fired CashOut, costing $4.13 exit + $3.74 missed payout = $7.87.
+        New floor blocks this exit — position correctly held.
+        """
+        _, etype = compute_exit_reason("UP", cur_yes=0.58, entry_yes=0.78,
+                                       age_placed=3.0, status="open")
+        assert etype != "cashout"
+
+    # ── CashOut FIRES when genuinely losing (win_prob <= floor) ─────────────
+
+    def test_cashout_fires_at_exactly_floor(self):
+        # win_prob=0.50 exactly at floor (<=), adverse > threshold — fires
+        # age=2.0 keeps ProfitLock (age>=3.0) and BreakEven (age>=2.5) silent
+        _, etype = compute_exit_reason("UP", cur_yes=0.50, entry_yes=0.68,
+                                       age_placed=2.0, status="open")
+        assert etype == "cashout"
+
+    def test_cashout_fires_just_below_floor(self):
+        # win_prob=0.48, adverse=0.20>0.12, age=2.0 → fires
+        _, etype = compute_exit_reason("UP", cur_yes=0.48, entry_yes=0.68,
+                                       age_placed=2.0, status="open")
+        assert etype == "cashout"
+
+    def test_sol_up_0802_correct_cashout_fires(self):
+        """
+        SOL UP 08:02 AM April 21: entry≈0.74, cur≈0.47, win_prob=0.47 < floor.
+        New logic correctly exits — market says 47% chance of winning.
+        At age=3.0, ProfitLock fires (pl_floor=0.65>0.47>0.45, reversal=0.27>0.08).
+        Any of the three exit mechanisms is the correct outcome here.
+        """
+        _, etype = compute_exit_reason("UP", cur_yes=0.47, entry_yes=0.74,
+                                       age_placed=3.0, status="open")
+        assert etype in ("break_even", "cashout", "profit_lock")
+
+    # ── Low-confidence entries preserve adverse-only logic ───────────────────
+
+    def test_low_confidence_entry_cashout_still_works(self):
+        # entry_win=0.55 < 0.60 → floor=0.0 → adverse-only (BreakEven blocked: entry_win not >0.60)
+        _, etype = compute_exit_reason("UP", cur_yes=0.42, entry_yes=0.55,
+                                       age_placed=3.0, status="open")
+        assert etype == "cashout"
+
+    def test_low_confidence_entry_floor_is_zero(self):
+        assert compute_cashout_win_floor(0.55) == pytest.approx(0.0)
+
+    # ── Interaction with BreakEven (win_prob < 0.45 takes priority) ──────────
+
+    def test_breakeven_still_fires_below_its_threshold(self):
+        # win_prob=0.44 < 0.45, age=3.0>=2.5, entry_win=0.70>0.60 → BreakEven, not CashOut
+        _, etype = compute_exit_reason("UP", cur_yes=0.44, entry_yes=0.70,
+                                       age_placed=3.0, status="open")
+        assert etype == "break_even"
+
+    def test_cashout_zone_between_floor_and_breakeven(self):
+        # win_prob in (0.45, 0.50]: CashOut is the exit mechanism (BreakEven blocked)
+        # age=2.0: ProfitLock (age<3.0) and BreakEven (age<2.5) both silent
+        _, etype = compute_exit_reason("UP", cur_yes=0.46, entry_yes=0.68,
+                                       age_placed=2.0, status="open")
+        assert etype == "cashout"

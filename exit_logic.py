@@ -64,6 +64,23 @@ def compute_reversal_threshold(entry_win_prob):
     return 0.15 if entry_win_prob >= 0.85 else 0.08
 
 
+def compute_cashout_win_floor(entry_win_prob):
+    """
+    CashOut only fires when win_prob is AT OR BELOW this floor.
+
+    Simulation of 390 trades (Mar-Apr 2026) at T=0.12 showed 97% false-positive
+    rate: 97 winning positions exited vs 3 actual losses caught. Losses in this
+    system are rapid collapses (yes→0 in 1-2 cycles), not gradual drift that
+    CashOut can intercept. Setting floor=0.50 for directional entries confines
+    CashOut to positions that have genuinely crossed to losing territory.
+    The BreakEven layer (win_prob<0.45, age>=2.5) provides the primary safety net.
+    """
+    if entry_win_prob >= 0.60:
+        return 0.50   # directional entries: only exit when market says <50% chance of winning
+    else:
+        return 0.0    # low-confidence entries: preserve adverse-only logic
+
+
 def compute_exit_reason(direction, cur_yes, entry_yes, age_placed, status,
                         cashout_adverse=CASHOUT_ADVERSE,
                         cashout_minutes=CASHOUT_MINUTES,
@@ -111,6 +128,8 @@ def compute_exit_reason(direction, cur_yes, entry_yes, age_placed, status,
         return f"ProfitLock win={win_prob:.2f}", "profit_lock"
     if win_prob < 0.45 and age_placed >= 2.5 and entry_win > 0.60:
         return f"BreakEven {win_prob:.0%}", "break_even"
-    if adverse > late_thresh and age_placed >= cashout_minutes:
+    cashout_floor = compute_cashout_win_floor(entry_win)
+    cashout_allowed = win_prob <= cashout_floor if cashout_floor > 0.0 else True
+    if adverse > late_thresh and age_placed >= cashout_minutes and cashout_allowed:
         return f"CashOut adverse={adverse:.2f}", "cashout"
     return None, None

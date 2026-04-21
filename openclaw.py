@@ -10,7 +10,8 @@ import json
 import numpy as np
 from kalshi_python import KalshiClient
 from kalshi_python.configuration import Configuration
-from exit_logic import compute_exit_reason, sell_side_for_direction, compute_sell_value, CASHOUT_ADVERSE as _CASHOUT_ADVERSE
+from exit_logic import (compute_exit_reason, sell_side_for_direction, compute_sell_value,
+                        compute_cashout_win_floor, CASHOUT_ADVERSE as _CASHOUT_ADVERSE)
 
 KALSHI_API_KEY='2d0a8c45-b76a-4459-a0e1-9a5e4d63fd8b'
 KALSHI_SECRET='''-----BEGIN RSA PRIVATE KEY-----
@@ -822,6 +823,14 @@ def check_open_positions():
             win_prob_now=cur_yes if direction=="UP" else (1-cur_yes)
             adverse_now=(entry_yes-cur_yes) if direction=="UP" else (cur_yes-(1-entry_yes))
             print(f"[Monitor] {direction} {ticker} | age={age_placed:.1f}m | yes={cur_yes:.3f} | entry={entry_yes:.3f} | win={win_prob_now:.3f} | adv={adverse_now:+.3f} | peak={peak_yes:.3f}")
+            if age_placed >= CASHOUT_MINUTES:
+                _entry_win_co = entry_yes if direction == "UP" else (1 - entry_yes)
+                _co_floor = compute_cashout_win_floor(_entry_win_co)
+                _late_thresh = 0.05 if age_placed >= 12 else CASHOUT_ADVERSE
+                _thresh_met = adverse_now > _late_thresh
+                _co_allowed = win_prob_now <= _co_floor if _co_floor > 0.0 else True
+                _fire = _thresh_met and _co_allowed
+                print(f"[CashOutDecision] {ticker} | entry={entry_yes:.2f} | cur={cur_yes:.2f} | adverse={adverse_now:.2f} | win_prob={win_prob_now:.2f} | threshold_met={_thresh_met} | confidence_floor={_co_floor:.2f} | FIRE={_fire}")
             reason,exit_type=compute_exit_reason(direction,cur_yes,entry_yes,age_placed,mkt_status,peak_yes=peak_yes)
             if reason:
                 entry_p=entry_yes if direction=="UP" else (1-entry_yes)
@@ -978,6 +987,93 @@ def _fetch_fill_for_ticker(ticker):
     return None,None
 
 
+def _recover_phantom_positions():
+    """
+    Startup-only: query fills API for buys in the last 30 minutes and add any
+    MARKET_SERIES positions not already captured by load_existing_positions().
+
+    Root cause of phantoms: bot places a bet, crashes or restarts, the window
+    expires before load_existing_positions() runs, so /portfolio/positions shows
+    nothing and the trade is never monitored. Querying fills directly catches
+    these positions while the window is still open.
+    """
+    try:
+        url = "https://api.elections.kalshi.com/trade-api/v2/portfolio/fills"
+        headers = kalshi.kalshi_auth.create_auth_headers("GET", url)
+        resp = requests.get(url, headers=headers, params={"limit": 50}, timeout=8)
+        if resp.status_code != 200:
+            return
+        fills = resp.json().get("fills", [])
+        known_tickers = {p.get("ticker") for p in OPEN_POSITIONS}
+        cutoff = time.time() - 1800  # 30-minute lookback
+        added = 0
+        for fill in fills:
+            if fill.get("action") != "buy":
+                continue
+            ticker = fill.get("ticker", "")
+            if not ticker or MARKET_SERIES not in ticker:
+                continue
+            # Parse fill timestamp (epoch float or ISO string)
+            ts_raw = fill.get("ts") or fill.get("created_time") or fill.get("updated_time")
+            if isinstance(ts_raw, (int, float)):
+                fill_ts = float(ts_raw)
+            elif isinstance(ts_raw, str):
+                try:
+                    fill_ts = datetime.datetime.fromisoformat(ts_raw.replace("Z", "+00:00")).timestamp()
+                except Exception:
+                    continue
+            else:
+                continue
+            if fill_ts < cutoff:
+                continue
+            if ticker in known_tickers:
+                continue
+            # Confirm market is still open — no point monitoring an expired window
+            try:
+                murl = f"https://api.elections.kalshi.com/trade-api/v2/markets/{ticker}"
+                mh = kalshi.kalshi_auth.create_auth_headers("GET", murl)
+                mr = requests.get(murl, headers=mh, timeout=4)
+                if mr.status_code != 200:
+                    continue
+                mkt = mr.json().get("market", {})
+                mkt_status = mkt.get("status", "")
+                if mkt_status not in ("open", "active"):
+                    print(f"[PhantomRecovery] {ticker} fill found but market is {mkt_status} — expired before restart")
+                    continue
+                ya = mkt.get("yes_ask_dollars") or mkt.get("yes_bid_dollars")
+                cur_yes_now = float(ya) if ya and 0.01 < float(ya) < 0.99 else None
+            except Exception:
+                continue
+            side = fill.get("side", "")
+            direction = "UP" if side == "yes" else "DOWN"
+            price = fill.get("yes_price_dollars") if side == "yes" else fill.get("no_price_dollars")
+            if price is None:
+                price = fill.get("yes_price_dollars") or fill.get("no_price_dollars")
+            if price is None:
+                continue
+            entry_yes = float(price) if side == "yes" else (1 - float(price))
+            count = max(1, int(fill.get("count_fp", 1) or 1))
+            bet = round(count * (entry_yes if direction == "UP" else (1 - entry_yes)), 2)
+            age_min = (time.time() - fill_ts) / 60
+            OPEN_POSITIONS.append({
+                "direction": direction, "bet": bet, "ticker": ticker,
+                "strategy": "recovered", "time": fill_ts, "placed_at": fill_ts,
+                "entry_yes": entry_yes,
+                "min_yes": min(entry_yes, cur_yes_now) if cur_yes_now else entry_yes,
+                "max_yes": max(entry_yes, cur_yes_now) if cur_yes_now else entry_yes,
+                "signal_type": "RECOVERED", "entry_minute": 0, "contracts": count,
+            })
+            known_tickers.add(ticker)
+            added += 1
+            print(f"[PhantomRecovery] Added: {ticker} {direction} entry_yes={entry_yes:.2f} {count}c placed {age_min:.1f}m ago")
+        if added:
+            send_telegram(f"[PhantomRecovery] Recovered {added} phantom position(s) from fills — monitoring now")
+        else:
+            print("[PhantomRecovery] No phantom positions found in last 30 minutes")
+    except Exception as e:
+        print(f"[PhantomRecovery] Failed: {e}")
+
+
 def _reconcile_positions():
     """
     Per-cycle check: query /portfolio/positions and add any MARKET_SERIES positions
@@ -1094,6 +1190,8 @@ def load_existing_positions():
             print("[Startup] No open positions found")
     except Exception as e:
         print(f"[Startup] Could not load positions: {e}")
+    # Also scan fills for positions placed during a window that closed before this restart
+    _recover_phantom_positions()
 
 def simulate_trade():
     global COOLDOWN_REMAINING,CURRENT_BALANCE
