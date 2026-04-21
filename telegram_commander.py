@@ -2,11 +2,36 @@
 import requests,time,json,subprocess,datetime,csv,os,tempfile
 from collections import defaultdict
 
-raw=open('/root/real_bot_pre_v4_backup.py').read()
-BOT_TOKEN=raw.split("BOT_TOKEN = '")[1].split("'")[0]
-CHAT_ID=raw.split("CHAT_ID   = '")[1].split("'")[0]
-KALSHI_KEY=raw.split("KALSHI_API_KEY = '")[1].split("'")[0]
-KALSHI_SEC=raw.split("KALSHI_SECRET  = '''")[1].split("'''")[0]
+BOT_TOKEN='8716034840:AAHBhhlM0nFOQCIAhVOzYW8iXamumTAZypU'
+CHAT_ID='8257178399'
+KALSHI_KEY='2d0a8c45-b76a-4459-a0e1-9a5e4d63fd8b'
+KALSHI_SEC='''-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEArkD0NUpJf2F1v6hW9tlKzQ1wPGJ0ypTgBVLMk73dPINtXjAU
+TVcunm2GtdG5p9QReCmUaihBYOVCom9m9D93tH6n/8gm4AjciW+GvtEolsJiExmQ
+145maRyZjS2aLzuQY0LKjEVxtIdbwRuWnQ4X4VuL6k/lHI/N5Nzz1WLDRHaEwwSO
+0Evcu9Nl5NBeJKaUjpUKaBLwmK3T7VrizkpnWYo9hZwEU9RZpSW4KjYG9+lSeYeN
+OZ/L5DUwhabSdqXIipFaXwtElt0wLa5TicqK2Dc8dy2fdyz5pX/fcmSvMffsuPEg
+kjvtMnhDjWL3aCzwDsTGJe7oR5r/Wxe0x4daIQIDAQABAoIBAA2FmzqKnTfceqRF
+jk0+Tc1DsbK94ScNqAsOgpmKx9Q36EP0byuuDD9D0iRINgpaYB12/Ir2vLwMJ/OU
+hksfcbNfI+8RVRLyUErJ8/Ol8p356SpnEK2DFPQrJ/wKNRP21By5Xh/5QGDF8DTR
+maQH9L2kIPz5xJZ6AkkBBfR7fLOfOtJXXxGRua/4AnzBf/zDRV0so/2tJaMOxNeU
+Nop9xKGqvISVXPMk3M7j2LlDGTkZcNvcNfbuPwzkUbQFoAJ/Cko0Esx0nT7DQTuh
+SzGbqGI/rnLu0NsMDFOABCK4yJuQCZSh4WP6x5WDOwdaz+loWotEdPfHVms0eGjb
+U5p8a1ECgYEA2z8VIC2LnlyLEzwmM86K8vfy2XgqoL1LgZbctuepk9ymAvfS3Xa5
+Mvges+aeHSc/6H0apJHCTdQBozQo/vekyKofPQQrIFCCNGla6sAxjqNv6cskT6pg
+0WqpBNjY+5eRGGGDCcB4LRbgGlmt5455F+bmQ7ijMbeVJStZ0er2RHMCgYEAy3cE
+004aPtnH22EQdJopic5tnqNqqX0ruEPqT+MwjkA8T7CbC52CFcZTG3HAn2KWyn1H
+FVvngCkUflxbrNSL0BfwwWQBmfoOyrFkbCUcIG8q6s2t3i74zvkFGlTB8IPboxjg
+b672WisT4pktTnXHIuq/nDAwnwmTOKzLjhTS1hsCgYEAkT8cZsHlohcbB7YsdNvb
+T5WV7B5g1zYwxHxGYmHdBRkDXioCJzeU/8BCztn0W8n527KtqOLrf5X5M77Ffgxf
+vZR+t3SAgZr0d3ZoheanriB2bsNmneR42aO4r35dWWgS9rz7C8XXl7903eAVhrbr
+YDtWxvyWGMTPaN1sVtY7KiMCgYEAl4Gz7SjucDi5Esnvd/RH1B8MD6H+TeEwShEA
+jKZPRM3eWzTV70tFT7OTtQ76cXT3dibdZLE/7HYqlYFunn7S8YyyMT+n1aGXnCWF
+8uWbUSeWnKu1uYneqjhSLW5J0DBPv95JWcC+HxyOvSB01UTsmTqWndZgjjySDRTW
+qqEk8lsCgYBWXgZTI0C1ukU0/jHu9OMULsPsoioZgj1pLP7Zvc6TzIWQVSCn0a6j
+/DL0JzwIlrU4B+YEuHPMnbRzuYtx2bDlW7Ycky51Wfp7jw2SVUj/Lr1rxNe9y9a+
+7VTiKzf+09eR4dAW/8VcpNTErYmLqHRQQcWgo7/WSpmp8V0xy0AaRQ==
+-----END RSA PRIVATE KEY-----'''
 tf=tempfile.NamedTemporaryFile(delete=False,suffix='.pem',mode='w')
 tf.write(KALSHI_SEC);tf.close()
 from kalshi_python import KalshiClient
@@ -77,7 +102,7 @@ def cmd_balance():
     send(f"💰 Cash: ${cash:.2f}\n📈 Portfolio: ${port:.2f}\n💎 Total: ${cash+port:.2f}")
 
 def cmd_help():
-    send("🤖 OpenClaw Commands:\n/status — full system status\n/balance — quick balance check\n/pause — pause all bots\n/resume — resume all bots\n/restart — restart all bots\n/locks — show active window locks\n/clearlocks — clear all window locks\n/help — this message")
+    send("🤖 OpenClaw Commands:\n/status — full system status\n/balance — quick balance check\n/positions — list open positions\n/health — bot process health (pm2)\n/pause — pause all bots\n/resume — resume all bots\n/restart — restart all bots\n/locks — show active window locks\n/clearlocks — clear all window locks\n/help — this message")
 
 def cmd_restart():
     import subprocess
@@ -98,6 +123,46 @@ def cmd_clearlocks():
     locks=glob.glob("/tmp/openclaw_window_*.lock")
     for l in locks: os.remove(l)
     send(f"🔓 Cleared {len(locks)} window locks")
+
+def cmd_positions():
+    try:
+        pos=get_positions()
+        if not pos:
+            send("📭 No open positions")
+            return
+        msg=f"📈 Open Positions ({len(pos)})\n"
+        for p in pos:
+            ticker=p.get('ticker','')
+            exp=float(p.get('market_exposure_dollars',0))
+            yes_c=float(p.get('yes_count',0) or 0)
+            no_c=float(p.get('no_count',0) or 0)
+            side="YES" if yes_c>0 else "NO"
+            contracts=int(yes_c if yes_c>0 else no_c)
+            mkt_series="BTC" if "BTC" in ticker else ("ETH" if "ETH" in ticker else "SOL")
+            msg+=f"  {mkt_series} {side} {contracts}c ${exp:.2f} | {ticker[-12:]}\n"
+        send(msg.strip())
+    except Exception as e:
+        send(f"⚠️ Positions error: {e}")
+
+def cmd_health():
+    try:
+        result=subprocess.run(['pm2','jlist'],capture_output=True,text=True,timeout=8)
+        procs=json.loads(result.stdout) if result.stdout else []
+        lines=["🏥 Bot Health:"]
+        for p in procs:
+            name=p.get('name','')
+            if 'openclaw' not in name: continue
+            status=p.get('pm2_env',{}).get('status','?')
+            restarts=p.get('pm2_env',{}).get('restart_time',0)
+            mem=p.get('monit',{}).get('memory',0)//1024//1024
+            icon="✅" if status=="online" else "❌"
+            lines.append(f"{icon} {name}: {status} | restarts={restarts} | mem={mem}MB")
+        if len(lines)==1:
+            lines.append("No openclaw processes found in pm2")
+        send('\n'.join(lines))
+    except Exception as e:
+        send(f"⚠️ Health check error: {e}")
+
 def handle(text):
     t=text.strip().lower()
     if t=='/status': cmd_status()
@@ -107,6 +172,8 @@ def handle(text):
     elif t=='/restart': cmd_restart()
     elif t=='/locks': cmd_locks()
     elif t=="/clearlocks": cmd_clearlocks()
+    elif t=='/positions': cmd_positions()
+    elif t=='/health': cmd_health()
     elif t=='/help': cmd_help()
     else: send(f"Unknown command: {text}\nTry /help")
 

@@ -77,6 +77,8 @@ STRONG_MIN1_EDGE=0.30
 MIN_EDGE=0.20
 CASHOUT_MINUTES=2
 CASHOUT_ADVERSE=_CASHOUT_ADVERSE  # 0.12 — exit before position is nearly worthless
+if MARKET_SERIES=="KXETH15M":
+    CASHOUT_ADVERSE=0.10  # tighter for ETH — faster fill speeds, tolerate less adverse drift
 INITIAL_BALANCE=0.0   # overridden at startup from live balance API — never used as fallback
 SESSION_START_BAL=0.0  # overridden at startup from /tmp/openclaw_day_start.json
 CURRENT_BALANCE=0.0    # set by startup before first cycle
@@ -309,7 +311,7 @@ def safety_check():
         if loss_pct>=DAILY_LOSS_LIMIT:
             return False,f"Daily loss {loss_pct*100:.1f}% exceeds limit {DAILY_LOSS_LIMIT*100:.0f}%"
     total=session_wins+session_losses
-    if total>=10:
+    if total>=20:
         wr=session_wins/total
         if wr<0.45:
             return False,f"Circuit breaker: {wr*100:.0f}% WR over {total} trades"
@@ -333,10 +335,13 @@ def cancel_resting_orders():
         print(f"[Orders] Cancel failed: {e}")
 
 def place_order(direction,bet,strategy_tag="directional",mkt_yes=None,mkt_no=None,override_max=False):
-    # CORRELATION GUARD — atomic file lock prevents simultaneous firing
+    # CORRELATION GUARD — OPEN_POSITIONS first (most reliable), then file lock for cross-bot
     try:
         import time as _t
         import os as _os
+        if any(p.get("ticker")==live_ticker for p in OPEN_POSITIONS):
+            print(f"[CorrGuard] Open position already exists on {live_ticker.split('-',1)[-1]} — skipping")
+            return False
         window_lock = f'/tmp/openclaw_window_{live_ticker.split("-",1)[-1]}.lock'
         try:
             if _os.path.exists(window_lock):
@@ -814,6 +819,9 @@ def check_open_positions():
         if cur_yes is not None and age_placed>=0.5 and direction in ("UP","DOWN"):
             entry_yes=pos.get("entry_yes",0.5)
             peak_yes=pos.get("max_yes") if direction=="UP" else pos.get("min_yes")
+            win_prob_now=cur_yes if direction=="UP" else (1-cur_yes)
+            adverse_now=(entry_yes-cur_yes) if direction=="UP" else (cur_yes-(1-entry_yes))
+            print(f"[Monitor] {direction} {ticker} | age={age_placed:.1f}m | yes={cur_yes:.3f} | entry={entry_yes:.3f} | win={win_prob_now:.3f} | adv={adverse_now:+.3f} | peak={peak_yes:.3f}")
             reason,exit_type=compute_exit_reason(direction,cur_yes,entry_yes,age_placed,mkt_status,peak_yes=peak_yes)
             if reason:
                 entry_p=entry_yes if direction=="UP" else (1-entry_yes)
@@ -849,11 +857,12 @@ def check_open_positions():
                     realized=round(sell_value-bet,2)
                     session_pnl+=realized
                     CURRENT_BALANCE=round(CURRENT_BALANCE+realized,2)
-                    if exit_type=="profit_lock" and realized>0:
+                    if realized>0:
                         session_wins+=1
                     else:
                         session_losses+=1
-                    log_trade(direction,bet,"CASHOUT",
+                    log_label="CASHOUT_WIN" if realized>0 else "CASHOUT_LOSS"
+                    log_trade(direction,bet,log_label,
                               profit_pct=realized/bet*100 if bet else 0,
                               notes=f"{exit_type}|{ticker}")
                 icon="🔒" if exit_type=="profit_lock" else "💸"
@@ -1184,7 +1193,9 @@ if __name__=="__main__":
                 chunk=min(15,remaining-slept)
                 time.sleep(chunk)
                 slept+=chunk
-                if OPEN_POSITIONS: check_open_positions()
+                if OPEN_POSITIONS:
+                    print(f"[FastCheck] {len(OPEN_POSITIONS)} position(s) — checking exits")
+                    check_open_positions()
     except SystemExit as e:
         msg=f"🛑 {BOT_NAME} halted: {e}"
         print(msg)
