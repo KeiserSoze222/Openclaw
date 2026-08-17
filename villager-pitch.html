@@ -54,7 +54,7 @@ body[data-tone="deep"]{background:var(--green-deep);}
 /* ---------- slide shell ---------- */
 .slide{
   position:absolute; inset:0;
-  padding:112px 96px 80px;
+  padding:112px 96px 96px;   /* bottom clearance leaves room for the dot row */
   display:flex; flex-direction:column;
   background:var(--cream);
   opacity:0; visibility:hidden;
@@ -95,6 +95,23 @@ body[data-tone="deep"]{background:var(--green-deep);}
 .pagenum b{color:var(--green);font-weight:700}
 .slide.dark .pagenum,.slide.dark--deep .pagenum{color:var(--muted-dark);opacity:.6}
 .slide.dark .pagenum b,.slide.dark--deep .pagenum b{color:var(--cream)}
+
+/* progress dots, bottom centre, shared by every slide */
+#dots{
+  position:absolute; left:0; right:0; bottom:46px;
+  display:flex; justify-content:center; align-items:center; gap:9px;
+  z-index:15;
+}
+#dots .dot{
+  width:6px; height:6px; border-radius:3px;
+  background:var(--green); opacity:.24; cursor:pointer;
+  transition:width .45s cubic-bezier(.22,.7,.3,1), opacity .4s ease, background-color .4s ease;
+}
+#dots .dot.on{width:22px; opacity:1; background:var(--gold)}
+body[data-tone="dark"] #dots .dot,
+body[data-tone="deep"] #dots .dot{background:var(--cream);opacity:.28}
+body[data-tone="dark"] #dots .dot.on,
+body[data-tone="deep"] #dots .dot.on{background:var(--gold);opacity:1}
 
 /* thin progress hairline along the very bottom */
 #progress{
@@ -152,7 +169,7 @@ h2{
   text-transform:uppercase;color:rgba(250,246,238,.55);font-weight:600;
 }
 #hint{
-  position:absolute;left:0;right:0;bottom:44px;text-align:center;
+  position:absolute;left:0;right:0;bottom:84px;text-align:center;
   font-size:11px;letter-spacing:.24em;text-transform:uppercase;
   color:rgba(250,246,238,.34);
   transition:opacity .7s ease;
@@ -474,7 +491,8 @@ h2{
 /* ============================================================
    7 — THE PACKET
    ============================================================ */
-#s7 .head-block{margin-bottom:32px;display:flex;align-items:flex-end;justify-content:space-between}
+#s7 .head-block{margin-bottom:24px;display:flex;align-items:flex-end;justify-content:space-between}
+#s7 .caption-bar{margin-top:18px}
 #s7 .head-block h2{font-size:48px}
 #s7 .head-block .sub{max-width:400px;text-align:right;font-size:17px}
 #s7 .row{display:flex;gap:34px;flex:1;align-items:stretch}
@@ -484,7 +502,7 @@ h2{
   border:1px solid rgba(26,60,46,.05);
 }
 .packet .mailbar{
-  background:var(--green);color:var(--cream);padding:16px 26px;
+  background:var(--green);color:var(--cream);padding:14px 26px;
   display:flex;align-items:center;gap:14px;
 }
 .packet .mailbar .av{
@@ -495,14 +513,14 @@ h2{
 .packet .mailbar .who{font-size:14px;font-weight:700;letter-spacing:.03em}
 .packet .mailbar .when{margin-left:auto;font-size:12px;color:rgba(250,246,238,.6);letter-spacing:.1em}
 .packet .subject{
-  padding:22px 26px 18px;border-bottom:1px solid #ede7db;
+  padding:18px 26px 15px;border-bottom:1px solid #ede7db;
 }
 .packet .subject .lbl{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:700}
 .packet .subject .txt{font-family:var(--serif);font-size:26px;color:var(--green);margin-top:7px}
 .packet .rows{padding:8px 26px 4px;flex:1}
 .packet .r{
   display:flex;gap:16px;align-items:baseline;
-  padding:12.5px 0;border-bottom:1px solid #f1ece1;
+  padding:9px 0;border-bottom:1px solid #f1ece1;
 }
 .packet .r:last-child{border-bottom:0}
 .packet .r .k{
@@ -549,12 +567,15 @@ h2{
   padding:13px 22px 16px;border-top:1px solid #ede7db;background:var(--cream);
   font-size:13px;color:var(--muted);line-height:1.5;
 }
-#s7 .caption-bar{
+/* shared closing caption, used by several slides */
+.caption-bar{
   margin-top:26px;font-family:var(--serif);font-size:24px;color:var(--green);
   display:flex;align-items:center;gap:16px;
 }
-#s7 .caption-bar .rule{width:40px;height:2px;flex:0 0 40px}
-#s7 .caption-bar em{color:var(--muted);font-size:19px;font-style:italic}
+.caption-bar .rule{width:40px;height:2px;flex:0 0 40px}
+.caption-bar em{color:var(--muted);font-size:19px;font-style:italic}
+.slide.dark .caption-bar,.slide.dark--deep .caption-bar{color:var(--cream)}
+.slide.dark .caption-bar em,.slide.dark--deep .caption-bar em{color:var(--muted-dark)}
 
 /* ============================================================
    8 — CONCIERGE
@@ -607,12 +628,335 @@ h2{
 }
 
 /* ============================================================
-   9 — THE MARKET
+   9 — MEANWHILE, THE OWNER'S SIDE
    ============================================================ */
-#s9 .head-block{margin-bottom:34px;display:flex;align-items:flex-end;justify-content:space-between}
-#s9 .head-block h2{font-size:50px}
-#s9 .head-block .sub{max-width:430px;text-align:right;font-size:17px}
-#s9 .cards{display:flex;gap:30px}
+#s9 .head-block{margin-bottom:28px;display:flex;align-items:flex-end;justify-content:space-between}
+#s9 .head-block h2{font-size:48px}
+#s9 .head-block .sub{max-width:400px;text-align:right;font-size:17px}
+#s9 .split{display:flex;gap:38px;flex:1;align-items:flex-start}
+#s9 .col{flex:1;display:flex;flex-direction:column;min-width:0}
+#s9 .col-lbl{
+  font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:800;
+  margin-bottom:14px;display:flex;align-items:center;gap:12px;
+}
+#s9 .col-lbl::after{content:"";flex:1;height:1px}
+#s9 .col-lbl.today{color:var(--muted)}
+#s9 .col-lbl.today::after{background:#e2dbcc}
+#s9 .col-lbl.ours{color:var(--gold)}
+#s9 .col-lbl.ours::after{background:rgba(201,162,39,.34)}
+
+/* the manual checklist — deliberately cramped and gray */
+.chorelist{
+  align-self:stretch;background:#eeeeea;border:1px solid #dbdbd3;border-radius:6px;
+  padding:15px 18px 16px;font-family:Verdana,Tahoma,Geneva,sans-serif;
+}
+.chorelist .hdr{
+  font-size:10px;color:#5c5c55;letter-spacing:.05em;text-transform:uppercase;
+  font-weight:bold;border-bottom:1px solid #d2d2ca;padding-bottom:8px;margin-bottom:9px;
+}
+.chorelist ul{list-style:none}
+.chorelist li{
+  display:flex;align-items:flex-start;gap:9px;
+  font-size:12.5px;color:#4b4b45;line-height:1.35;padding:8.5px 0;
+}
+.chorelist li i{
+  width:10px;height:10px;border:1px solid #9a9a92;background:#fff;
+  display:block;flex:0 0 10px;margin-top:2px;
+}
+.chorelist .warn{
+  text-decoration:underline;text-decoration-color:#b23b2e;
+  text-decoration-thickness:1.5px;text-underline-offset:3px;
+}
+.chorelist .foot{
+  margin-top:9px;padding-top:9px;border-top:1px solid #d2d2ca;
+  font-size:11px;color:#6d6d66;font-style:italic;
+}
+
+/* the owner dashboard */
+.owner-dash{
+  background:var(--white);border-radius:16px;
+  box-shadow:var(--shadow-card);border:1px solid rgba(26,60,46,.05);
+  overflow:hidden;display:flex;flex-direction:column;
+}
+.owner-dash .dbar{
+  background:var(--green);color:var(--cream);padding:14px 22px;
+  display:flex;align-items:center;gap:12px;
+}
+.owner-dash .dbar .av{
+  width:28px;height:28px;border-radius:50%;background:var(--gold);
+  color:var(--green-deep);font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+}
+.owner-dash .dbar .nm{font-size:13px;font-weight:700;letter-spacing:.04em}
+.owner-dash .dbar .prop{
+  margin-left:auto;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(250,246,238,.62);font-weight:600;
+}
+.owner-dash .sec{padding:17px 22px;border-bottom:1px solid #f0ebe0}
+.owner-dash .sec:last-child{border-bottom:0}
+.owner-dash .sec .lbl{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted);font-weight:800;margin-bottom:12px;
+}
+.calstrip{display:flex;gap:5px}
+.calstrip .d{
+  flex:1;text-align:center;border-radius:7px;padding:7px 0 8px;
+  background:var(--cream);border:1px solid #efe8da;
+}
+.calstrip .d .dow{font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.calstrip .d .n{font-size:13px;color:var(--ink);margin-top:2px;font-weight:600}
+.calstrip .d.booked{background:var(--green);border-color:var(--green)}
+.calstrip .d.booked .dow{color:rgba(250,246,238,.5)}
+.calstrip .d.booked .n{color:var(--cream)}
+.calstrip .d.arrive{background:var(--gold);border-color:var(--gold)}
+.calstrip .d.arrive .dow{color:rgba(44,35,6,.62)}
+.calstrip .d.arrive .n{color:#2c2306}
+.dash-line{font-size:15px;color:var(--ink);line-height:1.65}
+.dash-line b{font-family:var(--serif);font-size:21px;color:var(--green);font-weight:400}
+.dash-line .ok{color:#2f7a52;font-weight:700}
+.dash-line .sep{color:#d5cdbc;margin:0 8px}
+.auto-pill{
+  display:inline-block;margin-left:8px;vertical-align:1px;
+  background:rgba(201,162,39,.17);color:#8a6f10;
+  font-size:9.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  padding:4px 9px;border-radius:20px;
+}
+.pending{
+  display:flex;align-items:center;gap:16px;
+  background:var(--cream);border:1px solid #efe8da;border-radius:12px;padding:13px 15px;
+}
+.pending .who{font-size:13px;color:var(--muted);line-height:1.4}
+.pending .who b{font-family:var(--serif);font-size:19px;color:var(--green);font-weight:400;display:block;margin-bottom:2px}
+.pending .btns{margin-left:auto;display:flex;gap:9px;flex:0 0 auto}
+.btn-approve,.btn-decline{
+  font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  padding:10px 17px;border-radius:22px;
+}
+.btn-approve{background:var(--green);color:var(--cream)}
+.btn-decline{background:transparent;color:var(--muted);border:1px solid #ded6c6}
+
+/* ============================================================
+   10 — ONE DASHBOARD
+   ============================================================ */
+#s10 .head-block{margin-bottom:26px;display:flex;align-items:flex-end;justify-content:space-between}
+#s10 .head-block h2{font-size:48px}
+#s10 .head-block .sub{max-width:420px;text-align:right;font-size:17px}
+#s10 .dash{
+  flex:0 0 auto;background:var(--white);border-radius:18px;
+  box-shadow:var(--shadow-lift);border:1px solid rgba(26,60,46,.05);
+  overflow:hidden;display:flex;flex-direction:column;
+}
+#s10 .dtop{
+  background:var(--green);color:var(--cream);padding:15px 26px;
+  display:flex;align-items:center;gap:13px;
+}
+#s10 .dtop .av{
+  width:28px;height:28px;border-radius:50%;background:var(--gold);
+  color:var(--green-deep);font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+}
+#s10 .dtop .nm{font-size:13px;font-weight:700;letter-spacing:.04em}
+#s10 .dtop .prop{
+  margin-left:auto;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(250,246,238,.62);font-weight:600;
+}
+#s10 .tabs{display:flex;padding:0 26px;background:var(--cream);border-bottom:1px solid #ece6da}
+#s10 .tabs span{
+  padding:14px 19px;font-size:13px;font-weight:600;color:var(--muted);
+  letter-spacing:.03em;border-bottom:2px solid transparent;
+}
+#s10 .tabs span.on{color:var(--green);font-weight:700;border-bottom-color:var(--gold)}
+#s10 .dbody{display:flex;flex:1}
+#s10 .dleft{
+  flex:1.12;padding:24px 28px;border-right:1px solid #f0ebe0;
+  display:flex;flex-direction:column;gap:22px;
+}
+#s10 .dright{flex:1;padding:24px 28px;display:flex;flex-direction:column;gap:18px}
+#s10 .panel-lbl{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted);font-weight:800;margin-bottom:13px;
+}
+.minical .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;width:430px}
+.minical .dow{
+  font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+  text-align:center;font-weight:800;padding-bottom:3px;
+}
+.minical .c{
+  height:34px;display:flex;align-items:center;justify-content:center;
+  font-size:12.5px;color:var(--ink);border-radius:7px;background:var(--cream);
+}
+.minical .c.off{color:#cec7b9;background:transparent}
+.minical .c.bk{background:var(--green);color:var(--cream);font-weight:600}
+.minical .c.st{background:var(--gold);color:#2c2306;font-weight:800}
+.bklist{list-style:none}
+.bklist li{
+  display:flex;align-items:center;gap:12px;padding:11px 0;
+  border-top:1px solid #f0ebe0;font-size:14.5px;color:var(--ink);
+}
+.bklist li:first-child{border-top:0;padding-top:2px}
+.bklist .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex:0 0 7px}
+.bklist .nm{font-weight:600}
+.bklist .when{margin-left:auto;font-size:12.5px;color:var(--muted);letter-spacing:.05em}
+.taxcard{
+  background:var(--cream);border:1px solid #ece5d6;border-left:3px solid var(--gold);
+  border-radius:12px;padding:17px 19px;
+}
+.taxcard .t{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:800}
+.taxcard .m{margin-top:9px;font-size:15.5px;color:var(--ink);line-height:1.5}
+.taxcard .m b{font-family:var(--serif);font-size:19px;color:var(--green);font-weight:400}
+.taxcard .s{margin-top:11px;font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.taxcard .s i{width:6px;height:6px;border-radius:50%;background:#4c9c6e;display:block;flex:0 0 6px}
+.msgprev{background:var(--white);border:1px solid #f0ebe0;border-radius:12px;padding:16px 18px;flex:1}
+.msgprev .h{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+  font-weight:800;display:flex;align-items:center;gap:9px;margin-bottom:13px;
+}
+.msgprev .h .n{
+  margin-left:auto;background:var(--gold);color:#2c2306;
+  font-size:9.5px;font-weight:800;padding:3px 8px;border-radius:20px;letter-spacing:.08em;
+}
+.msgprev .line{display:flex;gap:11px;align-items:flex-start}
+.msgprev .line + .line{margin-top:12px;padding-top:12px;border-top:1px solid #f4efe4}
+.msgprev .av{
+  width:26px;height:26px;border-radius:50%;background:var(--cream-deep);
+  color:var(--green);font-size:9.5px;font-weight:800;flex:0 0 26px;
+  display:flex;align-items:center;justify-content:center;
+}
+.msgprev .who{
+  font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);font-weight:800;margin-bottom:4px;
+}
+.msgprev .tx{font-size:14px;color:var(--ink);line-height:1.5}
+
+/* ============================================================
+   11 — THE KNOWLEDGE GRAPH
+   ============================================================ */
+#s11 .head-block{margin-bottom:16px;text-align:center}
+#s11 .head-block h2{font-size:48px}
+#s11 .graph{position:relative;width:1360px;height:430px;margin:auto auto 0}
+#s11 .graph svg{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+#s11 .graph svg line{stroke:rgba(201,162,39,.42);stroke-width:1}
+#s11 .node{
+  position:absolute;transform:translate(-50%,-50%);z-index:2;
+  width:216px;padding:14px 16px;text-align:center;
+  background:rgba(250,246,238,.05);
+  border:1px solid rgba(250,246,238,.19);
+  border-radius:12px;
+  font-size:15px;line-height:1.4;color:var(--cream);
+}
+#s11 .node.center{
+  width:308px;padding:22px 22px 24px;
+  background:var(--green-deep);
+  border:1.5px solid var(--gold);
+  box-shadow:0 0 0 11px rgba(201,162,39,.06);
+}
+#s11 .node.center .k{
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold);font-weight:800;margin-bottom:9px;
+}
+#s11 .node.center .v{font-family:var(--serif);font-size:27px;line-height:1.18;color:var(--cream)}
+#s10 .caption-bar{margin-top:auto;padding-top:30px}
+#s11 .caption-bar{justify-content:center;margin:26px 0 auto}
+
+/* ============================================================
+   12 — HOW THE INFORMATION STAYS CURRENT
+   ============================================================ */
+#s12 .head-block{margin-bottom:34px;display:flex;align-items:flex-end;justify-content:space-between}
+#s12 .head-block h2{font-size:48px}
+#s12 .head-block .sub{max-width:400px;text-align:right;font-size:17px}
+#s12 .sources{display:flex;gap:28px;align-items:stretch;margin-top:auto}
+#s12 .caption-bar{margin-bottom:auto}
+.source{
+  flex:1;background:var(--white);border-radius:14px;
+  box-shadow:var(--shadow-card);border:1px solid rgba(26,60,46,.05);
+  padding:26px 22px 24px;display:flex;flex-direction:column;
+}
+.source .ico{
+  width:52px;height:52px;border-radius:15px;
+  background:var(--cream);border:1px solid #ece5d6;
+  display:flex;align-items:center;justify-content:center;margin-bottom:19px;
+}
+.source .ico i{position:relative;display:block;width:26px;height:26px}
+.source .ico i b{position:absolute;display:block;background:var(--gold);border-radius:2px}
+.source .n{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:9px}
+.source .t{font-family:var(--serif);font-size:21px;color:var(--green);line-height:1.24}
+.source .d{margin-top:12px;font-size:13.5px;color:var(--muted);line-height:1.55}
+/* 01 — stacked feed bars */
+.source .ico .ic-feed b:nth-child(1){left:0;top:4px;width:26px;height:3px}
+.source .ico .ic-feed b:nth-child(2){left:0;top:11.5px;width:19px;height:3px}
+.source .ico .ic-feed b:nth-child(3){left:0;top:19px;width:12px;height:3px}
+/* 02 — radar ring */
+.source .ico .ic-radar b:nth-child(1){left:0;top:0;width:26px;height:26px;border-radius:50%;background:transparent;border:2.5px solid var(--gold)}
+.source .ico .ic-radar b:nth-child(2){left:9.5px;top:9.5px;width:7px;height:7px;border-radius:50%}
+/* 03 — storefront */
+.source .ico .ic-shop b:nth-child(1){left:0;top:1px;width:26px;height:5px}
+.source .ico .ic-shop b:nth-child(2){left:2px;top:10px;width:22px;height:15px;background:transparent;border:2.5px solid var(--gold);border-radius:3px}
+/* 04 — verified check */
+.source .ico .ic-check b:nth-child(1){left:1px;top:13px;width:11px;height:3px;transform:rotate(45deg);transform-origin:left center}
+.source .ico .ic-check b:nth-child(2){left:8px;top:19px;width:19px;height:3px;transform:rotate(-49deg);transform-origin:left center}
+/* 05 — editorial seal */
+.source .ico .ic-seal b:nth-child(1){left:3px;top:3px;width:20px;height:20px;transform:rotate(45deg);background:transparent;border:2.5px solid var(--gold);border-radius:3px}
+.source .ico .ic-seal b:nth-child(2){left:10px;top:10px;width:6px;height:6px;border-radius:50%}
+
+/* ============================================================
+   13 — BUSINESSES JOIN THE ECOSYSTEM
+   ============================================================ */
+#s13 .head-block{margin-bottom:30px}
+#s13 .row{display:flex;gap:64px;flex:1;align-items:center}
+#s13 .copy{flex:1}
+#s13 .head-block h2{font-size:48px}
+#s13 .copy .sub{max-width:520px}
+#s13 .points{list-style:none;margin-top:32px}
+#s13 .points li{
+  font-size:16px;color:var(--cream);line-height:1.5;
+  padding:13px 0 13px 26px;position:relative;
+  border-top:1px solid rgba(250,246,238,.12);
+}
+#s13 .points li::before{
+  content:"";position:absolute;left:0;top:21px;width:10px;height:1.5px;background:var(--gold);
+}
+#s13 .caption-bar{margin-top:34px;color:var(--cream)}
+#s13 .caption-bar em{color:var(--muted-dark)}
+.bizcard{
+  flex:0 0 560px;background:var(--white);border-radius:18px;
+  box-shadow:0 30px 70px rgba(0,0,0,.3);overflow:hidden;
+}
+.bizcard .photo{
+  height:152px;position:relative;
+  background:linear-gradient(140deg,#2f5a49 0%,#6b8f79 52%,#e3d3a4 100%);
+}
+.bizcard .photo::after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(85% 70% at 20% 14%,rgba(255,255,255,.26),transparent 60%);
+}
+.bizcard .chip{
+  position:absolute;top:14px;right:14px;z-index:2;
+  background:var(--gold);color:#2c2306;
+  font-size:9.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
+  padding:6px 12px;border-radius:20px;
+}
+.bizcard .body{padding:24px 26px 26px}
+.bizcard .nm{font-family:var(--serif);font-size:31px;color:var(--green);line-height:1.14}
+.bizcard .loc{
+  margin-top:7px;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);font-weight:700;
+}
+.bizcard .facts{margin-top:19px;padding-top:17px;border-top:1px solid #ede7db;display:flex;flex-direction:column;gap:12px}
+.bizcard .f{display:flex;align-items:center;gap:12px;font-size:15.5px;color:var(--ink)}
+.bizcard .f .ico{font-size:16px;line-height:1;flex:0 0 auto}
+.bizcard .upd{
+  margin-top:19px;padding-top:15px;border-top:1px solid #ede7db;
+  font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:9px;
+}
+.bizcard .upd i{width:6px;height:6px;border-radius:50%;background:#4c9c6e;display:block;flex:0 0 6px}
+
+/* ============================================================
+   14 — THE MARKET
+   ============================================================ */
+#s14 .head-block{margin-bottom:34px;display:flex;align-items:flex-end;justify-content:space-between}
+#s14 .head-block h2{font-size:50px}
+#s14 .head-block .sub{max-width:430px;text-align:right;font-size:17px}
+#s14 .cards{display:flex;gap:30px}
 .comp{
   flex:1;background:var(--white);border-radius:14px;
   box-shadow:var(--shadow-card);padding:30px 28px 28px;
@@ -641,41 +985,42 @@ h2{
   display:block;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
   color:var(--muted);margin-bottom:5px;font-weight:800;
 }
-#s9 .banner{
+#s14 .banner{
   margin-top:36px;background:linear-gradient(100deg,#c9a227,#dcbc4c 55%,#c9a227);
   border-radius:12px;padding:26px 40px;
   display:flex;align-items:center;justify-content:center;gap:18px;
   box-shadow:0 14px 34px rgba(201,162,39,.28);
 }
-#s9 .banner .t{
+#s14 .banner .t{
   font-family:var(--serif);font-size:29px;color:#2c2306;text-align:center;
   letter-spacing:-.005em;
 }
-#s9 .banner .t b{color:#1a3c2e;font-weight:400;font-style:italic}
+#s14 .banner .t b{color:#1a3c2e;font-weight:400;font-style:italic}
 
 /* ============================================================
-   10 — CLOSE
+   15 — CLOSE
    ============================================================ */
-#s10{align-items:center;justify-content:center;text-align:center}
-#s10 .l1{
+#s15{align-items:center;justify-content:center;text-align:center}
+#s15 .l1{
   font-family:var(--serif);font-size:60px;color:rgba(250,246,238,.62);
   line-height:1.2;letter-spacing:-.012em;
 }
-#s10 .beat{
+#s15 .beat{
   width:5px;height:5px;border-radius:50%;background:var(--gold);
   margin:44px auto;box-shadow:0 0 0 9px rgba(201,162,39,.13);
 }
-#s10 .l2{
+#s15 .l2{
   font-family:var(--serif);font-size:96px;color:var(--cream);
   line-height:1.1;letter-spacing:-.02em;
 }
-#s10 .l2 em{color:var(--gold-soft);font-style:italic}
-#s10 .foot{
-  margin-top:76px;padding-top:28px;border-top:1px solid rgba(250,246,238,.16);
-  font-size:14px;letter-spacing:.18em;text-transform:uppercase;
+#s15 .l2 em{color:var(--gold-soft);font-style:italic}
+#s15 .foot{
+  margin-top:72px;padding-top:28px;border-top:1px solid rgba(250,246,238,.16);
+  font-size:12.5px;letter-spacing:.13em;text-transform:uppercase;
   color:rgba(250,246,238,.5);font-weight:600;
+  display:flex;align-items:baseline;justify-content:center;gap:0 16px;
 }
-#s10 .foot span{color:var(--gold-soft)}
+#s15 .foot .sep{color:var(--gold-soft)}
 
 @media (prefers-reduced-motion:reduce){
   .slide,.slide .rise,#progress{transition-duration:.01ms !important}
@@ -698,7 +1043,7 @@ h2{
       <div class="byline">Prepared by Jeff Keiser &nbsp;·&nbsp; August 2026</div>
     </div>
     <div id="hint">Press → to begin</div>
-    <div class="pagenum"><b>01</b> / 10</div>
+    <div class="pagenum"><b>01</b> / 15</div>
   </section>
 
   <!-- ══════════ 2 ══════════ -->
@@ -729,7 +1074,7 @@ h2{
         <div class="caption">First winter south</div>
       </div>
     </div>
-    <div class="pagenum"><b>02</b> / 10</div>
+    <div class="pagenum"><b>02</b> / 15</div>
   </section>
 
   <!-- ══════════ 3 ══════════ -->
@@ -827,7 +1172,7 @@ h2{
         </div>
       </div>
     </div>
-    <div class="pagenum"><b>03</b> / 10</div>
+    <div class="pagenum"><b>03</b> / 15</div>
   </section>
 
   <!-- ══════════ 4 ══════════ -->
@@ -851,7 +1196,7 @@ h2{
         <div class="assure">No village names required. <b>We already know the map.</b></div>
       </div>
     </div>
-    <div class="pagenum"><b>04</b> / 10</div>
+    <div class="pagenum"><b>04</b> / 15</div>
   </section>
 
   <!-- ══════════ 5 ══════════ -->
@@ -909,7 +1254,7 @@ h2{
       </div>
 
     </div>
-    <div class="pagenum"><b>05</b> / 10</div>
+    <div class="pagenum"><b>05</b> / 15</div>
   </section>
 
   <!-- ══════════ 6 ══════════ -->
@@ -933,7 +1278,7 @@ h2{
         <div class="small">No paperwork, no chasing checks, no calendar to keep.</div>
       </div>
     </div>
-    <div class="pagenum"><b>06</b> / 10</div>
+    <div class="pagenum"><b>06</b> / 15</div>
   </section>
 
   <!-- ══════════ 7 ══════════ -->
@@ -983,7 +1328,7 @@ h2{
     <div class="caption-bar rise">
       <span class="rule"></span>All communication in one thread. <em>No personal cell phones.</em>
     </div>
-    <div class="pagenum"><b>07</b> / 10</div>
+    <div class="pagenum"><b>07</b> / 15</div>
   </section>
 
   <!-- ══════════ 8 ══════════ -->
@@ -1011,11 +1356,318 @@ h2{
         <div class="send"></div>
       </div>
     </div>
-    <div class="pagenum"><b>08</b> / 10</div>
+    <div class="pagenum"><b>08</b> / 15</div>
   </section>
 
   <!-- ══════════ 9 ══════════ -->
   <section class="slide" id="s9">
+    <div class="wordmark">VILLAGER</div>
+    <div class="head-block rise">
+      <div>
+        <div class="eyebrow">The owner</div>
+        <h2>Meanwhile, the owner’s side</h2>
+      </div>
+      <div class="sub">The same rental, seen from the other end. One column is a to-do list. The other is a status board.</div>
+    </div>
+    <div class="split rise">
+
+      <div class="col">
+        <div class="col-lbl today">Today</div>
+        <div class="chorelist">
+          <div class="hdr">Season checklist — per booking</div>
+          <ul>
+            <li><i></i>Answer inquiries</li>
+            <li><i></i>Send contract</li>
+            <li><i></i>Chase signature</li>
+            <li><i></i>Collect deposit</li>
+            <li><i></i><span class="warn">remember</span> 2nd payment</li>
+            <li><i></i>Send arrival packet</li>
+            <li><i></i>Golf cart waivers</li>
+            <li><i></i>Villages ID forms</li>
+            <li><i></i>Coordinate cleaner</li>
+            <li><i></i>Track taxes</li>
+            <li><i></i>Update calendars</li>
+          </ul>
+          <div class="foot">Repeat for every booking, every season.</div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="col-lbl ours">On Villager</div>
+        <div class="owner-dash">
+          <div class="dbar">
+            <div class="av">R</div>
+            <div class="nm">Ray’s dashboard</div>
+            <div class="prop">Pennecamp · Duval</div>
+          </div>
+
+          <div class="sec">
+            <div class="lbl">February</div>
+            <div class="calstrip">
+              <div class="d"><div class="dow">S</div><div class="n">26</div></div>
+              <div class="d"><div class="dow">M</div><div class="n">27</div></div>
+              <div class="d"><div class="dow">T</div><div class="n">28</div></div>
+              <div class="d arrive"><div class="dow">W</div><div class="n">1</div></div>
+              <div class="d booked"><div class="dow">T</div><div class="n">2</div></div>
+              <div class="d booked"><div class="dow">F</div><div class="n">3</div></div>
+              <div class="d booked"><div class="dow">S</div><div class="n">4</div></div>
+              <div class="d booked"><div class="dow">S</div><div class="n">5</div></div>
+              <div class="d booked"><div class="dow">M</div><div class="n">6</div></div>
+              <div class="d booked"><div class="dow">T</div><div class="n">7</div></div>
+              <div class="d booked"><div class="dow">W</div><div class="n">8</div></div>
+              <div class="d"><div class="dow">T</div><div class="n">9</div></div>
+            </div>
+          </div>
+
+          <div class="sec">
+            <div class="lbl">At a glance</div>
+            <div class="dash-line"><b>2</b> upcoming arrivals</div>
+            <div class="dash-line">
+              Payments: <span class="ok">$8,400 collected</span><span class="sep">·</span>$4,200 due Oct 3
+              <span class="auto-pill">Auto-reminder scheduled</span>
+            </div>
+          </div>
+
+          <div class="sec">
+            <div class="lbl">Needs you</div>
+            <div class="pending">
+              <div class="who"><b>Bill &amp; Susan Hartley</b>Feb 1 – Feb 21 · Pennecamp</div>
+              <div class="btns">
+                <div class="btn-approve">Approve</div>
+                <div class="btn-decline">Decline</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="caption-bar rise">
+      <span class="rule"></span>Every manual step becomes a scheduled one.
+    </div>
+    <div class="pagenum"><b>09</b> / 15</div>
+  </section>
+
+  <!-- ══════════ 10 ══════════ -->
+  <section class="slide" id="s10">
+    <div class="wordmark">VILLAGER</div>
+    <div class="head-block rise">
+      <div>
+        <div class="eyebrow">The owner portal</div>
+        <h2>One dashboard, everything in it</h2>
+      </div>
+      <div class="sub">Calendar, money, paperwork, and guests — in one place, kept current by the platform.</div>
+    </div>
+    <div class="dash rise">
+      <div class="dtop">
+        <div class="av">R</div>
+        <div class="nm">Ray Whitfield · Owner</div>
+        <div class="prop">2 properties · 4 bookings this season</div>
+      </div>
+      <div class="tabs">
+        <span>Calendar</span><span>Bookings</span><span>Payments</span>
+        <span>Messages</span><span>Documents</span><span class="on">Taxes</span>
+      </div>
+      <div class="dbody">
+
+        <div class="dleft">
+          <div class="minical">
+            <div class="panel-lbl">February 2027</div>
+            <div class="grid">
+              <div class="dow">S</div><div class="dow">M</div><div class="dow">T</div>
+              <div class="dow">W</div><div class="dow">T</div><div class="dow">F</div><div class="dow">S</div>
+              <div class="c off">31</div><div class="c">1</div><div class="c">2</div><div class="c">3</div>
+              <div class="c">4</div><div class="c">5</div><div class="c">6</div>
+              <div class="c">7</div><div class="c">8</div><div class="c">9</div><div class="c">10</div>
+              <div class="c">11</div><div class="c">12</div><div class="c st">13</div>
+              <div class="c bk">14</div><div class="c bk">15</div><div class="c bk">16</div><div class="c bk">17</div>
+              <div class="c bk">18</div><div class="c bk">19</div><div class="c bk">20</div>
+              <div class="c bk">21</div><div class="c bk">22</div><div class="c bk">23</div><div class="c bk">24</div>
+              <div class="c">25</div><div class="c">26</div><div class="c">27</div>
+            </div>
+          </div>
+          <div>
+            <div class="panel-lbl">Upcoming</div>
+            <ul class="bklist">
+              <li><span class="dot"></span><span class="nm">Bill &amp; Susan Hartley</span><span class="when">Feb 1 · Pennecamp</span></li>
+              <li><span class="dot"></span><span class="nm">Marcus &amp; Jean Ortiz</span><span class="when">Feb 13 · Duval</span></li>
+              <li><span class="dot"></span><span class="nm">The Callahans</span><span class="when">Mar 4 · Pennecamp</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="dright">
+          <div>
+            <div class="panel-lbl">Taxes</div>
+            <div class="taxcard">
+              <div class="t">Action handled</div>
+              <div class="m"><b>Sumter County:</b> Q3 rental tax reminder — records exported.</div>
+              <div class="s"><i></i>Filed-ready summary sent to your email and accountant.</div>
+            </div>
+          </div>
+          <div class="msgprev">
+            <div class="h">Messages<span class="n">1 new</span></div>
+            <div class="line">
+              <div class="av">S</div>
+              <div>
+                <div class="who">Susan Hartley · Pennecamp</div>
+                <div class="tx">Hi! How does the lanai fan work?</div>
+              </div>
+            </div>
+            <div class="line">
+              <div class="av">R</div>
+              <div>
+                <div class="who">You · replied 4 min</div>
+                <div class="tx">The wall switch by the slider runs it — pull the chain twice for high.</div>
+              </div>
+            </div>
+            <div class="line">
+              <div class="av">M</div>
+              <div>
+                <div class="who">Marcus Ortiz · Duval</div>
+                <div class="tx">Is the cart charged and ready for the 13th?</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="caption-bar rise">
+      <span class="rule"></span>Built for owners who’d rather enjoy the income <em>than manage it.</em>
+    </div>
+    <div class="pagenum"><b>10</b> / 15</div>
+  </section>
+
+  <!-- ══════════ 11 ══════════ -->
+  <section class="slide dark" id="s11">
+    <div class="wordmark">VILLAGER</div>
+    <div class="head-block rise">
+      <div class="eyebrow">The moat</div>
+      <h2>The knowledge graph</h2>
+    </div>
+    <div class="graph rise">
+      <svg viewBox="0 0 1360 430" preserveAspectRatio="none" aria-hidden="true">
+        <line x1="680" y1="189" x2="680" y2="82"/>
+        <line x1="772" y1="203" x2="1048" y2="136"/>
+        <line x1="795" y1="233" x2="1139" y2="257"/>
+        <line x1="731" y1="257" x2="884" y2="354"/>
+        <line x1="629" y1="257" x2="476" y2="354"/>
+        <line x1="565" y1="233" x2="221" y2="257"/>
+        <line x1="588" y1="203" x2="312" y2="136"/>
+      </svg>
+      <div class="node center" style="left:680px;top:225px">
+        <div class="k">Place</div>
+        <div class="v">Brownwood<br>Paddock Square</div>
+      </div>
+      <div class="node" style="left:680px;top:55px">Tonight’s entertainment</div>
+      <div class="node" style="left:1118px;top:119px">Nearby restaurants</div>
+      <div class="node" style="left:1226px;top:263px">Happy hours</div>
+      <div class="node" style="left:923px;top:378px">Cart time from every rental</div>
+      <div class="node" style="left:437px;top:378px">Parking</div>
+      <div class="node" style="left:134px;top:263px">Upcoming events</div>
+      <div class="node" style="left:242px;top:119px">Weather</div>
+    </div>
+    <div class="caption-bar rise">
+      Every place in The Villages becomes a living object the AI can reason over.
+      <em>Listings can be copied. This can’t.</em>
+    </div>
+    <div class="pagenum"><b>11</b> / 15</div>
+  </section>
+
+  <!-- ══════════ 12 ══════════ -->
+  <section class="slide" id="s12">
+    <div class="wordmark">VILLAGER</div>
+    <div class="head-block rise">
+      <div>
+        <div class="eyebrow">Accuracy</div>
+        <h2>How the information stays current</h2>
+      </div>
+      <div class="sub">A concierge is only as good as what it knows this afternoon.</div>
+    </div>
+    <div class="sources rise">
+
+      <div class="source">
+        <div class="ico"><i class="ic-feed"><b></b><b></b><b></b></i></div>
+        <div class="n">Source 01</div>
+        <div class="t">Official feeds</div>
+        <div class="d">Squares, rec centers, and golf tee sheets, straight from the operator.</div>
+      </div>
+
+      <div class="source">
+        <div class="ico"><i class="ic-radar"><b></b><b></b></i></div>
+        <div class="n">Source 02</div>
+        <div class="t">AI monitoring of public sources</div>
+        <div class="d">Menus, hours, and event calendars watched continuously for changes.</div>
+      </div>
+
+      <div class="source">
+        <div class="ico"><i class="ic-shop"><b></b><b></b></i></div>
+        <div class="n">Source 03</div>
+        <div class="t">Business-updated profiles</div>
+        <div class="d">Owners correct their own listing in minutes, not weeks.</div>
+      </div>
+
+      <div class="source">
+        <div class="ico"><i class="ic-check"><b></b><b></b></i></div>
+        <div class="n">Source 04</div>
+        <div class="t">Community reports, AI-verified</div>
+        <div class="d">Residents flag what changed; the system confirms it before publishing.</div>
+      </div>
+
+      <div class="source">
+        <div class="ico"><i class="ic-seal"><b></b><b></b></i></div>
+        <div class="n">Source 05</div>
+        <div class="t">Our editorial review</div>
+        <div class="d">A human pass on anything the system is not certain about.</div>
+      </div>
+
+    </div>
+    <div class="caption-bar rise">
+      <span class="rule"></span>Five sources, one answer. <em>The system corrects itself.</em>
+    </div>
+    <div class="pagenum"><b>12</b> / 15</div>
+  </section>
+
+  <!-- ══════════ 13 ══════════ -->
+  <section class="slide dark" id="s13">
+    <div class="wordmark">VILLAGER</div>
+    <div class="head-block rise">
+      <div class="eyebrow">Phase 2</div>
+      <h2>Businesses join the ecosystem</h2>
+    </div>
+    <div class="row rise">
+      <div class="copy">
+        <div class="sub">The restaurants, courses, and venues our renters ask about get a profile of their own — and a reason to keep it accurate.</div>
+        <ul class="points">
+          <li>Free to claim, free to keep current</li>
+          <li>Sponsored placement exists, and is always labeled as such</li>
+          <li>An update at 4 PM reaches tonight’s recommendations</li>
+        </ul>
+      </div>
+
+      <div class="bizcard">
+        <div class="photo"><div class="chip">Sponsored — clearly labeled</div></div>
+        <div class="body">
+          <div class="nm">Bluefin Grill &amp; Bar</div>
+          <div class="loc">Brownwood Paddock Square</div>
+          <div class="facts">
+            <div class="f"><span class="ico">🎶</span>Live music Friday, 6–9 PM</div>
+            <div class="f"><span class="ico">🍸</span>Happy hour til 6</div>
+            <div class="f"><span class="ico">🛺</span>9 minutes by cart from Pennecamp</div>
+          </div>
+          <div class="upd"><i></i>Updated by the owner today</div>
+        </div>
+      </div>
+    </div>
+    <div class="caption-bar rise">
+      <span class="rule"></span>Businesses keep their own information fresh — <em>because accuracy brings them customers.</em>
+    </div>
+    <div class="pagenum"><b>13</b> / 15</div>
+  </section>
+
+  <!-- ══════════ 9 ══════════ -->
+  <section class="slide" id="s14">
     <div class="wordmark">VILLAGER</div>
     <div class="head-block rise">
       <div>
@@ -1063,20 +1715,22 @@ h2{
     <div class="banner rise">
       <div class="t">Everyone built a place to advertise a house. <b>Nobody built the thing that runs the rental.</b></div>
     </div>
-    <div class="pagenum"><b>09</b> / 10</div>
+    <div class="pagenum"><b>14</b> / 15</div>
   </section>
 
   <!-- ══════════ 10 ══════════ -->
-  <section class="slide dark--deep" id="s10">
+  <section class="slide dark--deep" id="s15">
     <div class="wordmark">VILLAGER</div>
     <div class="rise">
       <div class="l1">Every competitor’s product ends at the inquiry.</div>
       <div class="beat"></div>
       <div class="l2">Ours <em>starts</em> there.</div>
-      <div class="foot">Phase 1 target: late October <span>·</span> Weekly demos <span>·</span> ~$150/mo running costs</div>
+      <div class="foot"><span>Phase 1: the rental engine — late October</span><span class="sep">·</span><span>Phase 2: concierge depth + business portal</span><span class="sep">·</span><span>Phase 3: the operating system for The Villages</span></div>
     </div>
-    <div class="pagenum"><b>10</b> / 10</div>
+    <div class="pagenum"><b>15</b> / 15</div>
   </section>
+
+  <div id="dots"></div>
 
 </div>
 
@@ -1088,7 +1742,21 @@ h2{
   var stage  = document.getElementById('stage');
   var bar    = document.getElementById('progress');
   var hint   = document.getElementById('hint');
+  var dotbox = document.getElementById('dots');
   var i = 0, hintKilled = false;
+
+  /* --- one dot per slide, built from the slide list --- */
+  var dots = slides.map(function(_, n){
+    var d = document.createElement('div');
+    d.className = 'dot';
+    d.setAttribute('aria-label', 'Go to slide ' + (n + 1));
+    d.addEventListener('click', function(e){
+      e.stopPropagation();   /* don't let the page-wide click also advance */
+      killHint(); show(n);
+    });
+    dotbox.appendChild(d);
+    return d;
+  });
 
   /* --- scale the fixed 1600x900 stage to fit any viewport --- */
   function fit(){
@@ -1108,6 +1776,7 @@ h2{
     document.body.setAttribute('data-tone',
       cl.contains('dark--deep') ? 'deep' : cl.contains('dark') ? 'dark' : 'light');
     bar.style.width = ((i + 1) / slides.length * 100) + '%';
+    dots.forEach(function(d, n){ d.classList.toggle('on', n === i); });
   }
 
   function killHint(){
@@ -1154,6 +1823,7 @@ h2{
   }, {passive:true});
 
   bar.style.width = (1 / slides.length * 100) + '%';
+  dots[0].classList.add('on');
   setTimeout(killHint, 6000);
 })();
 </script>
