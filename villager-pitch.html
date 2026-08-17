@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Villager — The platform that runs the rental</title>
+<style>
+/* ============================================================
+   VILLAGER — pitch deck
+   Fixed 1600x900 stage, uniformly scaled to fit the viewport.
+   Nothing reflows, so nothing can overflow at any resolution.
+   ============================================================ */
+
+:root{
+  --green:#1a3c2e;
+  --green-deep:#12281f;
+  --green-soft:#2b5443;
+  --cream:#faf6ee;
+  --cream-deep:#f3ecdf;
+  --gold:#c9a227;
+  --gold-soft:#e0c46a;
+  --ink:#22302a;
+  --muted:#6f7d75;
+  --muted-dark:#a9bcb1;
+  --white:#ffffff;
+  --serif:Georgia,"Iowan Old Style","Times New Roman",Times,serif;
+  --sans:"Helvetica Neue",Helvetica,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  --shadow-card:0 1px 2px rgba(26,60,46,.05), 0 12px 30px rgba(26,60,46,.09);
+  --shadow-lift:0 2px 4px rgba(26,60,46,.06), 0 26px 60px rgba(26,60,46,.14);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{
+  background:var(--cream);
+  font-family:var(--sans);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  transition:background-color .55s ease;
+  cursor:default;
+}
+body[data-tone="dark"]{background:var(--green);}
+body[data-tone="deep"]{background:var(--green-deep);}
+
+#stage{
+  position:absolute;
+  top:50%; left:50%;
+  width:1600px; height:900px;
+  transform-origin:50% 50%;
+  overflow:hidden;
+}
+
+/* ---------- slide shell ---------- */
+.slide{
+  position:absolute; inset:0;
+  padding:112px 96px 80px;
+  display:flex; flex-direction:column;
+  background:var(--cream);
+  opacity:0; visibility:hidden;
+  transition:opacity .5s ease, visibility 0s linear .5s;
+  z-index:1;
+}
+.slide.is-active{
+  opacity:1; visibility:visible;
+  transition:opacity .55s ease, visibility 0s;
+  z-index:2;
+}
+.slide.dark{background:var(--green);color:var(--cream)}
+.slide.dark--deep{background:var(--green-deep);color:var(--cream)}
+
+/* gentle lift on the content of the active slide */
+.slide .rise{opacity:0;transform:translateY(14px)}
+.slide.is-active .rise{
+  opacity:1;transform:none;
+  transition:opacity .6s ease .12s, transform .6s cubic-bezier(.22,.7,.3,1) .12s;
+}
+
+/* ---------- furniture ---------- */
+.wordmark{
+  position:absolute; top:52px; left:96px;
+  font-family:var(--sans);
+  font-size:13px; font-weight:700;
+  letter-spacing:.42em;
+  color:var(--green);
+  opacity:.62;
+}
+.slide.dark .wordmark,.slide.dark--deep .wordmark{color:var(--cream);opacity:.5}
+
+.pagenum{
+  position:absolute; bottom:48px; right:96px;
+  font-size:12px; letter-spacing:.22em; font-weight:600;
+  color:var(--muted); opacity:.75;
+}
+.pagenum b{color:var(--green);font-weight:700}
+.slide.dark .pagenum,.slide.dark--deep .pagenum{color:var(--muted-dark);opacity:.6}
+.slide.dark .pagenum b,.slide.dark--deep .pagenum b{color:var(--cream)}
+
+/* thin progress hairline along the very bottom */
+#progress{
+  position:absolute; left:0; bottom:0; height:2px; width:0;
+  background:linear-gradient(90deg,var(--gold-soft),var(--gold));
+  opacity:.85; z-index:20;
+  transition:width .55s cubic-bezier(.22,.7,.3,1);
+  pointer-events:none;
+}
+
+/* ---------- shared type ---------- */
+.eyebrow{
+  font-size:12px;letter-spacing:.28em;text-transform:uppercase;
+  font-weight:700;color:var(--gold);margin-bottom:20px;
+}
+h1{font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.14}
+h2{
+  font-family:var(--serif);font-weight:400;font-size:52px;
+  line-height:1.1;letter-spacing:-.012em;color:var(--green);
+}
+.slide.dark h2,.slide.dark--deep h2{color:var(--cream)}
+.sub{font-size:19px;line-height:1.62;color:var(--muted);font-weight:400}
+.slide.dark .sub{color:var(--muted-dark)}
+.rule{width:64px;height:3px;background:var(--gold);border-radius:2px}
+
+.head-block{margin-bottom:44px}
+.head-block h2{margin-bottom:0}
+.head-block .rule{margin-top:26px}
+
+/* ============================================================
+   1 — TITLE
+   ============================================================ */
+#s1{align-items:center;justify-content:center;text-align:center}
+#s1 .crest{
+  width:56px;height:56px;margin:0 auto 44px;
+  border:1.5px solid rgba(201,162,39,.55);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+}
+#s1 .crest i{
+  display:block;width:11px;height:11px;border-radius:50%;
+  background:var(--gold);
+}
+#s1 h1{font-size:132px;letter-spacing:.12em;color:var(--cream);text-indent:.12em}
+#s1 .tagline{
+  margin-top:36px;font-family:var(--serif);font-style:italic;
+  font-size:34px;color:var(--gold-soft);letter-spacing:.01em;
+}
+#s1 .divider{
+  width:120px;height:1px;background:rgba(250,246,238,.24);
+  margin:44px auto 0;
+}
+#s1 .byline{
+  margin-top:38px;font-size:14px;letter-spacing:.2em;
+  text-transform:uppercase;color:rgba(250,246,238,.55);font-weight:600;
+}
+#hint{
+  position:absolute;left:0;right:0;bottom:44px;text-align:center;
+  font-size:11px;letter-spacing:.24em;text-transform:uppercase;
+  color:rgba(250,246,238,.34);
+  transition:opacity .7s ease;
+}
+#hint.gone{opacity:0}
+
+/* ============================================================
+   2 — MEET BILL & SUSAN
+   ============================================================ */
+#s2{padding-top:104px;padding-bottom:84px}
+#s2 .intro-card{
+  flex:1;display:flex;align-items:center;
+  background:var(--white);border-radius:20px;
+  box-shadow:var(--shadow-lift);
+  padding:64px 72px;gap:76px;
+  border-top:4px solid var(--gold);
+}
+#s2 .copy{flex:1}
+#s2 .copy h2{font-size:60px;margin-bottom:28px}
+#s2 .facts{list-style:none;margin-top:34px}
+#s2 .facts li{
+  display:flex;align-items:baseline;gap:18px;
+  padding:16px 0;border-top:1px solid #ece6da;
+  font-size:20px;color:var(--ink);
+}
+#s2 .facts li:last-child{border-bottom:1px solid #ece6da}
+#s2 .facts .k{
+  flex:0 0 156px;font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--muted);font-weight:700;
+}
+#s2 .facts .v{font-family:var(--serif);font-size:23px;color:var(--green)}
+#s2 .pull{
+  margin-top:36px;font-family:var(--serif);font-style:italic;
+  font-size:24px;line-height:1.5;color:var(--green-soft);
+  padding-left:22px;border-left:3px solid var(--gold);
+}
+
+/* CSS-only couple silhouette */
+.portrait{
+  flex:0 0 360px;height:400px;border-radius:16px;
+  background:radial-gradient(120% 120% at 50% 10%,#f6f1e6 0%,#efe7d7 100%);
+  display:flex;align-items:flex-end;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.portrait .sun{
+  position:absolute;top:52px;left:50%;transform:translateX(-50%);
+  width:186px;height:186px;border-radius:50%;
+  background:rgba(201,162,39,.16);
+}
+.couple{display:flex;align-items:flex-end;gap:20px;position:relative;padding-bottom:52px}
+.fig{position:relative;display:flex;flex-direction:column;align-items:center}
+.fig .head{width:40px;height:40px;border-radius:50%;background:var(--green);position:relative;z-index:2}
+.fig .torso{background:var(--green);position:relative;z-index:1}
+/* him — taller, square shoulders */
+.fig.him .head{width:41px;height:41px}
+.fig.him .torso{
+  width:84px;height:150px;margin-top:7px;
+  border-radius:40px 40px 9px 9px / 52px 52px 9px 9px;
+}
+/* her — slightly shorter, bobbed hair, A-line dress */
+.fig.her .head{width:37px;height:37px}
+.fig.her .hair{
+  position:absolute;top:-6px;left:50%;transform:translateX(-50%);
+  width:53px;height:52px;background:var(--green);
+  border-radius:50% 50% 44% 44% / 56% 56% 40% 40%;z-index:1;
+}
+.fig.her .shoulders{
+  width:58px;height:40px;margin-top:7px;background:var(--green);
+  border-radius:29px 29px 0 0 / 34px 34px 0 0;
+}
+/* wider than the shoulders, tapered in at the top — clip-path only ever clips */
+.fig.her .skirt{
+  width:82px;height:98px;background:var(--green);margin:-1px -12px 0;
+  clip-path:polygon(14.6% 0,85.4% 0,100% 100%,0 100%);
+}
+/* joined hands, bridging the 20px gap between the two figures */
+.couple .link{
+  position:absolute;left:78px;bottom:112px;
+  width:32px;height:7px;border-radius:4px;
+  background:var(--green);z-index:3;
+}
+.portrait .caption{
+  position:absolute;bottom:20px;left:0;right:0;text-align:center;
+  font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--muted);font-weight:600;
+}
+
+/* ============================================================
+   3 — OLD RENTAL SITE
+   ============================================================ */
+#s3 .row{flex:1;display:flex;gap:64px;align-items:center}
+#s3 .commentary{flex:1}
+#s3 .commentary h2{font-size:54px;margin-bottom:30px}
+#s3 .commentary .lead{
+  font-family:var(--serif);font-size:27px;line-height:1.5;
+  color:var(--green-soft);margin-bottom:30px;
+}
+#s3 .commentary .sub{font-size:19px;max-width:460px}
+#s3 .flaws{list-style:none;margin-top:34px}
+#s3 .flaws li{
+  font-size:16px;color:var(--muted);padding:11px 0 11px 26px;
+  position:relative;
+}
+#s3 .flaws li::before{
+  content:"";position:absolute;left:0;top:19px;
+  width:9px;height:1.5px;background:var(--gold);
+}
+
+/* the deliberately dated mock */
+.oldsite{
+  flex:0 0 648px;border-radius:8px;overflow:hidden;
+  box-shadow:var(--shadow-lift);
+  background:#e9e9e6;border:1px solid #cfcfc9;
+  font-family:Verdana,Tahoma,Geneva,sans-serif;
+  transform:rotate(-.5deg);
+  margin:0 5px; /* room for the rotation's bounding box */
+}
+.oldsite .chrome{
+  height:26px;background:linear-gradient(#f2f2f0,#dcdcd7);
+  border-bottom:1px solid #c2c2bb;display:flex;align-items:center;
+  padding:0 9px;gap:5px;
+}
+.oldsite .chrome i{width:8px;height:8px;border-radius:50%;background:#bdbdb6;display:block}
+.oldsite .chrome span{
+  margin-left:10px;font-size:9px;color:#8a8a83;letter-spacing:.02em;
+  font-family:Verdana,sans-serif;
+}
+.oldsite .bar{
+  background:linear-gradient(#5d6f63,#43544a);
+  color:#e6e6e0;font-size:11px;font-weight:bold;
+  padding:8px 11px;letter-spacing:.03em;
+  border-bottom:2px solid #33413a;
+}
+.oldsite .body{display:flex;background:#f4f4f1}
+.oldsite .side{
+  flex:0 0 320px;padding:9px 10px 12px;background:#ebebe7;
+  border-right:1px solid #d3d3cc;
+}
+.oldsite .side h4{
+  font-size:10.5px;color:#3d3d38;margin-bottom:6px;
+  border-bottom:1px solid #cdcdc6;padding-bottom:4px;
+  text-transform:uppercase;letter-spacing:.04em;
+}
+.oldsite .cols{display:flex;gap:8px}
+.oldsite .cols div{flex:1}
+.oldsite label{
+  display:flex;align-items:center;gap:4px;
+  font-size:10.5px;color:#4a4a44;line-height:1.95;white-space:nowrap;
+}
+.oldsite label b{
+  width:9px;height:9px;border:1px solid #9a9a92;background:#fff;
+  display:inline-block;flex:0 0 9px;
+}
+.oldsite label b.on{background:#6a7d70;box-shadow:inset 0 0 0 1.5px #fff}
+.oldsite .side .more{font-size:10px;color:#5566aa;text-decoration:underline;margin-top:7px;display:block}
+.oldsite .side hr{border:0;border-top:1px solid #d8d8d1;margin:9px 0}
+.oldsite .side select,.oldsite .side .fake-input{
+  width:100%;font-size:10.5px;padding:4px 5px;margin-top:4px;
+  border:1px solid #a9a9a1;background:#fff;color:#55554e;
+  font-family:Verdana,sans-serif;
+}
+.oldsite .side .go{
+  margin-top:9px;background:linear-gradient(#7d8f81,#5c6d61);
+  border:1px solid #4c5b51;color:#fff;font-size:10px;font-weight:bold;
+  text-align:center;padding:5px;
+}
+.oldsite .main{flex:1;padding:10px 11px}
+.oldsite .main .hits{font-size:10.5px;color:#6a6a63;margin-bottom:8px}
+.oldsite .main .hits u{color:#5566aa}
+.oldsite .listing{
+  border:1px solid #dcdcd5;background:#fff;padding:7px;margin-bottom:7px;
+  display:flex;gap:8px;
+}
+.oldsite .listing .thumb{
+  flex:0 0 62px;height:44px;background:
+    repeating-linear-gradient(45deg,#d8d8d2 0 6px,#cfcfc8 6px 12px);
+  border:1px solid #c6c6bf;
+}
+.oldsite .listing .t{font-size:11px;color:#3a5aa5;text-decoration:underline;font-weight:bold}
+.oldsite .listing .d{font-size:10px;color:#70706a;line-height:1.55;margin-top:3px}
+.oldsite .pager{font-size:10px;color:#5566aa;text-align:center;padding-top:2px}
+.oldsite .pager b{color:#3d3d38}
+
+/* ============================================================
+   4 — FRONT DOOR
+   ============================================================ */
+#s4{align-items:center;justify-content:center;text-align:center;background:var(--cream)}
+#s4 h2{font-size:56px;margin-bottom:16px}
+#s4 .sub{font-size:20px;margin-bottom:52px}
+#s4 .searchwrap{width:1080px}
+#s4 .searchbox{
+  background:var(--white);border-radius:26px;
+  box-shadow:var(--shadow-lift);
+  border:1px solid rgba(26,60,46,.07);
+  padding:40px 46px 38px;text-align:left;
+}
+#s4 .prompt{
+  font-size:13px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted);font-weight:700;margin-bottom:22px;
+  display:flex;align-items:center;gap:12px;
+}
+#s4 .prompt .dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+#s4 .typed{
+  font-family:var(--serif);font-size:34px;line-height:1.48;
+  color:var(--green);letter-spacing:-.005em;
+}
+#s4 .caret{
+  display:inline-block;width:2.5px;height:32px;background:var(--gold);
+  vertical-align:-5px;margin-left:5px;animation:blink 1.15s step-end infinite;
+}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+#s4 .searchfoot{
+  margin-top:34px;padding-top:26px;border-top:1px solid #ece6da;
+  display:flex;align-items:center;justify-content:space-between;
+}
+#s4 .tags{display:flex;gap:10px}
+#s4 .tags span{
+  font-size:13px;color:var(--muted);background:var(--cream-deep);
+  padding:8px 15px;border-radius:20px;
+}
+.btn-gold{
+  background:var(--gold);color:#3b2f06;
+  font-size:15px;font-weight:700;letter-spacing:.09em;
+  text-transform:uppercase;padding:16px 38px;border-radius:30px;
+  border:0;box-shadow:0 6px 18px rgba(201,162,39,.32);
+  font-family:var(--sans);
+}
+#s4 .assure{
+  margin-top:36px;font-size:16px;color:var(--muted);
+}
+#s4 .assure b{color:var(--green);font-weight:600}
+
+/* ============================================================
+   5 — THREE HOMES
+   ============================================================ */
+#s5 .head-block{margin-bottom:36px;display:flex;align-items:flex-end;justify-content:space-between}
+#s5 .head-block h2{font-size:50px}
+#s5 .head-block .sub{max-width:430px;text-align:right;font-size:17px}
+#s5 .cards{display:flex;gap:34px;flex:1;align-items:center}
+.listing-card{
+  flex:1;background:var(--white);border-radius:16px;
+  box-shadow:var(--shadow-card);overflow:hidden;
+  display:flex;flex-direction:column;
+  border:1px solid rgba(26,60,46,.05);
+}
+.listing-card .photo{height:168px;position:relative}
+.listing-card .photo.a{background:linear-gradient(150deg,#3f6b56 0%,#5f8f74 48%,#c9d8ac 100%)}
+.listing-card .photo.b{background:linear-gradient(150deg,#456b5c 0%,#7d9d84 45%,#e6d7a8 100%)}
+.listing-card .photo.c{background:linear-gradient(150deg,#2f5a49 0%,#6b8f79 42%,#d9c99b 100%)}
+.listing-card .photo::after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(90% 70% at 22% 12%,rgba(255,255,255,.28),transparent 62%);
+}
+.listing-card .badge{
+  position:absolute;top:14px;left:14px;z-index:2;
+  background:rgba(255,255,255,.93);color:var(--green);
+  font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+  padding:6px 11px;border-radius:20px;
+}
+.listing-card .body{padding:24px 26px 26px;display:flex;flex-direction:column;flex:1}
+.listing-card .village{font-family:var(--serif);font-size:30px;color:var(--green);line-height:1.15}
+.listing-card .meta{
+  margin-top:9px;font-size:15px;color:var(--muted);
+  display:flex;align-items:baseline;gap:9px;
+}
+.listing-card .meta .price{font-weight:700;color:var(--ink);font-size:17px}
+.listing-card .why{
+  margin-top:20px;padding-top:18px;border-top:1px solid #ede7db;
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);font-weight:800;
+}
+.chips{margin-top:14px;display:flex;flex-direction:column;gap:9px}
+.chip{
+  display:flex;align-items:center;gap:11px;
+  background:var(--cream);border:1px solid #ece5d6;
+  border-radius:11px;padding:11px 14px;
+  font-size:14.5px;color:var(--ink);line-height:1.3;
+}
+.chip .ico{font-size:16px;flex:0 0 auto;line-height:1}
+
+/* ============================================================
+   6 — THE PLATFORM TAKES OVER
+   ============================================================ */
+#s6 .head-block{margin-bottom:38px}
+#s6 .head-block h2{font-size:50px}
+#s6 .flow{flex:1;display:flex;flex-direction:column;max-width:1130px}
+#s6 .steps{position:relative;padding-left:6px}
+#s6 .steps::before{
+  content:"";position:absolute;left:25px;top:34px;bottom:34px;
+  width:2px;background:linear-gradient(rgba(201,162,39,.55),rgba(201,162,39,.18));
+}
+#s6 .step{display:flex;align-items:center;gap:26px;padding:21px 0;position:relative}
+#s6 .tick{
+  flex:0 0 40px;height:40px;border-radius:50%;
+  background:var(--gold);position:relative;z-index:2;
+  box-shadow:0 0 0 7px rgba(201,162,39,.13);
+}
+#s6 .tick::after{
+  content:"";position:absolute;left:14px;top:11px;
+  width:9px;height:16px;border:2.5px solid var(--green-deep);
+  border-top:0;border-left:0;transform:rotate(42deg);
+}
+#s6 .step .txt{font-family:var(--serif);font-size:31px;color:var(--cream);letter-spacing:-.005em}
+#s6 .step .note{
+  margin-left:auto;font-size:14px;color:var(--muted-dark);
+  letter-spacing:.16em;text-transform:uppercase;font-weight:600;
+}
+#s6 .kicker{
+  margin-top:auto;padding-top:34px;
+  border-top:1px solid rgba(250,246,238,.14);
+  display:flex;align-items:baseline;justify-content:space-between;
+}
+#s6 .kicker .big{
+  font-family:var(--serif);font-size:50px;color:var(--gold-soft);
+  letter-spacing:-.012em;
+}
+#s6 .kicker .small{font-size:16px;color:var(--muted-dark);max-width:330px;text-align:right;line-height:1.5}
+
+/* ============================================================
+   7 — THE PACKET
+   ============================================================ */
+#s7 .head-block{margin-bottom:32px;display:flex;align-items:flex-end;justify-content:space-between}
+#s7 .head-block h2{font-size:48px}
+#s7 .head-block .sub{max-width:400px;text-align:right;font-size:17px}
+#s7 .row{display:flex;gap:34px;flex:1;align-items:stretch}
+.packet{
+  flex:1.32;background:var(--white);border-radius:16px;
+  box-shadow:var(--shadow-card);overflow:hidden;display:flex;flex-direction:column;
+  border:1px solid rgba(26,60,46,.05);
+}
+.packet .mailbar{
+  background:var(--green);color:var(--cream);padding:16px 26px;
+  display:flex;align-items:center;gap:14px;
+}
+.packet .mailbar .av{
+  width:32px;height:32px;border-radius:50%;background:var(--gold);
+  color:var(--green-deep);font-size:13px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;letter-spacing:.02em;
+}
+.packet .mailbar .who{font-size:14px;font-weight:700;letter-spacing:.03em}
+.packet .mailbar .when{margin-left:auto;font-size:12px;color:rgba(250,246,238,.6);letter-spacing:.1em}
+.packet .subject{
+  padding:22px 26px 18px;border-bottom:1px solid #ede7db;
+}
+.packet .subject .lbl{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.packet .subject .txt{font-family:var(--serif);font-size:26px;color:var(--green);margin-top:7px}
+.packet .rows{padding:8px 26px 4px;flex:1}
+.packet .r{
+  display:flex;gap:16px;align-items:baseline;
+  padding:12.5px 0;border-bottom:1px solid #f1ece1;
+}
+.packet .r:last-child{border-bottom:0}
+.packet .r .k{
+  flex:0 0 148px;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);font-weight:700;
+}
+.packet .r .v{font-size:16px;color:var(--ink);line-height:1.45}
+.packet .r .v b{font-family:var(--serif);font-size:19px;color:var(--green);letter-spacing:.04em}
+.packet .foot{
+  padding:15px 26px;background:var(--cream);border-top:1px solid #ede7db;
+  font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:9px;
+}
+.packet .foot .pill{
+  background:rgba(201,162,39,.16);color:#8a6f10;font-weight:700;
+  font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  padding:5px 10px;border-radius:20px;
+}
+
+.thread{
+  flex:1;display:flex;flex-direction:column;
+  background:var(--white);border-radius:16px;box-shadow:var(--shadow-card);
+  overflow:hidden;border:1px solid rgba(26,60,46,.05);
+}
+.thread .tbar{
+  padding:15px 22px;border-bottom:1px solid #ede7db;
+  display:flex;align-items:center;gap:10px;
+}
+.thread .tbar .t{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);font-weight:800}
+.thread .tbar .live{
+  margin-left:auto;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);display:flex;align-items:center;gap:6px;font-weight:700;
+}
+.thread .tbar .live i{width:6px;height:6px;border-radius:50%;background:#4c9c6e;display:block}
+.thread .msgs{padding:20px 22px;display:flex;flex-direction:column;gap:14px;flex:1;justify-content:flex-end}
+.msg{max-width:88%;font-size:15px;line-height:1.5;padding:13px 16px;border-radius:15px}
+.msg .nm{
+  display:block;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
+  font-weight:800;margin-bottom:6px;opacity:.65;
+}
+.msg.them{background:var(--cream-deep);color:var(--ink);border-bottom-left-radius:5px;align-self:flex-start}
+.msg.us{background:var(--green);color:var(--cream);border-bottom-right-radius:5px;align-self:flex-end}
+.msg.us .nm{color:var(--gold-soft);opacity:1}
+.thread .tfoot{
+  padding:13px 22px 16px;border-top:1px solid #ede7db;background:var(--cream);
+  font-size:13px;color:var(--muted);line-height:1.5;
+}
+#s7 .caption-bar{
+  margin-top:26px;font-family:var(--serif);font-size:24px;color:var(--green);
+  display:flex;align-items:center;gap:16px;
+}
+#s7 .caption-bar .rule{width:40px;height:2px;flex:0 0 40px}
+#s7 .caption-bar em{color:var(--muted);font-size:19px;font-style:italic}
+
+/* ============================================================
+   8 — CONCIERGE
+   ============================================================ */
+#s8 .head-block{margin-bottom:30px;text-align:center}
+#s8 .head-block h2{font-size:50px}
+#s8 .head-block .sub{margin-top:16px;font-size:18px}
+#s8 .phone{
+  width:940px;margin:0 auto;flex:1;
+  background:var(--cream);border-radius:22px;
+  box-shadow:0 30px 70px rgba(0,0,0,.32);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+#s8 .phone .top{
+  padding:16px 26px;background:var(--white);border-bottom:1px solid #ece6da;
+  display:flex;align-items:center;gap:13px;
+}
+#s8 .phone .top .av{
+  width:30px;height:30px;border-radius:50%;background:var(--green);
+  color:var(--gold-soft);font-size:11px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+}
+#s8 .phone .top .nm{font-size:14px;font-weight:700;color:var(--green);letter-spacing:.04em}
+#s8 .phone .top .st{font-size:11px;color:var(--muted);letter-spacing:.1em;margin-left:auto;text-transform:uppercase;font-weight:600}
+#s8 .chatlog{padding:24px 30px;display:flex;flex-direction:column;gap:15px;flex:1;justify-content:center}
+#s8 .bub{max-width:70%;font-size:17px;line-height:1.52;padding:15px 20px;border-radius:18px}
+#s8 .bub.u{background:var(--white);color:var(--ink);align-self:flex-end;border-bottom-right-radius:5px;box-shadow:0 2px 8px rgba(26,60,46,.07)}
+#s8 .bub.v{background:var(--green);color:var(--cream);align-self:flex-start;border-bottom-left-radius:5px;max-width:76%}
+#s8 .bub.v b{color:var(--gold-soft);font-weight:600}
+#s8 .bub .nm{
+  display:block;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  font-weight:800;margin-bottom:6px;opacity:.6;
+}
+#s8 .bub.v .nm{color:var(--gold-soft);opacity:1}
+#s8 .composer{
+  padding:14px 22px;background:var(--white);border-top:1px solid #ece6da;
+  display:flex;align-items:center;gap:12px;
+}
+#s8 .composer .field{
+  flex:1;background:var(--cream-deep);border-radius:20px;padding:11px 17px;
+  font-size:14px;color:#a8ada8;
+}
+#s8 .composer .send{
+  width:34px;height:34px;border-radius:50%;background:var(--gold);
+  display:flex;align-items:center;justify-content:center;
+}
+#s8 .composer .send::after{
+  content:"";width:8px;height:8px;border:2px solid var(--green-deep);
+  border-left:0;border-bottom:0;transform:rotate(45deg);margin-left:-3px;
+}
+
+/* ============================================================
+   9 — THE MARKET
+   ============================================================ */
+#s9 .head-block{margin-bottom:34px;display:flex;align-items:flex-end;justify-content:space-between}
+#s9 .head-block h2{font-size:50px}
+#s9 .head-block .sub{max-width:430px;text-align:right;font-size:17px}
+#s9 .cards{display:flex;gap:30px}
+.comp{
+  flex:1;background:var(--white);border-radius:14px;
+  box-shadow:var(--shadow-card);padding:30px 28px 28px;
+  border:1px solid rgba(26,60,46,.05);
+  display:flex;flex-direction:column;
+}
+.comp .nm{font-family:var(--serif);font-size:26px;color:var(--green);line-height:1.2;min-height:64px}
+.comp .price{
+  margin-top:6px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold);font-weight:800;
+}
+.comp .facts{list-style:none;margin-top:22px;padding-top:20px;border-top:1px solid #ede7db;flex:1}
+.comp .facts li{
+  font-size:15px;color:var(--muted);line-height:1.45;
+  padding:9px 0 9px 22px;position:relative;
+}
+.comp .facts li::before{
+  content:"";position:absolute;left:0;top:16px;width:8px;height:8px;
+  border-radius:50%;border:1.5px solid #d6cfbf;
+}
+.comp .gap{
+  margin-top:20px;background:var(--cream);border-radius:10px;
+  padding:13px 15px;font-size:14px;color:var(--green-soft);line-height:1.45;
+}
+.comp .gap b{
+  display:block;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:5px;font-weight:800;
+}
+#s9 .banner{
+  margin-top:36px;background:linear-gradient(100deg,#c9a227,#dcbc4c 55%,#c9a227);
+  border-radius:12px;padding:26px 40px;
+  display:flex;align-items:center;justify-content:center;gap:18px;
+  box-shadow:0 14px 34px rgba(201,162,39,.28);
+}
+#s9 .banner .t{
+  font-family:var(--serif);font-size:29px;color:#2c2306;text-align:center;
+  letter-spacing:-.005em;
+}
+#s9 .banner .t b{color:#1a3c2e;font-weight:400;font-style:italic}
+
+/* ============================================================
+   10 — CLOSE
+   ============================================================ */
+#s10{align-items:center;justify-content:center;text-align:center}
+#s10 .l1{
+  font-family:var(--serif);font-size:60px;color:rgba(250,246,238,.62);
+  line-height:1.2;letter-spacing:-.012em;
+}
+#s10 .beat{
+  width:5px;height:5px;border-radius:50%;background:var(--gold);
+  margin:44px auto;box-shadow:0 0 0 9px rgba(201,162,39,.13);
+}
+#s10 .l2{
+  font-family:var(--serif);font-size:96px;color:var(--cream);
+  line-height:1.1;letter-spacing:-.02em;
+}
+#s10 .l2 em{color:var(--gold-soft);font-style:italic}
+#s10 .foot{
+  margin-top:76px;padding-top:28px;border-top:1px solid rgba(250,246,238,.16);
+  font-size:14px;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(250,246,238,.5);font-weight:600;
+}
+#s10 .foot span{color:var(--gold-soft)}
+
+@media (prefers-reduced-motion:reduce){
+  .slide,.slide .rise,#progress{transition-duration:.01ms !important}
+  #s4 .caret{animation:none}
+}
+</style>
+</head>
+<body data-tone="deep">
+
+<div id="stage">
+
+  <!-- ══════════ 1 ══════════ -->
+  <section class="slide dark--deep is-active" id="s1">
+    <div class="wordmark">VILLAGER</div>
+    <div class="rise">
+      <div class="crest"><i></i></div>
+      <h1>VILLAGER</h1>
+      <div class="tagline">The platform that runs the rental.</div>
+      <div class="divider"></div>
+      <div class="byline">Prepared by Jeff Keiser &nbsp;·&nbsp; August 2026</div>
+    </div>
+    <div id="hint">Press → to begin</div>
+    <div class="pagenum"><b>01</b> / 10</div>
+  </section>
+
+  <!-- ══════════ 2 ══════════ -->
+  <section class="slide" id="s2">
+    <div class="wordmark">VILLAGER</div>
+    <div class="intro-card rise">
+      <div class="copy">
+        <div class="eyebrow">The renter</div>
+        <h2>Meet Bill &amp; Susan</h2>
+        <div class="sub">They are the whole business, and every part of it is built for them.</div>
+        <ul class="facts">
+          <li><span class="k">Home</span><span class="v">Rochester, Michigan</span></li>
+          <li><span class="k">Staying</span><span class="v">Three weeks in February</span></li>
+          <li><span class="k">Experience</span><span class="v">Never been to The Villages</span></li>
+        </ul>
+        <div class="pull">They know what they want from a winter.<br>They don’t know a single village by name.</div>
+      </div>
+      <div class="portrait">
+        <div class="sun"></div>
+        <div class="couple">
+          <div class="fig him"><div class="head"></div><div class="torso"></div></div>
+          <div class="link"></div>
+          <div class="fig her">
+            <div class="hair"></div><div class="head"></div>
+            <div class="shoulders"></div><div class="skirt"></div>
+          </div>
+        </div>
+        <div class="caption">First winter south</div>
+      </div>
+    </div>
+    <div class="pagenum"><b>02</b> / 10</div>
+  </section>
+
+  <!-- ══════════ 3 ══════════ -->
+  <section class="slide" id="s3">
+    <div class="wordmark">VILLAGER</div>
+    <div class="row rise">
+      <div class="commentary">
+        <div class="eyebrow">The problem</div>
+        <h2>Today, they hit a wall</h2>
+        <div class="lead">Every site in this market asks renters to already know The&nbsp;Villages.</div>
+        <div class="sub">Bill and Susan are handed sixty village names, none of which mean anything to them, and asked to choose.</div>
+        <ul class="flaws">
+          <li>Filters written for insiders, not first-time visitors</li>
+          <li>No sense of distance, amenities, or daily life</li>
+          <li>Listings that never explain why they’d fit</li>
+        </ul>
+      </div>
+
+      <div class="oldsite">
+        <div class="chrome"><i></i><i></i><i></i><span>rentals · search results</span></div>
+        <div class="bar">SEARCH RENTALS &nbsp;»&nbsp; REFINE YOUR RESULTS</div>
+        <div class="body">
+          <div class="side">
+            <h4>Select Village(s)</h4>
+            <div class="cols">
+              <div>
+                <label><b></b>Duval</label>
+                <label><b class="on"></b>Pennecamp</label>
+                <label><b></b>Virginia Trace</label>
+                <label><b></b>Collier</label>
+                <label><b></b>Fenney</label>
+                <label><b></b>Marsh Bend</label>
+                <label><b></b>Osceola Hills</label>
+                <label><b></b>Hemingway</label>
+                <label><b></b>Charlotte</label>
+                <label><b></b>Bonita</label>
+              </div>
+              <div>
+                <label><b></b>Sanibel</label>
+                <label><b></b>Poinciana</label>
+                <label><b></b>Chatham</label>
+                <label><b></b>Hadley</label>
+                <label><b></b>Amelia</label>
+                <label><b></b>Buttonwood</label>
+                <label><b></b>Mallory Sq.</label>
+                <label><b></b>Springdale</label>
+                <label><b></b>Tamarind</label>
+                <label><b></b>DeLuna</label>
+              </div>
+            </div>
+            <a class="more">show 41 more villages…</a>
+            <hr>
+            <h4>Beds / Baths</h4>
+            <select><option>Any bedrooms</option></select>
+            <h4 style="margin-top:9px">Price Range</h4>
+            <div class="fake-input">$ min — $ max</div>
+            <h4 style="margin-top:9px">Availability</h4>
+            <div class="fake-input">mm/dd/yyyy — mm/dd/yyyy</div>
+            <div class="go">UPDATE RESULTS</div>
+          </div>
+          <div class="main">
+            <div class="hits">1&ndash;7 of 1,412 results &nbsp;|&nbsp; sort: <u>newest</u></div>
+            <div class="listing">
+              <div class="thumb"></div>
+              <div><div class="t">2/2 Courtyard Villa &mdash; Pennecamp</div>
+              <div class="d">Turnkey. Golf cart avail.<br>Call for seasonal rates.</div></div>
+            </div>
+            <div class="listing">
+              <div class="thumb"></div>
+              <div><div class="t">Designer Home &mdash; Virginia Trace</div>
+              <div class="d">3BR/2BA. No pets. Min 30 days.<br>Email owner for details.</div></div>
+            </div>
+            <div class="listing">
+              <div class="thumb"></div>
+              <div><div class="t">Ranch &mdash; Osceola Hills</div>
+              <div class="d">Avail Jan–Mar. Inquire.<br>Rates on request.</div></div>
+            </div>
+            <div class="listing">
+              <div class="thumb"></div>
+              <div><div class="t">Villa &mdash; Marsh Bend</div>
+              <div class="d">2/2. Seasonal only.<br>Text owner, no calls after 8.</div></div>
+            </div>
+            <div class="listing">
+              <div class="thumb"></div>
+              <div><div class="t">Patio Villa &mdash; Collier</div>
+              <div class="d">Avail. Rates vary by month.<br>See photos on request.</div></div>
+            </div>
+            <div class="listing">
+              <div class="thumb"></div>
+              <div><div class="t">Cottage &mdash; Fenney</div>
+              <div class="d">1 BR. No smoking. Deposit req’d.<br>Contact for availability.</div></div>
+            </div>
+            <div class="pager"><b>1</b> 2 3 4 5 … 471 &nbsp;next »</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pagenum"><b>03</b> / 10</div>
+  </section>
+
+  <!-- ══════════ 4 ══════════ -->
+  <section class="slide" id="s4">
+    <div class="wordmark">VILLAGER</div>
+    <div class="rise" style="width:100%;display:flex;flex-direction:column;align-items:center">
+      <div class="eyebrow">The solution</div>
+      <h2>Our front door</h2>
+      <div class="sub">One question, asked in their words — not ours.</div>
+      <div class="searchwrap">
+        <div class="searchbox">
+          <div class="prompt"><span class="dot"></span>Tell us about your trip…</div>
+          <div class="typed">Three weeks in February. We both golf, we’re bringing our dog, and we’d love live music at night.<span class="caret"></span></div>
+          <div class="searchfoot">
+            <div class="tags">
+              <span>Feb 1 – Feb 21</span><span>2 guests</span><span>1 dog</span>
+            </div>
+            <div class="btn-gold">Find our home</div>
+          </div>
+        </div>
+        <div class="assure">No village names required. <b>We already know the map.</b></div>
+      </div>
+    </div>
+    <div class="pagenum"><b>04</b> / 10</div>
+  </section>
+
+  <!-- ══════════ 5 ══════════ -->
+  <section class="slide" id="s5">
+    <div class="wordmark">VILLAGER</div>
+    <div class="head-block rise">
+      <div>
+        <div class="eyebrow">The result</div>
+        <h2>Three homes — and the reason why</h2>
+      </div>
+      <div class="sub">Every match explains itself. Not a wall of 1,412 results — three homes, each with its case already made.</div>
+    </div>
+    <div class="cards rise">
+
+      <div class="listing-card">
+        <div class="photo a"><div class="badge">Best overall</div></div>
+        <div class="body">
+          <div class="village">Pennecamp</div>
+          <div class="meta">2 BR · 2 BA <span class="price">$4,200/mo</span></div>
+          <div class="why">Why we chose it</div>
+          <div class="chips">
+            <div class="chip"><span class="ico">🛺</span>6 min to Lake Sumter Landing</div>
+            <div class="chip"><span class="ico">🐕</span>Fenced yard, dog-friendly</div>
+            <div class="chip"><span class="ico">⛳</span>2 executive courses in 10 min</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="listing-card">
+        <div class="photo b"><div class="badge">Most space</div></div>
+        <div class="body">
+          <div class="village">Collier</div>
+          <div class="meta">2 BR + den · 2 BA <span class="price">$4,600/mo</span></div>
+          <div class="why">Why we chose it</div>
+          <div class="chips">
+            <div class="chip"><span class="ico">🎶</span>Live music nightly, 8 min away</div>
+            <div class="chip"><span class="ico">🐕</span>Screened lanai, pet deposit waived</div>
+            <div class="chip"><span class="ico">⛳</span>Championship tee times on site</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="listing-card">
+        <div class="photo c"><div class="badge">Room for guests</div></div>
+        <div class="body">
+          <div class="village">Duval</div>
+          <div class="meta">3 BR · 2 BA <span class="price">$4,900/mo</span></div>
+          <div class="why">Why we chose it</div>
+          <div class="chips">
+            <div class="chip"><span class="ico">⛳</span>Backs to the 4th fairway</div>
+            <div class="chip"><span class="ico">🛺</span>Cart included, 4 min to Spanish Springs</div>
+            <div class="chip"><span class="ico">🐕</span>Two dog parks within a mile</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="pagenum"><b>05</b> / 10</div>
+  </section>
+
+  <!-- ══════════ 6 ══════════ -->
+  <section class="slide dark" id="s6">
+    <div class="wordmark">VILLAGER</div>
+    <div class="head-block rise">
+      <div class="eyebrow">Booking</div>
+      <h2>The platform takes over</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="flow rise">
+      <div class="steps">
+        <div class="step"><div class="tick"></div><div class="txt">Owner approves</div><div class="note">One click</div></div>
+        <div class="step"><div class="tick"></div><div class="txt">Agreement sent for e-signature</div><div class="note">Automatic</div></div>
+        <div class="step"><div class="tick"></div><div class="txt">Deposit collected</div><div class="note">Automatic</div></div>
+        <div class="step"><div class="tick"></div><div class="txt">Balance auto-scheduled, 30 days out</div><div class="note">Scheduled</div></div>
+        <div class="step"><div class="tick"></div><div class="txt">Reminders handled automatically</div><div class="note">Ongoing</div></div>
+      </div>
+      <div class="kicker">
+        <div class="big">Owner’s total effort: one click.</div>
+        <div class="small">No paperwork, no chasing checks, no calendar to keep.</div>
+      </div>
+    </div>
+    <div class="pagenum"><b>06</b> / 10</div>
+  </section>
+
+  <!-- ══════════ 7 ══════════ -->
+  <section class="slide" id="s7">
+    <div class="wordmark">VILLAGER</div>
+    <div class="head-block rise">
+      <div>
+        <div class="eyebrow">Arrival</div>
+        <h2>Fifteen days out, the packet sends itself</h2>
+      </div>
+      <div class="sub">Everything a first-time renter needs, delivered before they think to ask.</div>
+    </div>
+    <div class="row rise">
+
+      <div class="packet">
+        <div class="mailbar">
+          <div class="av">V</div>
+          <div class="who">Villager · Arrival Packet</div>
+          <div class="when">SENT AUTOMATICALLY</div>
+        </div>
+        <div class="subject">
+          <div class="lbl">To Susan &amp; Bill — 15 days before arrival</div>
+          <div class="txt">Everything you need for Pennecamp</div>
+        </div>
+        <div class="rows">
+          <div class="r"><div class="k">Address</div><div class="v">1742 Pennecamp Terrace, The Villages, FL 32162</div></div>
+          <div class="r"><div class="k">Door code</div><div class="v"><b>4 8 2 1 #</b> &nbsp;— active Feb 1, 3:00 PM</div></div>
+          <div class="r"><div class="k">Golf cart</div><div class="v">In the garage. Key on hook by door, charger plugged in nightly. Cart paths marked in brown on the map.</div></div>
+          <div class="r"><div class="k">Villages ID</div><div class="v">Pick up guest IDs at Lake Sumter Landing — bring lease copy (attached) and photo ID.</div></div>
+          <div class="r"><div class="k">House rules</div><div class="v">No smoking · Quiet hours after 10 PM · Dog welcome, off furniture</div></div>
+          <div class="r"><div class="k">Wi-Fi</div><div class="v"><b>Pennecamp-Guest</b> &nbsp;/&nbsp; password <b>lanai2026</b></div></div>
+        </div>
+        <div class="foot"><span class="pill">No owner action</span>Sent, logged, and available in their account for the whole stay.</div>
+      </div>
+
+      <div class="thread">
+        <div class="tbar"><span class="t">Messages · Pennecamp</span><span class="live"><i></i>In platform</span></div>
+        <div class="msgs">
+          <div class="msg them"><span class="nm">Susan</span>Hi! How does the lanai fan work?</div>
+          <div class="msg us"><span class="nm">Owner · Ray</span>The wall switch by the slider runs it — the little chain sets the speed. Pull it twice for high.</div>
+          <div class="msg them"><span class="nm">Susan</span>Perfect, thank you!</div>
+        </div>
+        <div class="tfoot">Owner replied in 4 minutes. Both sides keep the full history.</div>
+      </div>
+
+    </div>
+    <div class="caption-bar rise">
+      <span class="rule"></span>All communication in one thread. <em>No personal cell phones.</em>
+    </div>
+    <div class="pagenum"><b>07</b> / 10</div>
+  </section>
+
+  <!-- ══════════ 8 ══════════ -->
+  <section class="slide dark" id="s8">
+    <div class="wordmark">VILLAGER</div>
+    <div class="head-block rise">
+      <div class="eyebrow">During the stay</div>
+      <h2>The ninety days nobody else serves</h2>
+      <div class="sub">The booking is the beginning of the relationship, not the end of it.</div>
+    </div>
+    <div class="phone rise">
+      <div class="top">
+        <div class="av">V</div>
+        <div class="nm">Villager Concierge</div>
+        <div class="st">Day 12 of 21</div>
+      </div>
+      <div class="chatlog">
+        <div class="bub u"><span class="nm">Susan</span>Where should we eat tonight? Something casual, not far.</div>
+        <div class="bub v"><span class="nm">Villager</span>Are you thinking bar food or sit-down? And would you like live music with dinner?</div>
+        <div class="bub u"><span class="nm">Susan</span>Sit-down, with music.</div>
+        <div class="bub v"><span class="nm">Villager</span><b>City Fire at Lake Sumter Landing</b> — 7 minutes by golf cart. Live duo on the square 6–9 PM. Want two backup options?</div>
+      </div>
+      <div class="composer">
+        <div class="field">Message Villager…</div>
+        <div class="send"></div>
+      </div>
+    </div>
+    <div class="pagenum"><b>08</b> / 10</div>
+  </section>
+
+  <!-- ══════════ 9 ══════════ -->
+  <section class="slide" id="s9">
+    <div class="wordmark">VILLAGER</div>
+    <div class="head-block rise">
+      <div>
+        <div class="eyebrow">Competition</div>
+        <h2>The market</h2>
+      </div>
+      <div class="sub">Three players own this market today. All three stop at the same place.</div>
+    </div>
+    <div class="cards rise">
+
+      <div class="comp">
+        <div class="nm">Rent From<br>A Villager</div>
+        <div class="price">$199 / year</div>
+        <ul class="facts">
+          <li>Classifieds only — a listing board</li>
+          <li>Flat annual fee, no transaction role</li>
+          <li>Hands off at &ldquo;I’m interested&rdquo;</li>
+        </ul>
+        <div class="gap"><b>Where it ends</b>The inquiry email.</div>
+      </div>
+
+      <div class="comp">
+        <div class="nm">Villagers<br>Homes 4 Rent</div>
+        <div class="price">~1,400 listings · since 2005</div>
+        <ul class="facts">
+          <li>The incumbent — deepest inventory</li>
+          <li>Phone support, staffed by people</li>
+          <li>No automation anywhere in the flow</li>
+        </ul>
+        <div class="gap"><b>Where it ends</b>A phone call and a paper lease.</div>
+      </div>
+
+      <div class="comp">
+        <div class="nm">Stay<br>The Villages</div>
+        <div class="price">Launched March 2026</div>
+        <ul class="facts">
+          <li>Owner-side AI tools</li>
+          <li>Free through 2027</li>
+          <li>Roughly 2 live listings</li>
+        </ul>
+        <div class="gap"><b>Where it ends</b>Built for owners, not renters.</div>
+      </div>
+
+    </div>
+    <div class="banner rise">
+      <div class="t">Everyone built a place to advertise a house. <b>Nobody built the thing that runs the rental.</b></div>
+    </div>
+    <div class="pagenum"><b>09</b> / 10</div>
+  </section>
+
+  <!-- ══════════ 10 ══════════ -->
+  <section class="slide dark--deep" id="s10">
+    <div class="wordmark">VILLAGER</div>
+    <div class="rise">
+      <div class="l1">Every competitor’s product ends at the inquiry.</div>
+      <div class="beat"></div>
+      <div class="l2">Ours <em>starts</em> there.</div>
+      <div class="foot">Phase 1 target: late October <span>·</span> Weekly demos <span>·</span> ~$150/mo running costs</div>
+    </div>
+    <div class="pagenum"><b>10</b> / 10</div>
+  </section>
+
+</div>
+
+<div id="progress"></div>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var stage  = document.getElementById('stage');
+  var bar    = document.getElementById('progress');
+  var hint   = document.getElementById('hint');
+  var i = 0, hintKilled = false;
+
+  /* --- scale the fixed 1600x900 stage to fit any viewport --- */
+  function fit(){
+    var s = Math.min(window.innerWidth / 1600, window.innerHeight / 900);
+    stage.style.transform = 'translate(-50%,-50%) scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit);
+  fit();
+
+  function show(n){
+    n = Math.max(0, Math.min(slides.length - 1, n));
+    if (n === i && slides[n].classList.contains('is-active')) return;
+    slides[i].classList.remove('is-active');
+    i = n;
+    slides[i].classList.add('is-active');
+    var cl = slides[i].classList;
+    document.body.setAttribute('data-tone',
+      cl.contains('dark--deep') ? 'deep' : cl.contains('dark') ? 'dark' : 'light');
+    bar.style.width = ((i + 1) / slides.length * 100) + '%';
+  }
+
+  function killHint(){
+    if (hintKilled || !hint) return;
+    hintKilled = true;
+    hint.classList.add('gone');
+  }
+
+  function next(){ killHint(); show(i + 1); }
+  function prev(){ killHint(); show(i - 1); }
+
+  document.addEventListener('keydown', function(e){
+    switch(e.key){
+      case 'ArrowRight': case 'ArrowDown': case 'PageDown':
+      case ' ': case 'Spacebar': case 'Enter':
+        e.preventDefault(); next(); break;
+      case 'ArrowLeft': case 'ArrowUp': case 'PageUp': case 'Backspace':
+        e.preventDefault(); prev(); break;
+      case 'Home': e.preventDefault(); killHint(); show(0); break;
+      case 'End':  e.preventDefault(); killHint(); show(slides.length - 1); break;
+      case 'f': case 'F':
+        if (!document.fullscreenElement) {
+          if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+        } else if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+        break;
+    }
+  });
+
+  /* click anywhere to advance; click the left eighth to go back */
+  document.addEventListener('click', function(e){
+    if (e.clientX < window.innerWidth * 0.125) prev(); else next();
+  });
+
+  /* touch swipe, for tablets */
+  var x0 = null;
+  document.addEventListener('touchstart', function(e){ x0 = e.changedTouches[0].clientX; }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 45) { dx < 0 ? next() : prev(); }
+    x0 = null;
+  }, {passive:true});
+
+  bar.style.width = (1 / slides.length * 100) + '%';
+  setTimeout(killHint, 6000);
+})();
+</script>
+</body>
+</html>
