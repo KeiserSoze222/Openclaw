@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#12281f">
 <title>Villager — The platform that runs the rental</title>
 <style>
 /* ============================================================
@@ -30,15 +34,26 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden}
+html,body{
+  height:100%;
+  height:100dvh;              /* dvh keeps the stage clear of Safari/Chrome toolbars */
+  width:100%;
+  overflow:hidden;
+  overscroll-behavior:none;   /* no pull-to-refresh, no rubber-band */
+  touch-action:manipulation;  /* no double-tap zoom */
+}
 body{
   background:var(--cream);
   font-family:var(--sans);
   color:var(--ink);
   -webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:100%;
   text-rendering:optimizeLegibility;
   transition:background-color .55s ease;
   cursor:default;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-touch-callout:none;
+  user-select:none;
 }
 body[data-tone="dark"]{background:var(--green);}
 body[data-tone="deep"]{background:var(--green-deep);}
@@ -97,12 +112,17 @@ body[data-tone="deep"]{background:var(--green-deep);}
 .slide.dark .pagenum b,.slide.dark--deep .pagenum b{color:var(--cream)}
 
 /* progress dots, bottom centre, shared by every slide */
+/* With a mouse the row lives inside the stage and scales with it, exactly as
+   before. On touch, JS lifts it out to the body and the media query below
+   switches it to real viewport pixels, so finger targets stay finger-sized. */
 #dots{
   position:absolute; left:0; right:0; bottom:46px;
   display:flex; justify-content:center; align-items:center; gap:9px;
   z-index:15;
+  pointer-events:none;          /* only the dots themselves take a click */
 }
 #dots .dot{
+  pointer-events:auto;
   width:6px; height:6px; border-radius:3px;
   background:var(--green); opacity:.24; cursor:pointer;
   transition:width .45s cubic-bezier(.22,.7,.3,1), opacity .4s ease, background-color .4s ease;
@@ -112,6 +132,58 @@ body[data-tone="dark"] #dots .dot,
 body[data-tone="deep"] #dots .dot{background:var(--cream);opacity:.28}
 body[data-tone="dark"] #dots .dot.on,
 body[data-tone="deep"] #dots .dot.on{background:var(--gold);opacity:1}
+
+/* ---------- touch devices ---------- */
+@media (pointer:coarse){
+  /* Real pixels, no stage scaling: fifteen 44px tiles laid edge to edge give
+     every dot a full finger-sized target that cannot overlap its neighbour. */
+  #dots{
+    position:fixed;
+    left:0; right:0; bottom:auto;
+    gap:0;
+  }
+  /* `.dot.on` outranks `#dots .dot`, so the active dot needs naming too or it
+     keeps its 22px desktop width and loses half its touch target */
+  #dots .dot,
+  #dots .dot.on{
+    width:44px; height:44px; border-radius:0;
+    background:none !important; opacity:1 !important;
+    display:flex; align-items:center; justify-content:center;
+    transition:none;
+  }
+  #dots .dot::before{
+    content:""; display:block;
+    width:7px; height:7px; border-radius:4px;
+    background:var(--green); opacity:.26;
+    transition:width .45s cubic-bezier(.22,.7,.3,1), opacity .4s ease, background-color .4s ease;
+  }
+  #dots .dot.on::before{width:26px; opacity:1; background:var(--gold)}
+  body[data-tone="dark"] #dots .dot::before,
+  body[data-tone="deep"] #dots .dot::before{background:var(--cream);opacity:.3}
+  body[data-tone="dark"] #dots .dot.on::before,
+  body[data-tone="deep"] #dots .dot.on::before{background:var(--gold);opacity:1}
+}
+
+/* one-time nudge when the deck is opened in portrait */
+#rotate{
+  position:fixed; left:50%;
+  transform:translateX(-50%);
+  display:none; align-items:center; gap:13px;
+  background:rgba(18,40,31,.93); color:var(--cream);
+  border:1px solid rgba(201,162,39,.42); border-radius:999px;
+  padding:14px 24px 14px 20px;
+  font-size:15px; letter-spacing:.05em; white-space:nowrap;
+  box-shadow:0 14px 38px rgba(0,0,0,.34);
+  z-index:40; pointer-events:none;
+  opacity:0; transition:opacity .6s ease;
+}
+#rotate.show{display:flex}
+#rotate.show.vis{opacity:1}
+#rotate .ico{
+  width:15px; height:20px; flex:0 0 15px;
+  border:1.5px solid var(--gold); border-radius:3px;
+  transform:rotate(-22deg);
+}
 
 /* thin progress hairline along the very bottom */
 #progress{
@@ -1734,6 +1806,7 @@ h2{
 
 </div>
 
+<div id="rotate"><span class="ico"></span>Rotate for the best view</div>
 <div id="progress"></div>
 
 <script>
@@ -1758,12 +1831,65 @@ h2{
     return d;
   });
 
+  var isTouch = (window.matchMedia && window.matchMedia('(pointer:coarse)').matches) ||
+                (navigator.maxTouchPoints > 0 && !window.matchMedia('(pointer:fine)').matches);
+  /* On touch the row leaves the stage, so its 44px targets are real pixels
+     rather than stage units that the scale would shrink. */
+  if (isTouch) document.body.appendChild(dotbox);
+
+  /* --- read the safe-area insets the browser is reporting --- */
+  var probe = document.createElement('div');
+  probe.style.cssText = 'position:fixed;visibility:hidden;pointer-events:none;' +
+    'top:0;left:0;padding:env(safe-area-inset-top) env(safe-area-inset-right) ' +
+    'env(safe-area-inset-bottom) env(safe-area-inset-left)';
+  document.body.appendChild(probe);
+  function insets(){
+    var c = getComputedStyle(probe);
+    return { t: parseFloat(c.paddingTop)    || 0, r: parseFloat(c.paddingRight)  || 0,
+             b: parseFloat(c.paddingBottom) || 0, l: parseFloat(c.paddingLeft)   || 0 };
+  }
+
+  /* On iOS the visual viewport is the honest one: it excludes the browser
+     chrome, so the stage never ends up underneath a toolbar. */
+  function viewport(){
+    var vv = window.visualViewport;
+    return {
+      w: (vv && vv.width)  || document.documentElement.clientWidth  || window.innerWidth,
+      h: (vv && vv.height) || document.documentElement.clientHeight || window.innerHeight
+    };
+  }
+
   /* --- scale the fixed 1600x900 stage to fit any viewport --- */
   function fit(){
-    var s = Math.min(window.innerWidth / 1600, window.innerHeight / 900);
-    stage.style.transform = 'translate(-50%,-50%) scale(' + s + ')';
+    var v = viewport(), pad = insets();
+    var availW = Math.max(1, v.w - pad.l - pad.r);
+    var availH = Math.max(1, v.h - pad.t - pad.b);
+    var s = Math.min(availW / 1600, availH / 900);
+    var cx = pad.l + availW / 2;
+    var cy = pad.t + availH / 2;
+    var tf = 'translate(-50%,-50%) scale(' + s + ')';
+
+    stage.style.left = cx + 'px';
+    stage.style.top  = cy + 'px';
+    stage.style.transform = tf;
+
+    if (isTouch){
+      /* Real pixels: sit the row just below the deck, but never past the
+         safe area — in portrait the letterbox band is deep, in landscape
+         it is shallow, and this reads correctly in both. */
+      var stageBottom = cy + (900 * s) / 2;
+      var lowest = v.h - pad.b - 52;
+      dotbox.style.top = Math.round(Math.min(stageBottom + 14, lowest)) + 'px';
+      dotbox.style.bottom = 'auto';
+    }
+    positionRotate();
   }
   window.addEventListener('resize', fit);
+  window.addEventListener('orientationchange', function(){ setTimeout(fit, 120); });
+  if (window.visualViewport){
+    window.visualViewport.addEventListener('resize', fit);
+    window.visualViewport.addEventListener('scroll', fit);
+  }
   fit();
 
   function show(n){
@@ -1807,24 +1933,101 @@ h2{
     }
   });
 
-  /* click anywhere to advance; click the left eighth to go back */
+  /* Tap to advance. A mouse keeps the narrow left-eighth back zone it has
+     always had; a finger gets the left third, which is what a thumb expects. */
+  var backZone = isTouch ? 0.3333 : 0.125;
+  var swallowClick = false;
+
   document.addEventListener('click', function(e){
-    if (e.clientX < window.innerWidth * 0.125) prev(); else next();
+    if (swallowClick) return;          /* this click is the tail of a touch */
+    if (e.clientX < viewport().w * backZone) prev(); else next();
   });
 
-  /* touch swipe, for tablets */
-  var x0 = null;
-  document.addEventListener('touchstart', function(e){ x0 = e.changedTouches[0].clientX; }, {passive:true});
-  document.addEventListener('touchend', function(e){
-    if (x0 === null) return;
-    var dx = e.changedTouches[0].clientX - x0;
-    if (Math.abs(dx) > 45) { dx < 0 ? next() : prev(); }
-    x0 = null;
+  /* ---------- touch: swipe to move, tap to advance ---------- */
+  var touch = null;
+
+  document.addEventListener('touchstart', function(e){
+    if (e.touches.length !== 1){ touch = null; return; }
+    var t = e.changedTouches[0];
+    touch = { x: t.clientX, y: t.clientY, t: Date.now(), onDot: !!(e.target.closest && e.target.closest('#dots')) };
   }, {passive:true});
+
+  document.addEventListener('touchmove', function(e){
+    if (!touch || e.touches.length !== 1) return;
+    var t = e.changedTouches[0];
+    var dx = t.clientX - touch.x, dy = t.clientY - touch.y;
+    /* once the gesture reads as horizontal, own it so the page cannot pan */
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 8 && e.cancelable) e.preventDefault();
+  }, {passive:false});
+
+  document.addEventListener('touchend', function(e){
+    if (!touch) return;
+    var t  = e.changedTouches[0];
+    var dx = t.clientX - touch.x, dy = t.clientY - touch.y;
+    var dt = Date.now() - touch.t;
+    var moved = Math.abs(dx), drift = Math.abs(dy);
+    var onDot = touch.onDot;
+    touch = null;
+
+    /* a touch always produces a click too — let the dot's own handler run,
+       but never let the page-wide click handler fire on top of the gesture */
+    swallowClick = true;
+    setTimeout(function(){ swallowClick = false; }, 500);
+    if (onDot) return;                 /* the dot handles itself */
+
+    hideRotate();
+    if (moved > 40 && moved > drift * 1.3 && dt < 900){
+      killHint();
+      if (dx < 0) next(); else prev();
+    } else if (moved < 14 && drift < 14){
+      killHint();
+      if (t.clientX < viewport().w * backZone) prev(); else next();
+    }
+  }, {passive:true});
+
+  /* iOS: refuse pinch-zoom outright, so the deck cannot be left half-scaled */
+  ['gesturestart','gesturechange','gestureend'].forEach(function(ev){
+    document.addEventListener(ev, function(e){ e.preventDefault(); }, {passive:false});
+  });
+
+  /* ---------- portrait nudge, shown once ---------- */
+  var rotate = document.getElementById('rotate');
+  var rotateDone = false, rotateTimer = null;
+
+  function positionRotate(){
+    if (!rotate || !rotate.classList.contains('show')) return;
+    var v = viewport(), pad = insets();
+    var s = Math.min((v.w - pad.l - pad.r) / 1600, (v.h - pad.t - pad.b) / 900);
+    var stageTop = pad.t + (v.h - pad.t - pad.b) / 2 - (900 * s) / 2;
+    /* float it in the band above the deck, or just inside the top safe area */
+    rotate.style.top = Math.round(Math.max(pad.t + 16, stageTop - 74)) + 'px';
+  }
+
+  function hideRotate(){
+    if (!rotate || !rotate.classList.contains('show')) return;
+    rotate.classList.remove('vis');
+    clearTimeout(rotateTimer);
+    setTimeout(function(){ rotate.classList.remove('show'); }, 650);
+  }
+
+  function maybeRotateHint(){
+    if (rotateDone || !isTouch || !rotate) return;
+    var v = viewport();
+    if (v.h <= v.w) return;                       /* already landscape */
+    rotateDone = true;
+    rotate.classList.add('show');
+    positionRotate();
+    requestAnimationFrame(function(){ rotate.classList.add('vis'); });
+    rotateTimer = setTimeout(hideRotate, 5200);
+  }
+
+  /* touch devices swipe; only a keyboard has an arrow key to press */
+  if (isTouch && hint) hint.textContent = 'Swipe to begin';
 
   bar.style.width = (1 / slides.length * 100) + '%';
   dots[0].classList.add('on');
   setTimeout(killHint, 6000);
+  maybeRotateHint();
 })();
 </script>
 </body>
