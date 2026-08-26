@@ -30,7 +30,8 @@ const QUEUE_20 = [
 ].join('\n');
 
 test('full draft flow over file://', async ({ page }) => {
-  page.on('dialog', d => d.accept());
+  const dialogs = [];
+  page.on('dialog', d => { dialogs.push(d.message()); d.accept(); });
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
 
@@ -55,7 +56,7 @@ test('full draft flow over file://', async ({ page }) => {
 
   // In-page self-test: the same engine suite passes in the browser
   await page.click('#selfTestBtn');
-  await expect(page.locator('#selfTestOut')).toContainText('24/24 passed', { timeout: 30000 });
+  await expect(page.locator('#selfTestOut')).toContainText(/(\d+)\/\1 passed/, { timeout: 30000 });
   await expect(page.locator('#selfTestOut')).not.toContainText('FAIL');
 
   // 2. Paste a 20-player queue -> replaces the sample
@@ -75,9 +76,12 @@ test('full draft flow over file://', async ({ page }) => {
   await expect(page.locator('#pickInfo')).toContainText('Pick 7');
   await expect(page.locator('#pickInfo')).toContainText('YOU ARE ON THE CLOCK');
 
-  // 4. Tap "I picked" on the primary -> roster + Next Plan update
+  // 4. Rec card shows the Yahoo queue line, then tap "I picked" on the
+  //    primary -> always-on confirm dialog fires, roster + Next Plan update
+  await expect(page.locator('#recCard')).toContainText('Yahoo queue should be:');
   const primaryName = (await page.locator('#recCard .recName').first().textContent()).trim();
   await page.locator('#recCard button.primaryBtn').click();
+  expect(dialogs.some(m => m.includes('Confirm YOUR pick'))).toBe(true);
   await expect(page.locator('#main')).toContainText('My Roster (2/19)'); // keeper Allen + this pick
   await expect(page.locator('#main')).toContainText(primaryName);
   await expect(page.locator('#recCard')).toContainText('Plan: Pick 14');
@@ -94,6 +98,30 @@ test('full draft flow over file://', async ({ page }) => {
   await expect(page.locator('#pickInfo')).toContainText('Pick 8');
   await expect(page.locator('#main')).toContainText('My Roster (2/19)');
   await expect(page.locator('#main')).toContainText(primaryName);
+
+  // 7. Rapid catch-up: 3+ letters, tap the match, assigned to the on-the-clock
+  //    team; "picks behind" counter tracks the live pick number
+  await page.locator('#rapidCard summary').click();
+  await page.fill('#rapidTarget', '12');
+  await page.locator('#rapidTarget').blur();
+  await expect(page.locator('#rapidCard')).toContainText('You are 4 picks behind'); // live 12, app at 8
+  await page.fill('#rapidInput', 'seven');
+  await page.locator('#rapidMatches button', { hasText: 'Beta WR Seven' }).click();
+  await expect(page.locator('#pickInfo')).toContainText('Pick 9');
+  await expect(page.locator('#rapidCard')).toContainText('You are 3 picks behind');
+  await page.click('#tabbar button[data-tab="board"]');
+  await expect(page.locator('#main')).toContainText('Beta WR Seven');
+
+  // 8. Settings: Export Yahoo pre-draft list (keepers stripped)
+  await page.click('#tabbar button[data-tab="settings"]');
+  await page.click('#yahooExportBtn');
+  const listText = await page.locator('#yahooOut').inputValue();
+  expect(listText).toContain('Alpha RB One');
+  expect(listText).not.toContain('Josh Allen');
+
+  // No service worker over file://
+  const hasSW = await page.evaluate(() => !!(navigator.serviceWorker && navigator.serviceWorker.controller));
+  expect(hasSW).toBe(false);
 
   expect(errors).toEqual([]);
 });

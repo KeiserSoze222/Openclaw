@@ -11,7 +11,8 @@
   const ui = {
     tab: 'draft', posFilter: 'ALL', search: '',
     clock: { remaining: 90, running: false, timer: null },
-    lastRec: null, roadmap: null
+    lastRec: null, roadmap: null,
+    rapidOpen: false, rapidTarget: '', rapidRefocus: false
   };
 
   const $ = sel => document.querySelector(sel);
@@ -53,6 +54,10 @@
     bindHeader();
     render();
     save();
+    // PWA: only over http(s) - file:// stays plain and fully working.
+    if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+      navigator.serviceWorker.register('./sw.js').catch(() => { /* optional */ });
+    }
   }
 
   // ---- header + clock -------------------------------------------------------
@@ -139,9 +144,8 @@
 
   // ---- pick actions ---------------------------------------------------------
   function markPick(player, byMe, teamOverride) {
-    if (byMe && S.settings.flags.resilience) {
-      if (!confirm(`Confirm YOUR pick: ${player.name} (${player.pos})?`)) return;
-    }
+    // Always confirm my own pick - a wrong tap here is the worst failure.
+    if (byMe && !confirm(`Confirm YOUR pick: ${player.name} (${player.pos})?`)) return;
     act(() => {
       const pick = NS.board.currentPick(S);
       if (pick === null) return;
@@ -202,10 +206,9 @@
       log: renderLogTab, settings: renderSettingsTab, sim: renderSimTab
     };
     renderers[ui.tab](main);
-    if (S.settings.flags.resilience) {
-      // A6: precompute the next-pick rec (and warm the MC cache) off the clock
-      setTimeout(() => { try { NS.safeRecommend(S); } catch (e) { /* contained */ } }, 30);
-    }
+    // Precompute the next-pick rec (and warm the MC cache) during other
+    // teams' picks so the card is instant when my clock starts.
+    setTimeout(() => { try { NS.safeRecommend(S); } catch (e) { /* contained */ } }, 30);
   }
 
   // ---- DRAFT tab ------------------------------------------------------------
@@ -235,9 +238,72 @@
     if (S.settings.flags.byeLoad) byeLoadAlerts().forEach(a => { alerts += `<div class="banner ${a.red ? 'red' : 'amber'}">${esc(a.msg)}</div>`; });
     main.insertAdjacentHTML('beforeend', alerts);
 
+    renderRapidCatchup(main);
     renderRecCard(main, rec);
     renderRoster(main);
     renderAvailable(main);
+  }
+
+  // Rapid catch-up: type 3+ letters, tap the match, it goes to the next
+  // on-the-clock team (keeper picks are pre-filled, so they're skipped).
+  function renderRapidCatchup(main) {
+    const sec = document.createElement('section');
+    sec.className = 'card';
+    sec.id = 'rapidCard';
+    const cur = NS.board.currentPick(S);
+    const target = parseInt(ui.rapidTarget, 10);
+    let behind = '';
+    if (cur !== null && !isNaN(target)) {
+      const n = Math.max(0, target - cur);
+      behind = n > 0
+        ? `<div class="banner amber" style="margin:6px 0">You are ${n} pick${n > 1 ? 's' : ''} behind.</div>`
+        : `<div class="banner" style="margin:6px 0;background:#0f3a1f;border:1px solid var(--good)">Caught up.</div>`;
+    }
+    const nextTeam = cur !== null ? NS.board.teamForPick(S, cur) : '-';
+    sec.innerHTML = `<details ${ui.rapidOpen ? 'open' : ''} id="rapidDetails"><summary>Rapid catch-up</summary>
+      <div class="fieldRow"><label>Live draft is at pick #</label>
+        <input type="number" id="rapidTarget" value="${esc(ui.rapidTarget)}" min="1" max="190"></div>
+      ${behind}
+      <div class="dim">Next assignment: pick ${cur ?? '-'} &rarr; ${esc(nextTeam)}${cur !== null && NS.board.isMyPick(S, cur) ? ' (YOU)' : ''}</div>
+      <input type="search" id="rapidInput" placeholder="Type 3+ letters, tap the match"
+        style="width:100%;font-size:20px;min-height:56px;margin-top:6px" autocomplete="off">
+      <div id="rapidMatches"></div>
+    </details>`;
+    main.appendChild(sec);
+
+    const det = sec.querySelector('#rapidDetails');
+    det.addEventListener('toggle', () => { ui.rapidOpen = det.open; });
+    sec.querySelector('#rapidTarget').onchange = e => { ui.rapidTarget = e.target.value; render(); };
+    const input = sec.querySelector('#rapidInput');
+    const matches = sec.querySelector('#rapidMatches');
+    input.oninput = () => {
+      matches.innerHTML = '';
+      const q = input.value.trim();
+      if (q.length < 3) return;
+      const avail = NS.board.available(S);
+      const key = NS.normName(q);
+      let hits = avail.filter(p => p.normName.includes(key));
+      if (!hits.length) {
+        const m = NS.matchName(q, avail);
+        hits = m.kind === 'exact' ? [m.player] : (m.suggestions || []);
+      }
+      hits.slice(0, 6).forEach(p => {
+        const b = document.createElement('button');
+        b.style.cssText = 'display:block;width:100%;text-align:left;margin-top:6px';
+        b.textContent = `${p.name}  (${p.pos}${p.team ? ' ' + p.team : ''})`;
+        b.onclick = () => {
+          const pick = NS.board.currentPick(S);
+          if (pick === null) return;
+          ui.rapidRefocus = true;
+          markPick(p, NS.board.isMyPick(S, pick));
+        };
+        matches.appendChild(b);
+      });
+    };
+    if (ui.rapidRefocus && ui.rapidOpen) {
+      ui.rapidRefocus = false;
+      setTimeout(() => { const el = document.querySelector('#rapidInput'); if (el) el.focus(); }, 0);
+    }
   }
 
   function renderRecCard(main, rec) {
@@ -275,6 +341,7 @@
 
     sec.innerHTML = `<h2>Pick ${rec.pick} - YOUR PICK</h2>` +
       slotRow('Primary', rec.primary) + slotRow('Alt', rec.alt) + slotRow('Panic', rec.panic) +
+      ((rec.yahooQueue || []).length ? `<div style="margin-top:6px"><b>Yahoo queue should be:</b> ${rec.yahooQueue.map(esc).join(' &middot; ')}</div>` : '') +
       (rec.reachOrWait ? `<div class="dim" style="margin-top:6px">${esc(rec.reachOrWait)}</div>` : '') +
       (S.lastPlan ? `<div class="dim" style="margin-top:6px">Plan: ${esc(S.lastPlan)}</div>` : '') +
       (rec.doNotTake.length ? `<details><summary>Do not take (${rec.doNotTake.length})</summary>` +
@@ -790,7 +857,7 @@
       ${flag('flag_buildGuard', 'A3 Build-path guard')}
       ${flag('flag_byeLoad', 'A4 Bye-week load + Allen stack')}
       ${flag('flag_markers', 'A5 Queue markers')}
-      ${flag('flag_resilience', 'A6 Resilience extras (confirm my pick, precompute, draft grade)')}
+      ${flag('flag_resilience', 'A6 Draft grade (post-draft, in the text recap)')}
       <h3>Draft order (slot: team)</h3><div id="teamEdit"></div>
       <h3>Keepers</h3><div id="keeperEdit"></div>
       <h3>Byes (team week)</h3>
@@ -798,9 +865,11 @@
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
         <button class="primaryBtn" id="saveSettings">Save settings</button>
         <button id="selfTestBtn">Run self-test</button>
+        <button id="yahooExportBtn">Export Yahoo pre-draft list</button>
         <button id="roadmapBtn">Generate roadmap</button>
         <button class="dangerBtn" id="resetBtn">Reset app</button>
       </div>
+      <textarea id="yahooOut" style="display:none" placeholder="Yahoo pre-draft list appears here"></textarea>
       <div id="selfTestOut" class="mono" style="margin-top:8px;font-size:12px"></div>
       <div id="roadmapOut" style="margin-top:8px"></div>`;
     main.appendChild(sec);
@@ -872,6 +941,20 @@
         out.innerHTML = `<div><b>${pass}/${results.length} passed</b></div>` +
           results.map(r => `<div class="${r.pass ? 'testPass' : 'testFail'}">${r.pass ? 'PASS' : 'FAIL'} ${esc(r.name)}${r.detail ? ' - ' + esc(r.detail) : ''}</div>`).join('');
       }, 30);
+    };
+
+    sec.querySelector('#yahooExportBtn').onclick = () => {
+      const out = sec.querySelector('#yahooOut');
+      out.value = NS.store.yahooPreDraftList(S);
+      out.style.display = 'block';
+      try {
+        const blob = new Blob([out.value], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'yahoo-predraft-list.txt';
+        a.click();
+      } catch (e) { /* iOS fallback: copy from the textarea */ }
+      toast('Queue exported - keepers stripped, K/DST at the bottom');
     };
 
     sec.querySelector('#roadmapBtn').onclick = () => {

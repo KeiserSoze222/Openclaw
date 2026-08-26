@@ -92,12 +92,11 @@
       }
     }
 
-    // R8 - lean the empty side after pick 34 (R9 tier value can override)
-    if (primary && pick > ctx.qb2Pick) {
-      let leanPos = null;
-      if (ctx.counts.WR === 0) leanPos = 'WR';
-      else if (ctx.counts.RB === 0) leanPos = 'RB';
-      if (leanPos && primary.pos !== leanPos) {
+    // R8 - lean the empty side for the two skill picks after the trigger
+    // (window computed in playbook.computeLean; R9 tier value can override)
+    if (primary && ctx.lean) {
+      const leanPos = ctx.lean.pos;
+      if (primary.pos !== leanPos) {
         const bestLean = legal.find(p => p.pos === leanPos);
         if (bestLean) {
           if (primary.tier < bestLean.tier) {
@@ -109,7 +108,8 @@
           } else {
             primary = bestLean;
             rulesFired.push('R8');
-            note = `R8: 0 ${leanPos} rostered - leaning ${leanPos} (${bestLean.name}, #${bestLean.rank})`;
+            note = `R8: leaning ${leanPos} (${bestLean.name}, #${bestLean.rank}) - ` +
+              `${ctx.lean.remaining} lean pick${ctx.lean.remaining > 1 ? 's' : ''} left in the window`;
           }
         }
       }
@@ -251,13 +251,24 @@
       }
     }
 
+    // "Yahoo queue should be": primary, alt, panic, then one more legal name -
+    // typed straight into Yahoo's in-draft queue as insurance.
+    const yahooQueue = [];
+    [primary, alt, panic].forEach(p => {
+      if (p && !yahooQueue.includes(p.name)) yahooQueue.push(p.name);
+    });
+    for (const p of legal) {
+      if (yahooQueue.length >= 4) break;
+      if (!yahooQueue.includes(p.name)) yahooQueue.push(p.name);
+    }
+
     const allRules = chosen.rulesFired.slice();
     return {
       ...base,
       primary: primary ? { player: decorate(state, primary), why: why(chosen.note, allRules) } : null,
       alt: alt ? { player: decorate(state, alt), why: why(`next best legal (#${alt.rank})`, []) } : null,
       panic: panic ? { player: decorate(state, panic), why: why('highest-ranked legal player very likely still there if you hesitate', []) } : null,
-      doNotTake, costOfWaiting, reachOrWait,
+      doNotTake, costOfWaiting, reachOrWait, yahooQueue,
       rulesFired: allRules
     };
   };

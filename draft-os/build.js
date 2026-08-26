@@ -4,6 +4,7 @@
 // `node build.js --watch` rebuilds on change (simple poll).
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const SRC = path.join(__dirname, 'src');
 // Load order matters: later modules read earlier ones off the shared namespace.
@@ -35,7 +36,13 @@ function build() {
     .replace('/*__INLINE_CSS__*/', () => css)
     .replace('/*__INLINE_JS__*/', () => js);
   fs.writeFileSync(path.join(__dirname, 'index.html'), out);
-  console.log(`built index.html (${(out.length / 1024).toFixed(1)} KB)`);
+  // PWA sidecars: sw.js gets a content hash so a rebuild busts the old cache.
+  const hash = crypto.createHash('md5').update(out).digest('hex').slice(0, 10);
+  const sw = fs.readFileSync(path.join(SRC, 'sw.js'), 'utf8').replace(/__HASH__/g, hash);
+  fs.writeFileSync(path.join(__dirname, 'sw.js'), sw);
+  fs.copyFileSync(path.join(SRC, 'manifest.webmanifest'), path.join(__dirname, 'manifest.webmanifest'));
+  fs.copyFileSync(path.join(SRC, 'icon.svg'), path.join(__dirname, 'icon.svg'));
+  console.log(`built index.html (${(out.length / 1024).toFixed(1)} KB) + sw.js/manifest/icon (cache draftos-${hash})`);
 }
 
 build();

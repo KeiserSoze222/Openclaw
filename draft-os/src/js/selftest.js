@@ -243,6 +243,68 @@
       t.eq(rec.primary.player.name, 'Late RB A', 'R8 exception: 10+ ranks better');
     });
 
+    t.test('rule 8 window: lean lasts my next TWO skill picks after the trigger, then expires', () => {
+      const st = fresh();
+      st.myQueue = st.myQueue.filter(p => p.rank <= 25);
+      st.myQueue.push(
+        { rank: 40, name: 'Late RB A', normName: 'late rb a', pos: 'RB', team: 'CHI', bye: 10, tier: 4, tags: [], marker: null, handcuffOf: null },
+        { rank: 45, name: 'Late WR B', normName: 'late wr b', pos: 'WR', team: 'DET', bye: 6, tier: 4, tags: [], marker: null, handcuffOf: null },
+        { rank: 48, name: 'Late WR C', normName: 'late wr c', pos: 'WR', team: 'HOU', bye: 8, tier: 4, tags: [], marker: null, handcuffOf: null }
+      );
+      const topNames = st.myQueue.filter(p => p.rank <= 25).map(p => p.name);
+      const mine = { 7: 'Jahmyr Gibbs', 14: 'Christian McCaffrey', 34: 'Dak Prescott', 47: 'Jonathan Taylor', 54: 'James Cook', 67: 'Chase Brown', 74: 'Derrick Henry', 87: 'Saquon Barkley', 94: 'Trey McBride' };
+      fill(st, 106, { mine, others: topNames.filter(n => !Object.values(mine).includes(n)) });
+
+      // Pick 107: 0 WR -> trigger, lean pick 1 of 2
+      let rec = NS.recommend(st);
+      t.eq(rec.primary.player.name, 'Late WR B', 'lean pick 1: WR over slightly-better RB');
+      t.ok(rec.primary.why.rules.includes('R8'), 'R8 cited at 107');
+      pushPick(st, 107, findQ(st, 'Late WR B'), true);
+      fill(st, 113, {});
+
+      // Pick 114: WR count is now 1, but the window still has one lean left
+      rec = NS.recommend(st);
+      t.eq(NS.board.posCounts(NS.board.myRoster(st)).WR, 1, 'fixture: 1 WR rostered');
+      t.eq(rec.primary.player.name, 'Late WR C', 'lean pick 2 still leans WR with WR=1');
+      t.ok(rec.primary.why.rules.includes('R8'), 'R8 cited at 114');
+      pushPick(st, 114, findQ(st, 'Late WR C'), true);
+      fill(st, 126, {});
+
+      // Pick 127: window spent -> back to queue order (best rank wins)
+      rec = NS.recommend(st);
+      t.eq(rec.primary.player.name, 'Late RB A', 'window expired: best-ranked player');
+      t.ok(!rec.primary.why.rules.includes('R8'), 'R8 no longer cited');
+    });
+
+    t.test('rec card: Yahoo queue line = primary, alt, panic + one more legal name', () => {
+      const st = fresh();
+      fill(st, 6, {});
+      const rec = NS.recommend(st);
+      t.eq(rec.pick, 7);
+      t.eq(rec.yahooQueue.length, 4, 'four names');
+      t.eq(new Set(rec.yahooQueue).size, 4, 'all unique');
+      t.eq(rec.yahooQueue[0], rec.primary.player.name, 'primary first');
+      const ctx = NS.playbook.buildCtx(st, 7);
+      rec.yahooQueue.forEach(name => {
+        const p = findQ(st, name);
+        t.ok(NS.playbook.legality(st, ctx, p).legal, `${name} legal at pick 7`);
+      });
+    });
+
+    t.test('Yahoo pre-draft list: queue order, keepers stripped, K/DST at the bottom', () => {
+      const st = fresh();
+      st.myQueue.push({ rank: 27.5, name: 'Josh Allen', normName: 'josh allen', pos: 'QB', team: 'BUF', bye: 7, tier: 3, tags: [], marker: null, handcuffOf: null });
+      const lines = NS.store.yahooPreDraftList(st).split('\n');
+      t.ok(!lines.includes('Josh Allen'), 'keeper stripped');
+      t.eq(lines[0], 'Jahmyr Gibbs', 'queue order preserved');
+      const kdstCount = st.myQueue.filter(p => ['K', 'DST'].includes(p.pos)).length;
+      t.eq(kdstCount, 4, 'fixture has 4 K/DST fillers');
+      const tail = lines.slice(-kdstCount);
+      t.ok(tail.every(n => /Filler (K|DST)/.test(n)), `K/DST at the bottom, got: ${tail}`);
+      const firstKdstIdx = lines.findIndex(n => /Filler (K|DST)/.test(n));
+      t.eq(firstKdstIdx, lines.length - kdstCount, 'no K/DST above the bottom block');
+    });
+
     t.test('rule 6: K/DST never recommended before 174; allowed at 174 and 187; never two of the same', () => {
       const st = fresh();
       const someK = st.myQueue.find(p => p.pos === 'K');

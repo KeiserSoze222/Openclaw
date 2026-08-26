@@ -93,6 +93,33 @@
     };
   };
 
+  // Rule 8 lean state at one of my picks: once a side (WR/RB) hits 0 after
+  // pick 34, the lean covers my next TWO skill picks - even after the count
+  // leaves zero. QB picks don't consume the window. If the side is still
+  // empty when the window closes, the trigger re-arms.
+  // -> {pos:'WR'|'RB', remaining:1|2} | null
+  PB.computeLean = function (state, pick) {
+    const live = NS.pickorder.myPicks(state.settings).live;
+    const qb2Pick = live[2];
+    if (!(pick > qb2Pick)) return null;
+    const roster = NS.board.myRoster(state);
+    let lean = null;
+    for (const q of live.filter(q => q > qb2Pick && q <= pick)) {
+      if (!lean) {
+        const counts = NS.board.posCounts(roster.filter(r => r.pick < q));
+        if (counts.WR === 0) lean = { pos: 'WR', remaining: 2 };
+        else if (counts.RB === 0) lean = { pos: 'RB', remaining: 2 };
+      }
+      if (q === pick) return lean;
+      const made = roster.find(r => r.pick === q);
+      if (made && NS.SKILL.includes(made.pos) && lean) {
+        lean.remaining--;
+        if (lean.remaining <= 0) lean = null;
+      }
+    }
+    return lean;
+  };
+
   // Legality of one player at one pick. -> {legal:true} | {legal:false, ruleId, reason}
   // ctx: {pick, counts, top6TEKeys, kdst:[p1,p2], rule3}
   PB.legality = function (state, ctx, player) {
@@ -167,7 +194,8 @@
       earlyPicks: live.slice(0, 2),         // 7 and 14 with default settings
       qb2Pick: live[2],                     // 34
       rule3Picks: [live[5], live[6]],       // 67 and 74
-      rule3: PB.rule3Status(state)
+      rule3: PB.rule3Status(state),
+      lean: PB.computeLean(state, pick)
     };
   };
 

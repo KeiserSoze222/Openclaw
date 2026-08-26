@@ -143,6 +143,16 @@
     return state;
   };
 
+  // Yahoo pre-draft list: my queue as plain text, one name per line, keepers
+  // stripped (they can't be drafted), K/DST moved to the bottom in order.
+  ST.yahooPreDraftList = function (state) {
+    const keeperKeys = new Set((state.settings.keepers || []).map(k => NS.normName(k.player)));
+    const q = state.myQueue.filter(p => !keeperKeys.has(p.normName));
+    const skill = q.filter(p => !['K', 'DST'].includes(p.pos));
+    const kdst = q.filter(p => ['K', 'DST'].includes(p.pos));
+    return skill.concat(kdst).map(p => p.name).join('\n');
+  };
+
   // ---- Undo -----------------------------------------------------------------
   const SNAP_FIELDS = ['picks', 'log', 'myQueue', 'ghost', 'usingSample', 'grade'];
 

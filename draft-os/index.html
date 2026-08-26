@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0d1117">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon.svg">
 <title>4th &amp; Optimized Draft OS</title>
 <style>
 /* Dark, phone-first, big tap targets. */
@@ -898,6 +901,33 @@ summary { min-height: var(--tap); display: flex; align-items: center; cursor: po
     };
   };
 
+  // Rule 8 lean state at one of my picks: once a side (WR/RB) hits 0 after
+  // pick 34, the lean covers my next TWO skill picks - even after the count
+  // leaves zero. QB picks don't consume the window. If the side is still
+  // empty when the window closes, the trigger re-arms.
+  // -> {pos:'WR'|'RB', remaining:1|2} | null
+  PB.computeLean = function (state, pick) {
+    const live = NS.pickorder.myPicks(state.settings).live;
+    const qb2Pick = live[2];
+    if (!(pick > qb2Pick)) return null;
+    const roster = NS.board.myRoster(state);
+    let lean = null;
+    for (const q of live.filter(q => q > qb2Pick && q <= pick)) {
+      if (!lean) {
+        const counts = NS.board.posCounts(roster.filter(r => r.pick < q));
+        if (counts.WR === 0) lean = { pos: 'WR', remaining: 2 };
+        else if (counts.RB === 0) lean = { pos: 'RB', remaining: 2 };
+      }
+      if (q === pick) return lean;
+      const made = roster.find(r => r.pick === q);
+      if (made && NS.SKILL.includes(made.pos) && lean) {
+        lean.remaining--;
+        if (lean.remaining <= 0) lean = null;
+      }
+    }
+    return lean;
+  };
+
   // Legality of one player at one pick. -> {legal:true} | {legal:false, ruleId, reason}
   // ctx: {pick, counts, top6TEKeys, kdst:[p1,p2], rule3}
   PB.legality = function (state, ctx, player) {
@@ -972,7 +1002,8 @@ summary { min-height: var(--tap); display: flex; align-items: center; cursor: po
       earlyPicks: live.slice(0, 2),         // 7 and 14 with default settings
       qb2Pick: live[2],                     // 34
       rule3Picks: [live[5], live[6]],       // 67 and 74
-      rule3: PB.rule3Status(state)
+      rule3: PB.rule3Status(state),
+      lean: PB.computeLean(state, pick)
     };
   };
 
@@ -1154,12 +1185,11 @@ summary { min-height: var(--tap); display: flex; align-items: center; cursor: po
       }
     }
 
-    // R8 - lean the empty side after pick 34 (R9 tier value can override)
-    if (primary && pick > ctx.qb2Pick) {
-      let leanPos = null;
-      if (ctx.counts.WR === 0) leanPos = 'WR';
-      else if (ctx.counts.RB === 0) leanPos = 'RB';
-      if (leanPos && primary.pos !== leanPos) {
+    // R8 - lean the empty side for the two skill picks after the trigger
+    // (window computed in playbook.computeLean; R9 tier value can override)
+    if (primary && ctx.lean) {
+      const leanPos = ctx.lean.pos;
+      if (primary.pos !== leanPos) {
         const bestLean = legal.find(p => p.pos === leanPos);
         if (bestLean) {
           if (primary.tier < bestLean.tier) {
@@ -1171,7 +1201,8 @@ summary { min-height: var(--tap); display: flex; align-items: center; cursor: po
           } else {
             primary = bestLean;
             rulesFired.push('R8');
-            note = `R8: 0 ${leanPos} rostered - leaning ${leanPos} (${bestLean.name}, #${bestLean.rank})`;
+            note = `R8: leaning ${leanPos} (${bestLean.name}, #${bestLean.rank}) - ` +
+              `${ctx.lean.remaining} lean pick${ctx.lean.remaining > 1 ? 's' : ''} left in the window`;
           }
         }
       }
@@ -1313,13 +1344,24 @@ summary { min-height: var(--tap); display: flex; align-items: center; cursor: po
       }
     }
 
+    // "Yahoo queue should be": primary, alt, panic, then one more legal name -
+    // typed straight into Yahoo's in-draft queue as insurance.
+    const yahooQueue = [];
+    [primary, alt, panic].forEach(p => {
+      if (p && !yahooQueue.includes(p.name)) yahooQueue.push(p.name);
+    });
+    for (const p of legal) {
+      if (yahooQueue.length >= 4) break;
+      if (!yahooQueue.includes(p.name)) yahooQueue.push(p.name);
+    }
+
     const allRules = chosen.rulesFired.slice();
     return {
       ...base,
       primary: primary ? { player: decorate(state, primary), why: why(chosen.note, allRules) } : null,
       alt: alt ? { player: decorate(state, alt), why: why(`next best legal (#${alt.rank})`, []) } : null,
       panic: panic ? { player: decorate(state, panic), why: why('highest-ranked legal player very likely still there if you hesitate', []) } : null,
-      doNotTake, costOfWaiting, reachOrWait,
+      doNotTake, costOfWaiting, reachOrWait, yahooQueue,
       rulesFired: allRules
     };
   };
@@ -1740,6 +1782,16 @@ summary { min-height: var(--tap); display: flex; align-items: center; cursor: po
     return state;
   };
 
+  // Yahoo pre-draft list: my queue as plain text, one name per line, keepers
+  // stripped (they can't be drafted), K/DST moved to the bottom in order.
+  ST.yahooPreDraftList = function (state) {
+    const keeperKeys = new Set((state.settings.keepers || []).map(k => NS.normName(k.player)));
+    const q = state.myQueue.filter(p => !keeperKeys.has(p.normName));
+    const skill = q.filter(p => !['K', 'DST'].includes(p.pos));
+    const kdst = q.filter(p => ['K', 'DST'].includes(p.pos));
+    return skill.concat(kdst).map(p => p.name).join('\n');
+  };
+
   // ---- Undo -----------------------------------------------------------------
   const SNAP_FIELDS = ['picks', 'log', 'myQueue', 'ghost', 'usingSample', 'grade'];
 
@@ -2006,6 +2058,68 @@ summary { min-height: var(--tap); display: flex; align-items: center; cursor: po
       t.eq(rec.primary.player.name, 'Late RB A', 'R8 exception: 10+ ranks better');
     });
 
+    t.test('rule 8 window: lean lasts my next TWO skill picks after the trigger, then expires', () => {
+      const st = fresh();
+      st.myQueue = st.myQueue.filter(p => p.rank <= 25);
+      st.myQueue.push(
+        { rank: 40, name: 'Late RB A', normName: 'late rb a', pos: 'RB', team: 'CHI', bye: 10, tier: 4, tags: [], marker: null, handcuffOf: null },
+        { rank: 45, name: 'Late WR B', normName: 'late wr b', pos: 'WR', team: 'DET', bye: 6, tier: 4, tags: [], marker: null, handcuffOf: null },
+        { rank: 48, name: 'Late WR C', normName: 'late wr c', pos: 'WR', team: 'HOU', bye: 8, tier: 4, tags: [], marker: null, handcuffOf: null }
+      );
+      const topNames = st.myQueue.filter(p => p.rank <= 25).map(p => p.name);
+      const mine = { 7: 'Jahmyr Gibbs', 14: 'Christian McCaffrey', 34: 'Dak Prescott', 47: 'Jonathan Taylor', 54: 'James Cook', 67: 'Chase Brown', 74: 'Derrick Henry', 87: 'Saquon Barkley', 94: 'Trey McBride' };
+      fill(st, 106, { mine, others: topNames.filter(n => !Object.values(mine).includes(n)) });
+
+      // Pick 107: 0 WR -> trigger, lean pick 1 of 2
+      let rec = NS.recommend(st);
+      t.eq(rec.primary.player.name, 'Late WR B', 'lean pick 1: WR over slightly-better RB');
+      t.ok(rec.primary.why.rules.includes('R8'), 'R8 cited at 107');
+      pushPick(st, 107, findQ(st, 'Late WR B'), true);
+      fill(st, 113, {});
+
+      // Pick 114: WR count is now 1, but the window still has one lean left
+      rec = NS.recommend(st);
+      t.eq(NS.board.posCounts(NS.board.myRoster(st)).WR, 1, 'fixture: 1 WR rostered');
+      t.eq(rec.primary.player.name, 'Late WR C', 'lean pick 2 still leans WR with WR=1');
+      t.ok(rec.primary.why.rules.includes('R8'), 'R8 cited at 114');
+      pushPick(st, 114, findQ(st, 'Late WR C'), true);
+      fill(st, 126, {});
+
+      // Pick 127: window spent -> back to queue order (best rank wins)
+      rec = NS.recommend(st);
+      t.eq(rec.primary.player.name, 'Late RB A', 'window expired: best-ranked player');
+      t.ok(!rec.primary.why.rules.includes('R8'), 'R8 no longer cited');
+    });
+
+    t.test('rec card: Yahoo queue line = primary, alt, panic + one more legal name', () => {
+      const st = fresh();
+      fill(st, 6, {});
+      const rec = NS.recommend(st);
+      t.eq(rec.pick, 7);
+      t.eq(rec.yahooQueue.length, 4, 'four names');
+      t.eq(new Set(rec.yahooQueue).size, 4, 'all unique');
+      t.eq(rec.yahooQueue[0], rec.primary.player.name, 'primary first');
+      const ctx = NS.playbook.buildCtx(st, 7);
+      rec.yahooQueue.forEach(name => {
+        const p = findQ(st, name);
+        t.ok(NS.playbook.legality(st, ctx, p).legal, `${name} legal at pick 7`);
+      });
+    });
+
+    t.test('Yahoo pre-draft list: queue order, keepers stripped, K/DST at the bottom', () => {
+      const st = fresh();
+      st.myQueue.push({ rank: 27.5, name: 'Josh Allen', normName: 'josh allen', pos: 'QB', team: 'BUF', bye: 7, tier: 3, tags: [], marker: null, handcuffOf: null });
+      const lines = NS.store.yahooPreDraftList(st).split('\n');
+      t.ok(!lines.includes('Josh Allen'), 'keeper stripped');
+      t.eq(lines[0], 'Jahmyr Gibbs', 'queue order preserved');
+      const kdstCount = st.myQueue.filter(p => ['K', 'DST'].includes(p.pos)).length;
+      t.eq(kdstCount, 4, 'fixture has 4 K/DST fillers');
+      const tail = lines.slice(-kdstCount);
+      t.ok(tail.every(n => /Filler (K|DST)/.test(n)), `K/DST at the bottom, got: ${tail}`);
+      const firstKdstIdx = lines.findIndex(n => /Filler (K|DST)/.test(n));
+      t.eq(firstKdstIdx, lines.length - kdstCount, 'no K/DST above the bottom block');
+    });
+
     t.test('rule 6: K/DST never recommended before 174; allowed at 174 and 187; never two of the same', () => {
       const st = fresh();
       const someK = st.myQueue.find(p => p.pos === 'K');
@@ -2218,7 +2332,8 @@ summary { min-height: var(--tap); display: flex; align-items: center; cursor: po
   const ui = {
     tab: 'draft', posFilter: 'ALL', search: '',
     clock: { remaining: 90, running: false, timer: null },
-    lastRec: null, roadmap: null
+    lastRec: null, roadmap: null,
+    rapidOpen: false, rapidTarget: '', rapidRefocus: false
   };
 
   const $ = sel => document.querySelector(sel);
@@ -2260,6 +2375,10 @@ summary { min-height: var(--tap); display: flex; align-items: center; cursor: po
     bindHeader();
     render();
     save();
+    // PWA: only over http(s) - file:// stays plain and fully working.
+    if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+      navigator.serviceWorker.register('./sw.js').catch(() => { /* optional */ });
+    }
   }
 
   // ---- header + clock -------------------------------------------------------
@@ -2346,9 +2465,8 @@ summary { min-height: var(--tap); display: flex; align-items: center; cursor: po
 
   // ---- pick actions ---------------------------------------------------------
   function markPick(player, byMe, teamOverride) {
-    if (byMe && S.settings.flags.resilience) {
-      if (!confirm(`Confirm YOUR pick: ${player.name} (${player.pos})?`)) return;
-    }
+    // Always confirm my own pick - a wrong tap here is the worst failure.
+    if (byMe && !confirm(`Confirm YOUR pick: ${player.name} (${player.pos})?`)) return;
     act(() => {
       const pick = NS.board.currentPick(S);
       if (pick === null) return;
@@ -2409,10 +2527,9 @@ summary { min-height: var(--tap); display: flex; align-items: center; cursor: po
       log: renderLogTab, settings: renderSettingsTab, sim: renderSimTab
     };
     renderers[ui.tab](main);
-    if (S.settings.flags.resilience) {
-      // A6: precompute the next-pick rec (and warm the MC cache) off the clock
-      setTimeout(() => { try { NS.safeRecommend(S); } catch (e) { /* contained */ } }, 30);
-    }
+    // Precompute the next-pick rec (and warm the MC cache) during other
+    // teams' picks so the card is instant when my clock starts.
+    setTimeout(() => { try { NS.safeRecommend(S); } catch (e) { /* contained */ } }, 30);
   }
 
   // ---- DRAFT tab ------------------------------------------------------------
@@ -2442,9 +2559,72 @@ summary { min-height: var(--tap); display: flex; align-items: center; cursor: po
     if (S.settings.flags.byeLoad) byeLoadAlerts().forEach(a => { alerts += `<div class="banner ${a.red ? 'red' : 'amber'}">${esc(a.msg)}</div>`; });
     main.insertAdjacentHTML('beforeend', alerts);
 
+    renderRapidCatchup(main);
     renderRecCard(main, rec);
     renderRoster(main);
     renderAvailable(main);
+  }
+
+  // Rapid catch-up: type 3+ letters, tap the match, it goes to the next
+  // on-the-clock team (keeper picks are pre-filled, so they're skipped).
+  function renderRapidCatchup(main) {
+    const sec = document.createElement('section');
+    sec.className = 'card';
+    sec.id = 'rapidCard';
+    const cur = NS.board.currentPick(S);
+    const target = parseInt(ui.rapidTarget, 10);
+    let behind = '';
+    if (cur !== null && !isNaN(target)) {
+      const n = Math.max(0, target - cur);
+      behind = n > 0
+        ? `<div class="banner amber" style="margin:6px 0">You are ${n} pick${n > 1 ? 's' : ''} behind.</div>`
+        : `<div class="banner" style="margin:6px 0;background:#0f3a1f;border:1px solid var(--good)">Caught up.</div>`;
+    }
+    const nextTeam = cur !== null ? NS.board.teamForPick(S, cur) : '-';
+    sec.innerHTML = `<details ${ui.rapidOpen ? 'open' : ''} id="rapidDetails"><summary>Rapid catch-up</summary>
+      <div class="fieldRow"><label>Live draft is at pick #</label>
+        <input type="number" id="rapidTarget" value="${esc(ui.rapidTarget)}" min="1" max="190"></div>
+      ${behind}
+      <div class="dim">Next assignment: pick ${cur ?? '-'} &rarr; ${esc(nextTeam)}${cur !== null && NS.board.isMyPick(S, cur) ? ' (YOU)' : ''}</div>
+      <input type="search" id="rapidInput" placeholder="Type 3+ letters, tap the match"
+        style="width:100%;font-size:20px;min-height:56px;margin-top:6px" autocomplete="off">
+      <div id="rapidMatches"></div>
+    </details>`;
+    main.appendChild(sec);
+
+    const det = sec.querySelector('#rapidDetails');
+    det.addEventListener('toggle', () => { ui.rapidOpen = det.open; });
+    sec.querySelector('#rapidTarget').onchange = e => { ui.rapidTarget = e.target.value; render(); };
+    const input = sec.querySelector('#rapidInput');
+    const matches = sec.querySelector('#rapidMatches');
+    input.oninput = () => {
+      matches.innerHTML = '';
+      const q = input.value.trim();
+      if (q.length < 3) return;
+      const avail = NS.board.available(S);
+      const key = NS.normName(q);
+      let hits = avail.filter(p => p.normName.includes(key));
+      if (!hits.length) {
+        const m = NS.matchName(q, avail);
+        hits = m.kind === 'exact' ? [m.player] : (m.suggestions || []);
+      }
+      hits.slice(0, 6).forEach(p => {
+        const b = document.createElement('button');
+        b.style.cssText = 'display:block;width:100%;text-align:left;margin-top:6px';
+        b.textContent = `${p.name}  (${p.pos}${p.team ? ' ' + p.team : ''})`;
+        b.onclick = () => {
+          const pick = NS.board.currentPick(S);
+          if (pick === null) return;
+          ui.rapidRefocus = true;
+          markPick(p, NS.board.isMyPick(S, pick));
+        };
+        matches.appendChild(b);
+      });
+    };
+    if (ui.rapidRefocus && ui.rapidOpen) {
+      ui.rapidRefocus = false;
+      setTimeout(() => { const el = document.querySelector('#rapidInput'); if (el) el.focus(); }, 0);
+    }
   }
 
   function renderRecCard(main, rec) {
@@ -2482,6 +2662,7 @@ summary { min-height: var(--tap); display: flex; align-items: center; cursor: po
 
     sec.innerHTML = `<h2>Pick ${rec.pick} - YOUR PICK</h2>` +
       slotRow('Primary', rec.primary) + slotRow('Alt', rec.alt) + slotRow('Panic', rec.panic) +
+      ((rec.yahooQueue || []).length ? `<div style="margin-top:6px"><b>Yahoo queue should be:</b> ${rec.yahooQueue.map(esc).join(' &middot; ')}</div>` : '') +
       (rec.reachOrWait ? `<div class="dim" style="margin-top:6px">${esc(rec.reachOrWait)}</div>` : '') +
       (S.lastPlan ? `<div class="dim" style="margin-top:6px">Plan: ${esc(S.lastPlan)}</div>` : '') +
       (rec.doNotTake.length ? `<details><summary>Do not take (${rec.doNotTake.length})</summary>` +
@@ -2997,7 +3178,7 @@ summary { min-height: var(--tap); display: flex; align-items: center; cursor: po
       ${flag('flag_buildGuard', 'A3 Build-path guard')}
       ${flag('flag_byeLoad', 'A4 Bye-week load + Allen stack')}
       ${flag('flag_markers', 'A5 Queue markers')}
-      ${flag('flag_resilience', 'A6 Resilience extras (confirm my pick, precompute, draft grade)')}
+      ${flag('flag_resilience', 'A6 Draft grade (post-draft, in the text recap)')}
       <h3>Draft order (slot: team)</h3><div id="teamEdit"></div>
       <h3>Keepers</h3><div id="keeperEdit"></div>
       <h3>Byes (team week)</h3>
@@ -3005,9 +3186,11 @@ summary { min-height: var(--tap); display: flex; align-items: center; cursor: po
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
         <button class="primaryBtn" id="saveSettings">Save settings</button>
         <button id="selfTestBtn">Run self-test</button>
+        <button id="yahooExportBtn">Export Yahoo pre-draft list</button>
         <button id="roadmapBtn">Generate roadmap</button>
         <button class="dangerBtn" id="resetBtn">Reset app</button>
       </div>
+      <textarea id="yahooOut" style="display:none" placeholder="Yahoo pre-draft list appears here"></textarea>
       <div id="selfTestOut" class="mono" style="margin-top:8px;font-size:12px"></div>
       <div id="roadmapOut" style="margin-top:8px"></div>`;
     main.appendChild(sec);
@@ -3079,6 +3262,20 @@ summary { min-height: var(--tap); display: flex; align-items: center; cursor: po
         out.innerHTML = `<div><b>${pass}/${results.length} passed</b></div>` +
           results.map(r => `<div class="${r.pass ? 'testPass' : 'testFail'}">${r.pass ? 'PASS' : 'FAIL'} ${esc(r.name)}${r.detail ? ' - ' + esc(r.detail) : ''}</div>`).join('');
       }, 30);
+    };
+
+    sec.querySelector('#yahooExportBtn').onclick = () => {
+      const out = sec.querySelector('#yahooOut');
+      out.value = NS.store.yahooPreDraftList(S);
+      out.style.display = 'block';
+      try {
+        const blob = new Blob([out.value], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'yahoo-predraft-list.txt';
+        a.click();
+      } catch (e) { /* iOS fallback: copy from the textarea */ }
+      toast('Queue exported - keepers stripped, K/DST at the bottom');
     };
 
     sec.querySelector('#roadmapBtn').onclick = () => {
