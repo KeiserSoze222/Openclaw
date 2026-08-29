@@ -124,7 +124,12 @@
     if (p.marker === 'avoid') h += '<span class="pill fade">avoid</span>';
     if (p.handcuffOf) h += `<span class="pill">cuff: ${esc(p.handcuffOf)}</span>`;
     if (p.injury) h += `<span class="pill inj">${esc(p.injury)}</span>`;
-    if (S.settings.flags.byeLoad && p.allenStack) h += '<span class="pill stack">Allen stack</span>';
+    // Upside overlay tags (always on)
+    const cur = NS.board.currentPick(S) || 1;
+    NS.overlay.tagsFor(S, cur, p).forEach(tag => {
+      const cls = tag.kind === 'fade' ? 'fade' : tag.kind === 'stack' ? 'stack' : tag.kind === 'dual' ? 'rule' : 'star';
+      h += `<span class="pill ${cls}">${esc(tag.label)}</span>`;
+    });
     (p.props || []).forEach(pr => {
       if (pr.tag) h += `<span class="pill ${pr.tag === 'money edge' ? 'money' : 'fade'}">${esc(pr.tag)}</span>`;
     });
@@ -579,6 +584,7 @@
       act(() => {
         S.myQueue = parsed.players;
         S.usingSample = false;
+        NS.overlay.applyPreTags(S); // O2/O4 pre-tags survive every paste
         S.log.push({ t: 'queue', msg: `Queue replaced: ${parsed.players.length} players` });
       });
       toast('Queue replaced');
@@ -658,6 +664,29 @@
             } else { p.handcuffOf = null; p.marker = null; }
           });
         }));
+      }
+      // Overlay pre-tags are removable here (they are stored by name in
+      // settings, so removal survives future pastes too).
+      NS.overlay.tagsFor(S, NS.board.currentPick(S) || 1, p).forEach(tag => {
+        if (!tag.list) return; // stack is computed, not stored
+        row.appendChild(mk(`${esc(tag.label)} &#10005;`, () => act(() => {
+          const list = S.settings.overlay[tag.list] || [];
+          const idx = list.findIndex(n => NS.normName(n) === p.normName);
+          if (idx >= 0) list.splice(idx, 1);
+          if (tag.list === 'targets' && S.settings.overlay.targetFrom) {
+            for (const n of Object.keys(S.settings.overlay.targetFrom)) {
+              if (NS.normName(n) === p.normName) delete S.settings.overlay.targetFrom[n];
+            }
+          }
+        })));
+      });
+      if (NS.overlay.handcuffStarter(S, p.normName)) {
+        row.appendChild(mk('cuff &#10005;', () => act(() => {
+          for (const n of Object.keys(S.settings.overlay.handcuffs || {})) {
+            if (NS.normName(n) === p.normName) delete S.settings.overlay.handcuffs[n];
+          }
+          p.handcuffOf = null;
+        })));
       }
       row.appendChild(mk('&#8213;', () => act(() => { // insert tier break after this player
         for (let j = i + 1; j < S.myQueue.length; j++) S.myQueue[j].tier++;
@@ -851,6 +880,8 @@
       ${num('set_simQ2', 'Sim: P(opponent 2nd QB by rd 8)', s.simQB.secondQBByR8, 0.05)}
       <div class="fieldRow"><label>QB2 pool (comma-separated)</label></div>
       <textarea id="set_pool">${esc(s.qb2Pool.join(', '))}</textarea>
+      <div class="fieldRow"><label>Dual-threat QBs (upside overlay, comma-separated)</label></div>
+      <textarea id="set_dualThreat">${esc((s.overlay && s.overlay.dualThreatQBs || []).join(', '))}</textarea>
       <h3>Feature flags (Addendum A - all default OFF)</h3>
       ${flag('flag_monteCarlo', 'A1 Monte Carlo survival')}
       ${flag('flag_roadmap', 'A2 Pre-draft roadmap')}
@@ -900,6 +931,8 @@
         s.cheapQBPick = +g('set_cheapQB').value || 134;
         s.simQB = { firstQBIn4: +g('set_simQ1').value || 0.7, secondQBByR8: +g('set_simQ2').value || 0.5 };
         s.qb2Pool = g('set_pool').value.split(',').map(x => x.trim()).filter(Boolean);
+        if (!s.overlay) s.overlay = NS.overlay.defaults();
+        s.overlay.dualThreatQBs = g('set_dualThreat').value.split(',').map(x => x.trim()).filter(Boolean);
         ['monteCarlo', 'roadmap', 'buildGuard', 'byeLoad', 'markers', 'resilience'].forEach(f => {
           s.flags[f] = g('flag_' + f).checked;
         });

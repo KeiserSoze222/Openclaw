@@ -29,6 +29,7 @@
       survivalFactors: { likely: 1.0, coinflip: 0.5 },
       panicProb: 80,
       simQB: { firstQBIn4: 0.7, secondQBByR8: 0.5 },
+      overlay: NS.overlay.defaults(),   // Upside overlay pre-tags (O2/O4)
       // Addendum A features - all default OFF (Confirmed Defaults)
       flags: {
         monteCarlo: false,     // A1
@@ -53,7 +54,7 @@
 
   ST.defaultState = function () {
     const settings = ST.defaultSettings();
-    return {
+    return NS.overlay.applyPreTags({
       version: ST.VERSION,
       settings,
       myQueue: ST.buildSampleQueue(settings),
@@ -70,7 +71,7 @@
       undoStack: [],
       sim: null,
       grade: null
-    };
+    });
   };
 
   // ---- Migration ------------------------------------------------------------
@@ -86,9 +87,10 @@
     out.settings.flags = { ...base.settings.flags, ...((raw.settings || {}).flags || {}) };
     out.settings.startable = { ...base.settings.startable, ...((raw.settings || {}).startable || {}) };
     out.settings.targets = { ...base.settings.targets, ...((raw.settings || {}).targets || {}) };
+    out.settings.overlay = { ...base.settings.overlay, ...((raw.settings || {}).overlay || {}) };
     out.version = ST.VERSION;
     ST.validate(out);
-    return out;
+    return NS.overlay.applyPreTags(out);
   };
 
   ST.validate = function (state) {

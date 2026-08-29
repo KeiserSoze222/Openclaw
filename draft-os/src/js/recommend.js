@@ -145,12 +145,14 @@
     const available = NS.board.available(state);
     const ctx = PB.buildCtx(state, pick);
 
-    // Legality pass
+    // Legality pass (playbook rules, then the overlay's hard gates - O2/O4)
     const legal = [], blocked = [];
     for (const p of available) {
       const v = PB.legality(state, ctx, p);
-      if (v.legal) legal.push(p);
-      else blocked.push({ player: p, ruleId: v.ruleId, reason: v.reason });
+      if (!v.legal) { blocked.push({ player: p, ruleId: v.ruleId, reason: v.reason }); continue; }
+      const g = NS.overlay.hardGate(state, pick, p);
+      if (g) { blocked.push({ player: p, ruleId: g.ruleId, reason: g.reason }); continue; }
+      legal.push(p);
     }
 
     // Shared panels (used on and off the clock)
@@ -212,6 +214,14 @@
 
     // On the clock ------------------------------------------------------------
     const chosen = choosePrimary(state, ctx, legal, available);
+    // Upside overlay (O1/O5): after playbook filters and need tilt; a no-op
+    // whenever an override or any of R1/R2/R3/R6/R8/R9 decided this pick.
+    const overlayHit = NS.overlay.apply(state, ctx, legal, chosen);
+    if (overlayHit) {
+      chosen.primary = overlayHit.primary;
+      chosen.note = overlayHit.whyText;
+      chosen.rulesFired.push(overlayHit.cite);
+    }
     const primary = chosen.primary;
     const altPool = legal.filter(p => p !== primary);
     const alt = altPool[0] || null;
@@ -279,7 +289,11 @@
     if (pick === null) return { legal: true, note: 'draft over' };
     const ctx = PB.buildCtx(state, pick);
     const v = PB.legality(state, ctx, player);
-    if (v.legal) return { legal: true, note: `No conflict at pick ${pick}.` };
+    if (v.legal) {
+      const g = NS.overlay.hardGate(state, pick, player);
+      if (g) return { legal: false, ruleId: g.ruleId, note: `${g.ruleId} (upside overlay): ${g.reason}` };
+      return { legal: true, note: `No conflict at pick ${pick}.` };
+    }
     const rule = PB.ruleById(v.ruleId);
     return { legal: false, ruleId: v.ruleId, note: `${v.ruleId} (${rule ? rule.label : ''}): ${v.reason}` };
   };

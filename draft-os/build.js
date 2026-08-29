@@ -17,6 +17,7 @@ const JS_ORDER = [
   'js/board.js',
   'js/playbook.js',
   'js/survival.js',
+  'js/overlay.js',
   'js/recommend.js',
   'js/buildpath.js',
   'js/simulator.js',

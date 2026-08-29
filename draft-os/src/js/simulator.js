@@ -22,6 +22,9 @@
       if (!p.handcuffOf) return true;
       if (pickNo >= 100) return true;
       const starterKey = NS.normName(p.handcuffOf);
+      // O4: a keeper starter never triggers the last-2-picks unlock
+      const starterIsKeeper = (state.settings.keepers || []).some(k => NS.normName(k.player) === starterKey);
+      if (starterIsKeeper) return false;
       return recent.some(r => r.normName === starterKey);
     };
 

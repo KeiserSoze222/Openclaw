@@ -7,7 +7,7 @@ const path = require('path');
 // Load modules in dependency order onto the shared DraftOS namespace.
 [
   'core', 'data', 'normalize', 'pickorder', 'parser', 'board', 'playbook',
-  'survival', 'recommend', 'buildpath', 'simulator', 'statestore', 'selftest'
+  'survival', 'overlay', 'recommend', 'buildpath', 'simulator', 'statestore', 'selftest'
 ].forEach(m => require(path.join(__dirname, '..', 'src', 'js', `${m}.js`)));
 
 const NS = globalThis.DraftOS;

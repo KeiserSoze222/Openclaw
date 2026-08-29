@@ -481,6 +481,185 @@
       t.ok(res.engineError && res.engineError.includes('boom'), 'error captured');
     });
 
+    // ---- Upside overlay (O1-O5) ---------------------------------------------
+
+    // Controlled tie at pick 47: RB+WR rostered (no rule-8 lean), QB2 done at
+    // 34, tie-zone players are the only ones left in the queue.
+    function overlayFixture(tieZone, opts) {
+      opts = opts || {};
+      const st = fresh();
+      const q = (rank, name, pos, team, tier) => ({
+        rank, name, normName: NS.normName(name), pos, team,
+        bye: st.settings.byes[team] ?? null, tier, tags: [], marker: null, handcuffOf: null
+      });
+      st.myQueue = [
+        q(1, 'My RB One', 'RB', 'IND', 1),
+        q(2, 'My WR One', 'WR', 'DET', 1),
+        q(3, 'My WR Two', 'WR', 'HOU', 1),
+        q(10, 'Any QB', 'QB', 'DAL', 2)
+      ].concat(tieZone.map(z => q(z.rank, z.name, z.pos, z.team, z.tier)));
+      NS.overlay.applyPreTags(st);
+      const mine = opts.mine || { 7: 'My RB One', 14: 'My WR One', 34: 'Any QB' };
+      // Opponents absorb whichever base players I didn't take, so only the
+      // tie zone is left on the board at pick 47.
+      const others = ['My RB One', 'My WR One', 'My WR Two', 'Any QB']
+        .filter(n => !Object.values(mine).includes(n));
+      fill(st, 46, { mine, others });
+      return st;
+    }
+
+    t.test('O1: fade loses a valid tie; why-line format; never across tiers, >6 ranks, or outside top-3', () => {
+      // Jacobs (default FADE) vs Price (default TARGET): loser's fade is the reason
+      let st = overlayFixture([
+        { rank: 20, name: 'Josh Jacobs', pos: 'RB', team: 'LV', tier: 3 },
+        { rank: 21, name: 'Jadarian Price', pos: 'RB', team: 'DAL', tier: 3 }
+      ]);
+      let rec = NS.recommend(st);
+      t.eq(rec.pick, 47);
+      t.eq(rec.primary.player.name, 'Jadarian Price', 'fade loses the tie');
+      t.eq(rec.primary.why.text, 'Upside overlay: Price over Jacobs (fade)', 'exact why-line');
+      t.ok(rec.primary.why.rules.includes('O1'), 'O1 cited');
+
+      // Across a tier boundary: never fires
+      st = overlayFixture([
+        { rank: 20, name: 'Josh Jacobs', pos: 'RB', team: 'LV', tier: 3 },
+        { rank: 21, name: 'Jadarian Price', pos: 'RB', team: 'DAL', tier: 4 }
+      ]);
+      rec = NS.recommend(st);
+      t.eq(rec.primary.player.name, 'Josh Jacobs', 'tier boundary blocks the overlay');
+      t.ok(!rec.primary.why.text.includes('Upside overlay'), 'no overlay why-line');
+
+      // More than 6 queue ranks apart: never fires
+      st = overlayFixture([
+        { rank: 20, name: 'Josh Jacobs', pos: 'RB', team: 'LV', tier: 3 },
+        { rank: 27, name: 'Jadarian Price', pos: 'RB', team: 'DAL', tier: 3 }
+      ]);
+      rec = NS.recommend(st);
+      t.eq(rec.primary.player.name, 'Josh Jacobs', '7 ranks apart blocks the overlay');
+
+      // Outside the top-3 legal candidates: never fires
+      st = overlayFixture([
+        { rank: 20, name: 'Tie Rb Aa', pos: 'RB', team: 'CHI', tier: 3 },
+        { rank: 21, name: 'Tie Rb Bb', pos: 'RB', team: 'CLE', tier: 3 },
+        { rank: 22, name: 'Tie Rb Cc', pos: 'RB', team: 'NO', tier: 3 },
+        { rank: 26, name: 'Jadarian Price', pos: 'RB', team: 'DAL', tier: 3 } // 4th legal, within 6 ranks
+      ]);
+      rec = NS.recommend(st);
+      t.eq(rec.primary.player.name, 'Tie Rb Aa', '4th legal candidate cannot be promoted');
+    });
+
+    t.test('O1 priority: Target beats money edge; dual-threat QB beats Target', () => {
+      let st = overlayFixture([
+        { rank: 20, name: 'Tie Rb Alpha', pos: 'RB', team: 'CHI', tier: 3 },
+        { rank: 21, name: 'Tee Higgins', pos: 'WR', team: 'CIN', tier: 3 } // default TARGET
+      ]);
+      st.props = [{ player: 'Tie Rb Alpha', normName: 'tie rb alpha', type: 'rush yds', line: '900', note: 'sharp on over', tag: 'money edge' }];
+      let rec = NS.recommend(st);
+      t.eq(rec.primary.player.name, 'Tee Higgins', 'Target beats money edge');
+      t.eq(rec.primary.why.text, 'Upside overlay: Higgins over Alpha (target)');
+
+      st = overlayFixture([
+        { rank: 20, name: 'Tie Rb Alpha', pos: 'RB', team: 'CHI', tier: 3 },
+        { rank: 21, name: 'Jaxson Dart', pos: 'QB', team: 'NYG', tier: 3 } // dual-threat AND target
+      ]);
+      st.settings.overlay.targets.push('Tie Rb Alpha');
+      rec = NS.recommend(st);
+      t.eq(rec.primary.player.name, 'Jaxson Dart', 'dual-threat QB beats Target');
+      t.ok(rec.primary.why.text.includes('(dual-threat)'), 'dual-threat is the reason');
+    });
+
+    t.test('O1: my-starter and other-starter handcuffs are EQUAL - falls through to queue order', () => {
+      const st = overlayFixture([
+        { rank: 20, name: 'Cuff Of Mine', pos: 'RB', team: 'IND', tier: 3 },
+        { rank: 21, name: 'Cuff Of Theirs', pos: 'RB', team: 'SEA', tier: 3 }
+      ]);
+      st.myQueue.find(p => p.normName === 'cuff of mine').handcuffOf = 'My RB One';      // I roster him
+      st.myQueue.find(p => p.normName === 'cuff of theirs').handcuffOf = 'Opp Starter';  // I don't
+      const rec = NS.recommend(st);
+      t.eq(rec.primary.player.name, 'Cuff Of Mine', 'queue order decides an equal-priority tie');
+      t.ok(!rec.primary.why.text.includes('Upside overlay'), 'overlay did not fire');
+    });
+
+    t.test('O5: WR preferred in a WR-vs-RB tie after pick 14; rule-8 RB lean suppresses it', () => {
+      let st = overlayFixture([
+        { rank: 20, name: 'Tie Rb Alpha', pos: 'RB', team: 'CHI', tier: 3 },
+        { rank: 21, name: 'Tie Wr Beta', pos: 'WR', team: 'TEN', tier: 3 }
+      ]);
+      let rec = NS.recommend(st);
+      t.eq(rec.primary.player.name, 'Tie Wr Beta', 'WR over RB in a scoreless tie');
+      t.eq(rec.primary.why.text, 'Upside overlay: Beta over Alpha (WR over RB)');
+      t.ok(rec.primary.why.rules.includes('O5'), 'O5 cited');
+
+      // 0 RB -> rule-8 lean toward RB is live with the RB already on top: no O5 flip
+      st = overlayFixture([
+        { rank: 20, name: 'Tie Rb Alpha', pos: 'RB', team: 'CHI', tier: 3 },
+        { rank: 21, name: 'Tie Wr Beta', pos: 'WR', team: 'TEN', tier: 3 }
+      ], { mine: { 7: 'My WR One', 14: 'My WR Two', 34: 'Any QB' } });
+      t.eq(NS.board.posCounts(NS.board.myRoster(st)).RB, 0, 'fixture: 0 RB');
+      t.ok(NS.playbook.computeLean(st, 47) && NS.playbook.computeLean(st, 47).pos === 'RB', 'RB lean armed');
+      rec = NS.recommend(st);
+      t.eq(rec.primary.player.name, 'Tie Rb Alpha', 'RB lean suppresses O5');
+      t.ok(!rec.primary.why.text.includes('Upside overlay'), 'overlay stood down');
+    });
+
+    t.test('O2 hard gate: Jeremiyah Love blocked before pick 87, legal after', () => {
+      const st = overlayFixture([
+        { rank: 20, name: 'Jeremiyah Love', pos: 'RB', team: 'CHI', tier: 3 },
+        { rank: 21, name: 'Tie Rb Bb', pos: 'RB', team: 'CLE', tier: 3 }
+      ]);
+      const love = st.myQueue.find(p => p.normName === NS.normName('Jeremiyah Love'));
+      const rec = NS.recommend(st);
+      t.ok(rec.primary.player.normName !== love.normName, 'never primary before 87');
+      const dnt = rec.doNotTake.find(d => d.player.normName === love.normName);
+      t.ok(dnt && dnt.ruleId === 'O2', 'blocked with O2 in do-not-take');
+      t.ok(NS.overlay.hardGate(st, 86, love), 'gated at 86');
+      t.eq(NS.overlay.hardGate(st, 87, love), null, 'legal at 87');
+    });
+
+    t.test('O4: Robinson (keeper-starter cuff) gated flat until 100, Target only from 100; last-2-picks unlock for non-keeper starters', () => {
+      const st = fresh();
+      st.myQueue.push({ rank: 61, name: 'Brian Robinson', normName: NS.normName('Brian Robinson'), pos: 'RB', team: 'ATL', bye: 11, tier: 6, tags: [], marker: null, handcuffOf: null });
+      NS.overlay.applyPreTags(st);
+      const rob = st.myQueue.find(p => p.normName === NS.normName('Brian Robinson'));
+      t.eq(rob.handcuffOf, 'Bijan Robinson', 'pre-tagged as Bijan cuff');
+      // Bijan is a KEEPER at pick 5: no last-2-picks unlock, even right after pick 5
+      t.ok(NS.overlay.hardGate(st, 7, rob), 'no early unlock off a keeper starter');
+      t.ok(NS.overlay.hardGate(st, 99, rob), 'gated at 99');
+      t.eq(NS.overlay.hardGate(st, 100, rob), null, 'eligible at 100 flat');
+      const rec = NS.recommend(st, { forPick: 47 });
+      const dnt = rec.doNotTake.find(d => d.player.normName === rob.normName);
+      t.ok(dnt && dnt.ruleId === 'O4', 'in do-not-take with O4 before 100');
+      t.eq(NS.overlay.score(st, 99, rob).tag, 'handcuff', 'not a Target before 100');
+      t.eq(NS.overlay.score(st, 100, rob).tag, 'target', 'Target-eligible from 100');
+
+      // Non-keeper starter: the last-2-picks unlock works (Corum -> Kyren)
+      st.myQueue.push({ rank: 62, name: 'Blake Corum', normName: NS.normName('Blake Corum'), pos: 'RB', team: 'LAR', bye: 11, tier: 6, tags: [], marker: null, handcuffOf: null });
+      NS.overlay.applyPreTags(st);
+      const corum = st.myQueue.find(p => p.normName === NS.normName('Blake Corum'));
+      t.ok(NS.overlay.hardGate(st, 50, corum), 'Corum gated at 50');
+      st.picks.push({ pick: 48, team: 'Rob', player: 'Kyren Williams', pos: 'RB', normName: NS.normName('Kyren Williams'), keeper: false, byMe: false });
+      t.eq(NS.overlay.hardGate(st, 50, corum), null, 'unlocked - starter went in the last 2 picks');
+    });
+
+    t.test('O2: pre-tags survive a fresh queue paste (stored by name, re-applied)', () => {
+      const st = fresh();
+      const paste = [
+        '1. Tee Higgins WR CIN 6',
+        '2. Derrick Henry RB BAL 13',
+        '3. Blake Corum RB LAR 11',
+        '4. Some Guy WR DET 6'
+      ].join('\n');
+      const parsed = NS.parser.parseQueue(paste, { byes: st.settings.byes, keepers: st.settings.keepers, tierSize: 12 });
+      st.myQueue = parsed.players;
+      st.usingSample = false;
+      NS.overlay.applyPreTags(st);
+      const get = n => st.myQueue.find(p => p.normName === NS.normName(n));
+      t.eq(get('Blake Corum').handcuffOf, 'Kyren Williams', 'handcuff map re-applied');
+      t.eq(NS.overlay.score(st, 50, get('Tee Higgins')).tag, 'target', 'Target survives the paste');
+      t.eq(NS.overlay.score(st, 50, get('Derrick Henry')).tag, 'fade', 'Fade survives the paste');
+      t.eq(NS.overlay.score(st, 50, get('Some Guy')).tag, null, 'untagged stays untagged');
+    });
+
     t.test('state migration: a v1 blob loads under v2 without data loss', () => {
       const st = fresh();
       const v1 = {

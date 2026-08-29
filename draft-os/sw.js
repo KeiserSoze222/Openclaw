@@ -1,7 +1,7 @@
 // Minimal offline cache for Add-to-Home-Screen over HTTP(S). This file is
 // never loaded over file:// (registration is protocol-guarded in the app).
-// 758f4fe42b is replaced at build time so a new build busts the old cache.
-const CACHE = 'draftos-758f4fe42b';
+// be8eb1b402 is replaced at build time so a new build busts the old cache.
+const CACHE = 'draftos-be8eb1b402';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon.svg'];
 
 self.addEventListener('install', e => {
