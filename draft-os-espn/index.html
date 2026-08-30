@@ -1,0 +1,3605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0d1117">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>Draft OS - ESPN (KeiserSoze)</title>
+<style>
+/* Dark, phone-first, big tap targets. */
+:root {
+  --bg: #0d1117;
+  --bg2: #161b22;
+  --bg3: #1f2630;
+  --line: #30363d;
+  --fg: #e6edf3;
+  --dim: #8b949e;
+  --accent: #58a6ff;
+  --good: #3fb950;
+  --warn: #d29922;
+  --bad: #f85149;
+  --tap: 48px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { background: var(--bg); color: var(--fg); font: 16px/1.45 -apple-system, "SF Pro Text", Segoe UI, Roboto, sans-serif; }
+body { padding-bottom: 76px; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button {
+  min-height: var(--tap); min-width: var(--tap);
+  background: var(--bg3); border: 1px solid var(--line); border-radius: 10px;
+  padding: 8px 14px; cursor: pointer;
+}
+button:active { background: #2b3542; }
+button.primaryBtn { background: #1f6feb; border-color: #1f6feb; font-weight: 600; }
+button.dangerBtn { background: #6e1a1a; border-color: var(--bad); }
+button.small { min-height: 40px; min-width: 40px; padding: 4px 10px; font-size: 14px; }
+input, select, textarea {
+  background: var(--bg2); border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px; min-height: var(--tap);
+}
+textarea { width: 100%; min-height: 110px; font-family: ui-monospace, Menlo, monospace; font-size: 13px; }
+h2 { font-size: 17px; margin: 4px 0 8px; }
+h3 { font-size: 15px; margin: 6px 0 6px; color: var(--accent); }
+.dim { color: var(--dim); font-size: 13px; }
+.mono { font-family: ui-monospace, Menlo, monospace; }
+
+/* Header */
+#hdr {
+  position: sticky; top: 0; z-index: 20; background: var(--bg2);
+  border-bottom: 1px solid var(--line); padding: 8px 10px;
+}
+#hdrTop { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+#pickInfo { font-size: 15px; font-weight: 600; }
+#pickInfo .sub { font-weight: 400; color: var(--dim); font-size: 13px; display: block; }
+#clockWrap { display: flex; align-items: center; gap: 6px; }
+#clock { font-size: 34px; font-weight: 700; font-variant-numeric: tabular-nums; min-width: 104px; text-align: center; }
+#clock.low { color: var(--bad); animation: blink 1s step-end infinite; }
+@keyframes blink { 50% { opacity: 0.35; } }
+#hdrBtns { display: flex; gap: 8px; margin-top: 6px; }
+#ghostBtn.on { background: #4c2889; border-color: #8957e5; }
+
+/* Sections */
+section.card {
+  background: var(--bg2); border: 1px solid var(--line); border-radius: 12px;
+  margin: 10px; padding: 12px;
+}
+.banner { border-radius: 10px; padding: 10px 12px; margin: 10px; font-weight: 600; }
+.banner.red { background: #67060c; border: 1px solid var(--bad); }
+.banner.amber { background: #4d3800; border: 1px solid var(--warn); }
+.banner.purple { background: #3c2470; border: 1px solid #8957e5; }
+
+/* Rec card */
+#recCard.frozen { opacity: 0.45; filter: grayscale(0.8); }
+.recRow { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.recRow:last-child { border-bottom: none; }
+.recLabel { flex: 0 0 62px; font-size: 12px; font-weight: 700; color: var(--dim); text-transform: uppercase; padding-top: 4px; }
+.recName { font-size: 18px; font-weight: 700; }
+.recWhy { font-size: 13px; color: var(--dim); }
+.pill {
+  display: inline-block; font-size: 11px; font-weight: 700; border-radius: 999px;
+  padding: 2px 8px; margin-left: 6px; vertical-align: middle;
+  background: var(--bg3); border: 1px solid var(--line);
+}
+.pill.rule { background: #0d419d; border-color: var(--accent); }
+.pill.money { background: #1a4d2e; border-color: var(--good); }
+.pill.fade { background: #5a1e02; border-color: var(--warn); }
+.pill.inj { background: #67060c; border-color: var(--bad); }
+.pill.star { background: #4d3800; border-color: var(--warn); }
+.pill.stack { background: #0f3058; border-color: var(--accent); }
+.pill.surv-likely { color: var(--good); }
+.pill.surv-coin { color: var(--warn); }
+.pill.surv-gone { color: var(--bad); }
+
+/* Available list */
+#posChips { display: flex; gap: 6px; overflow-x: auto; padding: 6px 0; }
+#posChips button { min-height: 40px; min-width: 52px; }
+#posChips button.on { background: #1f6feb; border-color: #1f6feb; }
+.playerRow {
+  display: flex; align-items: center; gap: 8px; padding: 6px 0;
+  border-bottom: 1px solid var(--line);
+}
+.playerRow .pInfo { flex: 1; min-width: 0; }
+.playerRow .pName { font-weight: 600; }
+.playerRow .pMeta { font-size: 12px; color: var(--dim); }
+.playerRow button { flex-shrink: 0; }
+
+/* Roster */
+#rosterGrid { display: grid; grid-template-columns: 56px 1fr; gap: 4px 10px; font-size: 14px; }
+#rosterGrid .slot { color: var(--dim); font-weight: 700; font-size: 12px; padding-top: 2px; }
+.countChips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.byeGrid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.byeCell { background: var(--bg3); border: 1px solid var(--line); border-radius: 8px; padding: 4px 8px; font-size: 12px; }
+.byeCell.hot { border-color: var(--bad); color: var(--bad); font-weight: 700; }
+
+/* Tables */
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { border: 1px solid var(--line); padding: 5px 7px; text-align: left; }
+th { background: var(--bg3); }
+.tableWrap { overflow-x: auto; }
+
+/* Queue editor */
+.qRow { display: flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1px solid var(--line); }
+.qRow .qName { flex: 1; min-width: 0; }
+.qRow.tierHead { background: var(--bg3); font-weight: 700; padding: 6px 8px; border-radius: 6px; }
+.badge { font-size: 10px; background: #67060c; border-radius: 4px; padding: 1px 5px; margin-left: 4px; }
+
+/* Tab bar */
+#tabbar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;
+  display: flex; overflow-x: auto; background: var(--bg2);
+  border-top: 1px solid var(--line); padding: 4px 4px calc(4px + env(safe-area-inset-bottom));
+}
+#tabbar button {
+  flex: 1 0 auto; border: none; background: none; border-radius: 8px;
+  font-size: 12px; padding: 6px 10px; min-width: 60px; color: var(--dim);
+}
+#tabbar button.on { color: var(--accent); background: var(--bg3); font-weight: 700; }
+
+.fieldRow { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.fieldRow label { flex: 1; min-width: 140px; }
+.fieldRow input[type="number"], .fieldRow input[type="text"] { width: 110px; }
+.fieldRow input[type="checkbox"] { width: 26px; height: 26px; }
+
+details { margin: 8px 0; }
+summary { min-height: var(--tap); display: flex; align-items: center; cursor: pointer; font-weight: 600; }
+.testPass { color: var(--good); }
+.testFail { color: var(--bad); font-weight: 700; }
+#toast {
+  position: fixed; bottom: 84px; left: 50%; transform: translateX(-50%);
+  background: #1f6feb; color: #fff; border-radius: 10px; padding: 10px 16px;
+  z-index: 50; font-weight: 600; max-width: 92vw; text-align: center;
+  transition: opacity 0.3s; opacity: 0; pointer-events: none;
+}
+#toast.show { opacity: 1; }
+@media (min-width: 760px) {
+  #main { max-width: 900px; margin: 0 auto; }
+}
+
+</style>
+</head>
+<body>
+<header id="hdr">
+  <div id="hdrTop">
+    <div id="pickInfo"></div>
+    <div id="clockWrap">
+      <div id="clock">1:30</div>
+      <button class="small" id="clockStart">&#9654;</button>
+      <button class="small" id="clockPause">&#10073;&#10073;</button>
+      <button class="small" id="clockReset">&#8634;</button>
+    </div>
+  </div>
+  <div id="hdrBtns">
+    <button id="ghostBtn">GHOST MODE</button>
+    <button id="undoBtn">Undo</button>
+  </div>
+</header>
+<div id="main"></div>
+<nav id="tabbar"></nav>
+<div id="toast"></div>
+<script>
+/* ===== js/core.js ===== */
+// Shared namespace + tiny utilities. Every module attaches to globalThis.DraftOS
+// and (in Node) exports the same namespace, so browser <script> concat and
+// require() both work with zero tooling.
+(function () {
+  const NS = globalThis.DraftOS || (globalThis.DraftOS = {});
+
+  NS.clone = obj => JSON.parse(JSON.stringify(obj));
+
+  // Deterministic RNG (mulberry32) so simulator tests are reproducible.
+  NS.makeRng = function (seed) {
+    let a = seed >>> 0;
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  };
+
+  NS.POSITIONS = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
+  NS.SKILL = ['RB', 'WR', 'TE'];
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = NS;
+})();
+
+/* ===== js/data.js ===== */
+// ESPN 12-team 1QB league facts. Everything here is a DEFAULT - Settings and
+// the Keepers tab can edit teams, slot, rounds, keepers. No network, ever.
+(function () {
+  const NS = globalThis.DraftOS;
+
+  NS.DATA = {};
+
+  // Draft order is UNKNOWN at boot: these names are the league's managers in
+  // a placeholder order, typed into the real order right before the draft.
+  // "Jeff" is me (team label: KeiserSoze).
+  NS.DATA.TEAMS = [
+    { slot: 1, name: 'Joe' },
+    { slot: 2, name: 'Rhett' },
+    { slot: 3, name: 'Mike' },
+    { slot: 4, name: 'Jeff' },
+    { slot: 5, name: 'TC' },
+    { slot: 6, name: 'Max' },
+    { slot: 7, name: 'Dan' },
+    { slot: 8, name: 'Pat' },
+    { slot: 9, name: 'Jim' },
+    { slot: 10, name: 'Ger' },
+    { slot: 11, name: 'Team 11' },
+    { slot: 12, name: 'Team 12' }
+  ];
+
+  NS.DATA.MY_SLOT = 4;           // where "Jeff" sits in the placeholder order
+  NS.DATA.MY_LABEL = 'KeiserSoze (Jeff)';
+  NS.DATA.ROUNDS = 16;           // editable 14-18
+  NS.DATA.ROUNDS_MIN = 14;
+  NS.DATA.ROUNDS_MAX = 18;
+  NS.DATA.TEAM_COUNT = 12;
+
+  // Keepers are stored by TEAM NAME with a round; a BLANK round = not kept
+  // (the player stays in the queue). Pick numbers are resolved only once
+  // slot + draft order are saved. All rows pre-load with blank rounds -
+  // including Jeff/Shaheed (NOT keeping him unless a round is typed).
+  NS.DATA.KEEPERS = [
+    { team: 'Joe', player: 'Tyjae Spears', round: null },
+    { team: 'Rhett', player: 'Marvin Mims Jr.', round: null },
+    { team: 'Mike', player: 'Elic Ayomanor', round: null },
+    { team: 'Jeff', player: 'Rashid Shaheed', round: null },
+    { team: 'TC', player: 'Bhayshul Tuten', round: null },
+    { team: 'Max', player: 'Trey Benson', round: null },
+    { team: 'Dan', player: 'Michael Penix Jr.', round: null },
+    { team: 'Pat', player: 'Quinshon Judkins', round: null },
+    { team: 'Jim', player: 'Tyler Warren', round: null },
+    { team: 'Ger', player: 'Luther Burden III', round: null }
+  ];
+
+  // 2026 team bye weeks - carried over unchanged. Table wins over pasted byes.
+  NS.DATA.BYES = {
+    ARI: 14, ATL: 11, BAL: 13, BUF: 7, CAR: 5, CHI: 10, CIN: 6, CLE: 11,
+    DAL: 14, DEN: 10, DET: 6, GB: 11, HOU: 8, IND: 13, JAX: 7, KC: 5,
+    LAC: 7, LAR: 11, LV: 13, MIA: 6, MIN: 6, NE: 11, NO: 8, NYG: 8,
+    NYJ: 13, PHI: 10, PIT: 9, SEA: 11, SF: 8, TB: 10, TEN: 9, WAS: 7
+  };
+
+  // Rule 2 exception window (my 5th live pick only) and rule-1 early TEs.
+  NS.DATA.ELITE_QBS = ['Josh Allen', 'Lamar Jackson', 'Jalen Hurts'];
+  NS.DATA.EARLY_TES = ['Trey McBride', 'Brock Bowers'];
+
+  NS.DATA.INJURY_TAGS = [
+    { name: "Ja'Marr Chase", tag: 'knee (monitor)' },
+    { name: 'Christian McCaffrey', tag: 'load-manage' },
+    { name: 'Malik Nabers', tag: 'ACL rehab' },
+    { name: 'Kenneth Walker', tag: 'foot' },
+    { name: 'Ashton Jeanty', tag: 'ankle' },
+    { name: 'Patrick Mahomes', tag: 'ACL return' },
+    { name: 'Zach Charbonnet', tag: 'PUP / Price SEA lead back' },
+    { name: 'Jordyn Tyson', tag: 'hamstring IR-likely' },
+    { name: 'Alec Pierce', tag: 'ankle/PUP' },
+    { name: 'George Kittle', tag: 'Achilles' },
+    { name: 'Jordan Love', tag: 'ankle' }
+  ];
+
+  NS.DATA.SCORING_TEXT =
+    'Half-PPR - 6-pt pass TD - 0.1/completion - -3 INT - +1 for 300-399 pass yds, ' +
+    '+3 for 400+ - 0.1 per rush/rec yd - +1 for 100-199 rush or rec yds, +3 for 200+ - ' +
+    'FG 3/3/5/6 - DST points-allowed and yards-allowed tiers. ' +
+    '(Reference only - this app has no points engine.)';
+
+  NS.DATA.SAMPLE_QUEUE_TEXT = [
+    'TIER 1',
+    '1. Jahmyr Gibbs RB DET 6',
+    "2. Ja'Marr Chase WR CIN 6",
+    '3. Puka Nacua WR LAR 11',
+    '4. Christian McCaffrey RB SF 8',
+    '5. Jonathan Taylor RB IND 13',
+    '6. Amon-Ra St. Brown WR DET 6',
+    '7. James Cook RB BUF 7',
+    '8. CeeDee Lamb WR DAL 14',
+    'TIER 2',
+    '9. Justin Jefferson WR MIN 6',
+    "10. De'Von Achane RB MIA 6",
+    '11. Drake London WR ATL 11',
+    '12. Chase Brown RB CIN 6',
+    '13. Omarion Hampton RB LAC 7',
+    '14. Trey McBride TE ARI 14',
+    '15. Saquon Barkley RB PHI 10',
+    '16. A.J. Brown WR NE 11',
+    '17. Nico Collins WR HOU 8',
+    '18. Ashton Jeanty RB LV 13',
+    '19. George Pickens WR DAL 14',
+    '20. Josh Allen QB BUF 7',
+    'TIER 3',
+    '21. Derrick Henry RB BAL 13',
+    '22. Lamar Jackson QB BAL 13',
+    '23. Jalen Hurts QB PHI 10',
+    '24. Joe Burrow QB CIN 6',
+    '25. Dak Prescott QB DAL 14'
+  ].join('\n');
+
+  // Filler rows so a mock can run deep before the real queue is pasted.
+  // Removed when a real queue is pasted (paste replaces all).
+  NS.DATA.buildFillers = function () {
+    const teams = Object.keys(NS.DATA.BYES);
+    const cycle = ['RB', 'WR', 'WR', 'RB', 'TE', 'QB'];
+    const out = [];
+    for (let rank = 26; rank <= 60; rank++) {
+      let pos;
+      if (rank === 55 || rank === 57) pos = 'K';
+      else if (rank === 56 || rank === 58) pos = 'DST';
+      else pos = cycle[(rank - 26) % cycle.length];
+      const team = teams[(rank - 26) % teams.length];
+      out.push({
+        rank, name: `Filler ${pos} ${rank}`, pos, team,
+        bye: NS.DATA.BYES[team], tier: 3 + Math.ceil((rank - 25) / 12),
+        tags: ['filler'], filler: true
+      });
+    }
+    return out;
+  };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = NS;
+})();
+
+/* ===== js/normalize.js ===== */
+// Name normalization + fuzzy matching. Used by every paste path.
+// Never silently drops a low-confidence match — callers get a suggestion.
+(function () {
+  const NS = globalThis.DraftOS;
+
+  const SUFFIXES = new Set(['jr', 'sr', 'ii', 'iii', 'iv', 'v']);
+
+  // "Chase, Ja'Marr" -> "Ja'Marr Chase"; case/punct/suffix-insensitive key.
+  NS.normName = function (raw) {
+    let s = String(raw || '').trim();
+    // "Last, First" (a single comma with words on both sides, no digits)
+    const m = s.match(/^([^,\d]+),\s*([^,\d]+)$/);
+    if (m) s = `${m[2]} ${m[1]}`;
+    s = s.toLowerCase()
+      .replace(/[.'’]/g, '')     // periods + apostrophes vanish: A.J. -> aj, Ja'Marr -> jamarr
+      .replace(/[^a-z0-9]+/g, ' ')    // everything else becomes a space
+      .trim();
+    const toks = s.split(' ').filter(t => t && !SUFFIXES.has(t));
+    return toks.join(' ');
+  };
+
+  function levenshtein(a, b) {
+    if (a === b) return 0;
+    const dp = Array.from({ length: a.length + 1 }, (_, i) => [i]);
+    for (let j = 0; j <= b.length; j++) dp[0][j] = j;
+    for (let i = 1; i <= a.length; i++) {
+      for (let j = 1; j <= b.length; j++) {
+        dp[i][j] = Math.min(
+          dp[i - 1][j] + 1, dp[i][j - 1] + 1,
+          dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+        );
+      }
+    }
+    return dp[a.length][b.length];
+  }
+  NS.levenshtein = levenshtein;
+
+  // Match a pasted name against a list of {name, normName}.
+  // -> {kind:'exact'|'suggest'|'none', player?, suggestions?}
+  NS.matchName = function (raw, players) {
+    const key = NS.normName(raw);
+    if (!key) return { kind: 'none', suggestions: [] };
+    const exact = players.find(p => p.normName === key);
+    if (exact) return { kind: 'exact', player: exact };
+    // substring containment (e.g. "gibbs" or "jahmyr gibbs det")
+    const contains = players.filter(p =>
+      p.normName.includes(key) || key.includes(p.normName));
+    if (contains.length === 1) return { kind: 'exact', player: contains[0] };
+    // fuzzy: small edit distance relative to length
+    const scored = players
+      .map(p => ({ p, d: levenshtein(key, p.normName) }))
+      .filter(x => x.d <= Math.max(2, Math.floor(key.length / 4)))
+      .sort((a, b) => a.d - b.d);
+    if (scored.length && scored[0].d <= 2 && (!scored[1] || scored[1].d > scored[0].d)) {
+      return { kind: 'exact', player: scored[0].p };
+    }
+    const sugg = (contains.length ? contains : scored.map(x => x.p)).slice(0, 3);
+    return { kind: sugg.length ? 'suggest' : 'none', suggestions: sugg };
+  };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = NS;
+})();
+
+/* ===== js/pickorder.js ===== */
+// Pure snake-draft pick-order engine. Keepers are stored by TEAM NAME +
+// round and resolved to pick numbers here, against the current draft order.
+(function () {
+  const NS = globalThis.DraftOS;
+  const PO = NS.pickorder = {};
+
+  // odd round: (r-1)*n + slot ; even round: (r-1)*n + (n+1) - slot
+  PO.pickForSlotRound = function (slot, round, teamCount) {
+    const n = teamCount || 12;
+    return round % 2 === 1
+      ? (round - 1) * n + slot
+      : (round - 1) * n + (n + 1) - slot;
+  };
+
+  PO.slotForPick = function (pick, teamCount) {
+    const n = teamCount || 12;
+    const round = Math.ceil(pick / n);
+    const idx = pick - (round - 1) * n;
+    return { round, slot: round % 2 === 1 ? idx : (n + 1) - idx };
+  };
+
+  // Resolve keeper rows against the draft order. A blank/invalid round means
+  // "not kept" (ignored, player stays in the queue). A filled round whose
+  // team name matches nothing goes to `unmatched` - shown with a red badge,
+  // excluded from the board, never silently dropped.
+  // -> {resolved: [{team, player, round, slot, pick}], unmatched: [row]}
+  PO.resolveKeepers = function (settings) {
+    const slotByName = {};
+    settings.teams.forEach(t => { slotByName[t.name] = t.slot; });
+    const resolved = [], unmatched = [];
+    (settings.keepers || []).forEach(k => {
+      const round = parseInt(k.round, 10);
+      if (!round || round < 1 || round > settings.rounds) return; // blank = not kept
+      const slot = slotByName[k.team];
+      if (slot === undefined) { unmatched.push(k); return; }
+      resolved.push({
+        team: k.team, player: k.player, round, slot,
+        pick: PO.pickForSlotRound(slot, round, settings.teams.length)
+      });
+    });
+    return { resolved, unmatched };
+  };
+
+  // -> array of {pick, round, slot, team, keeper:null|{player,...}}
+  PO.buildOrder = function (settings) {
+    const teams = settings.teams;
+    const n = teams.length;
+    const total = n * settings.rounds;
+    const bySlot = {};
+    teams.forEach(t => { bySlot[t.slot] = t.name; });
+    const keeperByPick = {};
+    PO.resolveKeepers(settings).resolved.forEach(k => { keeperByPick[k.pick] = k; });
+    const order = [];
+    for (let pick = 1; pick <= total; pick++) {
+      const { round, slot } = PO.slotForPick(pick, n);
+      order.push({
+        pick, round, slot, team: bySlot[slot],
+        keeper: keeperByPick[pick] || null
+      });
+    }
+    return order;
+  };
+
+  // My pick numbers, split into keeper vs live. A keeper of mine consumes
+  // that round's pick, dropping my live-pick count by one.
+  PO.myPicks = function (settings) {
+    const order = PO.buildOrder(settings);
+    const mine = order.filter(o => o.slot === settings.mySlot);
+    return {
+      all: mine.map(o => o.pick),
+      live: mine.filter(o => !o.keeper).map(o => o.pick),
+      keeper: mine.filter(o => o.keeper).map(o => o.pick)
+    };
+  };
+
+  PO.myNextLivePick = function (settings, fromPick) {
+    return PO.myPicks(settings).live.find(p => p >= fromPick) || null;
+  };
+
+  PO.livePicksBetween = function (settings, fromPickExclusive, toPickExclusive) {
+    const order = PO.buildOrder(settings);
+    return order.filter(o =>
+      o.pick > fromPickExclusive && o.pick < toPickExclusive && !o.keeper).length;
+  };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = NS;
+})();
+
+/* ===== js/parser.js ===== */
+// Lenient parsers for every paste box. Pure functions, no DOM.
+(function () {
+  const NS = globalThis.DraftOS;
+  const P = NS.parser = {};
+
+  const POS_SET = new Set(['QB', 'RB', 'WR', 'TE', 'K', 'DST', 'DEF', 'D/ST', 'PK']);
+  const normPos = p => {
+    const u = String(p || '').toUpperCase();
+    if (u === 'DEF' || u === 'D/ST') return 'DST';
+    if (u === 'PK') return 'K';
+    return u;
+  };
+
+  P.isTierBreak = function (line) {
+    const t = line.trim();
+    if (/^-{3,}$/.test(t) || /^={3,}$/.test(t)) return { tier: null };
+    const m = t.match(/^tier\s*(\d+)\s*$/i);
+    if (m) return { tier: parseInt(m[1], 10) };
+    return null;
+  };
+
+  // Parse one queue line -> {rank, name, pos, team, bye} (pos/team/bye optional).
+  P.parseQueueLine = function (line, byes) {
+    const t = line.trim();
+    if (!t) return null;
+    let rank = null, name = '', pos = '', team = '', bye = null;
+    const teamKeys = new Set(Object.keys(byes || {}));
+
+    if (t.includes(',') && /^\d+\s*[.,]?/.test(t)) {
+      // "12, Jahmyr Gibbs, RB, DET, 6"
+      const parts = t.split(',').map(s => s.trim()).filter(s => s !== '');
+      rank = parseInt(parts[0], 10);
+      name = parts[1] || '';
+      for (const part of parts.slice(2)) {
+        const u = part.toUpperCase();
+        if (POS_SET.has(u)) pos = normPos(u);
+        else if (teamKeys.has(u)) team = u;
+        else if (/^\d+$/.test(part)) bye = parseInt(part, 10);
+        else if (!name) name = part;
+      }
+    } else {
+      // "12. Jahmyr Gibbs" or "12 Jahmyr Gibbs RB DET 6"
+      const m = t.match(/^(\d+)\s*[.)]?\s+(.*)$/);
+      if (!m) return null;
+      rank = parseInt(m[1], 10);
+      let toks = m[2].split(/\s+/);
+      // consume pos/team/bye off the tail, in any order
+      let consumed = true;
+      while (consumed && toks.length > 1) {
+        consumed = false;
+        const lastRaw = toks[toks.length - 1];
+        const last = lastRaw.toUpperCase();
+        if (bye === null && /^\d+$/.test(lastRaw)) { bye = parseInt(lastRaw, 10); toks.pop(); consumed = true; }
+        else if (!team && teamKeys.has(last)) { team = last; toks.pop(); consumed = true; }
+        else if (!pos && POS_SET.has(last)) { pos = normPos(last); toks.pop(); consumed = true; }
+      }
+      name = toks.join(' ');
+    }
+    if (!name || rank === null || isNaN(rank)) return null;
+    return { rank, name, pos, team, bye };
+  };
+
+  // Full queue paste -> {players, strippedKeepers, warnings}
+  // Tier breaks honored; without any, tiers default to blocks of `tierSize`.
+  P.parseQueue = function (text, opts) {
+    const byes = opts.byes;
+    const keepers = opts.keepers || [];
+    const tierSize = opts.tierSize || 12;
+    const keeperKeys = new Set(keepers.map(k => NS.normName(k.player)));
+
+    const players = [];
+    const strippedKeepers = [];
+    const warnings = [];
+    let tier = 1, sawBreak = false;
+
+    for (const line of String(text).split(/\r?\n/)) {
+      const tb = P.isTierBreak(line);
+      if (tb) {
+        sawBreak = true;
+        if (tb.tier !== null) tier = tb.tier;          // "TIER n"
+        else if (players.length) tier += 1;            // "---" / "==="
+        continue;
+      }
+      const p = P.parseQueueLine(line, byes);
+      if (!p) {
+        if (line.trim()) warnings.push({ line: line.trim(), reason: 'unparsed' });
+        continue;
+      }
+      const key = NS.normName(p.name);
+      if (keeperKeys.has(key)) { strippedKeepers.push(p.name); continue; }
+
+      const badges = [];
+      if (!p.pos) badges.push('needs data');
+      if (!p.team) { if (!badges.includes('needs data')) badges.push('needs data'); }
+      // Bye table always wins over a pasted bye column.
+      if (p.team && byes[p.team] !== undefined) {
+        if (p.bye !== null && p.bye !== byes[p.team]) badges.push('bye mismatch');
+        p.bye = byes[p.team];
+      } else if (p.bye === null) {
+        if (!badges.includes('needs data')) badges.push('needs data');
+      }
+      players.push({
+        rank: p.rank, name: p.name, normName: key, pos: p.pos, team: p.team,
+        bye: p.bye, tier, tags: badges, marker: null, handcuffOf: null
+      });
+    }
+    if (!sawBreak) {
+      players.forEach(p => { p.tier = Math.ceil(p.rank / tierSize); });
+    }
+    players.sort((a, b) => a.rank - b.rank);
+    return { players, strippedKeepers, warnings };
+  };
+
+  // ADP / FantasyPros paste: "rank name" per line. Availability/compare only.
+  P.parseRankList = function (text, opts) {
+    const keeperKeys = new Set(((opts && opts.keepers) || []).map(k => NS.normName(k.player)));
+    const out = [];
+    for (const line of String(text).split(/\r?\n/)) {
+      const t = line.trim();
+      if (!t) continue;
+      const m = t.match(/^(\d+)\s*[.)]?\s*[,]?\s*(.+)$/);
+      if (!m) continue;
+      const name = m[2].split(',')[0].trim();
+      const key = NS.normName(name);
+      if (keeperKeys.has(key)) continue; // keepers stripped from every paste
+      out.push({ rank: parseInt(m[1], 10), name, normName: key });
+    }
+    return out;
+  };
+
+  // Props: "PLAYER | PROP TYPE | LINE | NOTE"
+  P.parseProps = function (text, opts) {
+    const keeperKeys = new Set(((opts && opts.keepers) || []).map(k => NS.normName(k.player)));
+    const out = [];
+    for (const line of String(text).split(/\r?\n/)) {
+      const t = line.trim();
+      if (!t) continue;
+      const parts = t.split('|').map(s => s.trim());
+      if (parts.length < 2) continue;
+      const [player, type, lineVal, note] = [parts[0], parts[1] || '', parts[2] || '', parts[3] || ''];
+      const key = NS.normName(player);
+      if (keeperKeys.has(key)) continue;
+      const blob = `${type} ${lineVal} ${note}`.toLowerCase();
+      let tag = null;
+      if (/\b(over|sharp|volume)\b/.test(blob)) tag = 'money edge';
+      if (/\b(under|fade)\b/.test(blob)) tag = 'fade';
+      out.push({ player, normName: key, type, line: lineVal, note, tag });
+    }
+    return out;
+  };
+
+  // Catch-up paste: comma- or line-separated player names, in pick order.
+  // With newlines, each line is one name (so "Last, First" lines survive);
+  // a single line is split on commas.
+  P.parseCatchup = function (text) {
+    const s = String(text).trim();
+    const parts = /\r?\n/.test(s) ? s.split(/\r?\n/) : s.split(',');
+    return parts
+      .map(x => x.trim().replace(/^\d+\s*[.)]?\s*/, ''))
+      .filter(Boolean);
+  };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = NS;
+})();
+
+/* ===== js/board.js ===== */
+// Board tracker for the ESPN 12-team 1QB room. Pure functions.
+(function () {
+  const NS = globalThis.DraftOS;
+  const B = NS.board = {};
+
+  B.myTeamName = function (settings) {
+    const t = settings.teams.find(t => t.slot === settings.mySlot);
+    return t ? t.name : 'Jeff';
+  };
+
+  B.myTeamLabel = function (settings) {
+    return `${settings.myLabel || 'KeiserSoze'} (${B.myTeamName(settings)})`;
+  };
+
+  // Active (round-filled, name-matched) keepers as board entries, with
+  // pos/bye resolved from the queue when the player is in it. These are
+  // pre-filled into state.picks so the clock skips them and board counts
+  // include them from pick 1.
+  B.keeperPickEntries = function (state) {
+    const settings = state.settings;
+    const me = B.myTeamName(settings);
+    return NS.pickorder.resolveKeepers(settings).resolved.map(k => {
+      const key = NS.normName(k.player);
+      const q = (state.myQueue || []).find(p => p.normName === key);
+      return {
+        pick: k.pick, team: k.team, player: k.player,
+        pos: q ? q.pos : '', normName: key, keeper: true,
+        byMe: k.team === me
+      };
+    }).sort((a, b) => a.pick - b.pick);
+  };
+
+  B.unmatchedKeepers = function (settings) {
+    return NS.pickorder.resolveKeepers(settings).unmatched;
+  };
+
+  // normNames of players currently locked up as keepers (active rows only -
+  // blanking a round instantly puts the player back in available).
+  B.activeKeeperKeys = function (settings) {
+    return new Set(NS.pickorder.resolveKeepers(settings).resolved
+      .map(k => NS.normName(k.player)));
+  };
+
+  B.totalPicks = s => s.settings.teams.length * s.settings.rounds;
+
+  B.currentPick = function (state) {
+    const filled = new Set(state.picks.map(p => p.pick));
+    const total = B.totalPicks(state);
+    for (let p = 1; p <= total; p++) if (!filled.has(p)) return p;
+    return null;
+  };
+
+  B.isMyPick = function (state, pick) {
+    const { slot } = NS.pickorder.slotForPick(pick, state.settings.teams.length);
+    return slot === state.settings.mySlot;
+  };
+
+  B.teamForPick = function (state, pick) {
+    const { slot } = NS.pickorder.slotForPick(pick, state.settings.teams.length);
+    const t = state.settings.teams.find(t => t.slot === slot);
+    return t ? t.name : '?';
+  };
+
+  B.pickedKeys = function (state) {
+    const keys = new Set(state.picks.map(p => p.normName));
+    B.activeKeeperKeys(state.settings).forEach(k => keys.add(k));
+    return keys;
+  };
+
+  // Remaining players in my queue order. Active keepers can never appear;
+  // a keeper row edited back to blank returns the player instantly.
+  B.available = function (state) {
+    const gone = B.pickedKeys(state);
+    return state.myQueue.filter(p => !gone.has(p.normName));
+  };
+
+  B.myRoster = function (state) {
+    const me = B.myTeamName(state.settings);
+    return state.picks.filter(p => p.byMe || p.team === me)
+      .sort((a, b) => a.pick - b.pick);
+  };
+
+  B.posCounts = function (players) {
+    const c = { QB: 0, RB: 0, WR: 0, TE: 0, K: 0, DST: 0, other: 0 };
+    players.forEach(p => { (c[p.pos] !== undefined) ? c[p.pos]++ : c.other++; });
+    return c;
+  };
+
+  B.teamCounts = function (state) {
+    const out = {};
+    state.settings.teams.forEach(t => { out[t.name] = { QB: 0, RB: 0, WR: 0, TE: 0, K: 0, DST: 0 }; });
+    state.picks.forEach(p => {
+      if (out[p.team] && out[p.team][p.pos] !== undefined) out[p.team][p.pos]++;
+    });
+    return out;
+  };
+
+  // Catch-up paste: walk the pick order from the current pick, skipping
+  // already-filled (keeper) picks.
+  B.assignCatchup = function (state, names) {
+    const total = B.totalPicks(state);
+    const filled = new Set(state.picks.map(p => p.pick));
+    const avail = B.available(state).slice();
+    const me = B.myTeamName(state.settings);
+    const assignments = [], unmatched = [];
+    let pick = B.currentPick(state);
+    for (const raw of names) {
+      while (pick !== null && pick <= total && filled.has(pick)) pick++;
+      if (pick === null || pick > total) break;
+      const m = NS.matchName(raw, avail);
+      if (m.kind !== 'exact') {
+        unmatched.push({ name: raw, suggestions: (m.suggestions || []).map(s => s.name) });
+        continue;
+      }
+      const team = B.teamForPick(state, pick);
+      assignments.push({
+        pick, team, player: m.player.name, pos: m.player.pos,
+        normName: m.player.normName, keeper: false, byMe: team === me
+      });
+      avail.splice(avail.indexOf(m.player), 1);
+      filled.add(pick);
+      pick++;
+    }
+    return { assignments, unmatched };
+  };
+
+  // "RB run in progress" - 3+ of the last 5 live picks share a position.
+  B.runDetection = function (state) {
+    const alerts = [];
+    const live = state.picks.filter(p => !p.keeper).sort((a, b) => a.pick - b.pick);
+    const counts = B.posCounts(live.slice(-5));
+    for (const pos of ['QB', 'RB', 'WR', 'TE']) {
+      if (counts[pos] >= 3) alerts.push(`${pos} run in progress (${counts[pos]} of last 5 picks)`);
+    }
+    const queueTEs = state.myQueue.filter(p => p.pos === 'TE').sort((a, b) => a.rank - b.rank);
+    const gone = B.pickedKeys(state);
+    const top2Gone = queueTEs.slice(0, 2).length === 2 &&
+      queueTEs.slice(0, 2).every(t => gone.has(t.normName));
+    const zeroTE = Object.values(B.teamCounts(state)).filter(c => c.TE === 0).length;
+    if (top2Gone && zeroTE >= 6) alerts.push(`TE will run (top-2 TEs gone, ${zeroTE} teams with 0 TE)`);
+    return alerts;
+  };
+
+  // Opponent-need model for a 12-team 1QB room (rule 9 defaults, editable):
+  // first QB between rounds 4 and 9, second QB after round 10.
+  B.needWeights = function (counts, round, settings) {
+    const w = { QB: 0, RB: 0, WR: 0, TE: 0, K: 0, DST: 0 };
+    const qd = (settings && settings.simQB) || { firstQBStart: 4, firstQBEnd: 9, secondQBAfter: 10 };
+    if (counts.QB === 0) {
+      if (round < qd.firstQBStart) w.QB = 0.15;
+      else if (round <= qd.firstQBEnd) w.QB = 1.1;
+      else w.QB = 1.8; // very late with no QB: urgent
+    } else if (counts.QB === 1) {
+      w.QB = round > qd.secondQBAfter ? 0.5 : 0.05;
+    } else {
+      w.QB = 0.02;
+    }
+    w.RB = Math.max(0.25, 1.5 - counts.RB * 0.25);
+    w.WR = Math.max(0.25, 1.5 - counts.WR * 0.25);
+    w.TE = counts.TE === 0 ? (round >= 3 ? 0.6 : 0.3) : (counts.TE === 1 ? 0.08 : 0.02);
+    const lastRounds = settings ? settings.rounds : 16;
+    if (round >= lastRounds - 1) { w.K = counts.K === 0 ? 0.9 : 0; w.DST = counts.DST === 0 ? 0.9 : 0; }
+    else if (round >= lastRounds - 3) { w.K = counts.K === 0 ? 0.12 : 0; w.DST = counts.DST === 0 ? 0.12 : 0; }
+    return w;
+  };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = NS;
+})();
+
+/* ===== js/playbook.js ===== */
+// ESPN 1QB playbook (rules R1-R10). Every recommendation cites ruleIds.
+(function () {
+  const NS = globalThis.DraftOS;
+  const PB = NS.playbook = {};
+
+  PB.RULES = [
+    { ruleId: 'R1', label: 'Rounds 1-4 are skill only', text: 'My picks in rounds 1-4: RB/WR/TE only, no exceptions - not even elite QBs. TE in rounds 1-4 only if the TE is McBride or Bowers.' },
+    { ruleId: 'R2', label: 'First QB timing', text: 'First QB no earlier than my 6th live pick. ONE exception: at my 5th live pick only, take Allen, Lamar, or Hurts if he is a full queue tier above the best remaining skill player. Rule 1 always wins in rounds 1-4.' },
+    { ruleId: 'R3', label: 'Target build', text: '2 QB (3rd only after overall pick 130), 5-6 RB, 5-6 WR, 1 TE (2nd only if both are top-6 TEs in my queue), 1 K, 1 DST. My keeper counts toward these targets.' },
+    { ruleId: 'R4', label: 'K/DST timing', text: 'K and DST only on my last two live picks, whatever those pick numbers are after keepers and round-count settings. Never two of the same.' },
+    { ruleId: 'R5', label: 'Five-name card', text: 'Rec card shows FIVE names: Primary + Alt2-Alt5, mixed positions, each with a one-line why and rule ids.' },
+    { ruleId: 'R6', label: 'Handcuff timing', text: 'Handcuff-tagged players (user marker only): not recommendable before overall pick 100, or immediately if that starter went in the last 2 picks.' },
+    { ruleId: 'R7', label: 'Upside overlay', text: 'Overlay carries over: same tier, within 6 ranks, top-3 legal, strictly below the playbook. A Target later marked as a keeper is stripped with no error.' },
+    { ruleId: 'R8', label: 'No QB3 over starters', text: 'Never recommend a 3rd QB over a starting-caliber RB/WR (within the startable thresholds).' },
+    { ruleId: 'R9', label: '1QB recalibration', text: 'Startable QB = top 15 (editable). Sim: each opponent takes its first QB between rounds 4 and 9, second QB after round 10 (editable).' },
+    { ruleId: 'R10', label: 'Ghost mode', text: 'GHOST MODE banner: "Recs frozen. Use the paper / ESPN queue."' }
+  ];
+
+  PB.ruleById = id => PB.RULES.find(r => r.ruleId === id);
+
+  // My K/DST window: my last two live picks under the current settings.
+  PB.kdstPicks = function (settings) {
+    return NS.pickorder.myPicks(settings).live.slice(-2);
+  };
+
+  PB.posRankMap = function (queue) {
+    const map = {};
+    const byPos = {};
+    queue.slice().sort((a, b) => a.rank - b.rank).forEach(p => {
+      byPos[p.pos] = (byPos[p.pos] || 0) + 1;
+      map[p.normName] = byPos[p.pos];
+    });
+    return map;
+  };
+
+  // Startable = within the per-position threshold, counted within my queue.
+  PB.startableRemaining = function (state, available) {
+    const th = state.settings.startable; // {QB:15, RB:30, WR:36, TE:12}
+    const posRank = PB.posRankMap(state.myQueue);
+    const out = { QB: 0, RB: 0, WR: 0, TE: 0 };
+    available.forEach(p => {
+      if (out[p.pos] !== undefined && posRank[p.normName] <= (th[p.pos] || 999)) out[p.pos]++;
+    });
+    return out;
+  };
+
+  // Rule 2 exception check at my 5th live pick: the best available elite QB
+  // (Allen/Lamar/Hurts) that sits a full queue tier above the best remaining
+  // skill player. -> {fires, candidate, bestSkillTier}
+  PB.rule2Exception = function (state, ctx, available) {
+    if (ctx.liveIndex !== 4 || ctx.counts.QB > 0 || ctx.round <= 4) {
+      return { fires: false, candidate: null, bestSkillTier: ctx.bestSkillTier };
+    }
+    const elite = new Set((state.settings.eliteQBs || []).map(NS.normName));
+    const candidate = available.find(p =>
+      p.pos === 'QB' && elite.has(p.normName) && p.tier < ctx.bestSkillTier);
+    return { fires: !!candidate, candidate: candidate || null, bestSkillTier: ctx.bestSkillTier };
+  };
+
+  // Legality of one player at one of my picks.
+  PB.legality = function (state, ctx, player) {
+    const s = state.settings;
+    const pick = ctx.pick;
+    const counts = ctx.counts;
+
+    // R4 - K/DST only on my last two live picks; never a second
+    if (player.pos === 'K' || player.pos === 'DST') {
+      if (!ctx.kdst.includes(pick)) {
+        return { legal: false, ruleId: 'R4', reason: `K/DST only at my last two live picks (${ctx.kdst.join(' and ')})` };
+      }
+      if (counts[player.pos] >= 1) {
+        return { legal: false, ruleId: 'R4', reason: `never a second ${player.pos}` };
+      }
+    }
+
+    // R1 - rounds 1-4: RB/WR/TE only; TE only McBride/Bowers. Absolute.
+    if (ctx.round <= 4) {
+      if (!NS.SKILL.includes(player.pos)) {
+        return { legal: false, ruleId: 'R1', reason: 'rounds 1-4 = RB/WR/TE only, no exceptions' };
+      }
+      if (player.pos === 'TE' && !ctx.earlyTEKeys.has(player.normName)) {
+        return { legal: false, ruleId: 'R1', reason: 'rounds 1-4 TE only if McBride or Bowers' };
+      }
+    }
+
+    if (player.pos === 'QB') {
+      // R2 - first QB timing (my 5th live pick = exception window only)
+      if (counts.QB === 0) {
+        if (ctx.liveIndex < 4) {
+          return { legal: false, ruleId: 'R2', reason: 'first QB no earlier than my 6th live pick' };
+        }
+        if (ctx.liveIndex === 4) {
+          const elite = new Set((s.eliteQBs || []).map(NS.normName));
+          const ok = ctx.round > 4 && elite.has(player.normName) && player.tier < ctx.bestSkillTier;
+          if (!ok) {
+            return { legal: false, ruleId: 'R2', reason: '5th-live-pick window: Allen/Lamar/Hurts only, a full tier above the best remaining skill player' };
+          }
+        }
+      }
+      // R3 - QB caps: 3rd only after overall pick 130, never a 4th
+      if (counts.QB >= 3) return { legal: false, ruleId: 'R3', reason: 'never a 4th QB' };
+      if (counts.QB === 2 && pick < s.qb3Pick) {
+        return { legal: false, ruleId: 'R3', reason: `3rd QB only after overall pick ${s.qb3Pick}` };
+      }
+      // R8 - never a 3rd QB over a starting-caliber RB/WR
+      if (counts.QB >= 2 && (ctx.startable.RB > 0 || ctx.startable.WR > 0)) {
+        return { legal: false, ruleId: 'R8', reason: 'starting-caliber RB/WR still available - no 3rd QB over them' };
+      }
+    }
+
+    // R3 - TE2 gate: only if both TEs are top-6 in my queue
+    if (player.pos === 'TE' && counts.TE >= 1) {
+      if (counts.TE >= 2) return { legal: false, ruleId: 'R3', reason: 'never a 3rd TE' };
+      const rosterTE = ctx.myTEKeys[0];
+      const bothTop6 = ctx.top6TEKeys.has(player.normName) &&
+        (rosterTE === undefined || ctx.top6TEKeys.has(rosterTE));
+      if (!bothTop6) {
+        return { legal: false, ruleId: 'R3', reason: 'TE2 only if both TEs are top-6 in my queue' };
+      }
+    }
+
+    return { legal: true };
+  };
+
+  PB.buildCtx = function (state, pick) {
+    const s = state.settings;
+    const roster = NS.board.myRoster(state);
+    const counts = NS.board.posCounts(roster);
+    const queueTEs = state.myQueue.filter(p => p.pos === 'TE').sort((a, b) => a.rank - b.rank);
+    const live = NS.pickorder.myPicks(s).live;
+    let liveIndex = live.indexOf(pick);
+    if (liveIndex < 0) {
+      const next = live.findIndex(p => p >= pick);
+      liveIndex = next >= 0 ? next : live.length;
+    }
+    const available = NS.board.available(state);
+    const skillTiers = available.filter(p => NS.SKILL.includes(p.pos)).map(p => p.tier);
+    return {
+      pick,
+      round: NS.pickorder.slotForPick(pick, s.teams.length).round,
+      counts, liveIndex,
+      kdst: PB.kdstPicks(s),
+      top6TEKeys: new Set(queueTEs.slice(0, 6).map(t => t.normName)),
+      myTEKeys: roster.filter(p => p.pos === 'TE').map(p => p.normName),
+      earlyTEKeys: new Set((s.earlyTEs || []).map(NS.normName)),
+      bestSkillTier: skillTiers.length ? Math.min(...skillTiers) : Infinity,
+      startable: PB.startableRemaining(state, available)
+    };
+  };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = NS;
+})();
+
+/* ===== js/survival.js ===== */
+// Survival estimates: cheap heuristic by default, Monte Carlo when the A1
+// flag is on. Both answer "will this player still be there at my next pick?"
+(function () {
+  const NS = globalThis.DraftOS;
+  const SV = NS.survival = {};
+
+  SV.adpRank = function (state, player) {
+    const row = (state.adp || []).find(a => a.normName === player.normName);
+    return row ? row.rank : null;
+  };
+
+  // Heuristic (the live-clock default):
+  //   ref = ADP rank if pasted, else my queue rank
+  //   margin = ref - currentPick
+  //   margin >= picksBetween * likelyFactor  -> likely
+  //   margin >= picksBetween * coinFactor    -> coin-flip
+  //   else                                   -> gone
+  SV.heuristic = function (state, player, currentPick, picksBetween) {
+    const f = state.settings.survivalFactors || { likely: 1.0, coinflip: 0.5 };
+    const ref = SV.adpRank(state, player) ?? player.rank;
+    const margin = ref - currentPick;
+    if (margin >= picksBetween * f.likely) return 'likely';
+    if (margin >= picksBetween * f.coinflip) return 'coin-flip';
+    return 'gone';
+  };
+
+  SV.formulaText = function (state) {
+    const f = state.settings.survivalFactors || { likely: 1.0, coinflip: 0.5 };
+    return `margin = (ADP rank if pasted, else queue rank) - current pick. ` +
+      `likely if margin >= picks-between x ${f.likely}; coin-flip if >= picks-between x ${f.coinflip}; else gone.`;
+  };
+
+  // Monte Carlo (A1): N fast sims from the current board to my next pick.
+  // Cached by board signature; caps out early if it would blow the 1s budget.
+  let mcCache = { sig: null, result: null };
+
+  SV.boardSignature = function (state) {
+    return state.picks.map(p => p.pick).join(',') + '|' + (state.adp || []).length +
+      '|' + state.myQueue.length;
+  };
+
+  SV.monteCarlo = function (state, opts) {
+    opts = opts || {};
+    const sig = SV.boardSignature(state) + '|' + JSON.stringify(opts.protect || []);
+    if (!opts.force && mcCache.sig === sig && mcCache.result) return mcCache.result;
+
+    const N = opts.n || 200;
+    const budgetMs = opts.budgetMs || 900;
+    const cur = NS.board.currentPick(state);
+    const target = opts.targetPick ||
+      NS.pickorder.myNextLivePick(state.settings, NS.board.isMyPick(state, cur) ? cur + 1 : cur);
+    if (!target) return { probs: {}, n: 0, targetPick: null, capped: false };
+
+    const top = NS.board.available(state).slice(0, 15);
+    const counts = {};
+    top.forEach(p => { counts[p.normName] = 0; });
+
+    const t0 = Date.now();
+    let ran = 0, capped = false;
+    const seedBase = opts.seed !== undefined ? opts.seed : 1234567;
+    for (let i = 0; i < N; i++) {
+      if (Date.now() - t0 > budgetMs) { capped = true; break; }
+      const rng = NS.makeRng(seedBase + i * 7919);
+      const survivors = NS.sim.simulateToTarget(state, target, rng, { protect: opts.protect });
+      top.forEach(p => { if (survivors.has(p.normName)) counts[p.normName]++; });
+      ran++;
+    }
+    const probs = {};
+    top.forEach(p => { probs[p.normName] = ran ? Math.round(100 * counts[p.normName] / ran) : 0; });
+    const result = { probs, n: ran, targetPick: target, capped, ms: Date.now() - t0 };
+    mcCache = { sig, result };
+    return result;
+  };
+
+  SV.clearCache = function () { mcCache = { sig: null, result: null }; };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = NS;
+})();
+
+/* ===== js/overlay.js ===== */
+// Upside overlay (rule R7). Same mechanics as the Yahoo app: only reorders
+// LEGAL candidates in the same queue tier, within 6 ranks of the primary,
+// among the top-3 legal - strictly below the playbook (stand-down set uses
+// the ESPN rule ids). If a Target is later marked as someone's keeper, the
+// keeper strip wins upstream with no error (he never reaches the overlay).
+(function () {
+  const NS = globalThis.DraftOS;
+  const OV = NS.overlay = {};
+
+  OV.RANK_WINDOW = 6;
+  OV.TOP_N = 3;
+  OV.HANDCUFF_GATE_PICK = 100;
+  // ESPN rule ids that make the overlay stand down when they decided the pick.
+  OV.RESPECTS = ['R1', 'R2', 'R3', 'R4', 'R8'];
+
+  OV.defaults = function () {
+    return {
+      targets: [
+        'Jadarian Price', 'Jaxson Dart', 'Tee Higgins', 'Malik Nabers',
+        'Emeka Egbuka', 'Tucker Kraft', 'Jared Goff', 'Omarion Hampton',
+        'Travis Etienne', 'Blake Corum', 'MarShawn Lloyd', "De'Zhaun Stribling"
+      ],
+      targetFrom: {},
+      fades: ['Derrick Henry', 'Josh Jacobs', 'Kyle Pitts', 'Travis Kelce'],
+      dualThreatQBs: ['Lamar Jackson', 'Jalen Hurts', 'Jaxson Dart', 'Caleb Williams'],
+      handcuffs: {},   // no pre-set handcuffs in this league (rule 6: marker only)
+      hardGates: []
+    };
+  };
+
+  const cfg = state => (state.settings.overlay || (state.settings.overlay = OV.defaults()));
+  const normSet = list => new Set((list || []).map(NS.normName));
+
+  OV.handcuffStarter = function (state, normName) {
+    const map = cfg(state).handcuffs || {};
+    for (const [cuff, starter] of Object.entries(map)) {
+      if (NS.normName(cuff) === normName) return starter;
+    }
+    return null;
+  };
+
+  OV.applyPreTags = function (state) {
+    (state.myQueue || []).forEach(p => {
+      if (!p.handcuffOf) {
+        const starter = OV.handcuffStarter(state, p.normName);
+        if (starter) p.handcuffOf = starter;
+      }
+    });
+    return state;
+  };
+
+  // Stack tags: rostering a QB tags his team's RB/WR/TE and vice versa.
+  OV.isStacked = function (state, player) {
+    if (!player.team) return false;
+    const roster = NS.board.myRoster(state);
+    const teamOf = entry => {
+      const q = state.myQueue.find(x => x.normName === entry.normName);
+      return q && q.team ? q.team : null;
+    };
+    if (NS.SKILL.includes(player.pos)) {
+      return roster.some(r => r.pos === 'QB' && teamOf(r) === player.team);
+    }
+    if (player.pos === 'QB') {
+      return roster.some(r => NS.SKILL.includes(r.pos) && teamOf(r) === player.team);
+    }
+    return false;
+  };
+
+  OV.isTarget = function (state, pick, player) {
+    if (player.marker === 'target') return true;
+    const ov = cfg(state);
+    if (!normSet(ov.targets).has(player.normName)) return false;
+    for (const [name, from] of Object.entries(ov.targetFrom || {})) {
+      if (NS.normName(name) === player.normName && pick < from) return false;
+    }
+    return true;
+  };
+
+  // Tiebreak priority, highest first. Fade automatically loses the tie.
+  OV.score = function (state, pick, player) {
+    const ov = cfg(state);
+    const key = player.normName;
+    if (normSet(ov.fades).has(key)) return { score: -1, tag: 'fade' };
+    if (player.pos === 'QB' && normSet(ov.dualThreatQBs).has(key)) return { score: 5, tag: 'dual-threat' };
+    if (OV.isTarget(state, pick, player)) return { score: 4, tag: 'target' };
+    if ((state.props || []).some(pr => pr.normName === key && pr.tag === 'money edge')) return { score: 3, tag: 'money edge' };
+    if (OV.isStacked(state, player)) return { score: 2, tag: 'stack' };
+    if (player.handcuffOf) return { score: 1, tag: 'handcuff' };
+    return { score: 0, tag: null };
+  };
+
+  // R6 hard gate: a USER-MARKED handcuff is not recommendable before overall
+  // pick 100 - unless his starter went in the last 2 picks.
+  OV.hardGate = function (state, pick, player) {
+    const ov = cfg(state);
+    for (const g of ov.hardGates || []) {
+      if (NS.normName(g.name) === player.normName && pick < g.beforePick) {
+        return { ruleId: 'R7', reason: `hard gate - never before pick ${g.beforePick}` };
+      }
+    }
+    if (player.handcuffOf && pick < OV.HANDCUFF_GATE_PICK) {
+      const sKey = NS.normName(player.handcuffOf);
+      const recent = state.picks.some(x => x.normName === sKey && x.pick >= pick - 2 && x.pick < pick);
+      if (!recent) {
+        return { ruleId: 'R6', reason: `handcuff of ${player.handcuffOf} - not before pick ${OV.HANDCUFF_GATE_PICK} (unless the starter went in the last 2 picks)` };
+      }
+    }
+    return null;
+  };
+
+  const lastName = n => String(n).split(' ').pop();
+
+  // -> null | {primary, whyText, cite}
+  OV.apply = function (state, ctx, legal, chosen) {
+    if (!chosen || chosen.override) return null;
+    if ((chosen.rulesFired || []).some(r => OV.RESPECTS.includes(r))) return null;
+    const primary = chosen.primary;
+    if (!primary || primary !== legal[0]) return null;
+
+    const pick = ctx.pick;
+    const group = legal.slice(0, OV.TOP_N).filter(p =>
+      p.tier === primary.tier && Math.abs(p.rank - primary.rank) <= OV.RANK_WINDOW);
+    if (group.length < 2) return null;
+
+    const scored = group.map(p => ({ p, ...OV.score(state, pick, p) }));
+    const pRow = scored.find(x => x.p === primary);
+    let best = pRow;
+    for (const x of scored) if (x.score > best.score) best = x;
+
+    if (best.p !== primary && best.score > pRow.score) {
+      const reason = pRow.tag === 'fade' ? 'fade' : best.tag;
+      return {
+        primary: best.p, cite: 'R7',
+        whyText: `Upside overlay: ${lastName(best.p.name)} over ${lastName(primary.name)} (${reason})`
+      };
+    }
+
+    // WR-over-RB preference in a scoreless two-player tie, from my 3rd live
+    // pick on, suppressed when I have 0 RB (no rule-8 lean in this league).
+    if (ctx.liveIndex >= 2 && group.length === 2) {
+      const wrRow = scored.find(x => x.p.pos === 'WR');
+      const rbRow = scored.find(x => x.p.pos === 'RB');
+      if (wrRow && rbRow && primary === rbRow.p &&
+        wrRow.score >= rbRow.score && ctx.counts.RB !== 0) {
+        return {
+          primary: wrRow.p, cite: 'R7',
+          whyText: `Upside overlay: ${lastName(wrRow.p.name)} over ${lastName(rbRow.p.name)} (WR over RB)`
+        };
+      }
+    }
+    return null;
+  };
+
+  OV.tagsFor = function (state, pick, player) {
+    const out = [];
+    const ov = cfg(state);
+    if (player.pos === 'QB' && normSet(ov.dualThreatQBs).has(player.normName)) out.push({ kind: 'dual', label: 'dual-threat', list: 'dualThreatQBs' });
+    if (normSet(ov.targets).has(player.normName)) out.push({ kind: 'target', label: 'target', list: 'targets' });
+    if (normSet(ov.fades).has(player.normName)) out.push({ kind: 'fade', label: 'fade', list: 'fades' });
+    if (OV.isStacked(state, player)) out.push({ kind: 'stack', label: 'stack', list: null });
+    return out;
+  };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = NS;
+})();
+
+/* ===== js/recommend.js ===== */
+// recommend(state) -> Rec for the ESPN 1QB room. Pure function of state.
+// My queue order is the only value signal; playbook rules filter and override;
+// the upside overlay may nudge inside a valid tie, strictly below the rules.
+(function () {
+  const NS = globalThis.DraftOS;
+  const PB = NS.playbook;
+
+  const why = (txt, rules) => ({ text: txt, rules: rules || [] });
+
+  function propsFor(state, player) {
+    return (state.props || []).filter(pr => pr.normName === player.normName);
+  }
+
+  function injuryTag(state, player) {
+    const hit = (state.injuries || []).find(i => NS.normName(i.name) === player.normName);
+    return hit ? hit.tag : null;
+  }
+
+  function decorate(state, player) {
+    if (!player) return null;
+    return { ...player, injury: injuryTag(state, player), props: propsFor(state, player) };
+  }
+
+  // Pick the primary among legal players for this pick.
+  function choosePrimary(state, ctx, legal, available) {
+    const pick = ctx.pick;
+    const rulesFired = [];
+    let primary = legal[0] || null;
+    let note = primary ? `#${primary.rank} in your queue - best legal player` : 'no legal players left';
+
+    // R4 - K/DST window: whichever of K/DST is missing, higher-queued first
+    if (ctx.kdst.includes(pick)) {
+      const wantK = ctx.counts.K === 0, wantD = ctx.counts.DST === 0;
+      const cands = legal.filter(p => (p.pos === 'K' && wantK) || (p.pos === 'DST' && wantD));
+      if (cands.length) {
+        rulesFired.push('R4');
+        return {
+          primary: cands[0], rulesFired, override: true,
+          note: `K/DST window (pick ${pick}) - ${cands[0].pos} is the ${wantK && wantD ? 'higher-queued need' : 'remaining need'}`
+        };
+      }
+    }
+
+    // R2 exception - my 5th live pick only: elite QB a full tier above skill
+    const ex = PB.rule2Exception(state, ctx, available);
+    if (ex.fires) {
+      rulesFired.push('R2');
+      return {
+        primary: ex.candidate, rulesFired, override: true,
+        note: `R2 exception (5th live pick): ${ex.candidate.name} (tier ${ex.candidate.tier}) is a full tier above the best remaining skill player (tier ${ex.bestSkillTier})`
+      };
+    }
+
+    // A5 Avoid marker: push below any equal-tier alternative (never removed)
+    if (primary && primary.marker === 'avoid') {
+      const alt = legal.find(p => p !== primary && p.tier <= primary.tier && p.marker !== 'avoid');
+      if (alt) {
+        primary = alt;
+        note = `${alt.name} over avoided ${legal[0].name} (equal tier)`;
+      }
+    }
+
+    return { primary, note, rulesFired, override: false };
+  }
+
+  NS.recommend = function (state, opts) {
+    opts = opts || {};
+    const s = state.settings;
+    const cur = NS.board.currentPick(state);
+    if (cur === null) return { draftOver: true };
+    const pick = opts.forPick || cur;
+    const myPick = NS.board.isMyPick(state, pick);
+    const nextMine = NS.pickorder.myNextLivePick(s, myPick ? pick + 1 : pick);
+    const available = NS.board.available(state);
+    const ctx = PB.buildCtx(state, pick);
+
+    // Legality pass (playbook rules, then the R6 handcuff gate via overlay)
+    const legal = [], blocked = [];
+    for (const p of available) {
+      const v = PB.legality(state, ctx, p);
+      if (!v.legal) { blocked.push({ player: p, ruleId: v.ruleId, reason: v.reason }); continue; }
+      const g = NS.overlay.hardGate(state, pick, p);
+      if (g) { blocked.push({ player: p, ruleId: g.ruleId, reason: g.reason }); continue; }
+      legal.push(p);
+    }
+
+    const startable = ctx.startable;
+    const picksBetween = nextMine
+      ? NS.pickorder.livePicksBetween(s, myPick ? pick : cur - 1, nextMine)
+      : 0;
+
+    const mc = (s.flags.monteCarlo && NS.sim)
+      ? NS.survival.monteCarlo(state, { protect: (state.sim && state.sim.protect) || [] })
+      : null;
+
+    const survLabel = p => {
+      if (mc && mc.probs[p.normName] !== undefined) {
+        const pct = mc.probs[p.normName];
+        return { label: pct >= 75 ? 'likely' : pct >= 35 ? 'coin-flip' : 'gone', prob: pct };
+      }
+      return { label: NS.survival.heuristic(state, p, pick, picksBetween), prob: null };
+    };
+
+    const survival = available.slice(0, 5).map(p => ({ player: decorate(state, p), ...survLabel(p) }));
+
+    const scarcity = [];
+    for (const pos of ['QB', 'RB', 'WR', 'TE']) {
+      const posAvail = available.filter(p => p.pos === pos);
+      if (posAvail.length >= 5) {
+        const gap = posAvail[4].rank - posAvail[0].rank;
+        scarcity.push({ pos, gap, cliff: gap > s.scarcityGap });
+      } else if (posAvail.length > 0) {
+        scarcity.push({ pos, gap: null, cliff: true, thin: posAvail.length });
+      }
+    }
+
+    const notes = NS.board.runDetection(state);
+
+    const base = {
+      pick, round: ctx.round,
+      team: NS.board.teamForPick(state, pick),
+      myPick, nextMyPick: nextMine, picksUntilMine: picksBetween,
+      startable, scarcity, survival, notes,
+      monteCarlo: mc ? { n: mc.n, targetPick: mc.targetPick, capped: mc.capped } : null,
+      ghost: !!state.ghost
+    };
+
+    if (!myPick) {
+      const watch = legal.slice(0, 5).map(p => ({ player: decorate(state, p), ...survLabel(p) }));
+      return { ...base, watch };
+    }
+
+    // On the clock ------------------------------------------------------------
+    const chosen = choosePrimary(state, ctx, legal, available);
+    // Upside overlay (R7): strictly below the playbook - a no-op whenever an
+    // override or any of R1/R2/R3/R4/R8 decided this pick.
+    const overlayHit = NS.overlay.apply(state, ctx, legal, chosen);
+    if (overlayHit) {
+      chosen.primary = overlayHit.primary;
+      chosen.note = overlayHit.whyText;
+      chosen.rulesFired.push(overlayHit.cite);
+    }
+    const primary = chosen.primary;
+
+    // R5 - FIVE names: Primary + Alt2-Alt5, mixed positions, each with a why.
+    const alts = legal.filter(p => p !== primary).slice(0, 4).map((p, i) => ({
+      player: decorate(state, p),
+      why: why(`Alt${i + 2}: next best legal (#${p.rank}, ${p.pos})`, [])
+    }));
+
+    const doNotTake = blocked.slice(0, 6).map(b => ({
+      player: decorate(state, b.player), ruleId: b.ruleId, reason: b.reason
+    }));
+
+    const costOfWaiting = [];
+    for (const pos of ['QB', 'RB', 'WR', 'TE']) {
+      const now = available.find(p => p.pos === pos);
+      if (!now) continue;
+      const later = available.find(p => p.pos === pos && survLabel(p).label === 'likely');
+      costOfWaiting.push({
+        pos,
+        text: later
+          ? `pass on ${pos} now -> expected best ${pos} at pick ${nextMine || '-'} is ${later.name} (#${later.rank})`
+          : `pass on ${pos} now -> no ${pos} is safe to your next pick`
+      });
+    }
+
+    let reachOrWait = null;
+    if (mc && primary && alts[0]) {
+      const pP = mc.probs[primary.normName], pA = mc.probs[alts[0].player.normName];
+      if (pP !== undefined || pA !== undefined) {
+        reachOrWait = `Taking ${primary.name} now vs waiting: ${primary.name} survives ${pP ?? '?'}% / ${alts[0].player.name} survives ${pA ?? '?'}%`;
+      }
+    }
+
+    // "ESPN queue should be:" - the five names in order, deduped (R5)
+    const espnQueue = [];
+    if (primary) espnQueue.push(primary.name);
+    alts.forEach(a => { if (!espnQueue.includes(a.player.name)) espnQueue.push(a.player.name); });
+
+    return {
+      ...base,
+      primary: primary ? { player: decorate(state, primary), why: why(chosen.note, chosen.rulesFired) } : null,
+      alts,
+      doNotTake, costOfWaiting, reachOrWait, espnQueue,
+      rulesFired: chosen.rulesFired
+    };
+  };
+
+  // Long-press "conflicts with playbook?" at the current pick.
+  NS.conflictCheck = function (state, player) {
+    const pick = NS.board.currentPick(state);
+    if (pick === null) return { legal: true, note: 'draft over' };
+    const ctx = PB.buildCtx(state, pick);
+    const v = PB.legality(state, ctx, player);
+    if (v.legal) {
+      const g = NS.overlay.hardGate(state, pick, player);
+      if (g) return { legal: false, ruleId: g.ruleId, note: `${g.ruleId}: ${g.reason}` };
+      return { legal: true, note: `No conflict at pick ${pick}.` };
+    }
+    const rule = PB.ruleById(v.ruleId);
+    return { legal: false, ruleId: v.ruleId, note: `${v.ruleId} (${rule ? rule.label : ''}): ${v.reason}` };
+  };
+
+  NS.nextPlan = function (state) {
+    const s = state.settings;
+    const next = NS.pickorder.myNextLivePick(s, NS.board.currentPick(state) || 999);
+    if (!next) return 'Draft complete.';
+    const rec = NS.recommend(state, { forPick: next });
+    if (!rec || !rec.primary) return `Pick ${next}: best legal player in queue.`;
+    const parts = [rec.primary.player.name];
+    (rec.alts || []).slice(0, 2).forEach(a => parts.push(`else ${a.player.name}`));
+    const counts = NS.board.posCounts(NS.board.myRoster(state));
+    const needs = [];
+    if (counts.QB < 1) needs.push('QB1 still open');
+    else if (counts.QB < 2) needs.push('QB2 still open');
+    if (counts.TE < 1) needs.push('TE empty');
+    if (counts.RB === 0) needs.push('RB empty');
+    if (counts.WR === 0) needs.push('WR empty');
+    return `Pick ${next}: ${parts.join(', ')}${needs.length ? ` (${needs.join('; ')})` : ''}.`;
+  };
+
+  // Safe mode wrapper: the engine must never blank the app mid-draft.
+  NS.safeRecommend = function (state, opts) {
+    try {
+      return NS.recommend(state, opts);
+    } catch (e) {
+      return { engineError: String(e && e.stack || e) };
+    }
+  };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = NS;
+})();
+
+/* ===== js/buildpath.js ===== */
+// A3 Build-path guard: can the target build still fit in my remaining picks?
+(function () {
+  const NS = globalThis.DraftOS;
+  const BP = NS.buildpath = {};
+
+  const RELAX = [
+    { key: 'QB', floor: 2, label: '3rd QB' },
+    { key: 'TE', floor: 1, label: '2nd TE' },
+    { key: 'WR', floor: 5, label: '6th WR' },
+    { key: 'RB', floor: 5, label: '6th RB' }
+  ];
+
+  BP.needed = function (targets, counts) {
+    let n = 0;
+    for (const pos of Object.keys(targets)) n += Math.max(0, targets[pos] - (counts[pos] || 0));
+    return n;
+  };
+
+  // -> {counts, picksLeft, targets, needed, reachable, dropped[], remainingText, message}
+  BP.guard = function (state) {
+    const counts = NS.board.posCounts(NS.board.myRoster(state));
+    const cur = NS.board.currentPick(state) || (NS.board.totalPicks(state) + 1);
+    const picksLeft = NS.pickorder.myPicks(state.settings).live.filter(p => p >= cur).length;
+    const targets = { ...(state.settings.targets || { QB: 2, RB: 5, WR: 5, TE: 1, K: 1, DST: 1 }) };
+
+    const dropped = [];
+    let needed = BP.needed(targets, counts);
+    while (needed > picksLeft) {
+      const relax = RELAX.find(r => targets[r.key] > r.floor);
+      if (!relax) break;
+      targets[relax.key] -= 1;
+      dropped.push(relax.label);
+      needed = BP.needed(targets, counts);
+    }
+    const reachable = needed <= picksLeft;
+
+    const parts = [];
+    for (const pos of ['QB', 'RB', 'WR', 'TE', 'K', 'DST']) {
+      const rem = Math.max(0, targets[pos] - (counts[pos] || 0));
+      if (rem > 0) parts.push(rem > 1 ? `${rem} ${pos}` : pos);
+    }
+    return {
+      counts, picksLeft, targets, needed, reachable, dropped,
+      remainingText: `Remaining: ${parts.join(', ') || 'build complete'} in ${picksLeft} picks`,
+      message: dropped.length
+        ? `Build unreachable - drop ${dropped.join(', then ')}`
+        : (reachable ? null : 'Build unreachable even after relaxing all optional targets')
+    };
+  };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = NS;
+})();
+
+/* ===== js/simulator.js ===== */
+// Mock-draft simulator + fast sims for Monte Carlo. Opponents draft off ADP
+// (else my queue) through the opponent-need model with mild randomness.
+(function () {
+  const NS = globalThis.DraftOS;
+  const SIM = NS.sim = {};
+
+  const refRank = (state, p) => NS.survival.adpRank(state, p) ?? p.rank;
+
+  // One opponent pick. availList is queue-ordered; returns chosen player or null.
+  SIM.opponentChoose = function (state, availList, picksSoFar, pickNo, team, rng, opts) {
+    opts = opts || {};
+    const protect = new Set((opts.protect || []).map(NS.normName));
+    const { round } = NS.pickorder.slotForPick(pickNo, state.settings.teams.length);
+
+    const counts = { QB: 0, RB: 0, WR: 0, TE: 0, K: 0, DST: 0 };
+    picksSoFar.forEach(p => { if (p.team === team && counts[p.pos] !== undefined) counts[p.pos]++; });
+    const w = NS.board.needWeights(counts, round, state.settings);
+
+    // Rule 6: marker-tagged handcuffs go late - not before pick 100 unless
+    // the starter went in the last 2 picks.
+    const recent = picksSoFar.filter(p => p.pick >= pickNo - 2 && p.pick < pickNo);
+    const handcuffOk = p => {
+      if (!p.handcuffOf) return true;
+      if (pickNo >= 100) return true;
+      const starterKey = NS.normName(p.handcuffOf);
+      return recent.some(r => r.normName === starterKey);
+    };
+
+    const pool = availList
+      .filter(p => !protect.has(p.normName))
+      .filter(p => (w[p.pos] || 0) > 0 || !['K', 'DST'].includes(p.pos))
+      .filter(handcuffOk)
+      .sort((a, b) => refRank(state, a) - refRank(state, b))
+      .slice(0, 12);
+    if (!pool.length) return availList.find(p => !protect.has(p.normName)) || availList[0] || null;
+
+    let total = 0;
+    const weights = pool.map((p, i) => {
+      const s = Math.exp(-i / 1.3) * (0.2 + (w[p.pos] || 0));
+      total += s;
+      return s;
+    });
+    let r = rng() * total;
+    for (let i = 0; i < pool.length; i++) {
+      r -= weights[i];
+      if (r <= 0) return pool[i];
+    }
+    return pool[0];
+  };
+
+  // Fast sim used by Monte Carlo: from the current board to targetPick
+  // (exclusive), opponents only. My unfilled picks in the window are skipped
+  // (nobody is removed) - see ASSUMPTIONS.md. Returns surviving normName Set.
+  SIM.simulateToTarget = function (state, targetPick, rng, opts) {
+    const total = NS.board.totalPicks(state);
+    const filled = new Set(state.picks.map(p => p.pick));
+    const picksSoFar = state.picks.slice();
+    let avail = NS.board.available(state).slice();
+    const me = NS.board.myTeamName(state.settings);
+    for (let pick = 1; pick < Math.min(targetPick, total + 1); pick++) {
+      if (filled.has(pick)) continue;
+      const team = NS.board.teamForPick(state, pick);
+      if (team === me) continue;
+      const chosen = SIM.opponentChoose(state, avail, picksSoFar, pick, team, rng, opts);
+      if (chosen) {
+        avail = avail.filter(p => p !== chosen);
+        picksSoFar.push({ pick, team, player: chosen.name, pos: chosen.pos, normName: chosen.normName });
+      }
+    }
+    return new Set(avail.map(p => p.normName));
+  };
+
+  // ---- Simulate tab (separate from live state) ------------------------------
+
+  SIM.freshSim = function (state, opts) {
+    return {
+      picks: NS.board.keeperPickEntries(state),
+      log: [],
+      protect: (opts && opts.protect) || (state.sim && state.sim.protect) || [],
+      seed: (opts && opts.seed) || Math.floor(1e9 * ((opts && opts.rand) || 0.42)) + 7,
+      step: 0
+    };
+  };
+
+  // A live-shaped view of the sim board so recommend()/board fns work on it.
+  SIM.shadow = function (state, sim) {
+    return Object.assign({}, state, { picks: sim.picks, ghost: false });
+  };
+
+  // Advance the sim until it's my pick (or the draft ends). Mutates sim.
+  SIM.autoToMyPick = function (state, sim) {
+    const shadow = SIM.shadow(state, sim);
+    const me = NS.board.myTeamName(state.settings);
+    let guard = 0;
+    while (guard++ < 400) {
+      const cur = NS.board.currentPick(shadow);
+      if (cur === null) return { done: true };
+      const team = NS.board.teamForPick(shadow, cur);
+      if (team === me) return { done: false, pick: cur };
+      const rng = NS.makeRng(sim.seed + sim.step * 104729);
+      sim.step++;
+      const avail = NS.board.available(shadow);
+      const chosen = SIM.opponentChoose(shadow, avail, sim.picks, cur, team, rng, { protect: sim.protect });
+      if (!chosen) return { done: true };
+      sim.picks.push({ pick: cur, team, player: chosen.name, pos: chosen.pos, normName: chosen.normName, keeper: false, byMe: false });
+      sim.log.push(`Pick ${cur} - ${team}: ${chosen.name} (${chosen.pos})`);
+    }
+    return { done: true };
+  };
+
+  SIM.simMyPick = function (state, sim, player) {
+    const shadow = SIM.shadow(state, sim);
+    const cur = NS.board.currentPick(shadow);
+    const me = NS.board.myTeamName(state.settings);
+    sim.picks.push({ pick: cur, team: me, player: player.name, pos: player.pos, normName: player.normName, keeper: false, byMe: true });
+    sim.log.push(`Pick ${cur} - ${me} (you): ${player.name} (${player.pos})`);
+  };
+
+  // ---- Roadmap (A2): full mocks with the engine picking for me --------------
+
+  SIM.fullMock = function (state, seed, opts) {
+    const sim = SIM.freshSim(state, { seed, protect: (opts && opts.protect) || [] });
+    const me = NS.board.myTeamName(state.settings);
+    const myPicksLog = [];
+    let guard = 0;
+    while (guard++ < 400) {
+      const res = SIM.autoToMyPick(state, sim);
+      if (res.done) break;
+      const shadow = SIM.shadow(state, sim);
+      const rec = NS.safeRecommend(shadow);
+      const avail = NS.board.available(shadow);
+      const choice = (rec && rec.primary && rec.primary.player)
+        ? avail.find(p => p.normName === rec.primary.player.normName) || avail[0]
+        : avail[0];
+      if (!choice) break;
+      SIM.simMyPick(state, sim, choice);
+      const counts = NS.board.posCounts(NS.board.myRoster(SIM.shadow(state, sim)));
+      myPicksLog.push({ pick: res.pick, player: choice.name, pos: choice.pos, counts: { ...counts } });
+    }
+    return { sim, myPicksLog };
+  };
+
+  SIM.roadmap = function (state, runs) {
+    runs = runs || 100;
+    const perPick = {}; // pick -> {counts: {name: n}, posTotals: {...sum}, runs}
+    for (let i = 0; i < runs; i++) {
+      const { myPicksLog } = SIM.fullMock(state, 1000 + i * 613, { protect: (state.sim && state.sim.protect) || [] });
+      for (const row of myPicksLog) {
+        const slot = perPick[row.pick] || (perPick[row.pick] = { names: {}, posSums: { QB: 0, RB: 0, WR: 0, TE: 0, K: 0, DST: 0 }, runs: 0 });
+        slot.names[row.player] = (slot.names[row.player] || 0) + 1;
+        for (const pos of Object.keys(slot.posSums)) slot.posSums[pos] += row.counts[pos] || 0;
+        slot.runs++;
+      }
+    }
+    return Object.keys(perPick).map(Number).sort((a, b) => a - b).map(pick => {
+      const slot = perPick[pick];
+      const top = Object.entries(slot.names).sort((a, b) => b[1] - a[1]);
+      const counts = {};
+      for (const pos of Object.keys(slot.posSums)) counts[pos] = Math.round(slot.posSums[pos] / slot.runs);
+      return {
+        pick,
+        primary: top[0] ? top[0][0] : '-',
+        top3: top.slice(0, 3).map(([name, n]) => ({ name, pct: Math.round(100 * n / slot.runs) })),
+        counts
+      };
+    });
+  };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = NS;
+})();
+
+/* ===== js/statestore.js ===== */
+// State schema, defaults, migration, undo, persistence for the ESPN app.
+// STORAGE ISOLATION: every localStorage key is prefixed "espn:" so this app
+// and the Yahoo Superflex app can never read or overwrite each other's state,
+// even when served from the same origin.
+(function () {
+  const NS = globalThis.DraftOS;
+  const ST = NS.store = {};
+
+  ST.VERSION = 2;
+  ST.KEY = 'espn:draftos_state_v2';
+  ST.AUTOSAVE_KEY = 'espn:draftos_autosave';
+  ST.UNDO_LIMIT = 30;
+
+  ST.defaultSettings = function () {
+    return {
+      teams: NS.clone(NS.DATA.TEAMS),
+      mySlot: NS.DATA.MY_SLOT,
+      myLabel: 'KeiserSoze',
+      rounds: NS.DATA.ROUNDS,
+      roundsMin: NS.DATA.ROUNDS_MIN,
+      roundsMax: NS.DATA.ROUNDS_MAX,
+      keepers: NS.clone(NS.DATA.KEEPERS),   // rounds BLANK = not kept
+      byes: NS.clone(NS.DATA.BYES),
+      clockSeconds: 90,
+      tierSize: 12,
+      eliteQBs: NS.clone(NS.DATA.ELITE_QBS),
+      earlyTEs: NS.clone(NS.DATA.EARLY_TES),
+      qb3Pick: 130,
+      startable: { QB: 15, RB: 30, WR: 36, TE: 12 },  // rule 9: 1QB startable QB = top 15
+      targets: { QB: 2, RB: 5, WR: 5, TE: 1, K: 1, DST: 1 },
+      scarcityGap: 15,
+      survivalFactors: { likely: 1.0, coinflip: 0.5 },
+      panicProb: 80,
+      // rule 9 sim appetite for a 12-team 1QB room (editable)
+      simQB: { firstQBStart: 4, firstQBEnd: 9, secondQBAfter: 10 },
+      overlay: NS.overlay.defaults(),
+      flags: {
+        monteCarlo: false,
+        roadmap: false,
+        buildGuard: false,
+        byeLoad: false,
+        markers: true,       // rule 6 needs the handcuff marker usable
+        resilience: false    // draft grade only
+      }
+    };
+  };
+
+  ST.buildSampleQueue = function (settings) {
+    const parsed = NS.parser.parseQueue(NS.DATA.SAMPLE_QUEUE_TEXT, {
+      byes: settings.byes, keepers: [], tierSize: settings.tierSize
+    });
+    const fillers = NS.DATA.buildFillers().map(f => ({
+      ...f, normName: NS.normName(f.name), marker: null, handcuffOf: null
+    }));
+    return parsed.players.concat(fillers);
+  };
+
+  // Rebuild the keeper pre-fills from the current settings, preserving live
+  // picks. The core of the setup-guard "full clean recompute": also re-derives
+  // each live pick's team/byMe from the (possibly changed) draft order and
+  // drops picks beyond the (possibly shrunk) round count or now owned by a
+  // keeper.
+  ST.recompute = function (state) {
+    const total = NS.board.totalPicks(state);
+    const keeperEntries = NS.board.keeperPickEntries(state);
+    const keeperPicks = new Set(keeperEntries.map(k => k.pick));
+    const me = NS.board.myTeamName(state.settings);
+    const live = state.picks
+      .filter(p => !p.keeper && !keeperPicks.has(p.pick) && p.pick <= total)
+      .map(p => {
+        const team = NS.board.teamForPick(state, p.pick);
+        return { ...p, team, byMe: team === me };
+      });
+    state.picks = keeperEntries.concat(live).sort((a, b) => a.pick - b.pick);
+    if (NS.survival && NS.survival.clearCache) NS.survival.clearCache();
+    return state;
+  };
+
+  ST.defaultState = function () {
+    const settings = ST.defaultSettings();
+    const state = {
+      version: ST.VERSION,
+      settings,
+      myQueue: null,
+      usingSample: true,
+      adp: [],
+      props: [],
+      propsText: '',
+      fp: [],
+      fpText: '',
+      injuries: NS.clone(NS.DATA.INJURY_TAGS),
+      picks: [],
+      log: [{ t: 'init', msg: 'Draft OS (ESPN) initialized. Set your slot + draft order, then keeper rounds.' }],
+      ghost: false,
+      undoStack: [],
+      sim: null,
+      grade: null
+    };
+    state.myQueue = ST.buildSampleQueue(settings);
+    NS.overlay.applyPreTags(state);
+    state.picks = NS.board.keeperPickEntries(state);
+    return state;
+  };
+
+  // ---- Migration ------------------------------------------------------------
+  ST.migrate = function (raw) {
+    if (!raw || typeof raw !== 'object') throw new Error('not an object');
+    const v = raw.version || 1;
+    if (v > ST.VERSION) throw new Error(`state version ${v} is newer than app (${ST.VERSION})`);
+    const base = ST.defaultState();
+    const out = { ...base, ...raw };
+    out.settings = { ...base.settings, ...(raw.settings || {}) };
+    out.settings.flags = { ...base.settings.flags, ...((raw.settings || {}).flags || {}) };
+    out.settings.startable = { ...base.settings.startable, ...((raw.settings || {}).startable || {}) };
+    out.settings.targets = { ...base.settings.targets, ...((raw.settings || {}).targets || {}) };
+    out.settings.overlay = { ...base.settings.overlay, ...((raw.settings || {}).overlay || {}) };
+    out.settings.simQB = { ...base.settings.simQB, ...((raw.settings || {}).simQB || {}) };
+    out.version = ST.VERSION;
+    ST.validate(out);
+    return NS.overlay.applyPreTags(out);
+  };
+
+  ST.validate = function (state) {
+    if (!state || typeof state !== 'object') throw new Error('state is not an object');
+    if (!Array.isArray(state.settings && state.settings.teams) || !state.settings.teams.length) {
+      throw new Error('settings.teams missing');
+    }
+    if (!Array.isArray(state.myQueue)) throw new Error('myQueue missing');
+    if (!Array.isArray(state.picks)) throw new Error('picks missing');
+    return true;
+  };
+
+  // ---- Persistence (espn:-prefixed keys only) -------------------------------
+  ST.save = function (state, storage) {
+    const json = JSON.stringify(ST.exportable(state));
+    try {
+      const prev = storage.getItem(ST.KEY);
+      if (prev) storage.setItem(ST.AUTOSAVE_KEY, prev);
+      storage.setItem(ST.KEY, json);
+    } catch (e) { /* quota - export button is the escape hatch */ }
+    return json;
+  };
+
+  ST.load = function (storage) {
+    const tryParse = key => {
+      const raw = storage.getItem(key);
+      if (!raw) return null;
+      return ST.migrate(JSON.parse(raw));
+    };
+    try {
+      const state = tryParse(ST.KEY);
+      if (state) return { state };
+      return { state: ST.defaultState(), fresh: true };
+    } catch (e) {
+      let autosave = null;
+      try { autosave = tryParse(ST.AUTOSAVE_KEY); } catch (_) { /* both corrupt */ }
+      return { corrupt: true, error: String(e), autosave, fresh: ST.defaultState() };
+    }
+  };
+
+  ST.exportable = function (state) {
+    const { undoStack, ...rest } = state;
+    return rest;
+  };
+
+  ST.importJson = function (json) {
+    const parsed = JSON.parse(json);
+    const state = ST.migrate(parsed);
+    state.undoStack = [];
+    return state;
+  };
+
+  // ESPN pre-draft list: my queue as plain text, active keepers stripped,
+  // K/DST at the bottom in order.
+  ST.espnPreDraftList = function (state) {
+    const kept = NS.board.activeKeeperKeys(state.settings);
+    const q = state.myQueue.filter(p => !kept.has(p.normName));
+    const skill = q.filter(p => !['K', 'DST'].includes(p.pos));
+    const kdst = q.filter(p => ['K', 'DST'].includes(p.pos));
+    return skill.concat(kdst).map(p => p.name).join('\n');
+  };
+
+  // ---- Undo -----------------------------------------------------------------
+  const SNAP_FIELDS = ['picks', 'log', 'myQueue', 'ghost', 'usingSample', 'grade'];
+
+  ST.snapshot = function (state) {
+    const snap = {};
+    SNAP_FIELDS.forEach(f => { snap[f] = NS.clone(state[f]); });
+    state.undoStack.push(snap);
+    if (state.undoStack.length > ST.UNDO_LIMIT) state.undoStack.shift();
+  };
+
+  ST.undo = function (state) {
+    const snap = state.undoStack.pop();
+    if (!snap) return false;
+    SNAP_FIELDS.forEach(f => { state[f] = snap[f]; });
+    return true;
+  };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = NS;
+})();
+
+/* ===== js/selftest.js ===== */
+// Engine self-tests for the ESPN 12-team 1QB app. Deterministic fixtures.
+// Shared by `npm test` (node --test wrapper) and the in-page Run self-test.
+(function () {
+  const NS = globalThis.DraftOS;
+  const ST = NS.store;
+
+  function makeT() {
+    const results = [];
+    let current = null;
+    return {
+      results,
+      test(name, fn) {
+        current = { name, pass: true, detail: '' };
+        try { fn(); } catch (e) {
+          current.pass = false;
+          current.detail = String(e && e.message || e);
+        }
+        results.push(current);
+      },
+      ok(cond, msg) { if (!cond) throw new Error(msg || 'assertion failed'); },
+      eq(a, b, msg) {
+        if (JSON.stringify(a) !== JSON.stringify(b)) {
+          throw new Error(`${msg || 'eq failed'}: ${JSON.stringify(a)} != ${JSON.stringify(b)}`);
+        }
+      }
+    };
+  }
+
+  const fresh = () => ST.defaultState();
+
+  function findQ(state, name) {
+    const key = NS.normName(name);
+    const p = state.myQueue.find(x => x.normName === key);
+    if (!p) throw new Error(`fixture player not in queue: ${name}`);
+    return p;
+  }
+
+  function addQ(state, rank, name, pos, team, tier) {
+    const p = {
+      rank, name, normName: NS.normName(name), pos, team,
+      bye: state.settings.byes[team] ?? null, tier: tier || 6,
+      tags: [], marker: null, handcuffOf: null
+    };
+    state.myQueue.push(p);
+    return p;
+  }
+
+  function pushPick(state, pick, player, byMe) {
+    const team = NS.board.teamForPick(state, pick);
+    state.picks.push({
+      pick, team, player: player.name, pos: player.pos,
+      normName: player.normName, keeper: false, byMe: !!byMe
+    });
+  }
+
+  function fill(state, through, opts) {
+    opts = opts || {};
+    const mine = opts.mine || {};
+    const others = (opts.others || []).slice();
+    const filled = new Set(state.picks.map(p => p.pick));
+    let dummy = 0;
+    for (let pick = 1; pick <= through; pick++) {
+      if (filled.has(pick)) continue;
+      if (NS.board.isMyPick(state, pick)) {
+        const name = mine[pick];
+        if (!name) throw new Error(`fixture: my pick ${pick} needs a player`);
+        pushPick(state, pick, findQ(state, name), true);
+      } else if (others.length) {
+        pushPick(state, pick, findQ(state, others.shift()), false);
+      } else {
+        dummy++;
+        pushPick(state, pick, { name: `Opp Dummy ${dummy}`, pos: 'WR', normName: `opp dummy ${dummy}` }, false);
+      }
+    }
+  }
+
+  function fakeStorage(seed) {
+    const data = Object.assign({}, seed || {});
+    return {
+      getItem: k => (k in data ? data[k] : null),
+      setItem: (k, v) => { data[k] = String(v); },
+      removeItem: k => { delete data[k]; },
+      _data: data
+    };
+  }
+
+  NS.runSelfTests = function () {
+    const t = makeT();
+    // Default order: Joe(1) Rhett(2) Mike(3) Jeff(4=ME) TC(5) Max(6) Dan(7)
+    // Pat(8) Jim(9) Ger(10) Team 11(11) Team 12(12). 16 rounds, no active keepers.
+    const MY_LIVE_DEFAULT = [4, 21, 28, 45, 52, 69, 76, 93, 100, 117, 124, 141, 148, 165, 172, 189];
+
+    t.test('pick order: slot 7, 12 teams, 16 rounds -> 192 picks + my numbers; rounds=14 recomputes', () => {
+      const s = ST.defaultSettings();
+      s.mySlot = 7;
+      const order = NS.pickorder.buildOrder(s);
+      t.eq(order.length, 192);
+      t.eq(NS.pickorder.myPicks(s).live,
+        [7, 18, 31, 42, 55, 66, 79, 90, 103, 114, 127, 138, 151, 162, 175, 186]);
+      s.rounds = 14;
+      t.eq(NS.pickorder.buildOrder(s).length, 168, '14 rounds -> 168 picks');
+      t.eq(NS.pickorder.myPicks(s).live,
+        [7, 18, 31, 42, 55, 66, 79, 90, 103, 114, 127, 138, 151, 162], 'my picks recompute');
+    });
+
+    t.test('default state: my picks at slot 4 (Jeff = KeiserSoze), no active keepers, blank rounds preloaded', () => {
+      const st = fresh();
+      t.eq(NS.pickorder.myPicks(st.settings).live, MY_LIVE_DEFAULT);
+      t.eq(st.picks.length, 0, 'all keeper rounds are blank -> nothing pre-filled');
+      t.eq(st.settings.keepers.length, 10, '10 keeper rows preloaded');
+      t.ok(st.settings.keepers.every(k => k.round === null), 'all rounds blank');
+      const shaheed = st.settings.keepers.find(k => k.team === 'Jeff');
+      t.eq(shaheed.player, 'Rashid Shaheed', 'Jeff/Shaheed row exists, NOT kept');
+      t.eq(NS.board.myTeamLabel(st.settings), 'KeiserSoze (Jeff)');
+    });
+
+    t.test('keeper add: Jim/Warren R8 -> pick 88 pre-filled + Warren off available; blanking restores both', () => {
+      const st = fresh();
+      addQ(st, 61, 'Tyler Warren', 'TE', 'IND');
+      const row = st.settings.keepers.find(k => k.team === 'Jim');
+      row.round = 8;
+      ST.recompute(st);
+      const { resolved } = NS.pickorder.resolveKeepers(st.settings);
+      t.eq(resolved.length, 1);
+      t.eq(resolved[0].pick, 88, 'Jim slot 9, R8 even -> pick 88');
+      t.ok(st.picks.some(p => p.pick === 88 && p.keeper && p.player === 'Tyler Warren'), 'pre-filled');
+      t.ok(!NS.board.available(st).some(p => p.normName === NS.normName('Tyler Warren')), 'off available');
+      t.eq(st.picks[0].pos, 'TE', 'pos resolved from the queue');
+      const tc = NS.board.teamCounts(st);
+      t.eq(tc['Jim'].TE, 1, 'board counts include the keeper from pick 1');
+      row.round = null;
+      ST.recompute(st);
+      t.ok(NS.board.available(st).some(p => p.normName === NS.normName('Tyler Warren')), 'back in available');
+      t.ok(!st.picks.some(p => p.pick === 88), 'pick 88 back on the clock');
+    });
+
+    t.test('my-keeper (ME row): on my roster at pick 1, live picks drop by one, counts toward the build', () => {
+      const st = fresh();
+      addQ(st, 62, 'Rashid Shaheed', 'WR', 'NO');
+      const row = st.settings.keepers.find(k => k.team === 'Jeff');
+      // Blank round: none of the my-keeper behavior
+      t.eq(NS.board.myRoster(st).length, 0, 'blank round -> not on roster');
+      t.eq(NS.pickorder.myPicks(st.settings).live.length, 16);
+      row.round = 4;
+      ST.recompute(st);
+      const roster = NS.board.myRoster(st);
+      t.eq(roster.length, 1, 'on my roster');
+      t.eq(roster[0].player, 'Rashid Shaheed');
+      t.ok(roster[0].byMe && roster[0].keeper, 'flagged as my keeper');
+      t.eq(roster[0].pick, 45, 'Jeff slot 4, R4 even -> pick 45');
+      t.eq(NS.pickorder.myPicks(st.settings).live.length, 15, 'live picks drop by one');
+      t.ok(!NS.pickorder.myPicks(st.settings).live.includes(45), 'round 4 pick consumed');
+      t.eq(NS.board.posCounts(roster).WR, 1, 'counts toward the target build');
+      const g = NS.buildpath.guard(st);
+      t.eq(g.targets.WR - g.counts.WR, st.settings.targets.WR - 1, 'build guard sees the keeper WR');
+      row.round = null;
+      ST.recompute(st);
+      t.eq(NS.board.myRoster(st).length, 0, 'blank again -> gone from roster');
+      t.eq(NS.pickorder.myPicks(st.settings).live.length, 16);
+    });
+
+    t.test('two keepers on one team work; unmatched team name -> badge list, order not corrupted', () => {
+      const st = fresh();
+      st.settings.keepers.push({ team: 'Jim', player: 'Second Guy', round: 12 });
+      st.settings.keepers.find(k => k.team === 'Jim' && k.player === 'Tyler Warren').round = 8;
+      st.settings.keepers.push({ team: 'Nobody', player: 'Ghost Player', round: 3 });
+      ST.recompute(st);
+      const { resolved, unmatched } = NS.pickorder.resolveKeepers(st.settings);
+      t.eq(resolved.length, 2, 'both Jim keepers resolved');
+      t.eq(unmatched.length, 1, 'unmatched row reported');
+      t.eq(unmatched[0].team, 'Nobody');
+      const order = NS.pickorder.buildOrder(st.settings);
+      t.eq(order.length, 192, 'order not corrupted');
+      t.eq(order.filter(o => o.keeper).length, 2, 'unmatched keeper excluded from the board');
+    });
+
+    t.test('rule 5: rec card returns 5 legal names when 5 exist; fewer only when fewer are legal', () => {
+      let st = fresh();
+      fill(st, 3, {});
+      let rec = NS.recommend(st);
+      t.eq(rec.pick, 4);
+      t.ok(rec.myPick, 'pick 4 is mine');
+      t.eq(rec.espnQueue.length, 5, 'five names');
+      t.eq(new Set(rec.espnQueue).size, 5, 'deduped');
+      t.eq(rec.alts.length, 4, 'Alt2-Alt5');
+      t.eq(rec.espnQueue[0], rec.primary.player.name, 'primary first');
+
+      st = fresh();
+      st.myQueue = st.myQueue.filter(p => ['Jahmyr Gibbs', 'Puka Nacua', 'Jonathan Taylor'].includes(p.name));
+      fill(st, 3, {});
+      rec = NS.recommend(st);
+      t.eq(rec.espnQueue.length, 3, 'only 3 legal -> 3 names');
+    });
+
+    t.test('rule 1: rounds 1-4 never a QB (even Allen atop the queue); TE only McBride/Bowers', () => {
+      const st = fresh();
+      const allen = findQ(st, 'Josh Allen');
+      st.myQueue = [{ ...allen, rank: 0 }].concat(st.myQueue.filter(p => p !== allen));
+      for (const pick of [4, 21, 28, 45]) { // my picks in rounds 1-4
+        const rec = NS.recommend(st, { forPick: pick });
+        t.ok(rec.primary && rec.primary.player.pos !== 'QB', `primary not QB at pick ${pick}`);
+        (rec.alts || []).forEach(a => t.ok(a.player.pos !== 'QB', `alts not QB at pick ${pick}`));
+      }
+      const rec4 = NS.recommend(st, { forPick: 4 });
+      const dnt = rec4.doNotTake.find(d => d.player.normName === 'josh allen');
+      t.ok(dnt && dnt.ruleId === 'R1', 'Allen blocked with R1 in round 1');
+      // TE gate: McBride legal, a filler TE is not
+      const ctx = NS.playbook.buildCtx(st, 4);
+      t.ok(NS.playbook.legality(st, ctx, findQ(st, 'Trey McBride')).legal, 'McBride legal in rounds 1-4');
+      const fillerTE = st.myQueue.find(p => p.pos === 'TE' && p.filler);
+      t.eq(NS.playbook.legality(st, ctx, fillerTE).ruleId, 'R1', 'other TE blocked in rounds 1-4');
+    });
+
+    t.test('rule 2: exception at my 5th live pick only, both conditions required; QB legal from 6th', () => {
+      // Case A: all tier-1/2 skill gone, Allen (tier 2) available -> fires at pick 52
+      let st = fresh();
+      const t12skill = st.myQueue.filter(p => p.tier <= 2 && NS.SKILL.includes(p.pos)).map(p => p.name);
+      const mine = { 4: 'Jahmyr Gibbs', 21: "Ja'Marr Chase", 28: 'Puka Nacua', 45: 'Jonathan Taylor' };
+      fill(st, 51, { mine, others: t12skill.filter(n => !Object.values(mine).includes(n)) });
+      let rec = NS.recommend(st);
+      t.eq(rec.pick, 52, '5th live pick');
+      t.eq(rec.primary.player.name, 'Josh Allen', 'elite QB a full tier above skill -> taken');
+      t.ok(rec.primary.why.rules.includes('R2'), 'R2 cited');
+
+      // Case B: tier-1 skill still there -> tier condition fails, no QB at 52
+      st = fresh();
+      fill(st, 51, { mine });
+      rec = NS.recommend(st);
+      t.ok(rec.primary.player.pos !== 'QB', 'no QB when skill of equal/better tier remains');
+      const dnt = rec.doNotTake.find(d => d.player.normName === 'josh allen');
+      t.ok(dnt && dnt.ruleId === 'R2', 'Allen blocked with R2');
+
+      // Case C: a non-elite QB never qualifies in the window
+      const ctx52 = NS.playbook.buildCtx(st, 52);
+      t.eq(NS.playbook.legality(st, ctx52, findQ(st, 'Joe Burrow')).ruleId, 'R2', 'Burrow not in the window');
+
+      // Case D: at the 4th live pick even a qualifying elite is blocked
+      st = fresh();
+      fill(st, 44, { mine: { 4: 'Jahmyr Gibbs', 21: "Ja'Marr Chase", 28: 'Puka Nacua' }, others: t12skill.filter(n => !['Jahmyr Gibbs', "Ja'Marr Chase", 'Puka Nacua'].includes(n)) });
+      rec = NS.recommend(st);
+      t.eq(rec.pick, 45);
+      t.ok(rec.primary.player.pos !== 'QB', 'no QB at the 4th live pick');
+
+      // Case E: from the 6th live pick a QB is legal without conditions
+      st = fresh();
+      fill(st, 68, { mine: { 4: 'Jahmyr Gibbs', 21: "Ja'Marr Chase", 28: 'Puka Nacua', 45: 'Jonathan Taylor', 52: 'James Cook' } });
+      const ctx69 = NS.playbook.buildCtx(st, 69);
+      t.ok(NS.playbook.legality(st, ctx69, findQ(st, 'Joe Burrow')).legal, 'any QB legal at the 6th live pick');
+    });
+
+    t.test('rule 4: K/DST only on my last two live picks under 14-, 16-, and 18-round settings', () => {
+      for (const rounds of [14, 16, 18]) {
+        const st = fresh();
+        st.settings.rounds = rounds;
+        ST.recompute(st);
+        const live = NS.pickorder.myPicks(st.settings).live;
+        const kdst = live.slice(-2);
+        const someK = st.myQueue.find(p => p.pos === 'K');
+        const someD = st.myQueue.find(p => p.pos === 'DST');
+        for (const pick of live.filter(p => !kdst.includes(p))) {
+          const ctx = NS.playbook.buildCtx(st, pick);
+          t.eq(NS.playbook.legality(st, ctx, someK).ruleId, 'R4', `${rounds}rd: K blocked at pick ${pick}`);
+          t.eq(NS.playbook.legality(st, ctx, someD).ruleId, 'R4', `${rounds}rd: DST blocked at pick ${pick}`);
+        }
+        const recLast = NS.recommend(st, { forPick: kdst[0] });
+        t.ok(['K', 'DST'].includes(recLast.primary.player.pos), `${rounds}rd: K/DST recommended at pick ${kdst[0]}`);
+        t.ok(recLast.primary.why.rules.includes('R4'), 'R4 cited');
+        // never a second of the same
+        const st2 = fresh();
+        st2.settings.rounds = rounds;
+        ST.recompute(st2);
+        st2.picks.push({ pick: kdst[0], team: 'Jeff', player: someK.name, pos: 'K', normName: someK.normName, keeper: false, byMe: true });
+        const otherK = st2.myQueue.filter(p => p.pos === 'K')[1];
+        const ctxLast = NS.playbook.buildCtx(st2, kdst[1]);
+        t.eq(NS.playbook.legality(st2, ctxLast, otherK).ruleId, 'R4', 'second K blocked');
+        t.eq(NS.recommend(st2, { forPick: kdst[1] }).primary.player.pos, 'DST', 'the other one at the last pick');
+      }
+    });
+
+    t.test('rules 3+8: 3rd QB only after pick 130 and never over a startable RB/WR', () => {
+      const st = fresh();
+      const burrow = findQ(st, 'Joe Burrow');
+      st.picks.push({ pick: 4, team: 'Jeff', player: 'Josh Allen', pos: 'QB', normName: 'josh allen', keeper: false, byMe: true });
+      st.picks.push({ pick: 21, team: 'Jeff', player: 'Dak Prescott', pos: 'QB', normName: 'dak prescott', keeper: false, byMe: true });
+      let ctx = NS.playbook.buildCtx(st, 120);
+      t.eq(NS.playbook.legality(st, ctx, burrow).ruleId, 'R3', 'QB3 blocked before pick 130');
+      ctx = NS.playbook.buildCtx(st, 141);
+      t.eq(NS.playbook.legality(st, ctx, burrow).ruleId, 'R8', 'after 130 still blocked while startable RB/WR remain');
+      // Remove every startable RB/WR from the queue -> QB3 becomes legal after 130
+      st.myQueue = st.myQueue.filter(p => !['RB', 'WR'].includes(p.pos));
+      ctx = NS.playbook.buildCtx(st, 141);
+      t.ok(NS.playbook.legality(st, ctx, burrow).legal, 'QB3 legal after 130 with no startable RB/WR left');
+    });
+
+    t.test('rule 3: second TE only when both TEs are top-6 in my queue', () => {
+      const st = fresh();
+      addQ(st, 61, 'MidTier TE X', 'TE', 'PIT');
+      const mcbride = findQ(st, 'Trey McBride');
+      st.picks.push({ pick: 28, team: 'Jeff', player: mcbride.name, pos: 'TE', normName: mcbride.normName, keeper: false, byMe: true });
+      const top6TE = st.myQueue.filter(p => p.pos === 'TE').sort((a, b) => a.rank - b.rank).slice(0, 6).map(p => p.normName);
+      const goodTE2 = st.myQueue.find(p => p.pos === 'TE' && p.normName !== mcbride.normName && top6TE.includes(p.normName));
+      const ctx = NS.playbook.buildCtx(st, 100);
+      t.ok(NS.playbook.legality(st, ctx, goodTE2).legal, 'top-6 TE2 legal');
+      t.eq(NS.playbook.legality(st, ctx, findQ(st, 'MidTier TE X')).ruleId, 'R3', 'mid-tier TE2 blocked');
+    });
+
+    t.test('rule 6: marker handcuff gated before pick 100 unless the starter went in the last 2 picks', () => {
+      const st = fresh();
+      const cuff = addQ(st, 61, 'Cuff Guy', 'RB', 'CHI');
+      cuff.handcuffOf = 'Some Starter';
+      t.eq(NS.overlay.hardGate(st, 50, cuff).ruleId, 'R6', 'gated at 50');
+      t.eq(NS.overlay.hardGate(st, 100, cuff), null, 'free at 100');
+      st.picks.push({ pick: 48, team: 'Joe', player: 'Some Starter', pos: 'RB', normName: NS.normName('Some Starter'), keeper: false, byMe: false });
+      t.eq(NS.overlay.hardGate(st, 50, cuff), null, 'unlocked - starter went in the last 2 picks');
+    });
+
+    t.test('rule 7 overlay: fade loses a valid tie (exact why-line); never across tiers or >6 ranks', () => {
+      const mkTie = (priceRank, priceTier) => {
+        const st = fresh();
+        st.myQueue = [];
+        addQ(st, 1, 'Josh Jacobs', 'RB', 'LV', 1);       // default FADE
+        addQ(st, priceRank, 'Jadarian Price', 'RB', 'DAL', priceTier); // default TARGET
+        fill(st, 3, {});
+        return NS.recommend(st); // my pick 4, round 1, both RB legal
+      };
+      let rec = mkTie(2, 1);
+      t.eq(rec.primary.player.name, 'Jadarian Price', 'fade loses the tie');
+      t.eq(rec.primary.why.text, 'Upside overlay: Price over Jacobs (fade)', 'exact why-line');
+      t.ok(rec.primary.why.rules.includes('R7'), 'R7 cited');
+      rec = mkTie(2, 2);
+      t.eq(rec.primary.player.name, 'Josh Jacobs', 'tier boundary blocks the overlay');
+      rec = mkTie(8, 1);
+      t.eq(rec.primary.player.name, 'Josh Jacobs', '7 ranks apart blocks the overlay');
+    });
+
+    t.test('rule 7 overlay: stands down when a playbook rule decided the pick (R2 exception)', () => {
+      const st = fresh();
+      const t12skill = st.myQueue.filter(p => p.tier <= 2 && NS.SKILL.includes(p.pos)).map(p => p.name);
+      const mine = { 4: 'Jahmyr Gibbs', 21: "Ja'Marr Chase", 28: 'Puka Nacua', 45: 'Jonathan Taylor' };
+      fill(st, 51, { mine, others: t12skill.filter(n => !Object.values(mine).includes(n)) });
+      // Lamar (dual-threat, tier 3... actually tier 2 gone) - make a tie zone irrelevant:
+      const rec = NS.recommend(st);
+      t.eq(rec.primary.player.name, 'Josh Allen', 'R2 exception holds');
+      t.ok(!rec.primary.why.text.includes('Upside overlay'), 'overlay stood down');
+    });
+
+    t.test('keeper strip beats a Target with no error (rule 7)', () => {
+      const st = fresh();
+      addQ(st, 61, 'Tee Higgins', 'WR', 'CIN'); // default TARGET
+      st.settings.keepers.push({ team: 'Joe', player: 'Tee Higgins', round: 5 });
+      ST.recompute(st);
+      t.ok(!NS.board.available(st).some(p => p.normName === NS.normName('Tee Higgins')), 'stripped');
+      const rec = NS.safeRecommend(st, { forPick: 4 });
+      t.ok(!rec.engineError, 'no error');
+    });
+
+    t.test('storage isolation: espn:-prefixed keys only; Yahoo state invisible', () => {
+      const storage = fakeStorage({
+        'draftos_state_v2': '{"version":2,"settings":{"teams":[{"slot":1,"name":"Colby"}]},"myQueue":[],"picks":[]}',
+        'draftos_autosave': '{}'
+      });
+      const loaded = ST.load(storage);
+      t.ok(loaded.fresh, 'ESPN app boots fresh - Yahoo keys ignored');
+      t.eq(loaded.state.settings.teams.length, 12, 'ESPN defaults, not Yahoo state');
+      ST.save(loaded.state, storage);
+      const newKeys = Object.keys(storage._data).filter(k => !['draftos_state_v2', 'draftos_autosave'].includes(k));
+      t.ok(newKeys.length >= 1, 'wrote at least one key');
+      t.ok(newKeys.every(k => k.startsWith('espn:')), `only espn:-prefixed keys written (${newKeys})`);
+      t.eq(storage._data['draftos_state_v2'].includes('Colby'), true, 'Yahoo key untouched');
+    });
+
+    t.test('setup guard recompute: slot/order changes re-derive teams; keeper collision drops the live pick', () => {
+      const st = fresh();
+      fill(st, 3, {});
+      pushPick(st, 4, findQ(st, 'Jahmyr Gibbs'), true);
+      t.ok(st.picks.some(p => !p.keeper), 'a pick has been marked');
+      st.settings.mySlot = 7; // I am now Dan
+      ST.recompute(st);
+      const p4 = st.picks.find(p => p.pick === 4);
+      t.eq(p4.team, 'Jeff', 'pick 4 still belongs to slot 4 (Jeff)');
+      t.ok(!p4.byMe, 'no longer mine after the slot change');
+      t.eq(NS.board.currentPick(st), 5, 'board intact');
+      // Keeper claiming a pick already marked live: keeper wins, live entry dropped
+      st.settings.keepers.push({ team: 'Joe', player: 'Keeper Guy', round: 1 }); // Joe slot 1 -> pick 1
+      ST.recompute(st);
+      const p1 = st.picks.find(p => p.pick === 1);
+      t.ok(p1.keeper && p1.player === 'Keeper Guy', 'keeper wins the collision');
+      t.eq(st.picks.filter(p => p.pick === 1).length, 1, 'no duplicate pick entries');
+    });
+
+    t.test('catch-up paste walks the 12-team snake and skips keeper picks', () => {
+      const st = fresh();
+      st.settings.keepers.find(k => k.team === 'Rhett').round = 3; // slot 2, R3 odd -> pick 26
+      ST.recompute(st);
+      t.eq(NS.pickorder.resolveKeepers(st.settings).resolved[0].pick, 26);
+      fill(st, 24, { mine: { 4: 'Jahmyr Gibbs', 21: "Ja'Marr Chase" } });
+      t.eq(NS.board.currentPick(st), 25);
+      const res = NS.board.assignCatchup(st, NS.parser.parseCatchup('Derrick Henry, George Pickens, Nico Collins'));
+      t.eq(res.unmatched.length, 0);
+      t.eq(res.assignments.map(a => [a.pick, a.team]), [[25, 'Joe'], [27, 'Mike'], [28, 'Jeff']], 'keeper pick 26 skipped; 28 is mine');
+      t.ok(res.assignments[2].byMe, 'pick 28 flagged as mine');
+    });
+
+    t.test("name normalization: Ja'Marr Chase variants all match; bye table wins over pasted bye", () => {
+      const st = fresh();
+      for (const variant of ["Ja'Marr Chase", 'JaMarr Chase', "Chase, Ja'Marr", 'JAMARR CHASE']) {
+        const m = NS.matchName(variant, st.myQueue);
+        t.ok(m.kind === 'exact' && m.player.name === "Ja'Marr Chase", `variant "${variant}"`);
+      }
+      const parsed = NS.parser.parseQueue('1. James Cook RB BUF 9', { byes: st.settings.byes, keepers: [], tierSize: 12 });
+      t.eq(parsed.players[0].bye, 7, 'table bye (BUF=7) wins');
+      t.ok(parsed.players[0].tags.includes('bye mismatch'), 'bye mismatch badge');
+    });
+
+    t.test('sample queue: tiers 1/2/3 parse; filler removed on a real paste; kept players stay hidden', () => {
+      const st = fresh();
+      t.eq(findQ(st, 'Jahmyr Gibbs').tier, 1);
+      t.eq(findQ(st, 'Josh Allen').tier, 2);
+      t.eq(findQ(st, 'Derrick Henry').tier, 3);
+      t.ok(st.myQueue.some(p => p.filler), 'fillers present');
+      const paste = Array.from({ length: 20 }, (_, i) => `${i + 1}. Real Player ${i + 1} WR DET 6`).join('\n');
+      const parsed = NS.parser.parseQueue(paste, { byes: st.settings.byes, keepers: [], tierSize: 12 });
+      st.myQueue = parsed.players; st.usingSample = false;
+      t.eq(st.myQueue.length, 20, 'paste replaces the whole queue');
+      t.ok(!st.myQueue.some(p => p.filler), 'fillers gone');
+      // an active keeper pasted back stays hidden from available
+      st.settings.keepers.find(k => k.team === 'Joe').round = 2;
+      addQ(st, 21, 'Tyjae Spears', 'RB', 'TEN');
+      ST.recompute(st);
+      t.ok(!NS.board.available(st).some(p => p.normName === NS.normName('Tyjae Spears')), 'kept player hidden after paste');
+    });
+
+    t.test('undo restores exact prior state; storage round-trips full state', () => {
+      const st = fresh();
+      const before = JSON.stringify({ picks: st.picks, log: st.log });
+      ST.snapshot(st);
+      pushPick(st, 1, findQ(st, 'Jahmyr Gibbs'), false);
+      st.log.push({ t: 'pick', msg: 'x' });
+      t.ok(ST.undo(st), 'undo ran');
+      t.eq(JSON.stringify({ picks: st.picks, log: st.log }), before, 'exact prior state');
+      const storage = fakeStorage();
+      pushPick(st, 1, findQ(st, 'Jahmyr Gibbs'), false);
+      ST.save(st, storage);
+      const loaded = ST.load(storage);
+      t.ok(!loaded.corrupt);
+      t.eq(JSON.stringify(ST.exportable(loaded.state)), JSON.stringify(ST.exportable(st)), 'round-trip');
+    });
+
+    t.test('Monte Carlo: protected player survives at 100%; ADP-1 unprotected is essentially gone', () => {
+      const st = fresh();
+      fill(st, 4, { mine: { 4: 'Jonathan Taylor' } });
+      NS.survival.clearCache();
+      const mc1 = NS.survival.monteCarlo(st, { protect: ['Jahmyr Gibbs'], n: 50, seed: 42, budgetMs: 5000, force: true });
+      t.eq(mc1.targetPick, 21, 'sim to my next live pick');
+      t.eq(mc1.probs['jahmyr gibbs'], 100, 'protected -> 100%');
+      st.adp = NS.parser.parseRankList('1. Jahmyr Gibbs\n2. Puka Nacua\n3. Christian McCaffrey', {});
+      const mc2 = NS.survival.monteCarlo(st, { protect: [], n: 50, seed: 42, budgetMs: 5000, force: true });
+      t.ok(mc2.probs['jahmyr gibbs'] < 5, `ADP-1 unprotected -> <5% (got ${mc2.probs['jahmyr gibbs']}%)`);
+      NS.survival.clearCache();
+    });
+
+    t.test('build-path guard: 3rd QB dropped first when the build no longer fits', () => {
+      const st = fresh();
+      st.settings.targets = { QB: 3, RB: 6, WR: 6, TE: 2, K: 1, DST: 1 }; // 19 slots
+      fill(st, 51, { mine: { 4: 'Jahmyr Gibbs', 21: 'Jonathan Taylor', 28: "Ja'Marr Chase", 45: 'Puka Nacua' } });
+      const g = NS.buildpath.guard(st);
+      t.eq(g.picksLeft, 12, '12 live picks left from pick 52');
+      t.ok(g.dropped.length >= 1, 'targets relaxed');
+      t.eq(g.dropped[0], '3rd QB', '3rd QB dropped first');
+    });
+
+    t.test('safe mode: a thrown engine error is contained, not fatal', () => {
+      const orig = NS.recommend;
+      NS.recommend = () => { throw new Error('boom'); };
+      const res = NS.safeRecommend(fresh());
+      NS.recommend = orig;
+      t.ok(res.engineError && res.engineError.includes('boom'), 'error captured');
+    });
+
+    t.test('state migration: a v1 blob loads under v2 without data loss', () => {
+      const st = fresh();
+      const v1 = {
+        settings: { teams: st.settings.teams, mySlot: 4, rounds: 16, keepers: st.settings.keepers, byes: st.settings.byes, clockSeconds: 75 },
+        myQueue: st.myQueue.slice(0, 10),
+        picks: [],
+        log: [{ t: 'init', msg: 'old' }]
+      };
+      const migrated = ST.migrate(JSON.parse(JSON.stringify(v1)));
+      t.eq(migrated.version, 2);
+      t.eq(migrated.settings.clockSeconds, 75, 'user setting preserved');
+      t.eq(migrated.myQueue.length, 10, 'queue preserved');
+      t.ok(migrated.settings.flags && migrated.settings.simQB.firstQBStart === 4, 'v2 fields added');
+    });
+
+    t.test('ESPN pre-draft list: queue order, active keepers stripped, K/DST at the bottom', () => {
+      const st = fresh();
+      addQ(st, 61, 'Tyler Warren', 'TE', 'IND');
+      st.settings.keepers.find(k => k.team === 'Jim').round = 8;
+      ST.recompute(st);
+      const lines = ST.espnPreDraftList(st).split('\n');
+      t.ok(!lines.includes('Tyler Warren'), 'active keeper stripped');
+      t.eq(lines[0], 'Jahmyr Gibbs', 'queue order preserved');
+      const kdstCount = st.myQueue.filter(p => ['K', 'DST'].includes(p.pos)).length;
+      const tail = lines.slice(-kdstCount);
+      t.ok(tail.every(n => /Filler (K|DST)/.test(n)), 'K/DST at the bottom');
+    });
+
+    return t.results;
+  };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = NS;
+})();
+
+/* ===== js/app.js ===== */
+// UI layer. Everything below touches the DOM; all draft logic lives in the
+// pure modules. In Node this file is a no-op so tests can require the bundle.
+(function () {
+  const NS = globalThis.DraftOS;
+  if (typeof document === 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) module.exports = NS;
+    return;
+  }
+
+  let S = null; // live state
+  const ui = {
+    tab: 'draft', posFilter: 'ALL', search: '',
+    clock: { remaining: 90, running: false, timer: null },
+    lastRec: null, roadmap: null,
+    rapidOpen: false, rapidTarget: '', rapidRefocus: false
+  };
+
+  const $ = sel => document.querySelector(sel);
+  const esc = s => String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+  function toast(msg) {
+    const t = $('#toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  function save() { NS.store.save(S, localStorage); }
+
+  // Wrap every mutating action: snapshot for undo, run, persist, redraw.
+  function act(fn) {
+    NS.store.snapshot(S);
+    fn();
+    save();
+    render();
+  }
+
+  // ---- boot -----------------------------------------------------------------
+  function boot() {
+    const loaded = NS.store.load(localStorage);
+    if (loaded.corrupt) {
+      const useAuto = loaded.autosave &&
+        confirm('Stored state is corrupt.\n\nOK = restore from last autosave\nCancel = start fresh');
+      S = useAuto ? loaded.autosave : loaded.fresh;
+      if (!useAuto && loaded.autosave === null) alert('No autosave found - starting fresh.');
+    } else {
+      S = loaded.state;
+    }
+    S.undoStack = S.undoStack || [];
+    ui.clock.remaining = S.settings.clockSeconds;
+    bindHeader();
+    render();
+    save();
+    // PWA: only over http(s) - file:// stays plain and fully working.
+    if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+      navigator.serviceWorker.register('./sw.js').catch(() => { /* optional */ });
+    }
+  }
+
+  // ---- header + clock -------------------------------------------------------
+  function bindHeader() {
+    $('#clockStart').onclick = () => { ui.clock.running = true; ensureTimer(); };
+    $('#clockPause').onclick = () => { ui.clock.running = false; };
+    $('#clockReset').onclick = () => { ui.clock.remaining = S.settings.clockSeconds; ui.clock.running = false; renderClock(); };
+    $('#ghostBtn').onclick = toggleGhost;
+    $('#undoBtn').onclick = () => {
+      if (NS.store.undo(S)) { save(); render(); toast('Undone'); }
+      else toast('Nothing to undo');
+    };
+  }
+
+  function ensureTimer() {
+    if (ui.clock.timer) return;
+    ui.clock.timer = setInterval(() => {
+      if (ui.clock.running && ui.clock.remaining > 0) {
+        ui.clock.remaining--;
+        renderClock();
+      }
+    }, 1000);
+  }
+
+  function renderClock() {
+    const c = $('#clock');
+    const m = Math.floor(ui.clock.remaining / 60), s = ui.clock.remaining % 60;
+    c.textContent = `${m}:${String(s).padStart(2, '0')}`;
+    c.classList.toggle('low', ui.clock.remaining <= 15);
+  }
+
+  function toggleGhost() {
+    act(() => {
+      S.ghost = !S.ghost;
+      S.log.push({ t: 'ghost', msg: S.ghost ? 'GHOST MODE ON - recs frozen. Use the paper / ESPN queue.' : 'Ghost mode off - recs resumed' });
+    });
+  }
+
+  // SETUP GUARD: structural edits (slot, order, rounds, keepers) after any
+  // marked pick require a confirm, then a full clean recompute. Before any
+  // pick is marked they apply instantly.
+  function applySetupChange(mutFn) {
+    const hasLive = S.picks.some(p => !p.keeper);
+    if (hasLive && !confirm('Picks have already been marked. Changing the setup will recompute the board, clock, and counts. Continue?')) {
+      render();
+      return false;
+    }
+    act(() => {
+      mutFn();
+      NS.store.recompute(S);
+      ui.clock.remaining = S.settings.clockSeconds;
+      ui.clock.running = false;
+    });
+    return true;
+  }
+
+  function renderHeader() {
+    const cur = NS.board.currentPick(S);
+    const info = $('#pickInfo');
+    if (cur === null) { info.innerHTML = '<b>Draft complete</b>'; return; }
+    const { round } = NS.pickorder.slotForPick(cur, S.settings.teams.length);
+    const team = NS.board.teamForPick(S, cur);
+    const mine = NS.board.isMyPick(S, cur);
+    const next = NS.pickorder.myNextLivePick(S.settings, mine ? cur + 1 : cur);
+    const between = next ? NS.pickorder.livePicksBetween(S.settings, mine ? cur : cur - 1, next) : 0;
+    info.innerHTML =
+      `Pick ${cur} &middot; R${round} &middot; ${mine ? '<span style="color:var(--good)">YOU</span>' : esc(team)}` +
+      `<span class="sub">${mine ? 'YOU ARE ON THE CLOCK' : `my next: ${next ?? '-'} (${between} picks away)`}</span>`;
+    $('#ghostBtn').classList.toggle('on', !!S.ghost);
+    renderClock();
+  }
+
+  // ---- shared bits ----------------------------------------------------------
+  function playerPills(p) {
+    let h = '';
+    if (p.tier) h += `<span class="pill">T${p.tier}</span>`;
+    if (p.bye != null) h += `<span class="pill">bye ${p.bye}</span>`;
+    (p.tags || []).forEach(tag => {
+      if (tag !== 'filler') h += `<span class="badge">${esc(tag)}</span>`;
+    });
+    if (p.marker === 'target') h += '<span class="pill star">&#9733; target</span>';
+    if (p.marker === 'avoid') h += '<span class="pill fade">avoid</span>';
+    if (p.handcuffOf) h += `<span class="pill">cuff: ${esc(p.handcuffOf)}</span>`;
+    if (p.injury) h += `<span class="pill inj">${esc(p.injury)}</span>`;
+    // Upside overlay tags (always on)
+    const cur = NS.board.currentPick(S) || 1;
+    NS.overlay.tagsFor(S, cur, p).forEach(tag => {
+      const cls = tag.kind === 'fade' ? 'fade' : tag.kind === 'stack' ? 'stack' : tag.kind === 'dual' ? 'rule' : 'star';
+      h += `<span class="pill ${cls}">${esc(tag.label)}</span>`;
+    });
+    (p.props || []).forEach(pr => {
+      if (pr.tag) h += `<span class="pill ${pr.tag === 'money edge' ? 'money' : 'fade'}">${esc(pr.tag)}</span>`;
+    });
+    return h;
+  }
+
+  function survPill(row) {
+    const cls = row.label === 'likely' ? 'surv-likely' : row.label === 'coin-flip' ? 'surv-coin' : 'surv-gone';
+    const pct = row.prob !== null && row.prob !== undefined ? ` ${row.prob}%` : '';
+    return `<span class="pill ${cls}" title="${esc(NS.survival.formulaText(S))}">${row.label}${pct}</span>`;
+  }
+
+  function decorateLite(p) {
+    const inj = (S.injuries || []).find(i => NS.normName(i.name) === p.normName);
+    return { ...p, injury: inj ? inj.tag : null, props: (S.props || []).filter(pr => pr.normName === p.normName), allenStack: p.team === 'BUF' && ['WR', 'TE', 'RB'].includes(p.pos) };
+  }
+
+  // ---- pick actions ---------------------------------------------------------
+  function markPick(player, byMe, teamOverride) {
+    // Always confirm my own pick - a wrong tap here is the worst failure.
+    if (byMe && !confirm(`Confirm YOUR pick: ${player.name} (${player.pos})?`)) return;
+    act(() => {
+      const pick = NS.board.currentPick(S);
+      if (pick === null) return;
+      const team = byMe ? NS.board.myTeamName(S.settings) : (teamOverride || NS.board.teamForPick(S, pick));
+      S.picks.push({ pick, team, player: player.name, pos: player.pos, normName: player.normName, keeper: false, byMe });
+      const rec = ui.lastRec;
+      const matched = !!(byMe && rec && rec.primary && rec.primary.player.normName === player.normName);
+      S.log.push({
+        t: byMe ? 'mypick' : 'pick', pick, team, player: player.name, pos: player.pos,
+        matchedPrimary: byMe ? matched : undefined,
+        rules: byMe && rec && rec.primary ? rec.primary.why.rules : []
+      });
+      if (byMe) {
+        const plan = NS.nextPlan(S);
+        S.log.push({ t: 'plan', msg: plan });
+        S.lastPlan = plan;
+      }
+      ui.clock.remaining = S.settings.clockSeconds;
+      ui.clock.running = false;
+    });
+  }
+
+  function longPressify(elem, player) {
+    let timer = null;
+    const start = () => { timer = setTimeout(() => { timer = null; showConflict(player); }, 550); };
+    const cancel = () => { if (timer) { clearTimeout(timer); timer = null; } };
+    elem.addEventListener('touchstart', start, { passive: true });
+    elem.addEventListener('mousedown', start);
+    ['touchend', 'touchmove', 'mouseup', 'mouseleave'].forEach(ev => elem.addEventListener(ev, cancel));
+  }
+
+  function showConflict(player) {
+    const res = NS.conflictCheck(S, player);
+    alert(res.legal
+      ? `${player.name}: ${res.note}`
+      : `${player.name} conflicts with the playbook.\n\n${res.note}`);
+  }
+
+  // ---- render root ----------------------------------------------------------
+  const TABS = [
+    ['draft', 'Draft'], ['keepers', 'Keepers'], ['playbook', 'Playbook'], ['queue', 'Queue'],
+    ['board', 'Board'], ['props', 'Props'], ['fp', 'FP'], ['log', 'Log'],
+    ['settings', 'Settings'], ['sim', 'Simulate']
+  ];
+
+  function render() {
+    renderHeader();
+    const bar = $('#tabbar');
+    bar.innerHTML = TABS.map(([id, label]) =>
+      `<button data-tab="${id}" class="${ui.tab === id ? 'on' : ''}">${label}</button>`).join('');
+    bar.querySelectorAll('button').forEach(b => {
+      b.onclick = () => { ui.tab = b.dataset.tab; render(); };
+    });
+    const main = $('#main');
+    main.innerHTML = '';
+    const renderers = {
+      draft: renderDraftTab, keepers: renderKeepersTab, playbook: renderPlaybookTab,
+      queue: renderQueueTab, board: renderBoardTab, props: renderPropsTab, fp: renderFpTab,
+      log: renderLogTab, settings: renderSettingsTab, sim: renderSimTab
+    };
+    renderers[ui.tab](main);
+    // Precompute the next-pick rec (and warm the MC cache) during other
+    // teams' picks so the card is instant when my clock starts.
+    setTimeout(() => { try { NS.safeRecommend(S); } catch (e) { /* contained */ } }, 30);
+  }
+
+  // ---- DRAFT tab ------------------------------------------------------------
+  function renderDraftTab(main) {
+    const rec = NS.safeRecommend(S);
+    ui.lastRec = rec && !rec.engineError ? rec : ui.lastRec;
+
+    // Alerts
+    let alerts = '';
+    if (rec.engineError) {
+      alerts += `<div class="banner red">engine error - see console / Log tab. Raw list + clock still live.</div>`;
+      console.error(rec.engineError);
+      if (!S.log.some(l => l.t === 'error' && l.msg === rec.engineError)) {
+        S.log.push({ t: 'error', msg: rec.engineError });
+      }
+    }
+    if (S.ghost) alerts += `<div class="banner purple">Recs frozen. Use the paper / ESPN queue.</div>`;
+    if (!rec.engineError) {
+      (rec.notes || []).forEach(n => { alerts += `<div class="banner amber">${esc(n)}</div>`; });
+    }
+    const unmatchedK = NS.board.unmatchedKeepers(S.settings);
+    if (unmatchedK.length) {
+      alerts += `<div class="banner red">Keeper rows with unmatched team names (excluded from the board): ${unmatchedK.map(k => esc(`${k.team} / ${k.player}`)).join(', ')} - fix them in the Keepers tab.</div>`;
+    }
+    if (S.settings.flags.buildGuard) {
+      const g = NS.buildpath.guard(S);
+      if (g.message) alerts += `<div class="banner red">${esc(g.message)}</div>`;
+      alerts += `<div class="banner amber">${esc(g.remainingText)}</div>`;
+    }
+    if (S.settings.flags.byeLoad) byeLoadAlerts().forEach(a => { alerts += `<div class="banner ${a.red ? 'red' : 'amber'}">${esc(a.msg)}</div>`; });
+    main.insertAdjacentHTML('beforeend', alerts);
+
+    renderRapidCatchup(main);
+    renderRecCard(main, rec);
+    renderRoster(main);
+    renderAvailable(main);
+  }
+
+  // Rapid catch-up: type 3+ letters, tap the match, it goes to the next
+  // on-the-clock team (keeper picks are pre-filled, so they're skipped).
+  function renderRapidCatchup(main) {
+    const sec = document.createElement('section');
+    sec.className = 'card';
+    sec.id = 'rapidCard';
+    const cur = NS.board.currentPick(S);
+    const target = parseInt(ui.rapidTarget, 10);
+    let behind = '';
+    if (cur !== null && !isNaN(target)) {
+      const n = Math.max(0, target - cur);
+      behind = n > 0
+        ? `<div class="banner amber" style="margin:6px 0">You are ${n} pick${n > 1 ? 's' : ''} behind.</div>`
+        : `<div class="banner" style="margin:6px 0;background:#0f3a1f;border:1px solid var(--good)">Caught up.</div>`;
+    }
+    const nextTeam = cur !== null ? NS.board.teamForPick(S, cur) : '-';
+    sec.innerHTML = `<details ${ui.rapidOpen ? 'open' : ''} id="rapidDetails"><summary>Rapid catch-up</summary>
+      <div class="fieldRow"><label>Live draft is at pick #</label>
+        <input type="number" id="rapidTarget" value="${esc(ui.rapidTarget)}" min="1" max="190"></div>
+      ${behind}
+      <div class="dim">Next assignment: pick ${cur ?? '-'} &rarr; ${esc(nextTeam)}${cur !== null && NS.board.isMyPick(S, cur) ? ' (YOU)' : ''}</div>
+      <input type="search" id="rapidInput" placeholder="Type 3+ letters, tap the match"
+        style="width:100%;font-size:20px;min-height:56px;margin-top:6px" autocomplete="off">
+      <div id="rapidMatches"></div>
+    </details>`;
+    main.appendChild(sec);
+
+    const det = sec.querySelector('#rapidDetails');
+    det.addEventListener('toggle', () => { ui.rapidOpen = det.open; });
+    sec.querySelector('#rapidTarget').onchange = e => { ui.rapidTarget = e.target.value; render(); };
+    const input = sec.querySelector('#rapidInput');
+    const matches = sec.querySelector('#rapidMatches');
+    input.oninput = () => {
+      matches.innerHTML = '';
+      const q = input.value.trim();
+      if (q.length < 3) return;
+      const avail = NS.board.available(S);
+      const key = NS.normName(q);
+      let hits = avail.filter(p => p.normName.includes(key));
+      if (!hits.length) {
+        const m = NS.matchName(q, avail);
+        hits = m.kind === 'exact' ? [m.player] : (m.suggestions || []);
+      }
+      hits.slice(0, 6).forEach(p => {
+        const b = document.createElement('button');
+        b.style.cssText = 'display:block;width:100%;text-align:left;margin-top:6px';
+        b.textContent = `${p.name}  (${p.pos}${p.team ? ' ' + p.team : ''})`;
+        b.onclick = () => {
+          const pick = NS.board.currentPick(S);
+          if (pick === null) return;
+          ui.rapidRefocus = true;
+          markPick(p, NS.board.isMyPick(S, pick));
+        };
+        matches.appendChild(b);
+      });
+    };
+    if (ui.rapidRefocus && ui.rapidOpen) {
+      ui.rapidRefocus = false;
+      setTimeout(() => { const el = document.querySelector('#rapidInput'); if (el) el.focus(); }, 0);
+    }
+  }
+
+  function renderRecCard(main, rec) {
+    const sec = document.createElement('section');
+    sec.className = 'card';
+    sec.id = 'recCard';
+    if (S.ghost) sec.classList.add('frozen');
+    if (rec.engineError || rec.draftOver) {
+      sec.innerHTML = rec.draftOver ? '<h2>Draft complete</h2>' : '<h2>Recommendation unavailable</h2>';
+      main.appendChild(sec);
+      return;
+    }
+    const rulePills = ids => ids.map(id => `<span class="pill rule">${id}</span>`).join('');
+
+    if (!rec.myPick) {
+      sec.innerHTML = `<h2>Next up: pick ${rec.nextMyPick ?? '-'} in ${rec.picksUntilMine} picks</h2>` +
+        (S.lastPlan ? `<div class="dim">Plan: ${esc(S.lastPlan)}</div>` : '') +
+        `<div class="dim">Watch list (your top legal targets):</div>` +
+        (rec.watch || []).map(w =>
+          `<div class="recRow"><div class="pInfo"><span class="recName">${esc(w.player.name)}</span>
+           <span class="pill">${w.player.pos}</span>${playerPills(w.player)} ${survPill(w)}</div></div>`).join('') +
+        panelsHtml(rec);
+      main.appendChild(sec);
+      return;
+    }
+
+    const slotRow = (label, item) => item ? `
+      <div class="recRow"><div class="recLabel">${label}</div>
+        <div class="pInfo">
+          <div><span class="recName">${esc(item.player.name)}</span>
+            <span class="pill">${item.player.pos}</span><span class="pill">#${item.player.rank}</span>
+            ${playerPills(item.player)} ${rulePills(item.why.rules)}</div>
+          <div class="recWhy">${esc(item.why.text)}</div>
+        </div></div>` : '';
+
+    // R5: five names - Primary + Alt2-Alt5
+    sec.innerHTML = `<h2>Pick ${rec.pick} - YOUR PICK</h2>` +
+      slotRow('Primary', rec.primary) +
+      (rec.alts || []).map((a, i) => slotRow(`Alt${i + 2}`, a)).join('') +
+      ((rec.espnQueue || []).length ? `<div style="margin-top:6px"><b>ESPN queue should be:</b> ${rec.espnQueue.map(esc).join(' &middot; ')}</div>` : '') +
+      (rec.reachOrWait ? `<div class="dim" style="margin-top:6px">${esc(rec.reachOrWait)}</div>` : '') +
+      (S.lastPlan ? `<div class="dim" style="margin-top:6px">Plan: ${esc(S.lastPlan)}</div>` : '') +
+      (rec.doNotTake.length ? `<details><summary>Do not take (${rec.doNotTake.length})</summary>` +
+        rec.doNotTake.map(d => `<div class="dim">${esc(d.player.name)} - <span class="pill rule">${d.ruleId}</span> ${esc(d.reason)}</div>`).join('') + '</details>' : '') +
+      panelsHtml(rec);
+    main.appendChild(sec);
+    if (rec.primary) {
+      const takeBtn = document.createElement('button');
+      takeBtn.className = 'primaryBtn';
+      takeBtn.textContent = `I picked ${rec.primary.player.name}`;
+      takeBtn.style.marginTop = '8px';
+      takeBtn.onclick = () => markPick(rec.primary.player, true);
+      sec.appendChild(takeBtn);
+    }
+  }
+
+  function panelsHtml(rec) {
+    const st = rec.startable;
+    let h = `<div class="countChips" style="margin-top:10px">` +
+      ['QB', 'RB', 'WR', 'TE'].map(p => `<span class="pill">startable ${p}: ${st[p]}</span>`).join('') + '</div>';
+    h += `<div class="countChips">` + rec.scarcity.map(sc =>
+      `<span class="pill" style="${sc.cliff ? 'border-color:var(--bad);color:var(--bad)' : ''}">${sc.pos} cliff: ${sc.gap === null ? `only ${sc.thin} left` : sc.gap}</span>`).join('') + '</div>';
+    if (rec.survival && rec.survival.length) {
+      h += `<details><summary>Survival to pick ${rec.nextMyPick ?? '-'}</summary>` +
+        rec.survival.map(sv => `<div>${esc(sv.player.name)} ${survPill(sv)}</div>`).join('') +
+        `<div class="dim">${esc(NS.survival.formulaText(S))}${rec.monteCarlo ? ` Monte Carlo: ${rec.monteCarlo.n} sims${rec.monteCarlo.capped ? ' (capped for speed)' : ''}.` : ''}</div></details>`;
+    }
+    if (rec.costOfWaiting && rec.costOfWaiting.length) {
+      h += `<details><summary>Cost of waiting</summary>` +
+        rec.costOfWaiting.map(c => `<div class="dim">${esc(c.text)}</div>`).join('') + '</details>';
+    }
+    return h;
+  }
+
+  function byeLoadAlerts() {
+    const out = [];
+    const roster = NS.board.myRoster(S).map(p => {
+      const q = S.myQueue.find(x => x.normName === p.normName);
+      return { ...p, bye: q ? q.bye : null };
+    }).filter(p => p.bye != null);
+    const byBye = {};
+    roster.forEach(p => { (byBye[p.bye] = byBye[p.bye] || []).push(p); });
+    for (const [bye, players] of Object.entries(byBye)) {
+      if (players.length >= 3) out.push({ red: false, msg: `Bye ${bye}: ${players.length} players (${players.map(p => p.player).join(', ')})` });
+      const byPos = {};
+      players.forEach(p => { (byPos[p.pos] = byPos[p.pos] || []).push(p); });
+      for (const [pos, list] of Object.entries(byPos)) {
+        if (list.length >= 2) out.push({ red: true, msg: `Bye ${bye}: ${list.length} ${pos}s share it (${list.map(p => p.player).join(', ')})` });
+      }
+    }
+    return out;
+  }
+
+  function renderRoster(main) {
+    const roster = NS.board.myRoster(S);
+    const counts = NS.board.posCounts(roster);
+    const targets = S.settings.targets;
+    // ESPN lineup: QB, WR, WR, RB, RB, TE, FLEX (W/R/T), K, DST + bench.
+    // The 2 IR slots are extra and never counted.
+    const SLOTS = ['QB', 'WR', 'WR', 'RB', 'RB', 'TE', 'FLEX', 'K', 'DST'];
+    const pool = roster.slice();
+    const takeWhere = pred => { const i = pool.findIndex(pred); return i >= 0 ? pool.splice(i, 1)[0] : null; };
+    const assigned = SLOTS.map(slot => {
+      let p = null;
+      if (['QB', 'RB', 'WR', 'TE', 'K', 'DST'].includes(slot)) p = takeWhere(x => x.pos === slot);
+      else if (slot === 'FLEX') p = takeWhere(x => ['WR', 'RB', 'TE'].includes(x.pos));
+      return { slot, p };
+    });
+    const byeOf = p => {
+      const q = S.myQueue.find(x => x.normName === p.normName);
+      return q && q.bye != null ? q.bye : null;
+    };
+    const byeCounts = {};
+    roster.forEach(p => { const b = byeOf(p); if (b != null) byeCounts[b] = (byeCounts[b] || 0) + 1; });
+
+    const sec = document.createElement('section');
+    sec.className = 'card';
+    sec.innerHTML = `<h2>My Roster - ${esc(NS.board.myTeamLabel(S.settings))} (${roster.length}/${S.settings.rounds})</h2>` +
+      `<div id="rosterGrid">` + assigned.map(a =>
+        `<div class="slot">${a.slot}</div><div>${a.p ? `${esc(a.p.player)} <span class="dim">${a.p.pos}${byeOf(a.p) != null ? ' - bye ' + byeOf(a.p) : ''}${a.p.keeper ? ' - keeper' : ''}</span>` : '<span class="dim">-</span>'}</div>`).join('') +
+      pool.map(p => `<div class="slot">BN</div><div>${esc(p.player)} <span class="dim">${p.pos}${byeOf(p) != null ? ' - bye ' + byeOf(p) : ''}</span></div>`).join('') +
+      `</div><div class="countChips">` +
+      ['QB', 'RB', 'WR', 'TE', 'K', 'DST'].map(pos =>
+        `<span class="pill" style="${counts[pos] >= targets[pos] ? 'border-color:var(--good)' : ''}">${pos} ${counts[pos]}/${targets[pos]}</span>`).join('') +
+      `</div><div class="byeGrid">` +
+      Object.keys(byeCounts).sort((a, b) => a - b).map(b =>
+        `<span class="byeCell">wk ${b}: ${byeCounts[b]}</span>`).join('') +
+      `</div>`;
+    main.appendChild(sec);
+  }
+
+  function renderAvailable(main) {
+    const sec = document.createElement('section');
+    sec.className = 'card';
+    const avail = NS.board.available(S);
+    const cur = NS.board.currentPick(S);
+    const filtered = avail.filter(p => {
+      if (ui.posFilter !== 'ALL' && p.pos !== ui.posFilter) return false;
+      if (ui.search) {
+        const m = NS.matchName(ui.search, [p]);
+        if (m.kind !== 'exact' && !p.normName.includes(NS.normName(ui.search))) return false;
+      }
+      return true;
+    }).slice(0, 40);
+
+    sec.innerHTML = `<h2>Available (${avail.length})</h2>
+      <input id="searchBox" type="search" placeholder="Search players... (type GHOST MODE to freeze)" value="${esc(ui.search)}" style="width:100%">
+      <div id="posChips"></div>
+      <div class="fieldRow"><label>"Someone else" assigns to:</label><select id="teamSel"></select></div>
+      <div id="availList"></div>
+      <details><summary>Catch-up paste (last N picks in order)</summary>
+        <textarea id="catchupBox" placeholder="Player A, Player B, Player C&#10;(or one per line)"></textarea>
+        <button id="catchupApply">Apply catch-up</button>
+        <div id="catchupResult" class="dim"></div>
+      </details>`;
+    main.appendChild(sec);
+
+    const sb = sec.querySelector('#searchBox');
+    sb.oninput = () => {
+      if (sb.value.trim().toUpperCase() === 'GHOST MODE') { sb.value = ''; ui.search = ''; toggleGhost(); return; }
+      ui.search = sb.value;
+      renderAvailListOnly(sec, cur);
+    };
+    const chips = sec.querySelector('#posChips');
+    ['ALL', 'QB', 'RB', 'WR', 'TE', 'K', 'DST'].forEach(pos => {
+      const b = document.createElement('button');
+      b.textContent = pos;
+      if (ui.posFilter === pos) b.classList.add('on');
+      b.onclick = () => { ui.posFilter = pos; render(); };
+      chips.appendChild(b);
+    });
+    const teamSel = sec.querySelector('#teamSel');
+    const onClock = cur !== null ? NS.board.teamForPick(S, cur) : null;
+    S.settings.teams.forEach(t => {
+      const o = document.createElement('option');
+      o.value = t.name; o.textContent = t.name + (t.name === onClock ? ' (on the clock)' : '');
+      if (t.name === onClock) o.selected = true;
+      teamSel.appendChild(o);
+    });
+    renderAvailListOnly(sec, cur);
+
+    sec.querySelector('#catchupApply').onclick = () => {
+      const names = NS.parser.parseCatchup(sec.querySelector('#catchupBox').value);
+      if (!names.length) return;
+      const res = NS.board.assignCatchup(S, names);
+      act(() => {
+        res.assignments.forEach(a => {
+          S.picks.push(a);
+          S.log.push({ t: a.byMe ? 'mypick' : 'pick', pick: a.pick, team: a.team, player: a.player, pos: a.pos, catchup: true, rules: [] });
+        });
+      });
+      const un = res.unmatched.map(u => `${u.name}${u.suggestions.length ? ` (did you mean: ${u.suggestions.join(' / ')}?)` : ''}`);
+      toast(`Assigned ${res.assignments.length} picks${un.length ? `, ${un.length} unmatched` : ''}`);
+      if (un.length) alert('Unmatched (fix and re-paste just these):\n' + un.join('\n'));
+    };
+  }
+
+  function renderAvailListOnly(sec, cur) {
+    const nextMine = cur !== null ? NS.pickorder.myNextLivePick(S.settings, NS.board.isMyPick(S, cur) ? cur + 1 : cur) : null;
+    const between = nextMine && cur !== null ? NS.pickorder.livePicksBetween(S.settings, NS.board.isMyPick(S, cur) ? cur : cur - 1, nextMine) : 0;
+    const avail = NS.board.available(S).filter(p => {
+      if (ui.posFilter !== 'ALL' && p.pos !== ui.posFilter) return false;
+      if (ui.search && !p.normName.includes(NS.normName(ui.search))) {
+        const m = NS.matchName(ui.search, [p]);
+        if (m.kind !== 'exact') return false;
+      }
+      return true;
+    }).slice(0, 40);
+    const list = sec.querySelector('#availList');
+    list.innerHTML = '';
+    const teamSel = sec.querySelector('#teamSel');
+    avail.forEach(p => {
+      const d = decorateLite(p);
+      const row = document.createElement('div');
+      row.className = 'playerRow';
+      const surv = cur !== null ? NS.survival.heuristic(S, p, cur, between) : 'likely';
+      row.innerHTML = `<div class="pInfo"><div class="pName">#${p.rank} ${esc(p.name)}</div>
+        <div class="pMeta">${p.pos}${p.team ? ' - ' + esc(p.team) : ''}${playerPills(d)} ${survPill({ label: surv, prob: null })}</div></div>`;
+      const meBtn = document.createElement('button');
+      meBtn.className = 'small primaryBtn';
+      meBtn.textContent = 'I picked';
+      meBtn.onclick = () => markPick(p, true);
+      const otherBtn = document.createElement('button');
+      otherBtn.className = 'small';
+      otherBtn.textContent = 'Other';
+      otherBtn.onclick = () => markPick(p, false, teamSel.value);
+      row.appendChild(meBtn);
+      row.appendChild(otherBtn);
+      longPressify(row.querySelector('.pName'), p);
+      list.appendChild(row);
+    });
+  }
+
+  // ---- KEEPERS tab ----------------------------------------------------------
+  // Rows of {team name, player name, round}. Blank round = not kept (player
+  // stays in the queue). Resolved to pick numbers against the saved draft
+  // order; an unmatched team name gets a red badge and is excluded from the
+  // board until fixed - never silently dropped.
+  function renderKeepersTab(main) {
+    const s = S.settings;
+    const sec = document.createElement('section');
+    sec.className = 'card';
+    const me = NS.board.myTeamName(s);
+    const { resolved } = NS.pickorder.resolveKeepers(s);
+    const resolvedFor = k => resolved.find(r =>
+      r.team === k.team && NS.normName(r.player) === NS.normName(k.player) && r.round === parseInt(k.round, 10));
+
+    sec.innerHTML = `<h2>Keepers</h2>
+      <div class="dim">Blank round = not kept (player stays in the queue). Filling a round strips the player,
+      pre-fills that team's pick, and skips it on the clock. A row for <b>${esc(me)}</b> (ME) with a round set
+      also lands on your roster and consumes that round's pick. Rounds 1-${s.rounds}.</div>
+      <datalist id="teamNames">${s.teams.map(t => `<option value="${esc(t.name)}">`).join('')}</datalist>
+      <div id="keeperRows"></div>
+      <button id="keeperAdd">+ Add keeper row</button>`;
+    main.appendChild(sec);
+
+    const rows = sec.querySelector('#keeperRows');
+    s.keepers.forEach((k, i) => {
+      const row = document.createElement('div');
+      row.className = 'fieldRow';
+      const res = resolvedFor(k);
+      const roundSet = !!parseInt(k.round, 10);
+      const unmatched = roundSet && !res && !s.teams.some(t => t.name === k.team);
+      row.innerHTML = `
+        <input type="text" list="teamNames" data-kf="team" value="${esc(k.team)}" style="width:90px" placeholder="team">
+        <input type="text" data-kf="player" value="${esc(k.player)}" style="width:150px" placeholder="player">
+        <input type="number" data-kf="round" value="${k.round || ''}" min="1" max="${s.rounds}" style="width:64px" placeholder="rd">
+        <span>${k.team === me ? '<span class="pill" style="border-color:var(--good);color:var(--good)">ME</span>' : ''}
+        ${res ? `<span class="pill">pick ${res.pick}</span>` : ''}
+        ${unmatched ? '<span class="pill" style="background:#67060c;border-color:var(--bad)">unmatched team</span>' : ''}
+        ${!roundSet ? '<span class="pill">not kept</span>' : ''}</span>`;
+      row.querySelectorAll('[data-kf]').forEach(inp => {
+        inp.onchange = () => {
+          applySetupChange(() => {
+            const field = inp.dataset.kf;
+            if (field === 'round') k.round = inp.value === '' ? null : parseInt(inp.value, 10);
+            else k[field] = inp.value.trim();
+          });
+        };
+      });
+      const del = document.createElement('button');
+      del.className = 'small dangerBtn';
+      del.innerHTML = '&#10005;';
+      del.onclick = () => {
+        if (!confirm(`Remove keeper row ${k.team} / ${k.player}?`)) return;
+        applySetupChange(() => { s.keepers.splice(i, 1); });
+      };
+      row.appendChild(del);
+      rows.appendChild(row);
+    });
+    sec.querySelector('#keeperAdd').onclick = () => {
+      applySetupChange(() => { s.keepers.push({ team: '', player: '', round: null }); });
+    };
+  }
+
+  // ---- PLAYBOOK tab ---------------------------------------------------------
+  function renderPlaybookTab(main) {
+    main.insertAdjacentHTML('beforeend', `<section class="card"><h2>Playbook (hard rules)</h2>` +
+      NS.playbook.RULES.map(r => `<div style="padding:6px 0;border-bottom:1px solid var(--line)">
+        <span class="pill rule">${r.ruleId}</span> <b>${esc(r.label)}</b><div class="dim">${esc(r.text)}</div></div>`).join('') +
+      `<h3 style="margin-top:12px">Scoring reference</h3><div class="dim">${esc(NS.DATA.SCORING_TEXT)}</div>
+      <h3 style="margin-top:12px">Injury / status tags</h3>` +
+      S.injuries.map(i => `<div class="dim">${esc(i.name)} - ${esc(i.tag)}</div>`).join('') +
+      `</section>`);
+  }
+
+  // ---- QUEUE tab ------------------------------------------------------------
+  function renderQueueTab(main) {
+    const sec = document.createElement('section');
+    sec.className = 'card';
+    sec.innerHTML = `<h2>My Queue ${S.usingSample ? '<span class="pill" style="border-color:var(--warn);color:var(--warn)">SAMPLE + filler</span>' : ''}</h2>
+      <details ${S.usingSample ? 'open' : ''}><summary>Paste rankings (replaces the whole queue)</summary>
+        <div class="dim">Formats: "12. Name" / "12 Name RB DET 6" / "12, Name, RB, DET, 6". Lines "---", "===" or "TIER n" are tier breaks.</div>
+        <textarea id="queuePaste"></textarea>
+        <button class="primaryBtn" id="queueReplace">Replace queue</button>
+      </details>
+      <details><summary>ADP paste (availability only - never reorders)</summary>
+        <textarea id="adpPaste" placeholder="1 Player Name&#10;2 Player Name">${esc((S.adp || []).map(a => `${a.rank} ${a.name}`).join('\n'))}</textarea>
+        <button id="adpApply">Save ADP</button> <button id="adpClear">Clear</button>
+      </details>
+      <div style="margin:8px 0"><button class="small" id="qAdd">+ Add player</button></div>
+      <div id="qList"></div>`;
+    main.appendChild(sec);
+
+    sec.querySelector('#queueReplace').onclick = () => {
+      const text = sec.querySelector('#queuePaste').value;
+      if (!text.trim()) return toast('Nothing to paste');
+      // Keepers stay IN the stored queue (a blanked round must restore them);
+      // active keepers are filtered out of "available" dynamically instead.
+      const parsed = NS.parser.parseQueue(text, { byes: S.settings.byes, keepers: [], tierSize: S.settings.tierSize });
+      if (!parsed.players.length) return toast('No players parsed');
+      const kept = NS.board.activeKeeperKeys(S.settings);
+      const keptNames = parsed.players.filter(p => kept.has(p.normName)).map(p => p.name);
+      if (!confirm(`Replace the ENTIRE queue with ${parsed.players.length} players?` +
+        (keptNames.length ? `\n(Currently kept, will stay hidden from available: ${keptNames.join(', ')})` : '') +
+        (parsed.warnings.length ? `\n${parsed.warnings.length} unparsed lines will be dropped.` : ''))) return;
+      act(() => {
+        S.myQueue = parsed.players;
+        S.usingSample = false;
+        NS.overlay.applyPreTags(S); // rule-7 pre-tags survive every paste
+        NS.store.recompute(S);      // keeper entries re-resolve pos/bye from the new queue
+        S.log.push({ t: 'queue', msg: `Queue replaced: ${parsed.players.length} players` });
+      });
+      toast('Queue replaced');
+    };
+    sec.querySelector('#adpApply').onclick = () => {
+      act(() => { S.adp = NS.parser.parseRankList(sec.querySelector('#adpPaste').value, { keepers: S.settings.keepers }); });
+      toast(`ADP saved (${S.adp.length})`);
+    };
+    sec.querySelector('#adpClear').onclick = () => act(() => { S.adp = []; });
+    sec.querySelector('#qAdd').onclick = () => {
+      const name = prompt('Player name:'); if (!name) return;
+      const pos = (prompt('Position (QB/RB/WR/TE/K/DST):') || '').toUpperCase();
+      const team = (prompt('NFL team abbrev (blank = unknown):') || '').toUpperCase();
+      act(() => {
+        S.myQueue.push({
+          rank: S.myQueue.length + 1, name, normName: NS.normName(name), pos, team,
+          bye: S.settings.byes[team] ?? null, tier: S.myQueue.length ? S.myQueue[S.myQueue.length - 1].tier : 1,
+          tags: pos && team ? [] : ['needs data'], marker: null, handcuffOf: null
+        });
+        renumber();
+      });
+    };
+    renderQueueList(sec.querySelector('#qList'));
+  }
+
+  function renumber() {
+    S.myQueue.forEach((p, i) => { p.rank = i + 1; });
+  }
+
+  function renderQueueList(host) {
+    host.innerHTML = '';
+    const gone = NS.board.pickedKeys(S);
+    let lastTier = null;
+    S.myQueue.forEach((p, i) => {
+      if (p.tier !== lastTier) {
+        lastTier = p.tier;
+        const th = document.createElement('div');
+        th.className = 'qRow tierHead';
+        th.textContent = `TIER ${p.tier}`;
+        host.appendChild(th);
+      }
+      const row = document.createElement('div');
+      row.className = 'qRow';
+      const drafted = gone.has(p.normName);
+      row.innerHTML = `<div class="qName" style="${drafted ? 'text-decoration:line-through;color:var(--dim)' : ''}">
+        #${p.rank} ${esc(p.name)} <span class="dim">${p.pos}${p.team ? ' ' + esc(p.team) : ''}${p.bye != null ? ' b' + p.bye : ''}</span>${playerPills(decorateLite(p))}</div>`;
+      const mk = (label, fn, cls) => {
+        const b = document.createElement('button');
+        b.className = 'small' + (cls ? ' ' + cls : '');
+        b.innerHTML = label;
+        b.onclick = fn;
+        return b;
+      };
+      row.appendChild(mk('&#9650;', () => act(() => { if (i > 0) { S.myQueue.splice(i - 1, 0, S.myQueue.splice(i, 1)[0]); S.myQueue[i - 1].tier = S.myQueue[i].tier; renumber(); } })));
+      row.appendChild(mk('&#9660;', () => act(() => { if (i < S.myQueue.length - 1) { S.myQueue.splice(i + 1, 0, S.myQueue.splice(i, 1)[0]); S.myQueue[i + 1].tier = S.myQueue[i].tier; renumber(); } })));
+      row.appendChild(mk('&#9998;', () => {
+        const name = prompt('Name:', p.name); if (name === null) return;
+        const pos = prompt('Pos:', p.pos); if (pos === null) return;
+        const team = prompt('Team:', p.team); if (team === null) return;
+        act(() => {
+          p.name = name; p.normName = NS.normName(name);
+          p.pos = pos.toUpperCase(); p.team = team.toUpperCase();
+          p.bye = S.settings.byes[p.team] ?? p.bye;
+          p.tags = (p.pos && p.team && p.bye != null) ? p.tags.filter(t => t !== 'needs data') : p.tags;
+        });
+      }));
+      if (S.settings.flags.markers) {
+        const label = p.marker === 'target' ? '&#9733;' : p.marker === 'avoid' ? '&#10060;' : p.handcuffOf ? '&#128279;' : '&#9734;';
+        row.appendChild(mk(label, () => {
+          act(() => {
+            if (!p.marker && !p.handcuffOf) p.marker = 'target';
+            else if (p.marker === 'target') { p.marker = 'avoid'; }
+            else if (p.marker === 'avoid') {
+              p.marker = null;
+              const of = prompt('Handcuff of (blank = none):', '');
+              p.handcuffOf = of || null;
+            } else { p.handcuffOf = null; p.marker = null; }
+          });
+        }));
+      }
+      // Overlay pre-tags are removable here (they are stored by name in
+      // settings, so removal survives future pastes too).
+      NS.overlay.tagsFor(S, NS.board.currentPick(S) || 1, p).forEach(tag => {
+        if (!tag.list) return; // stack is computed, not stored
+        row.appendChild(mk(`${esc(tag.label)} &#10005;`, () => act(() => {
+          const list = S.settings.overlay[tag.list] || [];
+          const idx = list.findIndex(n => NS.normName(n) === p.normName);
+          if (idx >= 0) list.splice(idx, 1);
+          if (tag.list === 'targets' && S.settings.overlay.targetFrom) {
+            for (const n of Object.keys(S.settings.overlay.targetFrom)) {
+              if (NS.normName(n) === p.normName) delete S.settings.overlay.targetFrom[n];
+            }
+          }
+        })));
+      });
+      if (NS.overlay.handcuffStarter(S, p.normName)) {
+        row.appendChild(mk('cuff &#10005;', () => act(() => {
+          for (const n of Object.keys(S.settings.overlay.handcuffs || {})) {
+            if (NS.normName(n) === p.normName) delete S.settings.overlay.handcuffs[n];
+          }
+          p.handcuffOf = null;
+        })));
+      }
+      row.appendChild(mk('&#8213;', () => act(() => { // insert tier break after this player
+        for (let j = i + 1; j < S.myQueue.length; j++) S.myQueue[j].tier++;
+      })));
+      row.appendChild(mk('&#10005;', () => { if (confirm(`Delete ${p.name} from queue?`)) act(() => { S.myQueue.splice(i, 1); renumber(); }); }, 'dangerBtn'));
+      longPressify(row.querySelector('.qName'), p);
+      host.appendChild(row);
+    });
+  }
+
+  // ---- BOARD tab ------------------------------------------------------------
+  function renderBoardTab(main) {
+    const tc = NS.board.teamCounts(S);
+    const rows = S.settings.teams.map(t => {
+      const c = tc[t.name];
+      return `<tr><td>${esc(t.name)}${t.name === NS.board.myTeamName(S.settings) ? ' (you)' : ''}</td>` +
+        ['QB', 'RB', 'WR', 'TE', 'K', 'DST'].map(p => `<td>${c[p]}</td>`).join('') + '</tr>';
+    }).join('');
+    const byTeam = {};
+    S.picks.slice().sort((a, b) => a.pick - b.pick).forEach(p => { (byTeam[p.team] = byTeam[p.team] || []).push(p); });
+    main.insertAdjacentHTML('beforeend', `<section class="card"><h2>Board</h2>
+      <div class="tableWrap"><table><tr><th>Team</th><th>QB</th><th>RB</th><th>WR</th><th>TE</th><th>K</th><th>DST</th></tr>${rows}</table></div>
+      <div class="dim" style="margin-top:6px">Counts include keepers from pick 1.</div>` +
+      S.settings.teams.map(t => `<details><summary>${esc(t.name)} (${(byTeam[t.name] || []).length})</summary>` +
+        (byTeam[t.name] || []).map(p => `<div class="dim">${p.pick}. ${esc(p.player)} (${p.pos})${p.keeper ? ' - keeper' : ''}</div>`).join('') +
+        `</details>`).join('') +
+      `</section>`);
+  }
+
+  // ---- PROPS tab ------------------------------------------------------------
+  function renderPropsTab(main) {
+    const sec = document.createElement('section');
+    sec.className = 'card';
+    sec.innerHTML = `<h2>Props / Vegas notes</h2>
+      <div class="dim">One per line: PLAYER | PROP TYPE | LINE | NOTE. "over/sharp/volume" tags money edge; "under/fade" tags fade. Annotation only - never reorders anything (R10).</div>
+      <textarea id="propsPaste">${esc(S.propsText || '')}</textarea>
+      <button class="primaryBtn" id="propsApply">Save props</button>
+      <div id="propsList" style="margin-top:8px">` +
+      (S.props || []).map(pr => `<div class="dim">${esc(pr.player)} - ${esc(pr.type)} ${esc(pr.line)} ${esc(pr.note)} ${pr.tag ? `<span class="pill ${pr.tag === 'money edge' ? 'money' : 'fade'}">${pr.tag}</span>` : ''}</div>`).join('') +
+      `</div>`;
+    main.appendChild(sec);
+    sec.querySelector('#propsApply').onclick = () => {
+      act(() => {
+        S.propsText = sec.querySelector('#propsPaste').value;
+        S.props = NS.parser.parseProps(S.propsText, { keepers: S.settings.keepers });
+      });
+      toast(`Saved ${S.props.length} props`);
+    };
+  }
+
+  // ---- FP tab ---------------------------------------------------------------
+  function renderFpTab(main) {
+    const sec = document.createElement('section');
+    sec.className = 'card';
+    let compare = '';
+    if ((S.fp || []).length) {
+      const cur = NS.board.currentPick(S) || 1;
+      const availByKey = {};
+      NS.board.available(S).forEach((p, i) => { availByKey[p.normName] = { p, availRank: i + 1 }; });
+      const rows = S.fp.map(f => {
+        const mine = availByKey[f.normName];
+        if (!mine) return `<tr><td>${esc(f.name)}</td><td>${f.rank}</td><td colspan="2" class="dim">not in my available queue</td></tr>`;
+        const delta = mine.availRank - f.rank;
+        let verdict = 'about even';
+        if (delta >= 3) verdict = `FP likes ${esc(f.name)} more than us (+${delta})`;
+        else if (delta <= -3) verdict = `We like ${esc(f.name)} more than FP (${delta})`;
+        const conflict = NS.conflictCheck(S, mine.p);
+        return `<tr><td>${esc(f.name)}</td><td>${f.rank}</td><td>${mine.availRank}</td>
+          <td>${verdict}${!conflict.legal ? ` <span class="pill rule">${conflict.ruleId}</span>` : ''}</td></tr>`;
+      }).join('');
+      compare = `<div class="tableWrap"><table><tr><th>Player</th><th>FP</th><th>My avail rank</th><th>Read</th></tr>${rows}</table></div>`;
+    }
+    sec.innerHTML = `<h2>FantasyPros compare (second opinion only)</h2>
+      <div class="dim">Paste "FP top 20 available" as "rank name" lines. Never auto-picks or reorders.</div>
+      <textarea id="fpPaste">${esc(S.fpText || '')}</textarea>
+      <button class="primaryBtn" id="fpApply">Save FP list</button>` + compare;
+    main.appendChild(sec);
+    sec.querySelector('#fpApply').onclick = () => {
+      act(() => {
+        S.fpText = sec.querySelector('#fpPaste').value;
+        S.fp = NS.parser.parseRankList(S.fpText, { keepers: S.settings.keepers });
+      });
+      render();
+    };
+  }
+
+  // ---- LOG tab --------------------------------------------------------------
+  function buildRecap() {
+    const lines = ['=== DRAFT RECAP ==='];
+    const picks = S.picks.slice().sort((a, b) => a.pick - b.pick);
+    let round = 0;
+    picks.forEach(p => {
+      const r = NS.pickorder.slotForPick(p.pick, S.settings.teams.length).round;
+      if (r !== round) { round = r; lines.push(`\n-- Round ${r} --`); }
+      lines.push(`${p.pick}. ${p.team}: ${p.player} (${p.pos})${p.keeper ? ' [keeper]' : ''}${p.byMe ? ' <== ME' : ''}`);
+    });
+    lines.push('\n=== MY ROSTER ===');
+    NS.board.myRoster(S).forEach(p => lines.push(`${p.pick}. ${p.player} (${p.pos})`));
+    const counts = NS.board.posCounts(NS.board.myRoster(S));
+    lines.push(`Counts: QB ${counts.QB} / RB ${counts.RB} / WR ${counts.WR} / TE ${counts.TE} / K ${counts.K} / DST ${counts.DST}`);
+    lines.push('\n=== RULES FIRED PER PICK ===');
+    S.log.filter(l => l.t === 'mypick').forEach(l =>
+      lines.push(`Pick ${l.pick}: ${l.player} ${l.rules && l.rules.length ? '[' + l.rules.join(', ') + ']' : '[queue order]'}${l.matchedPrimary === false ? ' (off-script)' : ''}`));
+    if (S.settings.flags.resilience) {
+      const mine = S.log.filter(l => l.t === 'mypick' && l.matchedPrimary !== undefined);
+      if (mine.length) {
+        const hit = mine.filter(l => l.matchedPrimary).length;
+        lines.push(`\n=== DRAFT GRADE ===`);
+        lines.push(`Followed primary rec: ${hit}/${mine.length} (${Math.round(100 * hit / mine.length)}%)`);
+        if ((S.adp || []).length) {
+          let value = 0, n = 0;
+          S.log.filter(l => l.t === 'mypick').forEach(l => {
+            const a = S.adp.find(x => x.normName === NS.normName(l.player));
+            if (a) { value += l.pick - a.rank; n++; }
+          });
+          if (n) lines.push(`Value vs ADP: ${value >= 0 ? '+' : ''}${value} total picks over ${n} matched picks`);
+        }
+      }
+    }
+    return lines.join('\n');
+  }
+
+  function renderLogTab(main) {
+    const sec = document.createElement('section');
+    sec.className = 'card';
+    sec.innerHTML = `<h2>Log / Export</h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button id="exportBtn" class="primaryBtn">Export State (JSON)</button>
+        <button id="recapBtn">Text recap</button>
+      </div>
+      <textarea id="ioBox" placeholder="Export appears here. Paste a previous export here and tap Import."></textarea>
+      <button id="importBtn" class="dangerBtn">Import State (replaces everything)</button>
+      <h3>Draft log</h3><div id="logList">` +
+      S.log.slice().reverse().slice(0, 200).map(l => {
+        if (l.t === 'plan') return `<div class="dim">&#128203; ${esc(l.msg)}</div>`;
+        if (l.t === 'mypick') return `<div><b>Pick ${l.pick}: ${esc(l.player)}</b> ${(l.rules || []).map(r => `<span class="pill rule">${r}</span>`).join('')}${l.matchedPrimary ? ' <span class="pill" style="color:var(--good)">on script</span>' : ''}</div>`;
+        if (l.t === 'pick') return `<div class="dim">Pick ${l.pick} - ${esc(l.team)}: ${esc(l.player)} (${esc(l.pos)})</div>`;
+        if (l.t === 'error') return `<div class="testFail">ENGINE: ${esc(String(l.msg).slice(0, 200))}</div>`;
+        return `<div class="dim">${esc(l.msg || l.t)}</div>`;
+      }).join('') + `</div>`;
+    main.appendChild(sec);
+    sec.querySelector('#exportBtn').onclick = () => {
+      const json = JSON.stringify(NS.store.exportable(S), null, 1);
+      sec.querySelector('#ioBox').value = json;
+      try {
+        const blob = new Blob([json], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'draftos-espn-state.json';
+        a.click();
+      } catch (e) { /* iOS fallback: copy from the textarea */ }
+      toast('Exported - copy the text or save the file');
+    };
+    sec.querySelector('#recapBtn').onclick = () => { sec.querySelector('#ioBox').value = buildRecap(); };
+    sec.querySelector('#importBtn').onclick = () => {
+      const raw = sec.querySelector('#ioBox').value.trim();
+      if (!raw) return toast('Paste an export first');
+      if (!confirm('Import will REPLACE all current state. Continue?')) return;
+      try {
+        S = NS.store.importJson(raw);
+        save();
+        render();
+        toast('Imported');
+      } catch (e) { alert('Import failed: ' + e.message); }
+    };
+  }
+
+  // ---- SETTINGS tab ---------------------------------------------------------
+  function renderSettingsTab(main) {
+    const s = S.settings;
+    const sec = document.createElement('section');
+    sec.className = 'card';
+    const num = (id, label, value, step, min, max) =>
+      `<div class="fieldRow"><label>${label}</label><input type="number" id="${id}" value="${value}" step="${step || 1}"${min !== undefined ? ` min="${min}"` : ''}${max !== undefined ? ` max="${max}"` : ''}></div>`;
+    const flag = (id, label) =>
+      `<div class="fieldRow"><label>${label}</label><input type="checkbox" id="${id}" ${s.flags[id.replace('flag_', '')] ? 'checked' : ''}></div>`;
+    sec.innerHTML = `<h2>Settings - ${esc(NS.board.myTeamLabel(s))}</h2>
+      <h3>Draft setup (guarded once picks are marked)</h3>
+      ${num('set_slot', 'My draft slot (1-12)', s.mySlot, 1, 1, s.teams.length)}
+      ${num('set_rounds', `Rounds (${s.roundsMin}-${s.roundsMax}; all pick math recomputes)`, s.rounds, 1, s.roundsMin, s.roundsMax)}
+      <div class="dim">Draft order (type the real names right before the draft; mark one as ME):</div>
+      <div id="teamEdit"></div>
+      <h3>Clock + thresholds</h3>
+      ${num('set_clock', 'Clock seconds', s.clockSeconds)}
+      ${num('set_tier', 'Default tier size (no tier breaks pasted)', s.tierSize)}
+      ${num('set_scarcity', 'Scarcity cliff gap', s.scarcityGap)}
+      ${num('set_panic', 'Panic pick P(available) %', s.panicProb)}
+      ${num('set_stQB', 'Startable QB threshold (rule 9: top 15)', s.startable.QB)}
+      ${num('set_stRB', 'Startable RB threshold', s.startable.RB)}
+      ${num('set_stWR', 'Startable WR threshold', s.startable.WR)}
+      ${num('set_stTE', 'Startable TE threshold', s.startable.TE)}
+      ${num('set_survL', 'Survival "likely" factor', s.survivalFactors.likely, 0.1)}
+      ${num('set_survC', 'Survival "coin-flip" factor', s.survivalFactors.coinflip, 0.1)}
+      ${num('set_qb3', '3rd QB earliest overall pick (rule 3)', s.qb3Pick)}
+      <h3>Sim QB appetite (rule 9, 1QB room)</h3>
+      ${num('set_simQ1', 'First QB window start round', s.simQB.firstQBStart)}
+      ${num('set_simQ2', 'First QB window end round', s.simQB.firstQBEnd)}
+      ${num('set_simQ3', 'Second QB after round', s.simQB.secondQBAfter)}
+      <div class="fieldRow"><label>Rule-2 elite QBs (comma-separated)</label></div>
+      <textarea id="set_elite">${esc((s.eliteQBs || []).join(', '))}</textarea>
+      <div class="fieldRow"><label>Rule-1 early TEs (comma-separated)</label></div>
+      <textarea id="set_earlyTE">${esc((s.earlyTEs || []).join(', '))}</textarea>
+      <div class="fieldRow"><label>Dual-threat QBs (upside overlay, comma-separated)</label></div>
+      <textarea id="set_dualThreat">${esc((s.overlay && s.overlay.dualThreatQBs || []).join(', '))}</textarea>
+      <h3>Feature flags</h3>
+      ${flag('flag_monteCarlo', 'A1 Monte Carlo survival')}
+      ${flag('flag_roadmap', 'A2 Pre-draft roadmap')}
+      ${flag('flag_buildGuard', 'A3 Build-path guard')}
+      ${flag('flag_byeLoad', 'A4 Bye-week load alerts')}
+      ${flag('flag_markers', 'A5 Queue markers (rule 6 handcuffs need this)')}
+      ${flag('flag_resilience', 'A6 Draft grade (post-draft, in the text recap)')}
+      <h3>Byes (team week)</h3>
+      <textarea id="set_byes">${esc(Object.entries(s.byes).map(([t, b]) => `${t} ${b}`).join('\n'))}</textarea>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+        <button class="primaryBtn" id="saveSettings">Save settings</button>
+        <button id="selfTestBtn">Run self-test</button>
+        <button id="espnExportBtn">Export ESPN pre-draft list</button>
+        <button id="roadmapBtn">Generate roadmap</button>
+        <button class="dangerBtn" id="resetBtn">Reset app</button>
+      </div>
+      <textarea id="espnOut" style="display:none" placeholder="ESPN pre-draft list appears here"></textarea>
+      <div id="selfTestOut" class="mono" style="margin-top:8px;font-size:12px"></div>
+      <div id="roadmapOut" style="margin-top:8px"></div>`;
+    main.appendChild(sec);
+
+    const teamEdit = sec.querySelector('#teamEdit');
+    s.teams.forEach(t => {
+      teamEdit.insertAdjacentHTML('beforeend',
+        `<div class="fieldRow"><label>Slot ${t.slot}</label>
+         <input type="text" data-slot="${t.slot}" value="${esc(t.name)}">
+         <label style="flex:0"><input type="radio" name="meRadio" data-me="${t.slot}" ${t.slot === s.mySlot ? 'checked' : ''}> ME</label></div>`);
+    });
+
+    sec.querySelector('#saveSettings').onclick = () => {
+      const g = id => sec.querySelector('#' + id);
+      // Read the structural fields first so the setup guard can tell whether
+      // slot / order / rounds actually changed.
+      const meRadio = sec.querySelector('input[name="meRadio"]:checked');
+      const newSlot = meRadio ? +meRadio.dataset.me
+        : Math.min(s.teams.length, Math.max(1, +g('set_slot').value || s.mySlot));
+      const newRounds = Math.min(s.roundsMax, Math.max(s.roundsMin, +g('set_rounds').value || s.rounds));
+      const newNames = {};
+      sec.querySelectorAll('[data-slot]').forEach(inp => { newNames[+inp.dataset.slot] = inp.value.trim(); });
+      const structuralChanged =
+        newSlot !== s.mySlot || newRounds !== s.rounds ||
+        s.teams.some(t => newNames[t.slot] && newNames[t.slot] !== t.name);
+
+      const applyAll = () => {
+        s.mySlot = newSlot;
+        s.rounds = newRounds;
+        s.teams.forEach(t => { if (newNames[t.slot]) t.name = newNames[t.slot]; });
+        s.clockSeconds = +g('set_clock').value || 90;
+        s.tierSize = +g('set_tier').value || 12;
+        s.scarcityGap = +g('set_scarcity').value || 15;
+        s.panicProb = +g('set_panic').value || 80;
+        s.startable = { QB: +g('set_stQB').value || 15, RB: +g('set_stRB').value || 30, WR: +g('set_stWR').value || 36, TE: +g('set_stTE').value || 12 };
+        s.survivalFactors = { likely: +g('set_survL').value || 1, coinflip: +g('set_survC').value || 0.5 };
+        s.qb3Pick = +g('set_qb3').value || 130;
+        s.simQB = {
+          firstQBStart: +g('set_simQ1').value || 4,
+          firstQBEnd: +g('set_simQ2').value || 9,
+          secondQBAfter: +g('set_simQ3').value || 10
+        };
+        s.eliteQBs = g('set_elite').value.split(',').map(x => x.trim()).filter(Boolean);
+        s.earlyTEs = g('set_earlyTE').value.split(',').map(x => x.trim()).filter(Boolean);
+        if (!s.overlay) s.overlay = NS.overlay.defaults();
+        s.overlay.dualThreatQBs = g('set_dualThreat').value.split(',').map(x => x.trim()).filter(Boolean);
+        ['monteCarlo', 'roadmap', 'buildGuard', 'byeLoad', 'markers', 'resilience'].forEach(f => {
+          s.flags[f] = g('flag_' + f).checked;
+        });
+        const byes = {};
+        g('set_byes').value.split(/\r?\n/).forEach(line => {
+          const m = line.trim().match(/^([A-Za-z]{2,3})\s+(\d+)$/);
+          if (m) byes[m[1].toUpperCase()] = +m[2];
+        });
+        if (Object.keys(byes).length >= 30) s.byes = byes;
+      };
+
+      if (structuralChanged) {
+        if (applySetupChange(applyAll)) toast('Settings saved - board recomputed');
+      } else {
+        act(() => { applyAll(); NS.store.recompute(S); });
+        toast('Settings saved');
+      }
+    };
+
+    sec.querySelector('#selfTestBtn').onclick = () => {
+      const out = sec.querySelector('#selfTestOut');
+      out.innerHTML = 'running...';
+      setTimeout(() => {
+        const results = NS.runSelfTests();
+        const pass = results.filter(r => r.pass).length;
+        out.innerHTML = `<div><b>${pass}/${results.length} passed</b></div>` +
+          results.map(r => `<div class="${r.pass ? 'testPass' : 'testFail'}">${r.pass ? 'PASS' : 'FAIL'} ${esc(r.name)}${r.detail ? ' - ' + esc(r.detail) : ''}</div>`).join('');
+      }, 30);
+    };
+
+    sec.querySelector('#espnExportBtn').onclick = () => {
+      const out = sec.querySelector('#espnOut');
+      out.value = NS.store.espnPreDraftList(S);
+      out.style.display = 'block';
+      try {
+        const blob = new Blob([out.value], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'espn-predraft-list.txt';
+        a.click();
+      } catch (e) { /* iOS fallback: copy from the textarea */ }
+      toast('Queue exported - active keepers stripped, K/DST at the bottom');
+    };
+
+    sec.querySelector('#roadmapBtn').onclick = () => {
+      if (!s.flags.roadmap) return alert('Enable the A2 roadmap flag first (it runs 100 full mocks - a night-before tool).');
+      const out = sec.querySelector('#roadmapOut');
+      out.innerHTML = '<div class="dim">Running 100 mocks...</div>';
+      setTimeout(() => {
+        ui.roadmap = NS.sim.roadmap(S, 100);
+        const rows = ui.roadmap.map(r =>
+          `<tr><td>${r.pick}</td><td>${esc(r.primary)}</td>
+           <td>${r.top3.map(c => `${esc(c.name)} ${c.pct}%`).join('<br>')}</td>
+           <td class="mono">${['QB', 'RB', 'WR', 'TE'].map(p => `${p}${r.counts[p]}`).join(' ')}</td></tr>`).join('');
+        const text = ui.roadmap.map(r => `Pick ${r.pick}: ${r.primary} | ${r.top3.map(c => `${c.name} ${c.pct}%`).join(', ')} | ` +
+          ['QB', 'RB', 'WR', 'TE', 'K', 'DST'].map(p => `${p} ${r.counts[p]}`).join(', ')).join('\n');
+        out.innerHTML = `<div class="tableWrap"><table><tr><th>Pick</th><th>Most common</th><th>Top 3</th><th>Counts after</th></tr>${rows}</table></div>
+          <details><summary>Export as text</summary><textarea>${esc(text)}</textarea></details>`;
+      }, 30);
+    };
+
+    sec.querySelector('#resetBtn').onclick = () => {
+      if (!confirm('Reset EVERYTHING to defaults? Export first if unsure.')) return;
+      if (!confirm('Really reset? This wipes the queue, board and log.')) return;
+      S = NS.store.defaultState();
+      save();
+      render();
+    };
+  }
+
+  // ---- SIMULATE tab ---------------------------------------------------------
+  function renderSimTab(main) {
+    const sec = document.createElement('section');
+    sec.className = 'card';
+    if (!S.sim) S.sim = NS.sim.freshSim(S, { seed: 20260826 });
+    const shadow = NS.sim.shadow(S, S.sim);
+    const cur = NS.board.currentPick(shadow);
+    const myTurn = cur !== null && NS.board.teamForPick(shadow, cur) === NS.board.myTeamName(S.settings);
+
+    sec.innerHTML = `<h2>Mock-draft simulator</h2>
+      <div class="dim">Separate from live state. Opponents pick by ${(S.adp || []).length ? 'your pasted ADP' : 'your queue'} + need model + mild randomness.</div>
+      <div class="fieldRow"><label>Protect list (sim never takes; comma-separated)</label></div>
+      <textarea id="protectBox">${esc((S.sim.protect || []).join(', '))}</textarea>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0">
+        <button class="primaryBtn" id="simAuto">Auto-draft to my pick</button>
+        <button class="dangerBtn" id="simReset">Reset sim</button>
+      </div>
+      <div id="simStatus">${cur === null ? '<b>Sim draft complete.</b>' :
+        `<b>Sim pick ${cur}</b> - ${myTurn ? '<span style="color:var(--good)">YOUR PICK</span>' : esc(NS.board.teamForPick(shadow, cur))}`}</div>
+      <div id="simRec"></div>
+      <div id="simAvail"></div>
+      <details><summary>Sim log (${S.sim.log.length})</summary>${S.sim.log.slice().reverse().map(l => `<div class="dim">${esc(l)}</div>`).join('')}</details>`;
+    main.appendChild(sec);
+
+    const saveProtect = () => {
+      S.sim.protect = sec.querySelector('#protectBox').value.split(',').map(x => x.trim()).filter(Boolean);
+    };
+    sec.querySelector('#protectBox').onchange = () => { saveProtect(); save(); };
+    sec.querySelector('#simAuto').onclick = () => {
+      saveProtect();
+      NS.sim.autoToMyPick(S, S.sim);
+      save();
+      render();
+    };
+    sec.querySelector('#simReset').onclick = () => {
+      saveProtect();
+      S.sim = NS.sim.freshSim(S, { seed: Math.floor(Math.random() * 1e9), protect: S.sim.protect });
+      save();
+      render();
+    };
+
+    if (myTurn) {
+      const rec = NS.safeRecommend(shadow);
+      const recHost = sec.querySelector('#simRec');
+      if (rec.engineError) recHost.innerHTML = '<div class="banner red">engine error in sim - see console</div>';
+      else if (rec.primary) {
+        recHost.innerHTML = `<div class="recRow"><div class="recLabel">Primary</div><div class="pInfo">
+          <div><span class="recName">${esc(rec.primary.player.name)}</span> <span class="pill">${rec.primary.player.pos}</span>
+          ${rec.primary.why.rules.map(r => `<span class="pill rule">${r}</span>`).join('')}</div>
+          <div class="recWhy">${esc(rec.primary.why.text)}</div></div></div>` +
+          (rec.alt ? `<div class="dim">Alt: ${esc(rec.alt.player.name)}</div>` : '');
+      }
+      const availHost = sec.querySelector('#simAvail');
+      NS.board.available(shadow).slice(0, 15).forEach(p => {
+        const row = document.createElement('div');
+        row.className = 'playerRow';
+        row.innerHTML = `<div class="pInfo"><div class="pName">#${p.rank} ${esc(p.name)}</div><div class="pMeta">${p.pos}${p.team ? ' - ' + esc(p.team) : ''}</div></div>`;
+        const b = document.createElement('button');
+        b.className = 'small primaryBtn';
+        b.textContent = 'Draft';
+        b.onclick = () => { NS.sim.simMyPick(S, S.sim, p); save(); render(); };
+        row.appendChild(b);
+        availHost.appendChild(row);
+      });
+    }
+  }
+
+  // go (guard against booting twice)
+  let booted = false;
+  const bootOnce = () => { if (!booted) { booted = true; boot(); } };
+  window.addEventListener('DOMContentLoaded', bootOnce);
+  if (document.readyState !== 'loading') bootOnce();
+})();
+
+</script>
+</body>
+</html>

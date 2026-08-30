@@ -1,0 +1,21 @@
+# ASSUMPTIONS — draft-os-espn (ESPN 12-team 1QB)
+
+Storage-isolated clone of `draft-os` (the Yahoo Superflex app, untouched). All
+engineering carried over: queue paste/replace, name normalization, tier breaks,
+catch-up + rapid entry, undo, clock, board grid, survival + cost-of-waiting,
+confirm on "I picked", rec precompute, safe mode, export/import, self-test
+button, file:// + HTTP + service worker, the 2026 bye table, editable injury
+tags. ESPN-specific decisions:
+
+E1. **Isolation.** localStorage keys are `espn:draftos_state_v2` / `espn:draftos_autosave`; the service-worker cache is `draftos-espn-<hash>`; `npm run serve` hosts on port **8091** via the dependency-free `serve.js`. Tests assert the app boots fresh with Yahoo keys present and writes only `espn:`-prefixed keys.
+E2. **Placeholder draft order.** Slots 1–12 default to the ten keeper-list managers (Joe, Rhett, Mike, **Jeff**, TC, Max, Dan, Pat, Jim, Ger) plus "Team 11/12", with my slot defaulting to 4 (where "Jeff" sits) — so all keeper rows resolve out of the box. Type the real order + slot right before the draft. Marking a name ME (radio in Settings) IS setting my slot; the label everywhere is "KeiserSoze (Jeff)".
+E3. **Keeper reversibility.** Kept players are filtered out of *available* dynamically (by the active-keeper set) instead of being deleted from the stored queue — so blanking a round restores the player and his pick instantly, and a queue paste keeps keeper names in the stored queue while they stay hidden from available ("the strip wins"). A keeper's pos/bye resolve from the queue; a keeper not in the queue still pre-fills his pick but shows a blank position (and is absent from positional counts) until a queue containing him is pasted.
+E4. **Setup-guard recompute** keeps every marked live pick, re-deriving its team/byMe from the new order; a live pick is dropped only when a keeper now claims that exact pick number (keeper wins, player returns to the pool) or the pick exceeds a shrunk round count. Keeper-row edits go through the same guard (one confirm per committed field once any pick is marked; instant before that).
+E5. **Rule 2 mechanics.** "Nth live pick" indexes my keeper-adjusted live-pick list. The 5th-pick exception requires: Allen/Lamar/Hurts (editable `eliteQBs`), tier strictly lower than the best remaining skill tier, and the pick falling after round 4 (rule 1 is absolute there — with keepers this is automatic, but it's guarded anyway). The exception is an override: when it fires, the elite QB IS the primary.
+E6. **Rule 8 as legality.** A 3rd QB is blocked (R8) while any startable RB/WR remains available; rule 3's pick-130 gate blocks it earlier regardless. Startable thresholds: QB 15 (rule 9), RB 30 / WR 36 / TE 12 carried from the Yahoo app, all editable.
+E7. **Overlay carry-over.** Stand-down set = R1/R2/R3/R4/R8 (the ids that decide picks here). The WR-over-RB tiebreak carries over, active from my 3rd live pick and suppressed at 0 RB (this league has no lean rule). Handcuff map is empty and there are no Love/Robinson hard gates — rule 6's pick-100 handcuff gate reads the user marker only, with the last-2-picks unlock. The A5 markers flag defaults ON so handcuff tags are settable.
+E8. **Sim QB appetite** (rule 9): with 0 QBs an opponent's QB weight is low before round `firstQBStart` (4), high through `firstQBEnd` (9), urgent after; a 2nd QB only after `secondQBAfter` (10). Three editable numbers in Settings.
+E9. **Five-name card.** The Panic slot is gone in favor of Primary + Alt2–Alt5 (mixed positions, one-line why each); "ESPN queue should be:" lists exactly those names, deduped. Fewer names appear only when fewer legal players exist.
+E10. **No IR-stash rule.** The ESPN playbook has none, so the Yahoo R7 gates are removed — IR-tagged players are recommendable normally (injury tags remain as annotations).
+E11. **Sample queue** keeps Allen (rank 20, tier 2) and Lamar/Hurts in tier 3 so the rule-2 exception is rehearsable before the real queue is pasted; fillers extend to rank 60 with 2 K / 2 DST rows for the rule-4 window.
+E12. **Rounds clamp.** The rounds setting clamps to 14–18 on save; every pick-math consumer (order, my picks, K/DST window, keeper resolution, build guard) derives from it live, which the 14/16/18 tests pin down.
